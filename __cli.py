@@ -3,18 +3,25 @@ This is the CLI to access
 '''
 
 import cmd, sys
+# import __audio
+from __audio import *
+
+
 
 class VinylShell(cmd.Cmd):
     intro = 'Welcome to the Vinyl shell.   Type help or ? to list commands.\n'
     prompt = '(((o))):'
     file = None
 
-    # ----- basic turtle commands -----
-    # def do_forward(self, arg):
-    #     'Move the turtle forward by the specified distance:  FORWARD 10'
-    #     forward(*parse(arg))
-    # ----- record and playback -----
-  
+    def do_loadfile(self, arg): 
+        'Loads a single audio file for analysis'
+        # return __audio.loadfile(*parse(arg))
+        # file_name = 
+        if arg == '':
+            return loadfile(raw_input("Please enter the location of the file: "))
+        else: 
+            return loadfile(arg)
+
 
 def parse(arg):
     'Convert a series of zero or more numbers to an argument tuple'
