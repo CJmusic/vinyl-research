@@ -34,12 +34,19 @@ class VinylShell(cmd.Cmd):
         self.update_current_file(file_name)
         
     def do_plotwave(self, arg):
-        'Plots the waveform of an audio file, args include the start point in either time or sample number and the number of points plotted (usually a power of two)'
+        'Plots the waveform of an audio file, args include the start point in either time or sample number and the number of points plotted'
         args = parse(arg)
-        plotting.plot_wave(self.current_file, int(arg[0]), int(arg[1]))
+        if arg == '':
+            start = int(raw_input("Please enter the sample to start plotting: "))
+            Npoints = int(raw_input("Please enter the number of points to plot plotting: "))
+        else: 
+            start = int(arg[0])
+            Npoints = int(arg[1])
+        plotting.plot_wave(self.current_file, start, Npoints)
     
     def do_plotfft(self, arg):
-        plotting.plot_fft(self.current_file)
+        'Plots the fft of an audio file, args include the start point in either time or sample number and the number of points to be analyzed (usually a power of two)'
+        plotting.plot_fft(self.current_file, int(args[0]), int(args[1]))
     
 
     def update_current_file(self, arg):
