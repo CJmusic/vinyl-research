@@ -19,7 +19,6 @@ class SOUNDFILE: ##the class that represents audio
 
         self.time = []
         self.freq = []
-
         self.data_windowed = []
         self.data_normalized = []
 
@@ -157,3 +156,29 @@ class SOUNDFILE: ##the class that represents audio
 def loadfile(input):
     file = SOUNDFILE(input)
     return file
+
+
+'''
+Below are the various audio tests that can be run on a SOUNDFILE object.
+
+
+'''
+
+
+def detect_signal(SF, start = 0):
+    return sample_start_i
+
+def signal_to_noise(SF, start, Npoints):
+    return snr_f
+
+def harmonic_distortion(SF,start,Npoints):
+    return snr_f
+
+def logsweep_spectrum(SF,start,Npoints):
+    return sweep_spectrum_A
+
+def noise_spectrum(SF, start, Npoints):
+    return noise_spectrum_A
+
+def stereo_seperation(SF, start, Npoints):
+    def stereo_seperation_r #r as in ratio
