@@ -26,7 +26,7 @@ class VinylShell(cmd.Cmd):
             location = raw_input("Please enter the location of the file: ")
         else: 
             location = arg
-
+        location = fixstring(arg)
         file_name = str(os.path.splitext(location)[0])
         file = audio.loadfile(location)
         print 'file: ', file
@@ -61,6 +61,11 @@ class VinylShell(cmd.Cmd):
 def parse(arg):
     'Convert a series of zero or more numbers to an argument tuple'
     return tuple(map(int, arg.split()))
+
+def fixstring(arg):
+    for char in "\\":
+        arg = arg.replace(char,'')
+    return arg
 
 if __name__ == '__main__':
     VinylShell().cmdloop()

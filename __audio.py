@@ -38,7 +38,7 @@ class SOUNDFILE: ##the class that represents audio
         # self.data_R = self.data.T[1]
 
     def __calc_time(self):
-        self.time_a = np.linspace(1,float(len(self.data))/self.fs, len(self.data))
+        self.time_a = np.linspace(1,float(len(self.data_a))/self.fs, len(self.data_a))
         return
 
 
@@ -51,7 +51,7 @@ class SOUNDFILE: ##the class that represents audio
     def __dft_init(self):
         if len(self.data_a)%self.dft_npoints > 0: 
             padding = self.dft_npoints - (len(self.data_a)%self.dft_npoints)
-            self.dft_a = np.zeros((len(self.data_a) + padding)/self.dft_npoints)
+            self.dft_a = np.zeros(int((len(self.data_a) + padding)/self.dft_npoints))
             return
         else:
             self.dft_a = np.zeros(len(self.data_a)/self.dft_npoints)
@@ -87,9 +87,9 @@ class SOUNDFILE: ##the class that represents audio
         print 'Number of Channels: ', self.Input.channels
         print 'The sampling rate is: ', self.fs
         print 'The type of audio is: ', self.Input.subtype       
-        print 'The bit depth is : ', self.bit_depth
+        print 'The bit depth is : ', self.bit_depth_i
         print 'The file is ', self.time_a[len(self.time_a)-1], ' seconds long'
-        print 'There are ', len(self.data), ' samples.'
+        print 'There are ', len(self.data_a), ' samples.'
 
 
 
