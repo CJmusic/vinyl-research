@@ -9,62 +9,63 @@ class SOUNDFILE: ##the class that represents audio
     def __init__(self, input, dft_npoints = 2.0**16): 
         self.SOUNDFILE_types = {'PCM_16': 16, 'PCM_24': 24, 'PCM_32': 32, 'FLOAT': 32}
         self.dft_npoints = dft_npoints
+        self.fs = 0.0
 
         self.data_a = np.empty(0)
-        # self.data_DBFS_a = np.empty(0)
         self.dft_a = np.empty(0)
         self.time_a = np.empty(0)
         self.freq_a = np.empty(0)
 
         self.bit_depth_i = 0 
 
-        self.file_read(input)
-        self.file_info(input)
-        self.calc_time()
-        self.calc_freqbins()
+        self.__file_read(input)
+        self.__calc_time()
+        self.__calc_freqbins()
         self.__dft_init()
 
-    def file_read(self,input):
+        self.file_info(input)
+
+    def __file_read(self,input):
         ##The following processes the wav file and imports it into python using the PySoundFile package
         self.Input = sf.SoundFile(input, 'r')
-        self.data, self.fs = sf.read(input)
+        self.data_a, self.fs = sf.read(input)
+        self.bit_depth_i = self.SOUNDFILE_types[self.Input.subtype]
+        return
         
-        self.data_DBFS_a = 20*np.log10(abs(np.asarray(self.data_normalized)))
-
         ##This fills in all the values of a SOUNDFILE class for use in the analysis 
         'Keeping the below 2 lines for reference'
         # self.data_L = self.data.T[0] 
         # self.data_R = self.data.T[1]
-        self.bit_depth_i = self.SOUNDFILE_types[self.Input.subtype]
 
-    def calc_time(self):
+    def __calc_time(self):
         self.time_a = np.linspace(1,float(len(self.data))/self.fs, len(self.data))
         return
 
 
-    def calc_freqbins(self):
+    def __calc_freqbins(self):
         k = np.arange(self.dft_npoints/2-1)
         T = len(self.data_a)/self.fs
         self.freq_a = k/T
         return
 
     def __dft_init(self):
-        self.dft
+        if len(self.data_a)%self.dft_npoints > 0: 
+            padding = self.dft_npoints - (len(self.data_a)%self.dft_npoints)
+            self.dft_a = np.zeros((len(self.data_a) + padding)/self.dft_npoints)
+            return
+        else:
+            self.dft_a = np.zeros(len(self.data_a)/self.dft_npoints)
+            return
 
-
-    def dft_audio(self, start, Npoints):
-        ##This function will take the Fast Fourier Transform of a self.data and time array 
-        self.data_fft = fft(self.data[start:start+ Npoints]) # calculate fourier transform (complex numbers list)
-        self.data_fft_Re = len(self.data_fft)/2  # you only need half of the fft list (real signal symmetry)
-        self.data_fft = abs(self.data_fft[0:(self.data_fft_Re-1)])
-        # data_fft_DBFS = 20.0*np.log10(4.5933528*abs(data_fft)/len(data_fft))
-        self.data_fft_DBFS = 20.0*np.log10(abs(self.data_fft)/2**16)#/len(data_fft))
-        
-        k = np.arange(self.data_fft_Re - 1)   
-        T = float(len(self.data))/float((self.fs)) 
-        freq = k/T
-        self.freq = freq
-        return self.data_fft, self.data_fft_DBFS, self.freq
+    def dft_audio(self, start):
+        if self.dft_a[int(start/self.dft_npoints)] != 0:
+            ##This function will take the Fast Fourier Transform of a self.data and time array 
+            data_fft = fft(self.data[start:start+ Npoints]) # calculate fourier transform (complex numbers list)
+            data_fft_Re = len(self.data_fft)/2  # you only need half of the fft list (real signal symmetry)
+            self.dft_a[int(start/self.dft_npoints)] = abs(self.data_fft[0:(self.data_fft_Re-1)])
+            return self.dft_a[int(start/self.dft_npoints)]
+        else:
+            return self.dft_a[int(start/self.dft_npoints)]
 
     def fft_audio(self, start, Npoints):
         ##This function will take the Fast Fourier Transform of a self.data and time array 
@@ -87,7 +88,9 @@ class SOUNDFILE: ##the class that represents audio
         print 'The sampling rate is: ', self.fs
         print 'The type of audio is: ', self.Input.subtype       
         print 'The bit depth is : ', self.bit_depth
+        print 'The file is ', self.time_a[len(self.time_a)-1], ' seconds long'
         print 'There are ', len(self.data), ' samples.'
+
 
 
 def loadfile(input):
