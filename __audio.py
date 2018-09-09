@@ -123,7 +123,7 @@ def noise_spectrum(SF, start, Npoints):
 def stereo_seperation(SF, start, Npoints):
     return stereo_seperation_r #r as in ratio
 
-def count_clicks(SF, start, Npoints)
+def count_clicks(SF, start, Npoints):
     return num_clicks
 
 
