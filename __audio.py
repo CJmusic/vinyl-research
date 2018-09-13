@@ -126,6 +126,9 @@ def stereo_seperation(SF, start, Npoints):
 def count_clicks(SF, start, Npoints):
     return num_clicks
 
+def RMS_level(SF, start, Npoints):
+    RMS_level_a = (np.sqrt(np.mean(data*data))
+    return RMS_level_a
 
 ### LEGACY CODE####
 #     def chop_audio(self, start, Npoints):
