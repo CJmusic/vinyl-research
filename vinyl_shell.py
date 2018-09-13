@@ -40,8 +40,8 @@ class VinylShell(cmd.Cmd):
             start = int(raw_input('Enter the sample to start from: '))
             npoints = int(raw_input('Enter the number of samples to measure: '))
         else: 
-            start = parse(args)[0]
-            npoints = parse(args)[1]
+            start = sys.argv[0]
+            npoints = sys.argv[1]
 
         RMS_level = audio.RMS_level(self.current_file, start, npoints)
         print 'The RMS level of the audio is: ', 20.0*np.log10(RMS_level), 'dB FS'
