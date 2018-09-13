@@ -8,7 +8,7 @@ import __database as database
 import __plotting as plotting
 # from __audio import *
 
-
+import numpy as np
 
 class VinylShell(cmd.Cmd):
     intro = 'Welcome to the Vinyl shell.   Type help or ? to list commands.\n'
@@ -32,7 +32,21 @@ class VinylShell(cmd.Cmd):
         print 'file: ', file
         self.file_cache[str(file_name)] = file
         self.update_current_file(file_name)
-        
+    
+    ##~~ __audio.py COMMANDS ~~##
+    def do_RMS_level(self,arg):
+        'Returns the RMS level over a section of audio'
+        if arg == '': 
+            start = int(raw_input('Enter the sample to start from: '))
+            npoints = int(raw_input('Enter the number of samples to measure: '))
+        else: 
+            start = parse(args)[0]
+            npoints = parse(args)[1]
+
+        RMS_level = audio.RMS_level(self.current_file, start, npoints)
+        print 'The RMS level of the audio is: ', 20.0*np.log10(RMS_level), 'dB FS'
+
+    ##~~ __plotting.py COMMANDS ~~##
     def do_plotwave(self, arg):
         'Plots the waveform of an audio file, args include the start point in either time or sample number and the number of points plotted'
         args = parse(arg)

@@ -127,7 +127,7 @@ def count_clicks(SF, start, Npoints):
     return num_clicks
 
 def RMS_level(SF, start, Npoints):
-    RMS_level_a = (np.sqrt(np.mean(data*data))
+    RMS_level_a = np.sqrt(np.mean(SF.data_a[start:start+Npoints]**2))
     return RMS_level_a
 
 ### LEGACY CODE####
