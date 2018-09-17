@@ -3,6 +3,8 @@ This is the CLI to access
 '''
 
 import cmd, sys, os
+import argparse
+
 import __audio as audio
 import __database as database
 import __plotting as plotting
@@ -40,8 +42,9 @@ class VinylShell(cmd.Cmd):
             start = int(raw_input('Enter the sample to start from: '))
             npoints = int(raw_input('Enter the number of samples to measure: '))
         else: 
-            start = sys.argv[0]
-            npoints = sys.argv[1]
+            # print sys.argv
+            start = int(arg[0])
+            npoints = int(arg[1])
 
         RMS_level = audio.RMS_level(self.current_file, start, npoints)
         print 'The RMS level of the audio is: ', 20.0*np.log10(RMS_level), 'dB FS'
@@ -62,6 +65,14 @@ class VinylShell(cmd.Cmd):
         'Plots the fft of an audio file, args include the start point in either time or sample number and the number of points to be analyzed (usually a power of two)'
         plotting.plot_fft(self.current_file, int(args[0]), int(args[1]))
     
+    def do_argtest(self,arg):
+        print sys.argv
+        print arg
+        print type(arg)
+        print len(arg)
+        # print sys.argv[0]
+        # print sys.argv[1]
+        
 
     def update_current_file(self, arg):
         'Updates the current audio file that will be acted upon'
@@ -72,9 +83,8 @@ class VinylShell(cmd.Cmd):
         print 'Current file: ', self.current_file
 
 
-def parse(arg):
-    'Convert a series of zero or more numbers to an argument tuple'
-    return tuple(map(int, arg.split()))
+# def parse(arg):
+    # parser = argparse.ArgumentParser()
 
 def fixstring(arg):
     for char in "\\":
@@ -82,4 +92,9 @@ def fixstring(arg):
     return arg
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-a', '--all', action='store_true', help='-a, --all runs the vinyl shell command on all audio files currently loaded') 
+
+
+    
     VinylShell().cmdloop()
