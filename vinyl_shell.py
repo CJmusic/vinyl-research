@@ -15,8 +15,8 @@ import numpy as np
 class VinylShell(cmd.Cmd):
     intro = 'Welcome to the Vinyl shell.   Type help or ? to list commands.\n'
     prompt = '(((o))):'
-    global current_file
-    current_file = None
+    global current_files
+    current_files = None
 
     file_cache = {}
 
@@ -28,12 +28,12 @@ class VinylShell(cmd.Cmd):
             location = raw_input("Please enter the location of the file: ")
         else: 
             location = arg
-        location = fixstring(arg)
+        location = self.parse(arg)
         file_name = str(os.path.splitext(location)[0])
         file = audio.loadfile(location)
         print 'file: ', file
         self.file_cache[str(file_name)] = file
-        self.update_current_file(file_name)
+        self.update_current_files(file_name)
     
     ##~~ __audio.py COMMANDS ~~##
     def do_RMS_level(self,arg):
@@ -46,45 +46,65 @@ class VinylShell(cmd.Cmd):
             start = int(arg[0])
             npoints = int(arg[1])
 
-        RMS_level = audio.RMS_level(self.current_file, start, npoints)
-        print 'The RMS level of the audio is: ', 20.0*np.log10(RMS_level), 'dB FS'
+
+        for file in self.current_files:
+            RMS_level = audio.RMS_level(file, start, npoints)
+            print 'The RMS level of the audio is: ', 20.0*np.log10(RMS_level), 'dB FS'
 
     ##~~ __plotting.py COMMANDS ~~##
     def do_plotwave(self, arg):
         'Plots the waveform of an audio file, args include the start point in either time or sample number and the number of points plotted'
-        args = parse(arg)
+        args = self.parse(arg)
         if arg == '':
             start = int(raw_input("Please enter the sample to start plotting: "))
             Npoints = int(raw_input("Please enter the number of points to plot plotting: "))
         else: 
             start = int(arg[0])
             Npoints = int(arg[1])
-        plotting.plot_wave(self.current_file, start, Npoints)
+        plotting.plot_wave(self.current_files, start, Npoints)
     
     def do_plotfft(self, arg):
         'Plots the fft of an audio file, args include the start point in either time or sample number and the number of points to be analyzed (usually a power of two)'
-        plotting.plot_fft(self.current_file, int(args[0]), int(args[1]))
+        plotting.plot_fft(self.current_files, int(args[0]), int(args[1]))
     
     def do_argtest(self,arg):
-        print sys.argv
+        # print sys.argv
+        # print arg
+        # print type(arg)
+        # print len(arg)
+        self.parse(arg)
         print arg
-        print type(arg)
-        print len(arg)
         # print sys.argv[0]
         # print sys.argv[1]
         
 
-    def update_current_file(self, arg):
+    def update_current_files(self, arg):
         'Updates the current audio file that will be acted upon'
         # file_name = parse(arg)[0]
         file_name = arg
-        self.current_file = self.file_cache[file_name]
+        self.current_files = self.file_cache[file_name]
         print 'Current file has been updated to: ', file_name
-        print 'Current file: ', self.current_file
+        print 'Current file: ', self.current_files
+
+
+    def parse(self, arg):
+        # parser = argparse.ArgumentParser()
+        for char in "\\":
+            arg = arg.replace(char,'')
+        if '-m' in arg: 
+            print arg.index('-m')
+            current_files = self.file_cache
+        if '-a' in arg: 
+            current_files = self.file_cache
+            print current_files
+        
+        return arg
 
 
 # def parse(arg):
-    # parser = argparse.ArgumentParser()
+#     for char in "\\":
+#         arg = arg.replace(char,'')
+#     return arg
 
 def fixstring(arg):
     for char in "\\":
