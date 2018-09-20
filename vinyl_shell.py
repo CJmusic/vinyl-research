@@ -34,6 +34,21 @@ class VinylShell(cmd.Cmd):
         print 'file: ', file
         self.file_cache[str(file_name)] = file
         self.update_current_files(file_name)
+
+    def do_loadfolder(self, arg):
+        'Loads a whole folder of .wav files for analysis'
+        if arg == '':
+            arg = raw_input("Please enter the path of the folder: ")
+        location = fixstring(arg)
+        for filename in os.listdir(location):
+            if filename.endswith(".wav"):  
+                file_name = str(os.path.splitext(location)[0])
+                file = audio.loadfile(location+filename)
+                print 'file: ', file
+                self.file_cache[str(file_name)] = file
+                # self.update_current_files(file_name)
+        current_files = self.file_cache
+
     
     ##~~ __audio.py COMMANDS ~~##
     def do_RMS_level(self,arg):
@@ -45,7 +60,6 @@ class VinylShell(cmd.Cmd):
             # print sys.argv
             start = int(arg[0])
             npoints = int(arg[1])
-
 
         # for file in self.current_files:
         for filename, file in self.current_files.iteritems():
