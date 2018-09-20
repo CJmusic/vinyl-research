@@ -25,10 +25,10 @@ class VinylShell(cmd.Cmd):
         # return __audio.loadfile(*parse(arg))
         # file_name =
         if arg == '':
-            location = raw_input("Please enter the location of the file: ")
-        else: 
-            location = arg
-        location = self.parse(arg)
+            arg = raw_input("Please enter the location of the file: ")
+        # else: 
+            # location = arg
+        location = fixstring(arg)
         file_name = str(os.path.splitext(location)[0])
         file = audio.loadfile(location)
         print 'file: ', file
@@ -47,7 +47,10 @@ class VinylShell(cmd.Cmd):
             npoints = int(arg[1])
 
 
-        for file in self.current_files:
+        # for file in self.current_files:
+        for filename, file in self.current_files.iteritems():
+
+            print file
             RMS_level = audio.RMS_level(file, start, npoints)
             print 'The RMS level of the audio is: ', 20.0*np.log10(RMS_level), 'dB FS'
 
@@ -82,7 +85,7 @@ class VinylShell(cmd.Cmd):
         'Updates the current audio file that will be acted upon'
         # file_name = parse(arg)[0]
         file_name = arg
-        self.current_files = self.file_cache[file_name]
+        self.current_files = {file_name : self.file_cache[file_name]}
         print 'Current file has been updated to: ', file_name
         print 'Current file: ', self.current_files
 
@@ -91,6 +94,9 @@ class VinylShell(cmd.Cmd):
         # parser = argparse.ArgumentParser()
         for char in "\\":
             arg = arg.replace(char,'')
+
+        arg = arg.split()
+        print (arg)
         if '-m' in arg: 
             print arg.index('-m')
             current_files = self.file_cache
