@@ -78,7 +78,8 @@ class VinylShell(cmd.Cmd):
         else: 
             start = int(arg[0])
             Npoints = int(arg[1])
-        plotting.plot_wave(self.current_files, start, Npoints)
+        for filename, file in self.current_files.iteritems():
+            plotting.plot_wave(file, start, Npoints)
     
     def do_plotfft(self, arg):
         'Plots the fft of an audio file, args include the start point in either time or sample number and the number of points to be analyzed (usually a power of two)'
