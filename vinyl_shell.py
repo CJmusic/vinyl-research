@@ -47,7 +47,7 @@ class VinylShell(cmd.Cmd):
                 print 'file: ', file
                 self.file_cache[str(file_name)] = file
                 # self.update_current_files(file_name)
-        current_files = self.file_cache
+        self.current_files = self.file_cache
 
     
     ##~~ __audio.py COMMANDS ~~##
@@ -63,7 +63,6 @@ class VinylShell(cmd.Cmd):
 
         # for file in self.current_files:
         for filename, file in self.current_files.iteritems():
-
             print file
             RMS_level = audio.RMS_level(file, start, npoints)
             print 'The RMS level of the audio is: ', 20.0*np.log10(RMS_level), 'dB FS'
@@ -133,9 +132,7 @@ def fixstring(arg):
     return arg
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-a', '--all', action='store_true', help='-a, --all runs the vinyl shell command on all audio files currently loaded') 
+    # parser = argparse.ArgumentParser()
+    # parser.add_argument('-a', '--all', action='store_true', help='-a, --all runs the vinyl shell command on all audio files currently loaded') 
 
-
-    
     VinylShell().cmdloop()
