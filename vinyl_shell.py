@@ -87,8 +87,11 @@ class VinylShell(cmd.Cmd):
             start = int(raw_input("Please enter the sample to start plotting: "))
             Npoints = int(raw_input("Please enter the number of points to plot plotting: "))
         else: 
-            start = int(arg[0])
-            Npoints = int(arg[1])
+            start = int(args[0])
+            Npoints = int(args[1])
+            # print 'start do_plot: ', start
+            # print 'Npoints do_plot: ', Npoints
+
         for filename, file in self.current_files.iteritems():
             plotting.plot_wave(file, start, Npoints)
     
@@ -122,7 +125,9 @@ class VinylShell(cmd.Cmd):
             arg = arg.replace(char,'')
 
         arg = arg.split()
-        print (arg)
+        # print 'parse(arg): ', (arg)
+        # print type(arg)
+        # print arg[0]
         if '-m' in arg: 
             print arg.index('-m')
             current_files = self.file_cache

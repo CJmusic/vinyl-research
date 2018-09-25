@@ -4,10 +4,11 @@ import matplotlib.pyplot as plt
 def plot_wave(file, start, Npoints):#, time, self.data):
     print len(file.time_a)
     print len(file.data_a)
-
+    # print 'start: ', start 
+    # print 'Npoints: ', Npoints
     x = file.time_a[start:start+Npoints]
     y = file.data_a[start:start+Npoints]
-    print len(x), len(y)
+    # print len(x), len(y)
 
 
     plt.plot(x,y, alpha = 0.7)#, linewidth = 0.7)
