@@ -45,11 +45,22 @@ class VinylShell(cmd.Cmd):
                 file_name = str(os.path.splitext(location)[0])
                 file = audio.loadfile(location+filename)
                 print 'file: ', file
-                self.file_cache[str(file_name)] = file
+                print 'filename: ', filename
+                self.file_cache[str(filename)] = file
                 # self.update_current_files(file_name)
         self.current_files = self.file_cache
 
-    
+    def do_viewfiles(self,arg):
+        print 'The current files are: '
+        print self.current_files
+        print '-----------------------'
+        print 'The total file cache is: '
+        print self.current_files
+        print '-----------------------'
+
+
+
+
     ##~~ __audio.py COMMANDS ~~##
     def do_RMS_level(self,arg):
         'Returns the RMS level over a section of audio'
@@ -58,12 +69,13 @@ class VinylShell(cmd.Cmd):
             npoints = int(raw_input('Enter the number of samples to measure: '))
         else: 
             # print sys.argv
+            arg = self.parse(arg)
             start = int(arg[0])
             npoints = int(arg[1])
 
         # for file in self.current_files:
         for filename, file in self.current_files.iteritems():
-            print file
+            print filename
             RMS_level = audio.RMS_level(file, start, npoints)
             print 'The RMS level of the audio is: ', 20.0*np.log10(RMS_level), 'dB FS'
 
@@ -115,6 +127,7 @@ class VinylShell(cmd.Cmd):
             print arg.index('-m')
             current_files = self.file_cache
         if '-a' in arg: 
+            print "ALL FILES ENABLED"
             current_files = self.file_cache
             print current_files
         
