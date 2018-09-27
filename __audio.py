@@ -23,6 +23,9 @@ class SOUNDFILE: ##the class that represents audio
         self.__calc_freqbins()
         self.__dft_init()
 
+        self.leadin_start = False
+        self.signal_start = False
+
         self.file_info(input)
 
     def __file_read(self,input):
@@ -66,17 +69,24 @@ class SOUNDFILE: ##the class that represents audio
         # print 'DATA ARRAY: ', self.data_a
         index = 0
         for sample in self.data_a[:int(tstart)*44100]:
-            if 20.0*np.log10(np.average(sample)) > -30.0 and leadin_detect == False: 
-                leadin_start = index
+            if (np.average(sample)) > 10.0**(-30.0/20) and leadin_detect == False: 
+                self.leadin_start = index
                 leadin_detect = True
-            if 20.0*np.log10(np.average(sample)) > -10.0 and signal_detect == False: 
-                signal_start = index
+            if (np.average(sample)) > 10.0**(-10.0/20.0) and signal_detect == False: 
+                self.signal_start = index
                 signal_detect = True
             index += 1
         
-        return leadin_start, signal_start
+        return self.leadin_start, self.signal_start
 
+    def leadin_noise(self):
+        if self.leadin_start == False or self.signal_start == False: 
+            self.detect_leadin()
+        self.leadin_noise = (RMS_level(self, self.leadin_start, self.signal_start-self.leadin_start))
+        return self.leadin_noise
+      
         
+
     def dft_audio(self, start):
         if self.dft_a[int(start/self.dft_npoints)] != 0:
             ##This function will take the Fast Fourier Transform of a self.data and time array 

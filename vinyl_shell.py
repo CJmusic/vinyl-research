@@ -12,6 +12,12 @@ import __plotting as plotting
 
 import numpy as np
 
+# import warnings
+
+# if not sys.warnoptions:
+    # warnings.simplefilter("ignore")
+
+
 class VinylShell(cmd.Cmd):
     intro = 'Welcome to the Vinyl shell.   Type help or ? to list commands.\n'
     prompt = '(((o))):'
@@ -75,7 +81,7 @@ class VinylShell(cmd.Cmd):
 
         # for file in self.current_files:
         for filename, file in self.current_files.iteritems():
-            print filename
+            # print filename
             RMS_level = audio.RMS_level(file, start, npoints)
             print filename, ' : ', 20.0*np.log10(RMS_level), 'dB FS'
             # print 'The RMS level of the audio is: ', 20.0*np.log10(RMS_level), 'dB FS'
@@ -87,6 +93,11 @@ class VinylShell(cmd.Cmd):
             leadin_start, signal_start = file.detect_leadin()
             print 'The leadin starts at: ', leadin_start
             print 'The signal starts at: ', signal_start
+
+    def do_leadin_noise(self, arg): 
+        'Automatically measures the noise in the leadin of the record'
+        for filename, file in self.current_files.iteritems():
+            print '%s : leadin noise: %f dB leadin start: %i leadin len: %i' % (filename, 20.0*np.log10(file.leadin_noise()), file.leadin_start, (file.signal_start - file.leadin_start))
 
     ##~~ __plotting.py COMMANDS ~~##
     def do_plotwave(self, arg):
