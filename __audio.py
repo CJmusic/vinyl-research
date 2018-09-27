@@ -28,7 +28,7 @@ class SOUNDFILE: ##the class that represents audio
     def __file_read(self,input):
         ##The following processes the wav file and imports it into python using the PySoundFile package
         self.Input = sf.SoundFile(input, 'r')
-        self.data_a, self.fs = sf.read(input)
+        self.data_a, self.fs = sf.read(input, always_2d=True)
         self.bit_depth_i = self.SOUNDFILE_types[self.Input.subtype]
         return
         
@@ -57,6 +57,26 @@ class SOUNDFILE: ##the class that represents audio
             self.dft_a = np.zeros(len(self.data_a)/self.dft_npoints)
             return
 
+    def detect_signal(self): 
+        return
+
+    def detect_leadin(self, tstart = 10.0):
+        leadin_detect = False
+        signal_detect = False
+        # print 'DATA ARRAY: ', self.data_a
+        index = 0
+        for sample in self.data_a[:int(tstart)*44100]:
+            if 20.0*np.log10(np.average(sample)) > -30.0 and leadin_detect == False: 
+                leadin_start = index
+                leadin_detect = True
+            if 20.0*np.log10(np.average(sample)) > -10.0 and signal_detect == False: 
+                signal_start = index
+                signal_detect = True
+            index += 1
+        
+        return leadin_start, signal_start
+
+        
     def dft_audio(self, start):
         if self.dft_a[int(start/self.dft_npoints)] != 0:
             ##This function will take the Fast Fourier Transform of a self.data and time array 

@@ -80,6 +80,14 @@ class VinylShell(cmd.Cmd):
             print filename, ' : ', 20.0*np.log10(RMS_level), 'dB FS'
             # print 'The RMS level of the audio is: ', 20.0*np.log10(RMS_level), 'dB FS'
 
+
+    def do_detect_leadin(self, arg):
+        'Returns the samples between the time the needle drops and the signal starts'
+        for filename, file in self.current_files.iteritems():
+            leadin_start, signal_start = file.detect_leadin()
+            print 'The leadin starts at: ', leadin_start
+            print 'The signal starts at: ', signal_start
+
     ##~~ __plotting.py COMMANDS ~~##
     def do_plotwave(self, arg):
         'Plots the waveform of an audio file, args include the start point in either time or sample number and the number of points plotted'
@@ -109,7 +117,8 @@ class VinylShell(cmd.Cmd):
         print arg
         # print sys.argv[0]
         # print sys.argv[1]
-        
+    
+
 
     def update_current_files(self, arg):
         'Updates the current audio file that will be acted upon'
