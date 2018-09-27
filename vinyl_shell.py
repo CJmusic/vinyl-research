@@ -119,6 +119,10 @@ class VinylShell(cmd.Cmd):
         'Plots the fft of an audio file, args include the start point in either time or sample number and the number of points to be analyzed (usually a power of two)'
         plotting.plot_fft(self.current_files, int(args[0]), int(args[1]))
     
+    def do_plotleadin(self,arg):
+            for filename, file in self.current_files.iteritems():
+                plotting.plot_wave(file, file.leadin_start, (file.signal_start-file.leadin_start) )
+
     def do_argtest(self,arg):
         # print sys.argv
         # print arg

@@ -3,8 +3,8 @@ import numpy as np
     
     
 def plot_wave(file, start, Npoints):#, time, self.data):
-    print len(file.time_a)
-    print len(file.data_a)
+    # print len(file.time_a)
+    # print len(file.data_a)
     # print 'start: ', start 
     # print 'Npoints: ', Npoints
     x = file.time_a[start:start+Npoints]
@@ -13,7 +13,8 @@ def plot_wave(file, start, Npoints):#, time, self.data):
 
 
     plt.plot(x,y, alpha = 0.7)#, linewidth = 0.7)
-    plt.ylabel('Intensity')
+    plt.title(file.file_name)
+    plt.ylabel('Volume (dB)')
     plt.xlabel('Time (s)')
     plt.grid(which='both')
     plt.show()
@@ -21,7 +22,6 @@ def plot_wave(file, start, Npoints):#, time, self.data):
 
 def plot_fft(file, start, Npoints):
     file.data_fft, file.data_fft_DBFS, file.freq = file.fft_audio(start, Npoints)
-
     plt.plot(file.freq, file.data_fft_DBFS, alpha = 0.7)#, linewidth = 0.5)         
     plt.ylabel('Intensity (dB FS)')
     plt.xlabel('Freq (Hz)')

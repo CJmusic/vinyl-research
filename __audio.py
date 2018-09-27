@@ -26,7 +26,10 @@ class SOUNDFILE: ##the class that represents audio
         self.leadin_start = False
         self.signal_start = False
 
+
+        self.file_name = input
         self.file_info(input)
+
 
     def __file_read(self,input):
         ##The following processes the wav file and imports it into python using the PySoundFile package
@@ -75,6 +78,7 @@ class SOUNDFILE: ##the class that represents audio
             if (np.average(sample)) > 10.0**(-10.0/20.0) and signal_detect == False: 
                 self.signal_start = index
                 signal_detect = True
+                return self.leadin_start, self.signal_start
             index += 1
         
         return self.leadin_start, self.signal_start
