@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import numpy as np
     
     
 def plot_wave(file, start, Npoints):#, time, self.data):
@@ -7,7 +8,7 @@ def plot_wave(file, start, Npoints):#, time, self.data):
     # print 'start: ', start 
     # print 'Npoints: ', Npoints
     x = file.time_a[start:start+Npoints]
-    y = file.data_a[start:start+Npoints]
+    y = 20*np.log10(file.data_a[start:start+Npoints])
     # print len(x), len(y)
 
 
