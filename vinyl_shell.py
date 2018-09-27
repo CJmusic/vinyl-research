@@ -77,7 +77,8 @@ class VinylShell(cmd.Cmd):
         for filename, file in self.current_files.iteritems():
             print filename
             RMS_level = audio.RMS_level(file, start, npoints)
-            print 'The RMS level of the audio is: ', 20.0*np.log10(RMS_level), 'dB FS'
+            print filename, ' : ', 20.0*np.log10(RMS_level), 'dB FS'
+            # print 'The RMS level of the audio is: ', 20.0*np.log10(RMS_level), 'dB FS'
 
     ##~~ __plotting.py COMMANDS ~~##
     def do_plotwave(self, arg):
