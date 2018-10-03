@@ -31,7 +31,7 @@ def plot_fft(file, start, Npoints):
     plt.show()
 
 
-def scipy_plotspectograph(file, start, Npoints):
+def scipy_plotspectograph(file):
     plt.pcolormesh(file.scipy_time, file.scipy_freq, file.scipy_spec)
     plt.imshow(file.scipy_spec)
     plt.ylabel('Frequency [Hz]')

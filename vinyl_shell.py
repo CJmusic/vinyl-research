@@ -124,12 +124,12 @@ class VinylShell(cmd.Cmd):
             plotting.plot_wave(file, file.leadin_start, (file.signal_start-file.leadin_start) )
 
 
-    def do_scipyspectrograph(self,arg)
+    def do_scipyspectrograph(self,arg):
         for filename, file in self.current_files.iteritems():
             if file.scipy_freq == False:
                 file.scipy_spectrograph(start, Npoints)
 
-            plotting.plot_(file)
+            plotting.scipy_plotspectograph(file)
 
 
     ##~~ generic COMMANDS ~~##
