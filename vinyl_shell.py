@@ -120,8 +120,19 @@ class VinylShell(cmd.Cmd):
         plotting.plot_fft(self.current_files, int(args[0]), int(args[1]))
     
     def do_plotleadin(self,arg):
-            for filename, file in self.current_files.iteritems():
-                plotting.plot_wave(file, file.leadin_start, (file.signal_start-file.leadin_start) )
+        for filename, file in self.current_files.iteritems():
+            plotting.plot_wave(file, file.leadin_start, (file.signal_start-file.leadin_start) )
+
+
+    def do_scipyspectrograph(self,arg)
+        for filename, file in self.current_files.iteritems():
+            if file.scipy_freq == False:
+                file.scipy_spectrograph(start, Npoints)
+
+            plotting.plot_(file)
+
+
+    ##~~ generic COMMANDS ~~##
 
     def do_argtest(self,arg):
         # print sys.argv

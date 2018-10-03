@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import __audio as audio
     
     
 def plot_wave(file, start, Npoints):#, time, self.data):
@@ -30,8 +31,15 @@ def plot_fft(file, start, Npoints):
     plt.show()
 
 
+def scipy_plotspectograph(file, start, Npoints):
+    plt.pcolormesh(file.scipy_time, file.scipy_freq, file.scipy_spec)
+    plt.imshow(file.scipy_spec)
+    plt.ylabel('Frequency [Hz]')
+    plt.xlabel('Time [sec]')
+    plt.show()
+
+
 if __name__ == '__main__': 
-    import __audio as audio
 
     file = audio.loadfile('/Users/christopherzaworski/Documents/University/Vinyl_Project/audio_files/Dec14-TestA1-normalized.wav')
     plot_wave(file,1000,int(1000))
