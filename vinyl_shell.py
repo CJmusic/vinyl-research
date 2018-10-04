@@ -123,11 +123,18 @@ class VinylShell(cmd.Cmd):
         for filename, file in self.current_files.iteritems():
             plotting.plot_wave(file, file.leadin_start, (file.signal_start-file.leadin_start) )
 
-
     def do_scipyspectrograph(self,arg):
+        args = self.parse(arg)
+        if arg == '':
+            start = int(raw_input("Please enter the sample to start plotting: "))
+            Npoints = int(raw_input("Please enter the number of points to plot plotting: "))
+        else: 
+            start = int(args[0])
+            Npoints = int(args[1])
+
         for filename, file in self.current_files.iteritems():
             if file.scipy_freq == False:
-                file.scipy_spectrograph(start, Npoints)
+                file.scipy_spectograph(start, Npoints)
 
             plotting.scipy_plotspectograph(file)
 

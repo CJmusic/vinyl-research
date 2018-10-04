@@ -4,7 +4,7 @@ import numpy as np
 
 import soundfile as sf
 import wave
-import scipy
+from scipy import signal
 
 class SOUNDFILE: ##the class that represents audio
     def __init__(self, input, dft_npoints = 2.0**16): 
@@ -27,6 +27,9 @@ class SOUNDFILE: ##the class that represents audio
         self.leadin_start = False
         self.signal_start = False
 
+        self.scipy_freq = False 
+        self.scipy_time = False 
+        self.scipy_spec = False
 
         self.file_name = input
         self.file_info(input)
@@ -117,7 +120,7 @@ class SOUNDFILE: ##the class that represents audio
         return self.data_fft, self.data_fft_DBFS, self.freq
 
     def scipy_spectograph(self,start, Npoints):
-        self.scipy_freq, self.scipy_time, self.scipy_spec = scipy.signal.spectogram(self.data_a[start:start+Npoints] , self.fs)  
+        self.scipy_freq, self.scipy_time, self.scipy_spec = signal.spectogram(self.data_a[start:start+Npoints] , self.fs)  
         return self.scipy_freq, self.scipy_time, self.scipy_spec
         
     def file_info(self,input):
