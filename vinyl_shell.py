@@ -97,7 +97,14 @@ class VinylShell(cmd.Cmd):
     def do_leadin_noise(self, arg): 
         'Automatically measures the noise in the leadin of the record'
         for filename, file in self.current_files.iteritems():
-            print '%s : leadin noise: %f dB leadin start: %i leadin len: %i' % (filename, 20.0*np.log10(file.leadin_noise()), file.leadin_start, (file.signal_start - file.leadin_start))
+            print '%s : leadin noise: %f dB leadin start: %i leadin len: %i' % (filename, 20.0*np.log10(file.leadin_noise()),file.leadin_start, (file.signal_start - file.leadin_start))
+
+    def do_dft_audio(self,arg):
+        args = parse(arg)
+
+        for filename, file in self.current_files.iteritems():
+            file.dft_audio()
+        return
 
     ##~~ __plotting.py COMMANDS ~~##
     def do_plotwave(self, arg):
@@ -178,7 +185,8 @@ class VinylShell(cmd.Cmd):
             print "ALL FILES ENABLED"
             current_files = self.file_cache
             print current_files
-        
+        if '-s' in arg:
+            print 'ALL time values in seconds'
         return arg
 
 

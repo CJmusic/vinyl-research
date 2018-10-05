@@ -18,8 +18,8 @@ def plot_wave(file, start, Npoints):#, time, self.data):
     plt.ylabel('Volume (dB)')
     plt.xlabel('Time (s)')
     plt.grid(which='both')
-    plt.show()
-
+    plt.show() 
+    
 
 def plot_fft(file, start, Npoints):
     file.data_fft, file.data_fft_DBFS, file.freq = file.fft_audio(start, Npoints)
@@ -37,6 +37,17 @@ def scipy_plotspectograph(file):
     plt.ylabel('Frequency [Hz]')
     plt.xlabel('Time [sec]')
     plt.show()
+
+def plot_dft(file, start, Npoints):
+        if start%self.dft_npoints < self.dft_npoints/2: 
+            start_dft = int(start/self.dft_npoints)
+        else: 
+            start_dft = int(start/self.dft_npoints) + 1
+        
+        if Npoints%self.dft_npoints < self.dft_npoints/2: 
+            npoints_dft = int(Npoints/self.dft_npoints)
+        else: 
+            npoints_dft = int(Npoints/self.dft_npoints) + 1
 
 
 if __name__ == '__main__': 
