@@ -49,6 +49,12 @@ def plot_dft(file, start, Npoints):
     else: 
         npoints_dft = int(Npoints/self.dft_npoints) + 1
 
+    plt.pcolormesh(file.dft_time_a, file.dft_freq_a, file.dft_a)
+    plt.imshow(file.dft_a)
+    plt.ylabel('Frequency [Hz]')
+    plt.xlabel('Time [sec]')
+    plt.show()
+
 
 if __name__ == '__main__': 
 
