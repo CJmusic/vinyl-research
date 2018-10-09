@@ -7,12 +7,13 @@ import wave
 from scipy import signal
 
 class SOUNDFILE: ##the class that represents audio
-    def __init__(self, input, dft_npoints = 2.0**16): 
+    def __init__(self, input, dft_npoints = int(2.0**16)): 
         self.SOUNDFILE_types = {'PCM_16': 16, 'PCM_24': 24, 'PCM_32': 32, 'FLOAT': 32}
         self.dft_npoints = dft_npoints
         self.fs = 0.0
 
         self.data_a = np.empty(0)
+        
         self.dft_a = np.empty(0)
         self.time_a = np.empty(0)
         self.freq_a = np.empty(0)
@@ -70,9 +71,9 @@ class SOUNDFILE: ##the class that represents audio
 
         if len(self.data_a)%self.dft_npoints > 0: 
             padding = self.dft_npoints - (len(self.data_a)%self.dft_npoints)
-            self.dft_a = np.zeros(int((len(self.data_a) + padding)/self.dft_npoints))
-            self.dft_time_a = np.zeros(len(self.dft_a)) ##this creates an array of time stamps for each index of the dft_a array 
-            self.dft_freq_a = np.zeros(len(self.dft_a))
+            self.dft_a = np.zeros((int((len(self.data_a) + padding)/self.dft_npoints), int(self.dft_npoints/2), 2))
+            self.dft_time_a = np.zeros(len(self.dft_a), ) ##this creates an array of time stamps for each index of the dft_a array 
+            self.dft_freq_a = np.zeros((len(self.dft_a), self.dft_npoints/2))
 
             return
         else:
@@ -152,12 +153,20 @@ class SOUNDFILE: ##the class that represents audio
 
         print 'start_dft: ', start_dft
         print 'end_dft: ', end_dft
+        
+        print 'dft_a: ', self.dft_a
+        print 'dft_time_a: ', self.dft_time_a
+        print 'dft_freq_a: ', self.dft_freq_a
+
 
         print 'STARTING DFT_LOOP'
         for dft_step in xrange(start_dft,end_dft):
-            self.dft_a[dft_step], self.dft_freq_a[dft_step] = self.fft_audio(dft_step*self.dft_npoints,self.dft_npoints)
-            self.dft_time_a[dft_step] = dft_step*self.dft_npoints/self.fs
             print 'dft_step: ', dft_step
+            dft_point = int(dft_step*self.dft_npoints)
+            dft_step_fft, dft_step_freq = self.fft_audio(dft_point,self.dft_npoints)
+            self.dft_a[dft_step]      = dft_step_fft
+            self.dft_freq_a[dft_step] = dft_step_freq
+            self.dft_time_a[dft_step] = dft_step*self.dft_npoints/self.fs
 
         return self.dft_a[start_dft:end_dft], self.dft_freq_a[start_dft:end_dft], self.dft_time_a[start_dft:end_dft]
         # if self.dft_a[int(start/self.dft_npoints)] != 0:
@@ -179,18 +188,22 @@ class SOUNDFILE: ##the class that represents audio
 
     def fft_audio(self, start, Npoints):
         ##This function will take the Fast Fourier Transform of a self.data and time array 
-        data = self.data_a[start:start+ Npoints]
-        data_fft = fft(data) # calculate fourier transform (complex numbers list)
-        data_fft_Re = len(data_fft)/2  # you only need half of the fft list (real signal symmetry)
-        data_fft = abs(data_fft[0:(data_fft_Re-1)])
+        # data = self.data_a[start:start+ Npoints]
+        # data_fft = fft(data) # calculate fourier transform (complex numbers list)
+        # data_fft_Re = len(data_fft)/2  # you only need half of the fft list (real signal symmetry)
+        # data_fft = abs(data_fft[0:(data_fft_Re-1)])
         # data_fft_DBFS = 20.0*np.log10(4.5933528*abs(data_fft)/len(data_fft))
         # data_fft_DBFS = 20.0*np.log10(abs(data_fft)/2**16)#/len(data_fft))
-        
-        k = np.arange(data_fft_Re - 1)   
-        T = float(len(data))/float((self.fs)) 
-        freq = k/T
+        data_fft_a = fft(self.data_a[start:start+ Npoints])
+        data_fft_a = abs(data_fft_a[0:(len(data_fft_a)/2)]) ##originally was 0:(len(data_fft_a)/2) - 1, no idea why I had the minus one
+
+        freq_a = np.arange(len(data_fft_a))*float(len(self.data_a[start:start+ Npoints]))/float(self.fs)
+
+        # k = np.arange(data_fft_Re - 1)   
+        # T = float(len(data))/float((self.fs)) 
+        # freq = k/T
         # freq = freq
-        return data_fft, freq
+        return data_fft_a, freq_a
 
     def scipy_spectograph(self,start, Npoints):
         self.scipy_freq, self.scipy_time, self.scipy_spec = signal.spectogram(self.data_a[start:start+Npoints] , self.fs)  
