@@ -131,6 +131,14 @@ class SOUNDFILE: ##the class that represents audio
         # self.dft_time_a = np.zeros(dft_length) ##this creates an array of time stamps for each index of the dft_a array 
         # self.dft_freq_a = np.zeros(dft_length)
         #####
+        print 'DFT Function STARTING'
+        print 'start: ', start 
+        print 'end: ', end
+        print 'dft_npoints: ', self.dft_npoints
+
+        print start/self.dft_npoints
+        print int(start/self.dft_npoints)
+
         if start%self.dft_npoints < self.dft_npoints/2: 
             start_dft = int(start/self.dft_npoints)
         else: 
@@ -142,10 +150,14 @@ class SOUNDFILE: ##the class that represents audio
             end_dft = int(end/self.dft_npoints) + 1
         
 
-        for dft_step in xrange(start_dft,end_dft):
-            self.dft_a[dft_step], self.dft_freq_a[dft_step] = fft_audio(dft_step*self.dft_npoints,self.dft_npoints)
-            self.dft_time_a[dft_step] = dft_step*self.dft_npoints/self.fs
+        print 'start_dft: ', start_dft
+        print 'end_dft: ', end_dft
 
+        print 'STARTING DFT_LOOP'
+        for dft_step in xrange(start_dft,end_dft):
+            self.dft_a[dft_step], self.dft_freq_a[dft_step] = self.fft_audio(dft_step*self.dft_npoints,self.dft_npoints)
+            self.dft_time_a[dft_step] = dft_step*self.dft_npoints/self.fs
+            print 'dft_step: ', dft_step
 
         return self.dft_a[start_dft:end_dft], self.dft_freq_a[start_dft:end_dft], self.dft_time_a[start_dft:end_dft]
         # if self.dft_a[int(start/self.dft_npoints)] != 0:
@@ -167,7 +179,7 @@ class SOUNDFILE: ##the class that represents audio
 
     def fft_audio(self, start, Npoints):
         ##This function will take the Fast Fourier Transform of a self.data and time array 
-        data = self.data[start:start+ Npoints]
+        data = self.data_a[start:start+ Npoints]
         data_fft = fft(data) # calculate fourier transform (complex numbers list)
         data_fft_Re = len(data_fft)/2  # you only need half of the fft list (real signal symmetry)
         data_fft = abs(data_fft[0:(data_fft_Re-1)])
