@@ -99,7 +99,7 @@ class VinylShell(cmd.Cmd):
         for filename, file in self.current_files.iteritems():
             print '%s : leadin noise: %f dB leadin start: %i leadin len: %i' % (filename, 20.0*np.log10(file.leadin_noise()),file.leadin_start, (file.signal_start - file.leadin_start))
 
-    def do_dft_audio(self,arg):
+    def do_dft(self,arg):
         args = self.parse(arg)
         if arg == '':
             start = int(raw_input("Please enter the sample to start the dft: "))
@@ -150,6 +150,18 @@ class VinylShell(cmd.Cmd):
                 file.scipy_spectograph(start, Npoints)
 
             plotting.scipy_plotspectograph(file)
+
+    def do_plot_dft(self, arg):
+        args = self.parse(arg)
+        if arg == '':
+            start = int(raw_input("Please enter the sample to start plotting: "))
+            Npoints = int(raw_input("Please enter the number of points to plot plotting: "))
+        else: 
+            start = int(args[0])
+            Npoints = int(args[1])
+
+        for filename, file in self.current_files.iteritems():
+            plotting.plot_dft(file, start, Npoints)
 
 
     ##~~ generic COMMANDS ~~##
