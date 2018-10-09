@@ -100,10 +100,16 @@ class VinylShell(cmd.Cmd):
             print '%s : leadin noise: %f dB leadin start: %i leadin len: %i' % (filename, 20.0*np.log10(file.leadin_noise()),file.leadin_start, (file.signal_start - file.leadin_start))
 
     def do_dft_audio(self,arg):
-        args = parse(arg)
+        args = self.parse(arg)
+        if arg == '':
+            start = int(raw_input("Please enter the sample to start the dft: "))
+            Npoints = int(raw_input("Please enter the number of points to do the dft: "))
+        else: 
+            start = int(args[0])
+            Npoints = int(args[1])
 
         for filename, file in self.current_files.iteritems():
-            file.dft_audio()
+            file.dft_audio(start, start+Npoints)
         return
 
     ##~~ __plotting.py COMMANDS ~~##

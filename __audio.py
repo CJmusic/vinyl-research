@@ -146,6 +146,8 @@ class SOUNDFILE: ##the class that represents audio
             self.dft_a[dft_step], self.dft_freq_a[dft_step] = fft_audio(dft_step*self.dft_npoints,self.dft_npoints)
             self.dft_time_a[dft_step] = dft_step*self.dft_npoints/self.fs
 
+
+        return self.dft_a[start_dft:end_dft], self.dft_freq_a[start_dft:end_dft], self.dft_time_a[start_dft:end_dft]
         # if self.dft_a[int(start/self.dft_npoints)] != 0:
         #     ##This function will take the Fast Fourier Transform of a self.data and time array 
         #     data_fft = fft(self.data[start:start+ Npoints]) # calculate fourier transform (complex numbers list)

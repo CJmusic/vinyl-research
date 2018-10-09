@@ -39,15 +39,15 @@ def scipy_plotspectograph(file):
     plt.show()
 
 def plot_dft(file, start, Npoints):
-        if start%self.dft_npoints < self.dft_npoints/2: 
-            start_dft = int(start/self.dft_npoints)
-        else: 
-            start_dft = int(start/self.dft_npoints) + 1
-        
-        if Npoints%self.dft_npoints < self.dft_npoints/2: 
-            npoints_dft = int(Npoints/self.dft_npoints)
-        else: 
-            npoints_dft = int(Npoints/self.dft_npoints) + 1
+    if start%self.dft_npoints < self.dft_npoints/2: 
+        start_dft = int(start/self.dft_npoints)
+    else: 
+        start_dft = int(start/self.dft_npoints) + 1
+    
+    if Npoints%self.dft_npoints < self.dft_npoints/2: 
+        npoints_dft = int(Npoints/self.dft_npoints)
+    else: 
+        npoints_dft = int(Npoints/self.dft_npoints) + 1
 
 
 if __name__ == '__main__': 
