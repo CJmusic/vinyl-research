@@ -162,11 +162,25 @@ class SOUNDFILE: ##the class that represents audio
         print 'STARTING DFT_LOOP'
         for dft_step in xrange(start_dft,end_dft):
             print 'dft_step: ', dft_step
+            print 'np.shape(dft_a): ', np.shape(self.dft_a[dft_step])
+            print 'np.shape(dft_a) next: ', np.shape(self.dft_a[dft_step + 1])
+
             dft_point = int(dft_step*self.dft_npoints)
+
             dft_step_fft, dft_step_freq = self.fft_audio(dft_point,self.dft_npoints)
+            print 'dft_step_fft: ', dft_step_fft
+            print 'np.shape(dft_step_fft): ', np.shape(dft_step_fft)
+
+            print 'dft_step_freq: ', dft_step_freq
+            print 'np.shape(dft_step_freq): ', np.shape(dft_step_freq)
+            
+            
+
             self.dft_a[dft_step]      = dft_step_fft
             self.dft_freq_a[dft_step] = dft_step_freq
             self.dft_time_a[dft_step] = dft_step*self.dft_npoints/self.fs
+            print np.sum(self.dft_a[dft_step])
+
 
         return self.dft_a[start_dft:end_dft], self.dft_freq_a[start_dft:end_dft], self.dft_time_a[start_dft:end_dft]
         # if self.dft_a[int(start/self.dft_npoints)] != 0:
