@@ -1,10 +1,12 @@
 from scipy.fftpack import fft
 
 import numpy as np 
+import matplotlib.pyplot as plt
 
 import soundfile as sf
 import wave
 from scipy import signal
+
 
 class SOUNDFILE: ##the class that represents audio
     def __init__(self, input, dft_npoints = int(2.0**16)): 
@@ -174,7 +176,9 @@ class SOUNDFILE: ##the class that represents audio
             print 'dft_step_freq: ', dft_step_freq
             print 'np.shape(dft_step_freq): ', np.shape(dft_step_freq)
             
-            
+            # plt.plot(dft_step_freq,20.0*np.log10(dft_step_fft))
+            # plt.xscale('log')
+            # plt.show()
 
             self.dft_a[dft_step]      = dft_step_fft
             self.dft_freq_a[dft_step] = dft_step_freq

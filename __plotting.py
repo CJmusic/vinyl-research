@@ -49,14 +49,12 @@ def plot_dft(file, start, Npoints):
     else: 
         npoints_dft = int(Npoints/file.dft_npoints) + 1
 
-    print 'np.shape: ', np.shape(file.dft_a)
-    print 'np.shape.T: ', np.shape(file.dft_a.T)
-    print 'np.shape.T[0]: ', np.shape(file.dft_a.T[0])
-    print 'np.shape.T[0].T: ', np.shape(file.dft_a.T[0].T)
+    print 'np.shape(file.dft_a): ', np.shape(file.dft_a)
+    print 'np.shape(file.dft_a.T): ', np.shape(file.dft_a.T)
+    print 'np.shape(file.dft_a.T[0])', np.shape(file.dft_a.T[0])
 
 
-
-    dft_L = file.dft_a.T[0].T
+    dft_L = file.dft_a.T[0]
     dft_R = file.dft_a.T[1].T
 
     print 'dft_time shape: ', np.shape(file.dft_time_a)
@@ -64,8 +62,8 @@ def plot_dft(file, start, Npoints):
     print 'dft_L shape: ', np.shape(dft_L)
     freq_a = file.dft_freq_a.T[0]
     print 'freq_a shape: ', np.shape(freq_a)
-    plt.pcolormesh(file.dft_time_a, file.dft_freq_a[0], dft_L.T)
-    # plt.imshow(file.dft_a)
+    plt.pcolormesh(file.dft_time_a, file.dft_freq_a, dft_L)
+
     plt.yscale('log')
     plt.ylabel('Frequency [Hz]')
     plt.xlabel('Time [sec]')
