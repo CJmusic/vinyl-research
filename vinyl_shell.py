@@ -119,14 +119,22 @@ class VinylShell(cmd.Cmd):
         if arg == '':
             start = int(raw_input("Please enter the sample to start plotting: "))
             Npoints = int(raw_input("Please enter the number of points to plot plotting: "))
+        print 'args: ', args
+
+        if args[0] == 'all': 
+            for filename, file in self.current_files.iteritems():
+                start = 0
+                Npoints = len(file.data_a)
+                plotting.plot_wave(file, start, Npoints)
+                return
+
+        
         else: 
             start = int(args[0])
             Npoints = int(args[1])
             # print 'start do_plot: ', start
             # print 'Npoints do_plot: ', Npoints
 
-        for filename, file in self.current_files.iteritems():
-            plotting.plot_wave(file, start, Npoints)
     
     def do_plotfft(self, arg):
         'Plots the fft of an audio file, args include the start point in either time or sample number and the number of points to be analyzed (usually a power of two)'

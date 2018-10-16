@@ -9,7 +9,9 @@ def plot_wave(file, start, Npoints):#, time, self.data):
     # print 'start: ', start 
     # print 'Npoints: ', Npoints
     x = file.time_a[start:start+Npoints]
-    y = 20*np.log10(file.data_a[start:start+Npoints])
+    y = (file.data_a[start:start+Npoints])
+
+    # y = 20*np.log10(file.data_a[start:start+Npoints])
     # print len(x), len(y)
 
 
@@ -62,7 +64,7 @@ def plot_dft(file, start, Npoints):
     print 'dft_L shape: ', np.shape(dft_L)
     freq_a = file.dft_freq_a.T[0]
     print 'freq_a shape: ', np.shape(freq_a)
-    plt.pcolormesh(file.dft_time_a, file.dft_freq_a, dft_L)
+    plt.pcolormesh(file.dft_time_a, file.dft_freq_a.T[0], dft_L)
 
     plt.yscale('log')
     plt.ylabel('Frequency [Hz]')
