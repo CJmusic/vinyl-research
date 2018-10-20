@@ -36,39 +36,36 @@ def octave_smooth(Spec, octave_wdith = 0.33):
     for i in xrange(2,N-2,1): 
         Spec[i] = (Spec[i-2] + Spec[i-1] + Spec[i] + Spec[i+1] + Spec[i+2])/5.0
     return Spec
-# fs, x = wavfile.read('110918UW_stuckontop_r1B.wav')
-# fs, x = wavfile.read('110918UW_stuckontop_r1A.wav')
 
 
-# fs, x = wavfile.read('sweep16kHz.wav')
 fs, x = wavfile.read('13.5.wav')
-
-# fs, x = wavfile.read('2.5.wav')
-# fs, x = wavfile.read('tone1000.wav')
-
 L = x.T[0]
-# L = L.tolist()
-# L = np.array(L[len(x)/2  + len(x)/3:len(x)/2 +len(x)/3+ 2**16])
-print 'len(L): ', len(L)
-f, t, Sxx = signal.spectrogram(L, fs, nperseg = 2**12, nfft = 2**12, noverlap=60)
-##Default nperseg = 256
+time = np.arange(0.0,len(L),1) ##calculates a time array in order to plot the waveform of the audio file
+time = time/float(fs)
 
+f, t, Sxx = signal.spectrogram(L, fs, nperseg = 256, nfft = 256, noverlap=60) ##Default nperseg = 256, nfft =, noverlap = 
+dBS = 10 * np.log10(Sxx) ##converts the Spectrogram to deciBels 
 
-# f, t, Sxx = signal.spectrogram(snd_block, RATE)   
-dBS = 10 * np.log10(Sxx)  # convert to dB
-# plt.pcolormesh(t, f, dBS)
+# fig, axes = plt.subplots(nrows=2, ncols=2)
+# for ax in axes.flat:
+#     im = ax.imshow(np.random.random((10,10)), vmin=0, vmax=1)
+plt.figure(1)
+# Create room on the right
+plt.gcf().subplots_adjust(right=0.8)
 
-time = np.arange(0.0,len(L),1)
-time = time/fs
-
-# Sxx = octave_smooth(Sxx)
 
 plt.subplot(211)
 plt.pcolormesh(t, f, dBS, cmap='inferno')
 plt.ylabel('Frequency [Hz]')
-plt.colorbar()
-# plt.yscale('symlog')
-plt.xlabel('Time [sec]')
+# plt.colorbar()
+# plt.yscale('symlog') ##this logscales the frequency axis, however as of now it does not look good 
 plt.subplot(212)
 plt.plot(time,L)
+plt.xlabel('Time [sec]')
+plt.ylabel ('Amplitude')
+plt.xlim(xmin=0,xmax=max(time))
+cbar_ax = plt.gcf().add_axes([0.85, 0.15, 0.05, 0.7])
+# plt.xlim(min(t),max(t))
+plt.colorbar(cax=cbar_ax)
+
 plt.show()
