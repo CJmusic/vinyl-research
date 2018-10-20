@@ -37,35 +37,37 @@ def octave_smooth(Spec, octave_wdith = 0.33):
         Spec[i] = (Spec[i-2] + Spec[i-1] + Spec[i] + Spec[i+1] + Spec[i+2])/5.0
     return Spec
 
+def mono_spectrogram(file,):
+    fs, x = wavfile.read(file)
+    L = x.T[0]
+    time = np.arange(0.0,len(L),1) ##calculates a time array in order to plot the waveform of the audio file
+    time = time/float(fs)
 
-fs, x = wavfile.read('13.5.wav')
-L = x.T[0]
-time = np.arange(0.0,len(L),1) ##calculates a time array in order to plot the waveform of the audio file
-time = time/float(fs)
+    f, t, Sxx = signal.spectrogram(L, fs, nperseg = 256, nfft = 256, noverlap=60) ##Default nperseg = 256, nfft =, noverlap = 
+    dBS = 10 * np.log10(Sxx) ##converts the Spectrogram to deciBels 
 
-f, t, Sxx = signal.spectrogram(L, fs, nperseg = 256, nfft = 256, noverlap=60) ##Default nperseg = 256, nfft =, noverlap = 
-dBS = 10 * np.log10(Sxx) ##converts the Spectrogram to deciBels 
-
-# fig, axes = plt.subplots(nrows=2, ncols=2)
-# for ax in axes.flat:
-#     im = ax.imshow(np.random.random((10,10)), vmin=0, vmax=1)
-plt.figure(1)
-# Create room on the right
-plt.gcf().subplots_adjust(right=0.8)
+    plt.figure(1)
+    # Create room on the right
+    plt.gcf().subplots_adjust(right=0.8)
 
 
-plt.subplot(211)
-plt.pcolormesh(t, f, dBS, cmap='inferno')
-plt.ylabel('Frequency [Hz]')
-# plt.colorbar()
-# plt.yscale('symlog') ##this logscales the frequency axis, however as of now it does not look good 
-plt.subplot(212)
-plt.plot(time,L)
-plt.xlabel('Time [sec]')
-plt.ylabel ('Amplitude')
-plt.xlim(xmin=0,xmax=max(time))
-cbar_ax = plt.gcf().add_axes([0.85, 0.15, 0.05, 0.7])
-# plt.xlim(min(t),max(t))
-plt.colorbar(cax=cbar_ax)
+    plt.subplot(211)
+    plt.pcolormesh(t, f, dBS, cmap='inferno')
+    plt.ylabel('Frequency [Hz]')
+    # plt.colorbar()
+    # plt.yscale('symlog') ##this logscales the frequency axis, however as of now it does not look good 
+    plt.subplot(212)
+    plt.plot(time,L)
+    plt.xlabel('Time [sec]')
+    plt.ylabel ('Amplitude')
+    plt.xlim(xmin=0,xmax=max(time))
+    cbar_ax = plt.gcf().add_axes([0.85, 0.15, 0.05, 0.7])
+    # plt.xlim(min(t),max(t))
+    cbar = plt.colorbar(cax=cbar_ax)
+    cbar.set_label('Amplitude [dB]')
+    plt.show()
 
-plt.show()
+# def stereo_spectrogram():
+
+
+mono_spectrogram('13.5.wav')
