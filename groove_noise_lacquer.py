@@ -10,24 +10,29 @@ import soundfile as sf
 from octave_smoothing import octave_smooth
 
 
-def groove_map(file_path, filter = False): 
-    SOUNDFILE_types = {'PCM_16': 16, 'PCM_24': 24, 'PCM_32': 32, 'FLOAT': 32}
-    soundfile = sf.SoundFile(file_path, 'r')
-    # data_sf, fs_sf = sf.read(input, always_2d=True)
-    bit_depth = SOUNDFILE_types[soundfile.subtype]
-    print 'The bit depth of the audio is: ', bit_depth
+def groove_map(audio_file, start_groove,T=1.8 ,filter = False): 
+    data = audio_file['data'] 
+    fs = audio_file['fs'] 
+    bit_depth = audio_file['bit_depth']
+    # audio_file[]
+    # SOUNDFILE_types = {'PCM_16': 16, 'PCM_24': 24, 'PCM_32': 32, 'FLOAT': 32}
+    # soundfile = sf.SoundFile(file_path, 'r')
+    # # data_sf, fs_sf = sf.read(input, always_2d=True)
+    # bit_depth = SOUNDFILE_types[soundfile.subtype]
+    # print 'The bit depth of the audio is: ', bit_depth
 
-    fig = plt.figure(1)
-    fs, data = wavfile.read(file_path)
+    # fig = plt.figure(1)
+    # fs, data = wavfile.read(file_path)
+    # fig = plt.figure(1)
 
-    L = data.T[0]/2**bit_depth
-    R = data.T[1]/2**bit_depth
+    L = data.T[0]#/2**bit_depth
+    R = data.T[1]#/2**bit_depth
 
     time = np.arange(0.0,len(data),1) ##calculates a time array in order to plot the waveform of the audio file
     time = time/float(fs)  
 
-    T = 1.8 #seconds, the period of rotation of a record
-    T_s = T*fs #period as a number of samples
+    # T = 1.8 #seconds, the period of rotation of a record
+    T_s = int(T*fs) #period as a number of samples
     # fs = 44100
 
 
@@ -36,11 +41,13 @@ def groove_map(file_path, filter = False):
     print 'max_time: ',  time[len(time)-1]
     print 'num_grooves: ', num_grooves
     # num_grooves = 2
-    num_grooves = 16
+    # num_grooves = 16
 
     for i in xrange(1,num_grooves): ##skip the first groove as this typically contains the needle drop
         start = int(i*T*fs)
         end = int(i*T*fs + T*fs)
+        print 'start: ', start
+        print 'end: ', end
         block_L = L[start:end]
         block_R = R[start:end]
         time = np.linspace(0.0,float(T*fs),T*fs)/float(fs) ##calculates a time array in order to plot the waveform of the audio file
@@ -88,8 +95,8 @@ def groove_map(file_path, filter = False):
         plt.plot(freq, 20*np.log10(fft_block_R/(2**bit_depth)), label = 'groove %i' % i)
         plt.xscale('log')
         # plt.grid(which = 'both')
-        if num_grooves < 6:
-            plt.legend()
+        # if num_grooves < 6:
+            # plt.legend()
 
 
 
@@ -124,27 +131,42 @@ def groove_map(file_path, filter = False):
     plt.xlabel('Freq [Hz]')
 
 
-    plt.show()
+    # plt.show()
+
+if __name__ == '__main__':
+
+    audio_dir = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/'
+    file_dir = '1015_18_LiteToneTest/'
+    file_name = '5.3declicked.wav'
+    # file_dir = '1101_18_LiteTone45rpm/'
+    # file_name = '45-5.2.wav'
+    # file_dir = '4A-RecordedSoundFiles/Dec14-TestAnormalized/Dec14-A1n_files/'
+    # file_name = 'Silence 0_05.wav'
+    # file_name = 'Dec14-TestA1n-tone1000.wav'
+
+    # file_dir = '4A-RecordedSoundFiles/Dec14-TestAnormalized/Dec14-A1n_files/'
+    # file_name = 'Silence 7_45.wav'
+    # file_dir = '00_digital_files/'
+    # file_name = 'tone100.wav'
+    file_dir = '1108_18_LiteToneMusicSample/'
+    file_name = '1-intro.wav'
+
+    file_path = audio_dir + file_dir + file_name
 
 
-audio_dir = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/'
-file_dir = '1015_18_LiteToneTest/'
-file_name = '5.3declicked.wav'
-# file_dir = '1101_18_LiteTone45rpm/'
-# file_name = '45-5.2.wav'
-# file_dir = '4A-RecordedSoundFiles/Dec14-TestAnormalized/Dec14-A1n_files/'
-# file_name = 'Silence 0_05.wav'
-# file_name = 'Dec14-TestA1n-tone1000.wav'
+    SOUNDFILE_types = {'PCM_16': 16, 'PCM_24': 24, 'PCM_32': 32, 'FLOAT': 32}
+    soundfile = sf.SoundFile(file_path, 'r')
+    # data_sf, fs_sf = sf.read(input, always_2d=True)
+    bit_depth = SOUNDFILE_types[soundfile.subtype]
+    print 'The bit depth of the audio is: ', bit_depth
 
-# file_dir = '4A-RecordedSoundFiles/Dec14-TestAnormalized/Dec14-A1n_files/'
-# file_name = 'Silence 7_45.wav'
-# file_dir = '00_digital_files/'
-# file_name = 'tone100.wav'
-file_dir = '1108_18_LiteToneMusicSample/'
-file_name = '1-intro.wav'
+    fs, data = wavfile.read(file_path)
+    audio_file = {}
+    audio_file['data'] = data 
+    audio_file['fs'] = fs 
+    audio_file['bit_depth'] = bit_depth
 
-file_path = audio_dir + file_dir + file_name
-groove_map(file_path, filter = True)
-groove_map(file_path, filter = False)
+    groove_map(audio_file, 1, filter = False)
+    
 
 

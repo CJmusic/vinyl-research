@@ -37,7 +37,7 @@ def octave_smooth(F, freq, width=float(1.0/3.0), fs = 44100, W=None):
 
         prev_lo = lowerbin
         prev_hi = upperbin
-x
+
     ##need to still ensure S is conjugate even 
 
     #and that the nyquist value is real 

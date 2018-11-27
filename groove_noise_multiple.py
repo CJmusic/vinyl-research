@@ -18,8 +18,8 @@ def groove_map(file_path, file_name, filter = False):
     fig = plt.figure(1)
     fs, data = wavfile.read(file_path)
 
-    L = data.T[0]/2**bit_depth
-    R = data.T[1]/2**bit_depth
+    L = data.T[0]#/2**bit_depth
+    R = data.T[1]#/2**bit_depth
 
     time = np.arange(0.0,len(data),1) ##calculates a time array in order to plot the waveform of the audio file
     time = time/float(fs)  
