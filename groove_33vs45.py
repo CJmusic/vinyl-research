@@ -1,74 +1,48 @@
-from scipy import signal
-from scipy.io import wavfile
-from scipy.fftpack import fft
-# import scipy.signal as sig
 import matplotlib.pyplot as plt
 import numpy as np
-
-import soundfile as sf
-
 from octave_smoothing import octave_smooth
-from groove_noise_lacquer import groove_map
+from groove_noise import groove_map
+from audio_load import load_audio
+from fft_audio import fft
+
+print 'hello'
+fs = 44100
+
+a_33rpm_loc = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/1015_18_LiteToneTest/5.1.wav'
+a_45rpm_loc = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/1101_18_LiteTone45rpm/45-5.1.wav'
+a_78rpm_loc = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/1101_18_LiteTone78rpm/78-5.1.wav'
+
+a_33rpm = load_audio(a_33rpm_loc)
+a_45rpm = load_audio(a_45rpm_loc)
+a_78rpm = load_audio(a_78rpm_loc)
+
+a_33_groove, a_33_time = groove_map(a_33rpm, 0, T = 1.8)
+a_45_groove, a_45_time = groove_map(a_45rpm, 0, T = 1.3333)
+a_78_groove, a_78_time = groove_map(a_78rpm, 0, T = 0.769)
+
+# freq_45, fft_45 = fft(a_45_groove[i][0])
+# freq_78, fft_78 = fft(a_78_groove[i][0])
 
 
+plt.figure()
+for i in xrange(len(a_33_groove)):
+    freq_33, fft_33 = fft(a_33_groove[i][0])
+    fft_33 = fft_block_L[0:(len(a_33_groove[i][0])/2 + 1)]
+    freq_33 = np.linspace(0.0,fs/2.0,len(a_33_groove[i][0])/2 + 1)
+    plt.plot(fft(a_33_groove[i][0]),'blue')
 
-audio_dir = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/'
-file_dir = '1015_18_LiteToneTest/'
-file_name = '5.1.wav'
-plt.figure(1)
+for i in xrange(len(a_45_groove)): 
+    freq_33, fft_33 = fft(a_33_groove[i][0])
+    fft_33 = fft_block_L[0:(len(a_33_groove[i][0])/2 + 1)]
+    freq_33 = np.linspace(0.0,fs/2.0,len(a_33_groove[i][0])/2 + 1)
+    plt.plot(fft(a_45_groove[i][0]),'orange')
+for i in xrange(len(a_78_groove)): 
+    freq_33, fft_33 = fft(a_33_groove[i][0])
+    fft_33 = fft_block_L[0:(len(a_33_groove[i][0])/2 + 1)]
+    freq_33 = np.linspace(0.0,fs/2.0,len(a_33_groove[i][0])/2 + 1)
+    plt.plot(fft(a_33_groove[i][0]),'blue')
+    plt.plot(fft(a_78_groove[i][0]),'green')
 
-file_path = audio_dir + file_dir + file_name
-
-SOUNDFILE_types = {'PCM_16': 16, 'PCM_24': 24, 'PCM_32': 32, 'FLOAT': 32}
-soundfile = sf.SoundFile(file_path, 'r')
-# data_sf, fs_sf = sf.read(input, always_2d=True)
-bit_depth = SOUNDFILE_types[soundfile.subtype]
-print 'The bit depth of the audio is: ', bit_depth
-
-fs, data = wavfile.read(file_path)
-audio_file = {}
-audio_file['data'] = data 
-audio_file['fs'] = fs 
-audio_file['bit_depth'] = bit_depth
-
-groove_map(audio_file, 1, filter = False)
-
-file_dir = '1101_18_LiteTone45rpm/'
-file_name = '45-5.1.wav'
-plt.figure(2)
-
-file_path = audio_dir + file_dir + file_name
-
-SOUNDFILE_types = {'PCM_16': 16, 'PCM_24': 24, 'PCM_32': 32, 'FLOAT': 32}
-soundfile = sf.SoundFile(file_path, 'r')
-# data_sf, fs_sf = sf.read(input, always_2d=True)
-bit_depth = SOUNDFILE_types[soundfile.subtype]
-print 'The bit depth of the audio is: ', bit_depth
-
-fs, data = wavfile.read(file_path)
-audio_file = {}
-audio_file['data'] = data 
-audio_file['fs'] = fs 
-audio_file['bit_depth'] = bit_depth
-groove_map(audio_file, 1, T=0.45, filter = False)
-
-file_dir = '1101_18_LiteTone78rpm/'
-file_name = '78-5.1.wav'
-plt.figure(3)
-
-file_path = audio_dir + file_dir + file_name
-
-SOUNDFILE_types = {'PCM_16': 16, 'PCM_24': 24, 'PCM_32': 32, 'FLOAT': 32}
-soundfile = sf.SoundFile(file_path, 'r')
-# data_sf, fs_sf = sf.read(input, always_2d=True)
-bit_depth = SOUNDFILE_types[soundfile.subtype]
-print 'The bit depth of the audio is: ', bit_depth
-
-fs, data = wavfile.read(file_path)
-audio_file = {}
-audio_file['data'] = data 
-audio_file['fs'] = fs 
-audio_file['bit_depth'] = bit_depth
-groove_map(audio_file, 1, T=1.3 , filter = False)
-
+plt.xlim(0,22500)
+plt.yscale('log')
 plt.show()
