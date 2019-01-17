@@ -1,4 +1,4 @@
-pkg load signal
+% pkg load signal
 
 [data, fs] = audioread('../../audio_files/300818_TestPressing_t9/b-sides/110918UW_regrindmouldsheated-r6B.wav');
 data = data(1:fs*10);
@@ -12,5 +12,6 @@ data = data(1:fs*10);
 
 %%EXAMPLE
 figure();
-specgram(data, 256, fs);
+[S, f, t] = specgram(data, 256, fs);
+imagesc (t, f, log(S));
 %Feel free to experiment with these values
