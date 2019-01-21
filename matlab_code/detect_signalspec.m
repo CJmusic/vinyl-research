@@ -35,7 +35,7 @@ signal_indices_Test = []; %%This array is meant to test the detection algorithm
 for k = 1:size(s,2);
     low_freq = sum(s(1:5,k));
     hi_freq = sum(s(6:end,k));
-    if abs(hi_freq)/abs(low_freq) > 1;
+    if abs(hi_freq)/abs(low_freq) > 2.0;
         %If there is sufficient high frequency content in the signal then keep track of
         %these indexes in a buffer
         signal_indices_Test = [signal_indices_Test, k*winSize]; %%%THIS ARRAY TO TEST DETECTION
@@ -50,7 +50,7 @@ for k = 1:size(s,2);
     %    signal_buffer = [];
     %    continue;
     %end
-    if length(signal_buffer) > 1;
+    if length(signal_buffer) > 1 && signal_buffer(length(signal_buffer))/winSize - k < -50;
         %if k*winSize - signal_buffer(1) > 10;  
             %If a signal was detected and it stretches over more than a few windows, then add 
             %it to the signal array as start and ending indices and clear the buffer
@@ -58,7 +58,9 @@ for k = 1:size(s,2);
             end_signal   = signal_buffer(length(signal_buffer)); 
             signal = [signal;[start_signal, end_signal]];
             signal_buffer = []; %clear the signal buffer array
-            continue; 
+            continue;
+     elseif length(signal_buffer) > 1;
+        continue; 
         %end;
     end
     continue;
@@ -68,30 +70,30 @@ end
 length(signal)
 
 %this loops through the signal array and amalgamates adjacent entries 
-for xi = 1:length(signal);
-    if length(signal) - xi <=  0;
-        disp('YA GOOFED')
-        disp(xi)
-        continue;
-    end;
-
-    disp('index: ')
-    disp(xi)
-    disp('length of signal')
-    disp(length(signal))
-    disp('start: ');
-    disp(signal(xi,2)/winSize);
-    disp( 'end: ');
-    disp( signal(xi+1,1)/winSize);
-    
-    if signal(xi + 1, 1)/winSize -  signal(xi, 2)/winSize < 30; 
-%        start_buffer = signal(x1,1);
-%        end_buffer = signal(x1,2);
-        disp('Yall good')
-        signal(xi,2) = signal(xi+1,1);           
-        signal(xi+1,:) = [];
-    end;
-end;
+%for xi = 1:length(signal);
+%    if length(signal) - xi <=  0;
+%        disp('YA GOOFED')
+%        disp(xi)
+%        continue;
+%    end;
+%
+%    disp('index: ')
+%    disp(xi)
+%    disp('length of signal')
+%    disp(length(signal))
+%    disp('start: ');
+%    disp(signal(xi,2)/winSize);
+%    disp( 'end: ');
+%    disp( signal(xi+1,1)/winSize);
+%    
+%    if signal(xi + 1, 1)/winSize -  signal(xi, 2)/winSize < 30; 
+%%        start_buffer = signal(x1,1);
+%%        end_buffer = signal(x1,2);
+%        disp('Yall good')
+%        signal(xi,2) = signal(xi+1,1);           
+%        signal(xi+1,:) = [];
+%    end;
+%end;
         
 signal/winSize
 %length(clicks)
@@ -115,7 +117,7 @@ for i = 1:size(clicks);
     x1 = (clicks(i));
     line([x1 x1], get(gca, 'ylim'),'Color', 'blue','LineStyle', '-');
 end  
-
+  
 for i = 1:size(signal);
     x1 = (signal(i, 1));
     x2 = (signal(i, 2));
