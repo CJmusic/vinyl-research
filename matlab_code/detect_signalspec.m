@@ -42,35 +42,64 @@ for k = 1:size(s,2);
         signal_buffer = [signal_buffer, k*winSize];
         continue;
     end
-    if length(signal_buffer) == 1; 
-        %If a signal is detected in one window, but not the next it is most likely a click
-        %add it to the clicks array and clear the current buffer
-        disp('CLICK BUFFER');
-        clicks = [clicks, signal_buffer];
-        signal_buffer = [];
-        continue;
-    end
-    if length(signal_buffer) > 1; 
-        %If a signal was detected and it stretches over more than a few windows, then add it 
-        %to the signal array as start and ending indices and clear the buffer
-        start_signal = signal_buffer(1); 
-        end_signal   = signal_buffer(length(signal_buffer)); 
-        signal = [signal;[start_signal, end_signal]];
-        signal_buffer = []; %clear the signal buffer array
-        continue; 
+    %if length(signal_buffer) == 1; 
+    %    %If a signal is detected in one window, but not the next it is most likely a click
+    %    %add it to the clicks array and clear the current buffer
+    %    disp('CLICK BUFFER');
+    %    clicks = [clicks, signal_buffer];
+    %    signal_buffer = [];
+    %    continue;
+    %end
+    if length(signal_buffer) > 1;
+        %if k*winSize - signal_buffer(1) > 10;  
+            %If a signal was detected and it stretches over more than a few windows, then add 
+            %it to the signal array as start and ending indices and clear the buffer
+            start_signal = signal_buffer(1); 
+            end_signal   = signal_buffer(length(signal_buffer)); 
+            signal = [signal;[start_signal, end_signal]];
+            signal_buffer = []; %clear the signal buffer array
+            continue; 
+        %end;
     end
     continue;
 end
 
-length(clicks)
+
 length(signal)
-clicks
-signal
+
+%this loops through the signal array and amalgamates adjacent entries 
+for xi = 1:length(signal);
+    if length(signal) - xi <=  0;
+        disp('YA GOOFED')
+        disp(xi)
+        continue;
+    end;
+
+    disp('index: ')
+    disp(xi)
+    disp('length of signal')
+    disp(length(signal))
+    disp('start: ');
+    disp(signal(xi,2)/winSize);
+    disp( 'end: ');
+    disp( signal(xi+1,1)/winSize);
+    
+    if signal(xi + 1, 1)/winSize -  signal(xi, 2)/winSize < 30; 
+%        start_buffer = signal(x1,1);
+%        end_buffer = signal(x1,2);
+        disp('Yall good')
+        signal(xi,2) = signal(xi+1,1);           
+        signal(xi+1,:) = [];
+    end;
+end;
+        
+signal/winSize
+%length(clicks)
+length(signal)
+%clicks
+%signal/winSize
 % [s,f,t] = spectrogram(data,fs)
 % imagesc (t, f, log(s));
-figure(1);
-clf();
-plot(x,'red')
 figure(2);
 clf();
 plot(X)
@@ -90,8 +119,13 @@ end
 for i = 1:size(signal);
     x1 = (signal(i, 1));
     x2 = (signal(i, 2));
-    line([x1 x1], get(gca, 'ylim'),'Color', 'red','LineStyle', '-'); 
-    line([x2 x2], get(gca, 'ylim'),'Color', 'green','LineStyle', '-');
+    y1 =  1;
+    y2 = -1;
+    %area([x1,x2]);
+    signal_area = fill([x1 x1 x2 x2],[y1 y2 y2 y1],'r');
+    alpha(signal_area, '0.5');
+    %line([x1 x1], get(gca, 'ylim'),'Color', 'red','LineStyle', '-'); 
+    %line([x2 x2], get(gca, 'ylim'),'Color', 'green','LineStyle', '-');
 end  
 
 
