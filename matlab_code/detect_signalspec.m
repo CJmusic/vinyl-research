@@ -1,4 +1,8 @@
-filename = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/1015_18_LiteToneTest/5.3.wav';
+%filename = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/1015_18_LiteToneTest/5.3.wav';
+filename = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/4A-RecordedSoundFiles/Dec14-TestAnormalized/Dec14-TestA1-normalized.wav';
+
+filename = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/1015_18_LiteToneTest/1-1.wav';
+
 
 [data, fs] = audioread(filename);
 
@@ -35,7 +39,7 @@ signal_indices_Test = []; %%This array is meant to test the detection algorithm
 for k = 1:size(s,2);
     low_freq = sum(s(1:5,k));
     hi_freq = sum(s(6:end,k));
-    if abs(hi_freq)/abs(low_freq) > 2.0;
+    if abs(hi_freq)/abs(low_freq) > 1.0;
         %If there is sufficient high frequency content in the signal then keep track of
         %these indexes in a buffer
         signal_indices_Test = [signal_indices_Test, k*winSize]; %%%THIS ARRAY TO TEST DETECTION
