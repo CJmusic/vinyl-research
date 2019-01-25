@@ -2,7 +2,7 @@
 filename = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/4A-RecordedSoundFiles/Dec14-TestAnormalized/Dec14-TestA1-normalized.wav';
 
 filename = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/1015_18_LiteToneTest/1-1.wav';
-
+%filename = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/00_digital_files/tone1000.wav';
 
 [data, fs] = audioread(filename);
 
@@ -17,7 +17,7 @@ size(X)
 % dur=0.5;
 winSize= 2^8;%round(fs*dur);
 overlap=0;%round(winSize/2);
-fftsize=winSize;
+fftsize=2^8;%winSize;
 % figure
 [s,f,t] = spectrogram(X,winSize,overlap,fftsize,fs,'yaxis');
 
@@ -36,12 +36,16 @@ signal_buffer = [];
 signal_indices_Test = []; %%This array is meant to test the detection algorithm 
                           %%independent of the indexing etc.
 
+bin_width = 30.0; %%this is the number of windows the detect signal looks for 
+
 for k = 1:size(s,2);
+    signal_check = false;
     low_freq = sum(s(1:5,k));
     hi_freq = sum(s(6:end,k));
     if abs(hi_freq)/abs(low_freq) > 1.0;
         %If there is sufficient high frequency content in the signal then keep track of
-        %these indexes in a buffer
+        %these indexes in a bufferi
+        signal_check = true;
         signal_indices_Test = [signal_indices_Test, k*winSize]; %%%THIS ARRAY TO TEST DETECTION
         signal_buffer = [signal_buffer, k*winSize];
         continue;
@@ -54,16 +58,24 @@ for k = 1:size(s,2);
     %    signal_buffer = [];
     %    continue;
     %end
-    if length(signal_buffer) > 1 && signal_buffer(length(signal_buffer))/winSize - k < -50;
+    if length(signal_buffer) == 1 && signal_buffer(length(signal_buffer))/winSize - k > -10 && signal_check ==false;
         %if k*winSize - signal_buffer(1) > 10;  
             %If a signal was detected and it stretches over more than a few windows, then add 
             %it to the signal array as start and ending indices and clear the buffer
-            start_signal = signal_buffer(1); 
-            end_signal   = signal_buffer(length(signal_buffer)); 
-            signal = [signal;[start_signal, end_signal]];
+            %start_signal = signal_buffer(1); 
+            %end_signal   = signal_buffer(length(signal_buffer)); 
+            %signal = [signal;[start_signal, end_signal]];
+            clicks = [clicks,signal_buffer];
             signal_buffer = []; %clear the signal buffer array
             continue;
      elseif length(signal_buffer) > 1;
+            if k - signal_buffer(length(signal_buffer))/winSize > 10;
+              %%add the current buffer to the signals and clear it  
+                    start_signal = signal_buffer(1); 
+                    end_signal   = signal_buffer(length(signal_buffer)); 
+                    signal = [signal;[start_signal, end_signal]];
+                    signal_buffer = []; %clear the signal buffer array
+            end  
         continue; 
         %end;
     end
@@ -73,7 +85,7 @@ end
 
 length(signal)
 
-%this loops through the signal array and amalgamates adjacent entries 
+%%this loops through the signal array and amalgamates adjacent entries 
 %for xi = 1:length(signal);
 %    if length(signal) - xi <=  0;
 %        disp('YA GOOFED')
@@ -119,7 +131,7 @@ end
 
 for i = 1:size(clicks);
     x1 = (clicks(i));
-    line([x1 x1], get(gca, 'ylim'),'Color', 'blue','LineStyle', '-');
+    line([x1 x1], get(gca, 'ylim'),'Color', 'red','LineStyle', '-');
 end  
   
 for i = 1:size(signal);
@@ -136,4 +148,7 @@ end
 
 
 
+%f
+%size(f)
+%size(s)
 

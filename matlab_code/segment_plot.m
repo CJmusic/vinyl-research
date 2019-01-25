@@ -11,6 +11,9 @@ filename = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_file
 % filename = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/misc/longleadout-beginning.wav';
 
 filename = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/lacquernoise.wav';
+
+filename = 'ChirpSilentLeadinCUT.wav'
+
 [data, fs] = audioread(filename);
 
 
@@ -29,18 +32,34 @@ end
 
 clf(figure(1))
 clf(figure(2))
-for ns = 1:num_segs;
+for ns = 1:5:num_segs;
     if rms(seg_array(:,1,ns),1) < 0.3
         figure(1)
-        plot(time_seg,seg_array(:,1,ns), 'DisplayName',['segment',num2str(ns)]);
+        plot(time_seg,seg_array(:,1,ns), 'DisplayName',['segment',num2str(ns)], 'Color', [1 - 1.0*ns/100 ,0,1.0*ns/100,0.5]);
         grid on; hold on; legend;
 
-        figure(2)
-        freq = fs*(0:(n_sam/2))/n_sam;
-        fft_seg = fft(seg_array(:,1,ns))/n_sam; 
-        fft_seg = fft_seg(1:size(fft_seg)/2+1);
-        plot(freq,20*log10(real(fft_seg)), 'DisplayName',['segment',num2str(ns)]);
-        grid on; hold on; legend;
-        set(gca, 'XScale', 'log');
+        %figure(2)
+        %freq = fs*(0:(n_sam/2))/n_sam;
+        %fft_seg = fft(seg_array(:,1,ns))/n_sam; 
+        %fft_seg = fft_seg(1:size(fft_seg)/2+1);
+        %plot(freq,20*log10(real(fft_seg)), 'DisplayName',['segment',num2str(ns)]);
+        %grid on; hold on; legend;
+        %set(gca, 'XScale', 'log');
     end
+end
+
+for ns = 1:10;
+    %if rms(seg_array(:,1,ns),1) < 0.3
+        figure(2)
+        plot(time_seg,seg_array(:,1,ns), 'DisplayName',['segment',num2str(ns)], 'Color', [1 - 1.0*ns/10 ,0,1.0*ns/10,0.5]);
+        grid on; hold on; legend;
+
+        %figure(2)
+        %freq = fs*(0:(n_sam/2))/n_sam;
+        %fft_seg = fft(seg_array(:,1,ns))/n_sam; 
+        %fft_seg = fft_seg(1:size(fft_seg)/2+1);
+        %plot(freq,20*log10(real(fft_seg)), 'DisplayName',['segment',num2str(ns)]);
+        %grid on; hold on; legend;
+        %set(gca, 'XScale', 'log');
+    %end
 end
