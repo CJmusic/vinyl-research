@@ -20,3 +20,4 @@ size(fft_data)
 
 plot(freq,20*log10(real(fft_data))) 
 grid on; 
+set(gca, 'XScale','log');
