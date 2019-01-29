@@ -25,14 +25,13 @@ num_segs = (floor(length(data)/fs/T))
 n_sam = round(T*fs)
 time_seg = time(1:n_sam);
 seg_array = []; %need to 
-
 for ng = 1:num_segs
     seg_array(:,:,ng) = data(1+(ng-1)*n_sam:ng*n_sam,:);
 end
 
 clf(figure(1))
 clf(figure(2))
-for ns = 1:5:num_segs;
+for ns = (num_segs-5):num_segs;
     if rms(seg_array(:,1,ns),1) < 0.3
         figure(1)
         plot(time_seg,seg_array(:,1,ns), 'DisplayName',['segment',num2str(ns)], 'Color', [1 - 1.0*ns/100 ,0,1.0*ns/100,0.5]);
@@ -48,7 +47,7 @@ for ns = 1:5:num_segs;
     end
 end
 
-for ns = 1:10;
+for ns = 1:5;
     %if rms(seg_array(:,1,ns),1) < 0.3
         figure(2)
         plot(time_seg,seg_array(:,1,ns), 'DisplayName',['segment',num2str(ns)], 'Color', [1 - 1.0*ns/10 ,0,1.0*ns/10,0.5]);
