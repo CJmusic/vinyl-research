@@ -39,7 +39,7 @@ corr_R = [];
 %%This loop for correlation with the first groove in the series
 for ns = 1:num_segs
     %corr_coeff = sum(seg_array(:,:,1).*seg_array(:,:,ns)) - sum(seg_array(:,:,1)).*sum(seg_array(:,:,ns));
-    corr_coeff = sum(seg_array(:,:,1).*seg_array(:,:,ns)); 
+    corr_coeff = sum(seg_array(:,:,20).*seg_array(:,:,ns)); 
     corr_L = [corr_L,corr_coeff(1)];
     corr_R = [corr_R,corr_coeff(2)];
 end
