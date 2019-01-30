@@ -73,17 +73,17 @@ for i = (1:length(name_files));
                                              %fs of the reference file, I assume thats the right one
     
     data_file = data_file(:,1);
-    
-    figure(1)
-    subplot(2,1,1)
-    plot(time_ref,data_ref)
-    title('s_1')
-    
-    subplot(2,1,2)
-    plot(time_file,data_file)
-    title('s_2')
-    xlabel('Time (s)')
-
+%    
+%    figure(1)
+%    subplot(2,1,1)
+%    plot(time_ref,data_ref)
+%    title('s_1')
+%    
+%    subplot(2,1,2)
+%    plot(time_file,data_file)
+%    title('s_2')
+%    xlabel('Time (s)')
+%
     
     [acor,lag] = xcorr(data_file,data_ref);
     [~,I] = max(abs(acor));
@@ -102,9 +102,23 @@ end
 time = time_ref;
 rotation_speed = 33.33333;%45;
 T = 60/rotation_speed; %this is the length of one groove segment
-num_segs = (floor(length(data_ref)/fs_ref/T))
 n_sam = round(T*fs_ref)
 time_seg = time(1:n_sam);
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 
+%~~~~~PLOTTING~~~~~~%
+seg_array = [];
 
+figure(2);hold on;
+
+for i=(1:length(AUDIO_FILES))
+    data = AUDIO_FILES{i};
+    num_segs = (floor(length(data)/fs_ref/T))
+    for ng = 1:num_segs
+        %seg_array(:,:,ng) = data(1+(ng-1)*n_sam:ng*n_sam,:);
+        plot(time_seg,data(1+(ng-1)*n_sam:ng*n_sam,:));
+ 
+    end    
+
+end
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~%
