@@ -59,7 +59,8 @@ to work with multiple recordings of the same audio file and our groove plotting 
 
 path_ref = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/1015_18_LiteToneTest/5.2.wav';
 dir_files = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/1015_18_LiteToneTest/';
-name_files = {'5.1.wav'};  % {['5.2.wav', '5.3.wav', '5.4.wav', '5.5.wav']}; 
+name_files = {'6.1.wav'};  % {['5.2.wav', '5.3.wav', '5.4.wav', '5.5.wav']}; 
+
 
 
 
@@ -140,10 +141,13 @@ fftsize=2^8;%winSize;
 %~~~~~GROOVE PLOTTING~~~~~~%
 seg_array = [];
 
-figure(2);hold on;
-
+figure(2);hold on; legend;
+disp('SIZE AUDIO_FILES')
+size(AUDIO_FILES)
 for i=(1:length(AUDIO_FILES))
     data = AUDIO_FILES{i};
+    disp('i: ')
+    i
     num_segs = (floor(length(data)/fs_ref/T))
     for ng = 1:num_segs
         %seg_array(:,:,ng) = data(1+(ng-1)*n_sam:ng*n_sam,:);
@@ -152,8 +156,10 @@ for i=(1:length(AUDIO_FILES))
         [s,f,t] = spectrogram(data_seg,winSize,overlap,fftsize,fs,'yaxis');
         lo_freq = sum(s(1:5));
         hi_freq = sum(s(6:end));
-        if abs(hi_freq/lo_freq) < 1.0;
-            plot(time_seg,data_seg);
+        abs(hi_freq/lo_freq) 
+        if abs(hi_freq/lo_freq) < 5;
+        %if ng == 3; 
+            plot(time_seg,data_seg,  'DisplayName', [ name_files{i},'groove', num2str(ng)]);
         end
     end    
 end
