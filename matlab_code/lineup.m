@@ -1,6 +1,9 @@
-%reference = 'correlation1.wav' %filename = 'correlation2.wav'
+%reference = 'correlation1.wav' 
+%filename = 'correlation2.wav'
 %
 %
+%filename = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/1015_18_LiteToneTest/5.1.wav';
+%reference = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/1015_18_LiteToneTest/5.2.wav';
 %[data_file, fs] = audioread(filename);
 %[data_ref, fs] = audioread(reference);
 %
@@ -27,25 +30,25 @@
 %
 %timeDiff = lagDiff/fs
 %
-%figure(3)
-%plot(lag,acor)
+%%figure(3)
+%%plot(lag,acor)
 %
-%cdata_file = data_file(-lagDiff+1:end);
+%cdata_file = data_file(lagDiff+1:end); %might be negative -lagDiff
 %ct_file = (0:length(cdata_file)-1)/fs;
 %
 %figure(1)
 %subplot(2,1,1)
 %plot(t_ref,data_ref)
 %title('s_1, aligned')
-%xlim([0,1])
+%%xlim([0,1])
 %subplot(2,1,2)
 %
 %plot(ct_file,cdata_file)
 %title('s_2')
 %xlabel('Time (s)')
 %xlim([0,1])
-%
-%
+
+
 clf(figure(1))
 clf(figure(2))
 
@@ -54,16 +57,16 @@ This code uses xcorr to lineup two audio files. The code above is the simplest u
 to work with multiple recordings of the same audio file and our groove plotting method.
 %}
 
-path_ref = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/1015_18_LiteToneTest/5.1.wav';
+path_ref = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/1015_18_LiteToneTest/5.2.wav';
 dir_files = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/1015_18_LiteToneTest/';
-name_files = {'5.2.wav'};  % {['5.2.wav', '5.3.wav', '5.4.wav', '5.5.wav']}; 
+name_files = {'5.1.wav'};  % {['5.2.wav', '5.3.wav', '5.4.wav', '5.5.wav']}; 
 
 
 
 
-path_ref = 'correlation1.wav' 
-dir_files = ''
-name_files = {'correlation2.wav'}
+%path_ref = 'correlation1.wav' 
+%dir_files = ''
+%name_files = {'correlation2.wav'}
 
 AUDIO_FILES = {};
 
@@ -80,6 +83,13 @@ name_files
 figure(1); hold on;
 plot(time_ref,data_ref, 'g')
 title('s_1')
+
+
+
+%%Gonna slice out a smaller section of audio to line them up
+
+lineup_ref  = data_ref;%(10*fs_ref:15*fs_ref);
+size(lineup_ref)
 for i = (1:length(name_files));
  
     strcat(dir_files,name_files{i})
@@ -87,19 +97,22 @@ for i = (1:length(name_files));
     
     data_file = data_file(:,1);
     %data_file = data_file(1:7*fs_ref);
+     
+    lineup_file = data_file;%(10*fs_file:15*fs_file); 
+    size(lineup_ref)
+   
+    time_file = (0:length(data_file)-1)/fs_file; %Not sure if important, but here I'm using the fs
     
-    time_file = (0:length(data_file)-1)/fs_file; %Not sure if important, but here I'm using the 
-                                             %fs of the reference file, I assume thats the right one
-
-    
-    [acor,lag] = xcorr(data_file,data_ref);
+    [acor,lag] = xcorr(lineup_file,lineup_ref);
     [~,I] = max(abs(acor));
     lagDiff = lag(I)
     timeDiff = lagDiff/fs_file
-    cdata_file = data_file(-lagDiff+1:end);
+
+    cdata_file = data_file(lagDiff+1:end);
     ctime_file = (0:length(cdata_file)-1)/fs_file;
    
     size(data_file)
+    size(cdata_file)
     size(data_ref)
    
     plot(ctime_file, cdata_file)
@@ -124,13 +137,12 @@ fftsize=2^8;%winSize;
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 
 
-%~~~~~PLOTTING~~~~~~%
+%~~~~~GROOVE PLOTTING~~~~~~%
 seg_array = [];
 
 figure(2);hold on;
 
 for i=(1:length(AUDIO_FILES))
-    size(AUDIO_FILES{i})
     data = AUDIO_FILES{i};
     num_segs = (floor(length(data)/fs_ref/T))
     for ng = 1:num_segs
@@ -138,13 +150,9 @@ for i=(1:length(AUDIO_FILES))
         %%IF THERE HI FREQ DONT PLOT IT
         data_seg = data(1+(ng-1)*n_sam:ng*n_sam,:);
         [s,f,t] = spectrogram(data_seg,winSize,overlap,fftsize,fs,'yaxis');
-        disp('SIZE of s')
-        size(s)
         lo_freq = sum(s(1:5));
         hi_freq = sum(s(6:end));
-        abs(hi_freq/lo_freq) 
         if abs(hi_freq/lo_freq) < 1.0;
-            %plot(time_seg,data(1+(ng-1)*n_sam:ng*n_sam,:));
             plot(time_seg,data_seg);
         end
     end    
