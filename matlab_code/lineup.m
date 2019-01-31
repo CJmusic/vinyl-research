@@ -46,6 +46,8 @@
 %xlim([0,1])
 %
 %
+clf(figure(1))
+clf(figure(2))
 
 %{
 This code uses xcorr to lineup two audio files. The code above is the simplest use case, below it's been specialized
@@ -54,47 +56,55 @@ to work with multiple recordings of the same audio file and our groove plotting 
 
 path_ref = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/1015_18_LiteToneTest/5.1.wav';
 dir_files = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/1015_18_LiteToneTest/';
-name_files = {['5.2.wav', '5.3.wav', '5.4.wav', '5.5.wav']}; 
+name_files = {'5.2.wav'};  % {['5.2.wav', '5.3.wav', '5.4.wav', '5.5.wav']}; 
+
+
+
+
+path_ref = 'correlation1.wav' 
+dir_files = ''
+name_files = {'correlation2.wav'}
 
 AUDIO_FILES = {};
 
 [data_ref, fs_ref] = audioread(path_ref);
-time_ref = (0:length(data_ref)-1)/fs;
 data_ref = data_ref(:,1);
+%data_ref = data_ref(1:5*fs_ref);
 size(data_ref)
+time_ref = (0:length(data_ref)-1)/fs;
 AUDIO_FILES{1} = data_ref;
 size(AUDIO_FILES)
 size(name_files)
+name_files
 %~ Loop through all the files and line them up with the reference
-for i = (1:length(name_files)); 
-    strcat(dir_files,filename{i})
-    [data_file, fs_file] = audioread(strcat(dir_files,filename{i}));
-    time_file = (0:length(data_file)-1)/fs_ref; %Not sure if important, but here I'm using the 
-                                             %fs of the reference file, I assume thats the right one
+figure(1); hold on;
+plot(time_ref,data_ref, 'g')
+title('s_1')
+for i = (1:length(name_files));
+ 
+    strcat(dir_files,name_files{i})
+    [data_file, fs_file] = audioread(strcat(dir_files,name_files{i}));
     
     data_file = data_file(:,1);
-%    
-%    figure(1)
-%    subplot(2,1,1)
-%    plot(time_ref,data_ref)
-%    title('s_1')
-%    
-%    subplot(2,1,2)
-%    plot(time_file,data_file)
-%    title('s_2')
-%    xlabel('Time (s)')
-%
+    %data_file = data_file(1:7*fs_ref);
+    
+    time_file = (0:length(data_file)-1)/fs_file; %Not sure if important, but here I'm using the 
+                                             %fs of the reference file, I assume thats the right one
+
     
     [acor,lag] = xcorr(data_file,data_ref);
     [~,I] = max(abs(acor));
     lagDiff = lag(I)
-    timeDiff = lagDiff/fs_ref
+    timeDiff = lagDiff/fs_file
     cdata_file = data_file(-lagDiff+1:end);
-    ct_file = (0:length(cdata_file)-1)/fs_ref;
+    ctime_file = (0:length(cdata_file)-1)/fs_file;
    
     size(data_file)
     size(data_ref)
    
+    plot(ctime_file, cdata_file)
+    title('s_2')
+    xlabel('Time (s)')
     AUDIO_FILES{i+1} = cdata_file; 
 end
 
@@ -106,19 +116,37 @@ n_sam = round(T*fs_ref)
 time_seg = time(1:n_sam);
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 
+
+%~~Detect_Signal Parameters~~~%
+winSize= 2^8;%round(fs*dur);
+overlap=0;%round(winSize/2);
+fftsize=2^8;%winSize;
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+
+
 %~~~~~PLOTTING~~~~~~%
 seg_array = [];
 
 figure(2);hold on;
 
 for i=(1:length(AUDIO_FILES))
+    size(AUDIO_FILES{i})
     data = AUDIO_FILES{i};
     num_segs = (floor(length(data)/fs_ref/T))
     for ng = 1:num_segs
         %seg_array(:,:,ng) = data(1+(ng-1)*n_sam:ng*n_sam,:);
-        plot(time_seg,data(1+(ng-1)*n_sam:ng*n_sam,:));
- 
+        %%IF THERE HI FREQ DONT PLOT IT
+        data_seg = data(1+(ng-1)*n_sam:ng*n_sam,:);
+        [s,f,t] = spectrogram(data_seg,winSize,overlap,fftsize,fs,'yaxis');
+        disp('SIZE of s')
+        size(s)
+        lo_freq = sum(s(1:5));
+        hi_freq = sum(s(6:end));
+        abs(hi_freq/lo_freq) 
+        if abs(hi_freq/lo_freq) < 1.0;
+            %plot(time_seg,data(1+(ng-1)*n_sam:ng*n_sam,:));
+            plot(time_seg,data_seg);
+        end
     end    
-
 end
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~%
