@@ -49,25 +49,18 @@
 %xlim([0,1])
 
 
-clf(figure(1))
-clf(figure(2))
-
 %{
-This code uses xcorr to lineup two audio files. The code above is the simplest use case, below it's been specialized
+This code uses xcorr to lineup two audio files. The code above is a simple example that always works, below it's been specialized and
 to work with multiple recordings of the same audio file and our groove plotting method.
 %}
 
+
+clf(figure(1))
+clf(figure(2))
+
 path_ref = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/1015_18_LiteToneTest/5.2.wav';
 dir_files = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/1015_18_LiteToneTest/';
-name_files = {'6.1.wav'};  % {['5.2.wav', '5.3.wav', '5.4.wav', '5.5.wav']}; 
-
-
-
-
-
-%path_ref = 'correlation1.wav' 
-%dir_files = ''
-%name_files = {'correlation2.wav'}
+name_files = {'5.1.wav'};  % {['5.2.wav', '5.3.wav', '5.4.wav', '5.5.wav']}; 
 
 AUDIO_FILES = {};
 
@@ -91,6 +84,7 @@ title('s_1')
 
 lineup_ref  = data_ref;%(10*fs_ref:15*fs_ref);
 size(lineup_ref)
+
 for i = (1:length(name_files));
  
     strcat(dir_files,name_files{i})
@@ -108,7 +102,6 @@ for i = (1:length(name_files));
     [~,I] = max(abs(acor));
     lagDiff = lag(I)
     timeDiff = lagDiff/fs_file
-
     cdata_file = data_file(lagDiff+1:end);
     ctime_file = (0:length(cdata_file)-1)/fs_file;
    
@@ -117,7 +110,7 @@ for i = (1:length(name_files));
     size(data_ref)
    
     plot(ctime_file, cdata_file)
-    title('s_2')
+    title('Original Audio Lined up')
     xlabel('Time (s)')
     AUDIO_FILES{i+1} = cdata_file; 
 end
@@ -140,6 +133,7 @@ fftsize=2^8;%winSize;
 
 %~~~~~GROOVE PLOTTING~~~~~~%
 seg_array = [];
+name_files= [ {'5.2.wav'},name_files];
 
 figure(2);hold on; legend;
 disp('SIZE AUDIO_FILES')
@@ -157,8 +151,8 @@ for i=(1:length(AUDIO_FILES))
         lo_freq = sum(s(1:5));
         hi_freq = sum(s(6:end));
         abs(hi_freq/lo_freq) 
-        if abs(hi_freq/lo_freq) < 5;
-        %if ng == 3; 
+        %if abs(hi_freq/lo_freq) < 2.0;
+        if ng > 1 &  ng < 4; 
             plot(time_seg,data_seg,  'DisplayName', [ name_files{i},'groove', num2str(ng)]);
         end
     end    
