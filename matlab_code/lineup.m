@@ -68,46 +68,33 @@ AUDIO_FILES = {};
 data_ref = data_ref(:,1);
 %data_ref = data_ref(1:5*fs_ref);
 size(data_ref)
-time_ref = (0:length(data_ref)-1)/fs;
+time_ref = (0:length(data_ref)-1)/fs_ref;
 AUDIO_FILES{1} = data_ref;
 size(AUDIO_FILES)
 size(name_files)
 name_files
-%~ Loop through all the files and line them up with the reference
 figure(1); hold on;
-plot(time_ref,data_ref, 'g')
-title('s_1')
-
-
-
-%%Gonna slice out a smaller section of audio to line them up
-
-lineup_ref  = data_ref;%(10*fs_ref:15*fs_ref);
-size(lineup_ref)
-
+plot(time_ref,data_ref,'g')
+%~ Loop through all the files and line them up with the reference
 for i = (1:length(name_files));
  
     strcat(dir_files,name_files{i})
     [data_file, fs_file] = audioread(strcat(dir_files,name_files{i}));
     
     data_file = data_file(:,1);
-    %data_file = data_file(1:7*fs_ref);
      
-    lineup_file = data_file;%(10*fs_file:15*fs_file); 
-    size(lineup_ref)
-   
     time_file = (0:length(data_file)-1)/fs_file; %Not sure if important, but here I'm using the fs
     
-    [acor,lag] = xcorr(lineup_file,lineup_ref);
+    [acor,lag] = xcorr(data_file,data_ref);
     [~,I] = max(abs(acor));
     lagDiff = lag(I)
     timeDiff = lagDiff/fs_file
     cdata_file = data_file(lagDiff+1:end);
     ctime_file = (0:length(cdata_file)-1)/fs_file;
    
-    size(data_file)
-    size(cdata_file)
-    size(data_ref)
+%    size(data_file)
+%    size(cdata_file)
+%    size(data_ref)
    
     plot(ctime_file, cdata_file)
     title('Original Audio Lined up')
@@ -136,23 +123,17 @@ seg_array = [];
 name_files= [ {'5.2.wav'},name_files];
 
 figure(2);hold on; legend;
-disp('SIZE AUDIO_FILES')
-size(AUDIO_FILES)
 for i=(1:length(AUDIO_FILES))
     data = AUDIO_FILES{i};
-    disp('i: ')
-    i
     num_segs = (floor(length(data)/fs_ref/T))
     for ng = 1:num_segs
         %seg_array(:,:,ng) = data(1+(ng-1)*n_sam:ng*n_sam,:);
-        %%IF THERE HI FREQ DONT PLOT IT
         data_seg = data(1+(ng-1)*n_sam:ng*n_sam,:);
-        [s,f,t] = spectrogram(data_seg,winSize,overlap,fftsize,fs,'yaxis');
+        [s,f,t] = spectrogram(data_seg,winSize,overlap,fftsize,fs_file,'yaxis');
         lo_freq = sum(s(1:5));
         hi_freq = sum(s(6:end));
-        abs(hi_freq/lo_freq) 
-        %if abs(hi_freq/lo_freq) < 2.0;
-        if ng > 1 &  ng < 4; 
+        %if abs(hi_freq/lo_freq) < 2.0; %%This is where the DETECT SIGNAL algorithm will go once its active
+        if ng > 1 &  ng < 4; %for now just plot grooves 2 & 3  
             plot(time_seg,data_seg,  'DisplayName', [ name_files{i},'groove', num2str(ng)]);
         end
     end    
