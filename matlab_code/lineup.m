@@ -57,6 +57,7 @@ to work with multiple recordings of the same audio file and our groove plotting 
 
 clf(figure(1))
 clf(figure(2))
+clf(figure(3))
 
 path_ref = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/1015_18_LiteToneTest/5.2.wav';
 dir_files = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/1015_18_LiteToneTest/';
@@ -126,6 +127,7 @@ figure(2);hold on; legend;
 for i=(1:length(AUDIO_FILES))
     data = AUDIO_FILES{i};
     num_segs = (floor(length(data)/fs_ref/T))
+    data_groove = data(1:n_sam,:);
     for ng = 1:num_segs
         %seg_array(:,:,ng) = data(1+(ng-1)*n_sam:ng*n_sam,:);
         data_seg = data(1+(ng-1)*n_sam:ng*n_sam,:);
@@ -133,8 +135,14 @@ for i=(1:length(AUDIO_FILES))
         lo_freq = sum(s(1:5));
         hi_freq = sum(s(6:end));
         %if abs(hi_freq/lo_freq) < 2.0; %%This is where the DETECT SIGNAL algorithm will go once its active
-        if ng > 1 &  ng < 4; %for now just plot grooves 2 & 3  
+        if ng > 1 &  ng < 6; %for now just plot grooves 2 & 3  
+            figure(2);hold on; legend;
             plot(time_seg,data_seg,  'DisplayName', [ name_files{i},'groove', num2str(ng)]);
+            figure(3); hold on; legend; 
+            %[cxy, f] = mscohere(x,y,window,noverlap,fs); %this is the call to mscohere
+            [cxy, f] = mscohere(data(1:n_sam,:),data_seg,winSize,overlap,fs_file);
+            plot(f/fs_file, cxy);
+            set(gca, 'XScale', 'log');
         end
     end    
 end
