@@ -141,8 +141,8 @@ for i=(1:length(AUDIO_FILES))
             figure(3); hold on; legend; 
             %[cxy, f] = mscohere(x,y,window,noverlap,fs); %this is the call to mscohere
             [cxy, f] = mscohere(data(1:n_sam,:),data_seg,winSize,overlap,fs_file);
-            plot(f/fs_file, cxy);
-            set(gca, 'XScale', 'log');
+            plot(f, cxy);
+            %set(gca, 'XScale', 'log');
         end
     end    
 end

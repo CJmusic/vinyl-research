@@ -12,7 +12,8 @@ filename = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_file
 
 filename = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/lacquernoise.wav';
 
-filename = 'ChirpSilentLeadinCUT.wav'
+filename = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/from_John/silent_cartridge_192.wav';
+%filename = 'ChirpSilentLeadinCUT.wav'
 
 [data, fs] = audioread(filename);
 
@@ -31,7 +32,7 @@ end
 
 clf(figure(1))
 clf(figure(2))
-for ns = (num_segs-5):num_segs;
+for ns = 1:5;%(num_segs-5):num_segs;
     if rms(seg_array(:,1,ns),1) < 0.3
         figure(1)
         plot(time_seg,seg_array(:,1,ns), 'DisplayName',['segment',num2str(ns)], 'Color', [1 - 1.0*ns/100 ,0,1.0*ns/100,0.5]);
