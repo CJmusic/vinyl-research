@@ -1,61 +1,90 @@
 %{ SCRIPT START BELOW %}
 %
-path_ref = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/1015_18_LiteToneTest/5.2.wav';
+path = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/1015_18_LiteToneTest/5.2.wav';
 dir_files = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/1015_18_LiteToneTest/';
 name_files = {'5.1.wav'};  % {['5.2.wav', '5.3.wav', '5.4.wav', '5.5.wav']}; 
 
 
-load_audio('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/1015_18_LiteToneTest/5.1.wav');
+[data, time, fs] = audio_load('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/1015_18_LiteToneTest/5.1.wav');
+size(data)
+size(time)
+rms(data) %the default matlab rms function works fine
+[data_fft, freq] = audio_spectrum(data, fs, 2^16, 2^16);
+size(data_fft)
+size(freq)
+figure(1);
+audio_plotspectrum(freq,data_fft);
 
-
-%{FUNCTIONS ARE ALL DEFINED BELOW}%
-
+%~~~~~~~~~~~~~~~~~~~~~READ ME~~~~~~~~~~~~~~~~~~~~~~~~~%
 
 %{ This script contains all the functions needed for anaylsis 
 %
 %
 %%} 
 
-%%% HOW TO HANDLE AUDIO ARRAYS in the form [data_ref, time_ref, fs_ref] 
+%%% HOW TO HANDLE AUDIO ARRAYS in the form [data, time, fs] 
 
 
-%data_ref = load_audio[1];
-%time_ref = load_audio[2];
-%fs_ref = load_audio[3];
+%data = audio_load[1];
+%time = audio_load[2];
+%fs = audio_load[3];
 
 
-%data_ref[[LEFT,RIGHT]
+%data[[LEFT,RIGHT]
 %         [LEFT,RIGHT]
 %            ...    
 %         [LEFT,RIGHT]] 
-%left_channel = data_ref[:,1];
-%right_channel = data_ref[:,2];
+%left_channel = data[:,1];
+%right_channel = data[:,2];
 
-%time_ref = [0.0 sec , 1/fs sec, 2/fs sec, ... , N];
+%time = [0.0 sec , 1/fs sec, 2/fs sec, ... , N];
 
 
 %~~~~~~~~~~~~~~~~~~~~FUNCTIONS~~~~~~~~~~~~~~~~~~~~~~%
 
 %{ LOAD FILES %}
 %This function takes a path and returns the data and time arrays, along with the sample rate
-function [data_ref, time_ref, fs_ref] = load_audio(path_ref)
-    [data_ref, fs_ref] = audioread(path_ref);
-    data_ref = data_ref(:,1);
-    %data_ref = data_ref(1:5*fs_ref);
-    size(data_ref)
-    time_ref = (0:length(data_ref)-1)/fs_ref;
-    AUDIO_FILES{1} = data_ref;
-    size(AUDIO_FILES)
-    size(name_files)
-    name_files
-    figure(1); hold on;
-    plot(time_ref,data_ref,'g')
+function [data, time, fs] = audio_load(path)
+    [data, fs] = audioread(path);
+    time = (0:length(data)-1)/fs;
+    %data = data.';
+end %audio_load
+
+function [data_fft, freq] = audio_spectrum(data, fs, start_sam, n_sam)
+    disp('inside audio_spectrum')
+    size(data)
+    size(data(start_sam:start_sam + n_sam,:))
+    freq = fs*(0:(n_sam/2))/n_sam;
+    data_fft = fft(data(start_sam:start_sam+n_sam, :))/n_sam;
+    size(data_fft)
+    data_fft = data_fft(1:size(data_fft)/2+1);
+    size(data_fft)
+    disp('finished audio_spectrum')
+end %audio_spectrum
+
+function audio_plotspectrum(freq, data_fft) 
+    plot(freq, 20.0*log10(data_fft))  
+    set(gca, 'XScale', 'log');
+    title('FFT spectrum')
+    xlabel('Frequency (Hz)')
+    ylabel('Level (dB)')  
+
 end
+
+
+function [data_psd, freq_psd] = audio_psd(data, fs, n_sam)
+
+end
+
+
 %~ Loop through all the files and line them up with the reference
 
-
 %{ LINEUP %}
-function [data] = lineup(data)
+% This function needs to take two arrays, and return two arrays that are lined up with one another. 
+% It should: 
+%       -  
+%
+function [cdata, ctime] = lineup(data)
 for i = (1:length(name_files));
  
     strcat(dir_files,name_files{i})
@@ -64,8 +93,8 @@ for i = (1:length(name_files));
     data_file = data_file(:,1);
      
     time_file = (0:length(data_file)-1)/fs_file; %Not sure if important, but here I'm using the fs
-    
-    [acor,lag] = xcorr(data_file,data_ref);
+   
+    [acor,lag] = xcorr(data_file,data);
     [~,I] = max(abs(acor));
     lagDiff = lag(I)
     timeDiff = lagDiff/fs_file
@@ -84,49 +113,49 @@ end
 
 %{ GROOVE PLOT %}
 
-
-clf(figure(1))
-clf(figure(2))
-AUDIO_FILES = {};
-
-%~~~Segmenting Parameters~~~%
-time = time_ref;
-rotation_speed = 33.33333;%45;
-T = 60/rotation_speed; %this is the length of one groove segment
-n_sam = round(T*fs_ref)
-time_seg = time(1:n_sam);
-%~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-
-
-%~~Detect_Signal Parameters~~~%
-winSize= 2^8;%round(fs*dur);
-overlap=0;%round(winSize/2);
-fftsize=2^8;%winSize;
-%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-
-
-%~~~~~GROOVE PLOTTING~~~~~~%
-seg_array = [];
-name_files= [ {'5.2.wav'},name_files];
-
-figure(2);hold on; legend;
-for i=(1:length(AUDIO_FILES))
-    data = AUDIO_FILES{i};
-    num_segs = (floor(length(data)/fs_ref/T))
-    for ng = 1:num_segs
-        %seg_array(:,:,ng) = data(1+(ng-1)*n_sam:ng*n_sam,:);
-        data_seg = data(1+(ng-1)*n_sam:ng*n_sam,:);
-        [s,f,t] = spectrogram(data_seg,winSize,overlap,fftsize,fs_file,'yaxis');
-        lo_freq = sum(s(1:5));
-        hi_freq = sum(s(6:end));
-        %if abs(hi_freq/lo_freq) < 2.0; %%This is where the DETECT SIGNAL algorithm will go once its active
-        if ng > 1 &  ng < 4; %for now just plot grooves 2 & 3  
-            plot(time_seg,data_seg,  'DisplayName', [ name_files{i},'groove', num2str(ng)]);
-        end
-    end    
-end
-%~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-
+function groove_plot(data)
+    clf(figure(1))
+    clf(figure(2))
+    AUDIO_FILES = {};
+    
+    %~~~Segmenting Parameters~~~%
+    time = time;
+    rotation_speed = 33.33333;%45;
+    T = 60/rotation_speed; %this is the length of one groove segment
+    n_sam = round(T*fs)
+    time_seg = time(1:n_sam);
+    %~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+    
+    
+    %~~Detect_Signal Parameters~~~%
+    winSize= 2^8;%round(fs*dur);
+    overlap=0;%round(winSize/2);
+    fftsize=2^8;%winSize;
+    %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+    
+    
+    %~~~~~GROOVE PLOTTING~~~~~~%
+    seg_array = [];
+    name_files= [ {'5.2.wav'},name_files];
+    
+    figure(2);hold on; legend;
+    for i=(1:length(AUDIO_FILES))
+        data = AUDIO_FILES{i};
+        num_segs = (floor(length(data)/fs/T))
+        for ng = 1:num_segs
+            %seg_array(:,:,ng) = data(1+(ng-1)*n_sam:ng*n_sam,:);
+            data_seg = data(1+(ng-1)*n_sam:ng*n_sam,:);
+            [s,f,t] = spectrogram(data_seg,winSize,overlap,fftsize,fs_file,'yaxis');
+            lo_freq = sum(s(1:5));
+            hi_freq = sum(s(6:end));
+            %if abs(hi_freq/lo_freq) < 2.0; %%This is where the DETECT SIGNAL algorithm will go once its active
+            if ng > 1 &  ng < 4; %for now just plot grooves 2 & 3  
+                plot(time_seg,data_seg,  'DisplayName', [ name_files{i},'groove', num2str(ng)]);
+            end
+        end    
+    end
+    %~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+end %function plotting
 %~~~~~~~~~~~~~~~~~~FUNCTIONS END~~~~~~~~~~~~~~~~~~~~~~%
 
 
