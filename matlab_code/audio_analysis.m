@@ -1,3 +1,16 @@
+%{ SCRIPT START BELOW %}
+%
+path_ref = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/1015_18_LiteToneTest/5.2.wav';
+dir_files = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/1015_18_LiteToneTest/';
+name_files = {'5.1.wav'};  % {['5.2.wav', '5.3.wav', '5.4.wav', '5.5.wav']}; 
+
+
+load_audio('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/1015_18_LiteToneTest/5.1.wav');
+
+
+%{FUNCTIONS ARE ALL DEFINED BELOW}%
+
+
 %{ This script contains all the functions needed for anaylsis 
 %
 %
@@ -42,6 +55,7 @@ end
 
 
 %{ LINEUP %}
+function [data] = lineup(data)
 for i = (1:length(name_files));
  
     strcat(dir_files,name_files{i})
@@ -62,10 +76,8 @@ for i = (1:length(name_files));
     % title('Original Audio Lined up')
     % xlabel('Time (s)')
     % AUDIO_FILES{i+1} = cdata_file; 
-
-
 end
-
+end
 
 %{ SPECTRUM PLOT %}
 
@@ -118,9 +130,3 @@ end
 %~~~~~~~~~~~~~~~~~~FUNCTIONS END~~~~~~~~~~~~~~~~~~~~~~%
 
 
-
-%{ SCRIPT START BELOW %}
-%
-path_ref = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/1015_18_LiteToneTest/5.2.wav';
-dir_files = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/1015_18_LiteToneTest/';
-name_files = {'5.1.wav'};  % {['5.2.wav', '5.3.wav', '5.4.wav', '5.5.wav']}; 

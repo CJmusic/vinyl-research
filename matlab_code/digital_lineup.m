@@ -40,39 +40,82 @@ lagDiff_lists = [0];
 recorded_file = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/A0000B0000/02072019_A0000B000r25-A.wav'; %path to the recording of the record
 
 [data_rec, fs_rec] = audioread(recorded_file); 
+
+%data_rec = data_rec(:,1); %take only the first channel
+%clf(figure(1))
+%figure(1) 
+%hold on; grid on; 
+%plot(time_rec,data_rec, 'g')
+
+[kHztone, fs_file] = audioread(strcat(path_digital_files,name_files{1}));
+
+
+kHztone = 0.18*kHztone(1:5*fs_file,1);
+data_rec = data_rec(6*fs_rec:10*fs_rec,1); %take only the first channel   
+
 time_rec = (0:length(data_rec)-1)/fs_rec;
 
-data_rec = data_rec(:,1); %take only the first channel
+[acor,lag] = xcorr(kHztone,data_rec);
+[~,I] = max(abs(acor));
+lagDiff = lag(I)
+
+
+cdata_file = kHztone(lagDiff+1:end);
+ctime_file = (lagDiff:lagDiff + length(cdata_file)-1)/fs_file;
+
+
 clf(figure(1))
-figure(1) 
-hold on; grid on; 
-plot(time_rec,data_rec, 'g')
-
-
-for i = (1:length(name_files));
-
-    start_offset = lagDiff_lists(end);%[length(lagDiff_lists)];
-    % look at the last entry in the lagDiff, maybe replace this with the ending sample
-     
-    strcat(path_digital_files,name_files{i})
-    [data_file, fs_file] = audioread(strcat(path_digital_files,name_files{i}));
-    
-    data_file = data_file(:,1);
-     
-    time_file = (0:length(data_file)-1)/fs_file; %Not sure if important, but here I'm using the fs
-    
-    [acor,lag] = xcorr(data_file,data_rec);
-    [~,I] = max(abs(acor));
-    lagDiff = lag(I)
-    timeDiff = lagDiff/fs_file
-    cdata_file = data_file(-lagDiff+1:end);
-    ctime_file = (lagDiff:lagdiff + length(cdata_file)-1)/fs_file;
-    lagDiff_lists = [lagDiff_lists, lagDiff]; %append to the list of all lag diffs to keep track of when each signal starts
-    plot(ctime_file, cdata_file)
-    title('Original Audio Lined up')
-    xlabel('Time (s)')
-    AUDIO_FILES{i+1} = cdata_file; 
-end
+figure(1); hold on; 
+plot(time_rec, data_rec) 
+plot(ctime_file, cdata_file, 'g')
+title('Original Audio Lined up')
+xlabel('Time (s)') 
 
 
 
+
+%time_file = (0:length(data_file)-1)/fs_file; %Not sure if important, but here I'm using the fs    
+%size(data_rec) 
+%size(kHztone)
+%[acor,lag] = xcorr(kHztone,data_rec);
+%[~,I] = max(abs(acor));
+%lagDiff = lag(I)
+%timeDiff = lagDiff/fs_file
+%%cdata_file = data_file(-lagDiff+1:end);
+%%ctime_file = (lagDiff:lagdiff + length(cdata_file)-1)/fs_file;
+%lagDiff_lists = [lagDiff_lists, lagDiff]; %append to the list of all lag diffs to keep track of when each signal starts
+%plot(ctime_file, cdata_file)
+%title('Original Audio Lined up')
+%xlabel('Time (s)') 
+%AUDIO_FILES{i+1} = cdata_file; 
+
+
+
+%
+%for i = (1:length(name_files));
+%
+%    start_offset = lagDiff_lists(end);%[length(lagDiff_lists)];
+%    % look at the last entry in the lagDiff, maybe replace this with the ending sample
+%     
+%    strcat(path_digital_files,name_files{i})
+%    [data_file, fs_file] = audioread(strcat(path_digital_files,name_files{i}));
+%    
+%    data_file = data_file(:,1);
+%     
+%    time_file = (0:length(data_file)-1)/fs_file; %Not sure if important, but here I'm using the fs
+%    
+%    [acor,lag] = xcorr(data_file,data_rec);
+%    [~,i] = max(abs(acor));
+%    lagdiff = lag(i)
+%    timediff = lagdiff/fs_file
+%    cdata_file = data_file(-lagDiff+1:end);
+%    ctime_file = (lagDiff:lagdiff + length(cdata_file)-1)/fs_file;
+%    lagDiff_lists = [lagDiff_lists, lagDiff]; %append to the list of all lag diffs to keep track of when each signal starts
+%    plot(ctime_file, cdata_file)
+%    title('Original Audio Lined up')
+%    xlabel('Time (s)')
+%    AUDIO_FILES{i+1} = cdata_file; 
+%end
+%
+%
+%
