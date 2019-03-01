@@ -6,14 +6,24 @@ name_files = {'5.1.wav'};  % {['5.2.wav', '5.3.wav', '5.4.wav', '5.5.wav']};
 
 
 [data, time, fs] = audio_load('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/1015_18_LiteToneTest/5.1.wav');
-size(data)
-size(time)
+
 rms(data) %the default matlab rms function works fine
-[data_fft, freq] = audio_spectrum(data, fs, 2^16, 2^16);
-size(data_fft)
-size(freq)
-figure(1);
-audio_plotspectrum(freq,data_fft);
+
+%[data_fft, freq] = audio_spectrum(data, fs, 2^16, 2^16);
+%figure(1);
+%audio_plotspectrum(freq,data_fft);
+
+figure(2)
+%[data_psd, freq_psd] = audio_psd(data, 2^16, fs); 
+%audio_plotspectrum(freq_psd, data_psd)
+nfft = 2^16
+data_L = data(:,1);
+%pwelch(data_L, 2^16, fs)
+[Pxx,f]=pwelch(data_L,hanning(nfft,'periodic'),nfft/2,nfft,fs,'');
+audio_plotspectrum(f, Pxx)
+
+
+%    SCRIPT END 
 
 %~~~~~~~~~~~~~~~~~~~~~READ ME~~~~~~~~~~~~~~~~~~~~~~~~~%
 
@@ -50,15 +60,11 @@ function [data, time, fs] = audio_load(path)
     %data = data.';
 end %audio_load
 
-function [data_fft, freq] = audio_spectrum(data, fs, start_sam, n_sam)
+function [data_fft, freq_fft] = audio_spectrum(data, fs, start_sam, n_sam)
     disp('inside audio_spectrum')
-    size(data)
-    size(data(start_sam:start_sam + n_sam,:))
-    freq = fs*(0:(n_sam/2))/n_sam;
+    freq_fft = fs*(0:(n_sam/2))/n_sam;
     data_fft = fft(data(start_sam:start_sam+n_sam, :))/n_sam;
-    size(data_fft)
     data_fft = data_fft(1:size(data_fft)/2+1);
-    size(data_fft)
     disp('finished audio_spectrum')
 end %audio_spectrum
 
@@ -71,9 +77,8 @@ function audio_plotspectrum(freq, data_fft)
 
 end
 
-
-function [data_psd, freq_psd] = audio_psd(data, fs, n_sam)
-
+function [data_psd, freq_psd] = audio_psd(data, nfft, fs)
+    [data_psd, freq_psd] = pwelch(data , nfft, fs, hanning(nfft), nfft/2);
 end
 
 
