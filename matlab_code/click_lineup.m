@@ -1,4 +1,9 @@
+%{
+This file can also count the clicks in the record and see what clicks are common 
+across all records (ones that are in the reference file as well), and ones that 
+aren't. 
 
+%}
 addpath('audio_functions')
 addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/260219_noisereferenceinst/');
 
@@ -17,14 +22,6 @@ time_ref = (0:length(data_ref)-1)/fs_ref;
 % slice up the array into a much smaller more manageable chunck, 
 % look for a local maximum 
 % take 0.9 seconds worth of audio on either side of the max for one groove 
-size(data_ref)
-size(time_ref)
-
-[val, idx] = max(data_ref(fs_ref*8.0:fs_ref*12.0,:)) %look for the max value in a small slice of the audio
-
-data_ref_chop = data_ref(fs_ref*8.0 + idx(2)-0.9*fs_ref+1:fs_ref*8.0 + idx(2)+0.9*fs_ref,:);
-time_ref_chop = time_ref(fs_ref*8.0 + idx(2)-0.9*fs_ref+1:fs_ref*8.0 + idx(2)+0.9*fs_ref);  
-
 
 t_s = 5.8;
 t_e = 6.2;
@@ -33,70 +30,63 @@ data_ref = data_ref(t_s*fs_ref:t_e*fs_ref,:);
 %time_ref = time_ref(t_s*fs_ref:t_e*fs_ref);
 time_ref = (0:length(data_ref)-1)/fs_ref; 
 
-clf(figure(1));clf(figure(2));
-figure(1);
-grid on; hold on;
-plot(time_ref,data_ref,'g');
-audio_clickdetect(data_ref, fs_ref);
+clf(figure(1));
+%clf(figure(2));
+%figure(1);
+%grid on; hold on;
+%plot(time_ref,data_ref,'g');
 
-function clicks = audio_clickdetect(data, fs);
-   time = (0:length(data)-1)/fs; 
-   d_data = diff(data);%/diff(time);
-   dd_data = diff(d_data);
-   clicks = [];
-   disp('for loop')
-   for i = (1:length(data));
-      if i + 1024 < length(data);
-          threshold = rms(data(i:i+1024));
-          %fft_wavelet = fft(wavelet);
-          if d_data(i) > threshold;
-                click = i
-                i/fs  
-                clicks = [clicks, click];   
-          end
-      end
-   end 
-   disp('for loop end')
-   x = zeros(length(clicks));
-   figure(1);
-   plot(time, data); grid on; hold on;
-   plot(clicks/fs,x, 'r.', 'MarkerSize', 20);
-   figure(2); 
-   subplot(2,1,1);
-   plot(time(1:end-1),d_data); grid on; hold on;
-   plot(clicks/fs,x,'r.', 'MarkerSize', 20);
-   subplot(2,1,2); 
-   plot(time(1:end-2),dd_data); grid on; hold on;
-   plot(clicks/fs,x,'r.', 'MarkerSize', 20);
-end 
 
-%{
-figure(1);
-grid on; hold on;
-plot(time_ref,data_ref,'g');
+[ clicks_ref ] = audio_clickdetect(data_ref, fs_ref);
+size(clicks_ref)
+%figure(1);
+%grid on; hold on;
+%plot(time_ref,data_ref,'g');
 
-figure(2);
-grid on; hold on;
-plot(time_ref_chop,data_ref_chop,'g');
+%x = zeros(length(clicks_ref));
+%figure(1);
+%plot(clicks_ref/fs_ref,x, 'r.', 'MarkerSize', 20);
+
+%figure(2);
+%grid on; hold on;
 
 for i = (1:length(AUDIO_FILES));         
     [data, time, fs] = audio_load(strcat(audio_dir,AUDIO_FILES{i}));
-    [data, time] = audio_lineup(data, fs, time, data_ref);
-    %data = data(fs*8.0:fs*12.0,:); %slices the data array into a smaller section
-    %time = time(fs*8.0:fs*12.0); 
+    data = data(t_s*fs:t_e*fs,:);
+    time = (1:length(data))/fs;
+    %[data, time] = audio_lineup(data, fs, time, data_ref);
+    [ clicks ] = audio_clickdetect(data, fs);
+    size(clicks)
+    %lag = mode([[clicks] - [clicks_ref]]);
+   
+    %I want to find the closest matching value in the reference array, take the difference
+    %then calculate the mode and correct for the lag, repeat this process a few times
+    % I have two dimensions, amplitude and time. So I can look for the matched clicks that minimize
+    % both the time difference and the amplitude difference
 
-    [val, idx] = max(data(fs*8.0:fs*12.0,:)); %look for the max value in a small slice of the audio
+    cd_ref = diff(clicks_ref);
+    cd_file = diff(clicks);
+    values = [];
+    amp_diffs = [];
+    sam_diffs = [];
+    for xi = (1:length(cd_ref));
+        %[values, data_index] = min(abs(cd_ref(xi) - cd_file)); % subtract sample # of click arrays, take the absolute value, take the minimum
+        [amp_diff, sam_diff] = min(abs(data_ref(cd_ref(xi)) - data(cd_file))); % subtract amplitude of click arrays, take abs, take min
+        amp_diffs = [amp_diffs, amp_diff];
+        sam_diffs = [sam_diffs, sam_diff]; 
+    end
     
-    data_chop = data(fs*8.0 + idx(2)-0.9*fs+1:fs*8.0 + idx(2)+0.9*fs,:); 
-    time_chop = time(fs*8.0 + idx(2)-0.9*fs+1:fs*8.0 + idx(2)+0.9*fs);  
+    amp_diffs
+    sam_diffs
+
+
 
     figure(1);
     grid on; hold on;
-    plot(time,data);
-    
-    figure(2);
-    grid on; hold on;
-    plot(time_chop,data_chop);
+    %plot(time,data, 'Color', [i/5,i/5,i/5] );
+    x = zeros(length(clicks_ref));
+    figure(1);
+    plot(clicks_ref/fs,x, 'r.', 'MarkerSize', 20);
 
 end
-%}
+
