@@ -19,8 +19,8 @@ figure(2)
 nfft = 2^16
 data_L = data(:,1);
 %pwelch(data_L, 2^16, fs)
-[Pxx,f]=pwelch(data_L,hanning(nfft,'periodic'),nfft/2,nfft,fs,'');
-audio_plotspectrum(f, Pxx)
+[Pxx,f]=pwelch(data,hanning(nfft,'periodic'),nfft/2,nfft,fs,'');
+audio_plotspectrum(f, Pxx, 'PSD')
 
 
 %    SCRIPT END 
@@ -68,10 +68,10 @@ function [data_fft, freq_fft] = audio_spectrum(data, fs, start_sam, n_sam)
     disp('finished audio_spectrum')
 end %audio_spectrum
 
-function audio_plotspectrum(freq, data_fft) 
+function audio_plotspectrum(freq, data_fft, title_string) 
     plot(freq, 20.0*log10(data_fft))  
     set(gca, 'XScale', 'log');
-    title('FFT spectrum')
+    title(title_string)
     xlabel('Frequency (Hz)')
     ylabel('Level (dB)')  
 
