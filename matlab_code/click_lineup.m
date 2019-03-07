@@ -1,17 +1,3 @@
-%{
-Lining up clicks: 
-
-detecting a click is the first task: 
-        - a threshold method is mentioned in the pre-processing of the Neural Network paper (Impulse Distortions) 
-        - In 437A:
-           • I only detected the maximum in a region I knew there was a click 
-           • I looked at the derivative ie: x(i) - x(i+1) ** I think this is the best thing to do,
-             basically it's searching for discontinuities. 
-           •   
-
-I need to cite Czewskzi 
-
-%} 
 
 addpath('audio_functions')
 addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/260219_noisereferenceinst/');
@@ -44,40 +30,44 @@ t_s = 5.8;
 t_e = 6.2;
 
 data_ref = data_ref(t_s*fs_ref:t_e*fs_ref,:);
-time_ref = time_ref(t_s*fs_ref:t_e*fs_ref);
+%time_ref = time_ref(t_s*fs_ref:t_e*fs_ref);
+time_ref = (0:length(data_ref)-1)/fs_ref; 
+
 clf(figure(1));clf(figure(2));
 figure(1);
 grid on; hold on;
 plot(time_ref,data_ref,'g');
-audio_clickdetect(data_ref, time_ref, fs_ref);
+audio_clickdetect(data_ref, fs_ref);
 
-function clicks = audio_clickdetect(data, time, fs); 
+function clicks = audio_clickdetect(data, fs);
+   time = (0:length(data)-1)/fs; 
    d_data = diff(data);%/diff(time);
    dd_data = diff(d_data);
    clicks = [];
    disp('for loop')
    for i = (1:length(data));
       if i + 1024 < length(data);
-          threshhold = rms(data(i:i+1024));
+          threshold = rms(data(i:i+1024));
           %fft_wavelet = fft(wavelet);
           if d_data(i) > threshold;
-                i
-                clicks = [clicks, i];   
+                click = i
+                i/fs  
+                clicks = [clicks, click];   
           end
       end
    end 
    disp('for loop end')
    x = zeros(length(clicks));
+   figure(1);
+   plot(time, data); grid on; hold on;
+   plot(clicks/fs,x, 'r.', 'MarkerSize', 20);
    figure(2); 
-   subplot(3,1,1);
-   plot(time, data); grid on;
-   plot(clicks/fs,x, 'r.', 'MarkerSize', 8);
-   subplot(3,1,2);
-   plot(time(1:end-1),d_data);grid on;
-   plot(clicks/fs,x,'r.', 'MarkerSize', 8);
-   subplot(3,1,3); 
-   plot(time(1:end-2),dd_data);grid on;
-   plot(clicks/fs,x,'r.', 'MarkerSize', 8);
+   subplot(2,1,1);
+   plot(time(1:end-1),d_data); grid on; hold on;
+   plot(clicks/fs,x,'r.', 'MarkerSize', 20);
+   subplot(2,1,2); 
+   plot(time(1:end-2),dd_data); grid on; hold on;
+   plot(clicks/fs,x,'r.', 'MarkerSize', 20);
 end 
 
 %{
