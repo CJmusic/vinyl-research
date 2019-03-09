@@ -23,8 +23,8 @@ time_ref = (0:length(data_ref)-1)/fs_ref;
 % look for a local maximum 
 % take 0.9 seconds worth of audio on either side of the max for one groove 
 
-t_s = 5.8;
-t_e = 6.2;
+t_s = 5.0;
+t_e = 10.0;
 
 data_ref = data_ref(t_s*fs_ref:t_e*fs_ref,:);
 %time_ref = time_ref(t_s*fs_ref:t_e*fs_ref);
@@ -42,7 +42,11 @@ size(clicks_ref)
 %figure(1);
 %grid on; hold on;
 %plot(time_ref,data_ref,'g');
-
+%for xi = 1:length(clicks_ref);
+%    x1 = time_ref(clicks_ref(xi));
+%    line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
+%end
+%
 %x = zeros(length(clicks_ref));
 %figure(1);
 %plot(clicks_ref/fs_ref,x, 'r.', 'MarkerSize', 20);
@@ -52,9 +56,9 @@ size(clicks_ref)
 
 manual_clicks = []; %%sample numbers of the same click in each recording
 
+%{
 
-
-for i = (1:2);%length(AUDIO_FILES));         
+for i = (1:length(AUDIO_FILES));         
     [data, time, fs] = audio_load(strcat(audio_dir,AUDIO_FILES{i}));
     data = data(t_s*fs:t_e*fs,:);
     time = (1:length(data))/fs;
@@ -72,11 +76,12 @@ for i = (1:2);%length(AUDIO_FILES));
     amp_diffs = [];
     sam_clicks = [];
     lag_diffs = [];
+    %this for loop attempts to look through the clicks in the reference and line them up with a click in the file
     for xi = (1:length(clicks_ref));
         %[values, data_index] = min(abs(clicks_ref(xi) - clicks)); % subtract sample # of click arrays, take the absolute value, take the minimum
         [amp_diff, sam_click] = min(abs(data_ref(clicks_ref(xi)) - data(clicks))); % subtract amplitude of click arrays, take abs, take min
-        sam_click_ref = clicks_ref(xi)  % the sample that the click corresponds to in the ref data
-        lag_diff = sam_click - sam_click_ref
+        sam_click_ref = clicks_ref(xi);  % the sample that the click corresponds to in the ref data
+        lag_diff = sam_click - sam_click_ref;
         lag_diffs = [lag_diffs, lag_diff];        
         %amp_diff
         %sam_click    
@@ -90,21 +95,27 @@ for i = (1:2);%length(AUDIO_FILES));
     %sam_clicks
     %clicks(sam_click)
     %lag_diff = mode(lag_diffs);
-    lag_diff = finddelay(data_ref, data)
-    data = data(lag_diff(1)+1:end,:); %shift the data in line with the reference 
-    time = (1:length(data))/fs;
-    for j = (1:length(time));
-        time(i) = time(i) + lag_diff(1)/fs + t_s;
-    end
+    %lag_diff = finddelay(data_ref, data)
+    
+    %data = data(lag_diff(1)+1:end,:); %shift the data in line with the reference 
+    %time = (1:length(data))/fs;
+    %for j = (1:length(time));
+    %    time(i) = time(i) + lag_diff(1)/fs + t_s;
+    %end
     %time = bsxfun(@plus, time,lag_diff/fs);
-    disp('TIME DELAY: ')
-    lag_diff/fs
-    figure(1);
+    %
+    %disp('TIME DELAY: ')
+    %lag_diff/fs
+
+
+
+    figure(i);
     grid on; hold on;
     plot(time,data);%, 'Color', [i/5,i/5,i/5] );
-    x = zeros(length(clicks_ref));
-    figure(1);
-    plot(clicks_ref/fs,x, 'r.', 'MarkerSize', 20);
+    %x = zeros(length(clicks_ref));
+    %figure(1);
+    %plot(clicks_ref/fs,x, 'r.', 'MarkerSize', 20);
 
 end
 
+%}
