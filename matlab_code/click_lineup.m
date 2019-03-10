@@ -51,7 +51,7 @@ manual_clicks = []; %%sample numbers of the same click in each recording
 
 clf(figure(1));
 
-for i = (1:2);%:length(AUDIO_FILES));         
+for i = (1:length(AUDIO_FILES));         
     [data, time, fs] = audio_load(strcat(audio_dir,AUDIO_FILES{i}));
     data = data(t_s*fs:t_e*fs,:);
     time = (1:length(data))/fs;
@@ -79,11 +79,29 @@ for i = (1:2);%:length(AUDIO_FILES));
 
     lagdiff = mode(diff_array(:))%size(diff_array))
     time = time - lagdiff/fs;%(1:length(data))*fs; 
+    cdata = data(lagdiff+1:end,:);
+    size(cdata)
+    size(data_ref)
+    size_diff = length(data_ref) - length(cdata)
+        
+    if size_diff > 0;
+        disp('>0'); 
+        cdata_ref = data_ref(size_diff+1:end,:); 
+    elseif size_diff < 0; 
+        cdata = cdata(size_diff,:);
+        cdata_ref = data_reff;
+    else;
+        cdata_ref = data_ref;
+    end
 
-    figure(1);
+    disp('sizes corrected')
+    size(cdata)
+    size(cdata_ref)
+
+    figure(i);
     grid on; hold on;
     plot(time,data(:,1));%, 'Color', [i/5,i/5,i/5] );
-
+    plot(time_ref, data_ref(:,1), 'g');
     for xi = 1:length(clicks);
          x1 = time(clicks(xi));
          line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
@@ -92,6 +110,9 @@ for i = (1:2);%:length(AUDIO_FILES));
     xlabel('Time [s]');
     ylabel('Amplitude');
 
+    figure(i*10); grid on; hold on;
+    [amp_coh, freq_coh] = audio_mscohere(cdata_ref, cdata, fs);
+    plot(freq_coh, amp_coh);
 end
 
 
