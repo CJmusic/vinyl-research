@@ -65,47 +65,28 @@ for i = (1:2);%:length(AUDIO_FILES));
     % I have two dimensions, amplitude and time. So I can look for the matched clicks that minimize
     % both the time difference and the amplitude difference
 
-    values = [];
-    amp_diffs = [];
-    sam_clicks = [];
-    lag_diffs = [];
     %this for loop attempts to look through the clicks in the reference and line them up with a click in the file
     diff_array = [];
     diag_diff = [];
     disp('for loop')
-    for xi = (1:length(clicks_ref));
+    for xi = (1:length(clicks_ref));%this makes an array with the distance between each click in the two
+                                    % files
         diff_array = [diff_array; clicks - clicks_ref(xi)];
-        %[amp_diff, sam_click] = min(abs(data_ref(clicks_ref(xi)) - data(clicks))); % subtract amplitude of click arrays, take abs, take min
-        %sam_click_ref = clicks_ref(xi);  % the sample that the click corresponds to in the ref data
-        %lag_diff = sam_click - sam_click_ref;
-        %lag_diffs = [lag_diffs, lag_diff];        
-        %amp_diffs = [amp_diffs, amp_diff];
-        %sam_clicks = [sam_clicks, sam_click]; 
     end
-    size(diff_array)
-    diff_array 
-    for ii = (1:size(diff_array(1)-1));
-        for j = (1:length(diff_array(ii,:)))
-            if diff_array(ii,ii) - diff_array(ii+1, j) == 0;
-                disp('ZERO')            
-                if j-ii > 1;   
-                 for k=(1:j-ii);
-                  diff_array(ii+k,:) = [];  
-              end
-          end
-      end 
-        end
-    end  
+
+    %[m, n] = size(diff_array);
+    disp('mode')
+    %for ii = (1:m-1);
+    %    for jj = (1:n);
+    %        rows = [rows; diff_array(ii+1, :) - diff_array(ii,jj)];
+    %    end
+    %end 
     diff_array
-    %diag_diff
-    %disp('TIME DELAY: ')
-    %lag_diff/fs
-    %length(diff_array)
-    lagdiff = trace(diff_array)/length(diff_array);
-    %lagdiff = clicks(1) - clicks_ref(i);
-    %lagdiff = mode(diag_diff)
-    %data = data(1:end-lagdiff);
+
+    %lagdiff = trace(diff_array)/length(diff_array);
+    lagdiff = mode(diff_array(:))%size(diff_array))
     time = time + lagdiff/fs;%(1:length(data))*fs; 
+
     figure(1);
     grid on; hold on;
     plot(time,data(:,1));%, 'Color', [i/5,i/5,i/5] );
@@ -117,9 +98,6 @@ for i = (1:2);%:length(AUDIO_FILES));
     title('Click detection: Amplitude vs. Time'); 
     xlabel('Time [s]');
     ylabel('Amplitude');
-    %x = zeros(length(clicks_ref));
-    %figure(1);
-    %plot(clicks_ref/fs,x, 'r.', 'MarkerSize', 20);
 
 end
 
