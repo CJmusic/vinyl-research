@@ -71,6 +71,7 @@ for i = (1:2);%:length(AUDIO_FILES));
     lag_diffs = [];
     %this for loop attempts to look through the clicks in the reference and line them up with a click in the file
     diff_array = [];
+    diag_diff = [];
     disp('for loop')
     for xi = (1:length(clicks_ref));
         diff_array = [diff_array; clicks - clicks_ref(xi)];
@@ -82,12 +83,27 @@ for i = (1:2);%:length(AUDIO_FILES));
         %sam_clicks = [sam_clicks, sam_click]; 
     end
     size(diff_array)
-    diff_array  
+    diff_array 
+    for ii = (1:size(diff_array(1)-1));
+        for j = (1:length(diff_array(ii,:)))
+            if diff_array(ii,ii) - diff_array(ii+1, j) == 0;
+                disp('ZERO')            
+                if j-ii > 1;   
+                 for k=(1:j-ii);
+                  diff_array(ii+k,:) = [];  
+              end
+          end
+      end 
+        end
+    end  
+    diff_array
+    %diag_diff
     %disp('TIME DELAY: ')
     %lag_diff/fs
-    length(diff_array)
+    %length(diff_array)
     lagdiff = trace(diff_array)/length(diff_array);
     %lagdiff = clicks(1) - clicks_ref(i);
+    %lagdiff = mode(diag_diff)
     %data = data(1:end-lagdiff);
     time = time + lagdiff/fs;%(1:length(data))*fs; 
     figure(1);
