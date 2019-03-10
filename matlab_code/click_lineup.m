@@ -74,18 +74,11 @@ for i = (1:2);%:length(AUDIO_FILES));
         diff_array = [diff_array; clicks - clicks_ref(xi)];
     end
 
-    %[m, n] = size(diff_array);
     disp('mode')
-    %for ii = (1:m-1);
-    %    for jj = (1:n);
-    %        rows = [rows; diff_array(ii+1, :) - diff_array(ii,jj)];
-    %    end
-    %end 
     diff_array
 
-    %lagdiff = trace(diff_array)/length(diff_array);
     lagdiff = mode(diff_array(:))%size(diff_array))
-    time = time + lagdiff/fs;%(1:length(data))*fs; 
+    time = time - lagdiff/fs;%(1:length(data))*fs; 
 
     figure(1);
     grid on; hold on;
