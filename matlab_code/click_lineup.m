@@ -20,15 +20,15 @@ path_ref
 [data_ref, fs_ref] = audioread(path_ref);
 time_ref = (0:length(data_ref)-1)/fs_ref;
 
-t_s = 67.0;% seconds, the start of the region in the file being analyzed
-t_e = 70.0;% seconds, the end of the region being analyzed
+t_s = 4%67.0;% seconds, the start of the region in the file being analyzed
+t_e = 30%70.0;% seconds, the end of the region being analyzed
 
 data_ref = data_ref(t_s*fs_ref:t_e*fs_ref,:);
 time_ref = (0:length(data_ref)-1)/fs_ref; 
 
 [ clicks_ref ] = audio_clickdetect(data_ref, fs_ref);
 
-clf(figure(1)); clf(figure(10)); %clear any figures used for plotting 
+clf(figure(1)); clf(figure(2)); %clear any figures used for plotting 
 
 for i = (1:length(AUDIO_FILES));         
     [data, time, fs] = audio_load(strcat(audio_dir,AUDIO_FILES{i}));
@@ -51,18 +51,18 @@ for i = (1:length(AUDIO_FILES));
     if lagdiff > 0;
         % positive lagdiff means that the data array is delayed compared to the reference
         cdata = data(lagdiff + 1:end,:); 
-        time = time - lagdiff/fs;%(1:length(data))*fs; 
+        time = time - lagdiff/fs; 
     elseif lagdiff < 0; 
         % negative lagdiff means that the data array is ahead of the reference  
         cdata = data(1: end + lagdiff,:);   
-        time = time - lagdiff/fs;%(1:length(data))*fs; 
+        time = time - lagdiff/fs;
     elseif lagdiff == 0; %then nothing needs to be corrected  
         cdata = data; %no lag 
-        time = time - lagdiff/fs;%(1:length(data))*fs; 
+        time = time - lagdiff/fs; 
     end
 
     size_diff = length(data_ref) - length(cdata)
-        
+    cdata_ref = data_ref(abs(size_diff)+1:end,:); %need to      
     %if size_diff > 0; %% the following is to ensure the data arrays are the same length for calculating the coherence
     %                  %% probably this isn't necessary after the lag diff is properly handled 
     %    disp('>0'); 
@@ -78,22 +78,21 @@ for i = (1:length(AUDIO_FILES));
     size(cdata)
     size(cdata_ref)
 
+    [amp_coh, freq_coh] = audio_mscohere(cdata_ref, cdata, fs);
+
+    % plotting below : 
     figure(1);
     grid on; hold on;
     plot(time,data(:,1));%, 'Color', [i/5,i/5,i/5] );
-    %plot(time_ref, data_ref(:,1), 'g');
     legend(AUDIO_FILES);
-    %for xi = 1:length(clicks);
-    %     x1 = time(clicks(xi));
-    %     line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
-    %end
     title('Click detection: Amplitude vs. Time'); 
     xlabel('Time [s]');
     ylabel('Amplitude');
 
-    figure(10); grid on; hold on;
-    [amp_coh, freq_coh] = audio_mscohere(cdata_ref, cdata, fs);
-    plot(freq_coh, amp_coh);
+    figure(2); grid on; hold on;
+    %plot(freq_coh, amp_coh); 
+    %set(gca, 'XScale', 'log');
+    semilogx(freq_coh, amp_coh);
     legend(AUDIO_FILES);
     xlabel('frequency [Hz]')
     title('Coherence compared to first recording')

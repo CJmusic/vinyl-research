@@ -3,11 +3,18 @@ Lining up clicks:
 
 clicks = [ sample numbers ] 
 
+% a click has a sustained high derivative 
+% the energy of a click is between 2-4 kHz
 
 %} 
 
 
 function clicks = audio_clickdetect(data, fs);
+   % implement a high pass filter 
+   %fc = 1000.0 
+   %[b, a] = butter(6, fc/(fs/2),'high'); % this should 
+   %data = filter(b, a, data);
+
    time = (0:length(data)-1)/fs; 
    d_data = diff(data,1)*fs;% since delta_t = 1/fs:w;
    clicks = [];
