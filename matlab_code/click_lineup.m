@@ -1,4 +1,5 @@
 %{
+
 This file can also count the clicks in the record and see what clicks are common 
 across all records (ones that are in the reference file as well), and ones that 
 aren't. 
@@ -14,7 +15,7 @@ audio_dir = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_fil
 AUDIO_FILES = {'one.wav','two.wav','three.wav', 'four.wav', 'five.wav'};
 %AUDIO_FILES = {[fsinst_shorted, fsinst_shortedgained, gain10reference, gain10recordnoise, recordnoise, reference, system_noise, system_gained] };
 
-path_ref = strcat(audio_dir,AUDIO_FILES{1});
+path_ref = strcat(audio_dir,AUDIO_FILES{2});
 path_ref
 [data_ref, fs_ref] = audioread(path_ref);
 time_ref = (0:length(data_ref)-1)/fs_ref;
@@ -23,8 +24,8 @@ time_ref = (0:length(data_ref)-1)/fs_ref;
 % look for a local maximum 
 % take 0.9 seconds worth of audio on either side of the max for one groove 
 
-t_s = 5.0;
-t_e = 10.0;
+t_s = 65.0;
+t_e = 75.0;
 
 data_ref = data_ref(t_s*fs_ref:t_e*fs_ref,:);
 time_ref = (0:length(data_ref)-1)/fs_ref; 
@@ -98,21 +99,25 @@ for i = (1:length(AUDIO_FILES));
     size(cdata)
     size(cdata_ref)
 
-    figure(i);
+    figure(1);
     grid on; hold on;
     plot(time,data(:,1));%, 'Color', [i/5,i/5,i/5] );
-    plot(time_ref, data_ref(:,1), 'g');
-    for xi = 1:length(clicks);
-         x1 = time(clicks(xi));
-         line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
-    end
+    %plot(time_ref, data_ref(:,1), 'g');
+    legend(AUDIO_FILES);
+    %for xi = 1:length(clicks);
+    %     x1 = time(clicks(xi));
+    %     line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
+    %end
     title('Click detection: Amplitude vs. Time'); 
     xlabel('Time [s]');
     ylabel('Amplitude');
 
-    figure(i*10); grid on; hold on;
+    figure(10); grid on; hold on;
     [amp_coh, freq_coh] = audio_mscohere(cdata_ref, cdata, fs);
     plot(freq_coh, amp_coh);
+    legend(AUDIO_FILES);
+    xlabel('frequency [Hz]')
+    title('Coherence compared to first recording')
 end
 
 
