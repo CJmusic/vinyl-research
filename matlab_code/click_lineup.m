@@ -24,8 +24,8 @@ time_ref = (0:length(data_ref)-1)/fs_ref;
 % look for a local maximum 
 % take 0.9 seconds worth of audio on either side of the max for one groove 
 
-t_s = 65.0;
-t_e = 75.0;
+t_s = 67.0;
+t_e = 70.0;
 
 data_ref = data_ref(t_s*fs_ref:t_e*fs_ref,:);
 time_ref = (0:length(data_ref)-1)/fs_ref; 
@@ -50,7 +50,7 @@ size(clicks_ref)
 
 manual_clicks = []; %%sample numbers of the same click in each recording
 
-clf(figure(1));
+clf(figure(1)); clf(figure(10));
 
 for i = (1:length(AUDIO_FILES));         
     [data, time, fs] = audio_load(strcat(audio_dir,AUDIO_FILES{i}));
@@ -79,13 +79,29 @@ for i = (1:length(AUDIO_FILES));
     diff_array
 
     lagdiff = mode(diff_array(:))%size(diff_array))
-    time = time - lagdiff/fs;%(1:length(data))*fs; 
-    cdata = data(lagdiff+1:end,:);
+
+    %% let's add some proper case handing for lagdiff > 0 and lagdiff < 0;
+    if lagdiff > 0;
+        % positive lagdiff means that the data array is delayed compared to the reference
+        cdata = data(lagdiff + 1:end,:); 
+        time = time - lagdiff/fs;%(1:length(data))*fs; 
+    elseif lagdiff < 0; 
+        % negative lagdiff means that the data array is ahead of the reference  
+        cdata = data(1: end + lagdiff,:);   
+        time = time - lagdiff/fs;%(1:length(data))*fs; 
+    elseif lagdiff == 0; %then nothing needs to be corrected  
+        cdata = data; %no lag 
+        time = time - lagdiff/fs;%(1:length(data))*fs; 
+    end
+
+    %time = time - lagdiff/fs;%(1:length(data))*fs; 
+    %cdata = data(lagdiff+1:end,:);
     size(cdata)
     size(data_ref)
     size_diff = length(data_ref) - length(cdata)
         
-    if size_diff > 0;
+    if size_diff > 0; %% the following is to ensure the data arrays are the same length for calculating the coherence
+                      %% probably this isn't necessary after the lag diff is properly handled 
         disp('>0'); 
         cdata_ref = data_ref(size_diff+1:end,:); 
     elseif size_diff < 0; 
