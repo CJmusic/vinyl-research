@@ -36,17 +36,6 @@ for i = (1:length(AUDIO_FILES));
     time = (1:length(data))/fs;
     %[data, time] = audio_lineup(data, fs, time, data_ref);
     [ clicks ] = audio_clickdetect(data, fs);
-   
-    %this for loop attempts to look through the clicks in the reference and line them up with a click in the file
-
-    diff_array = []; % this array contains the distances between every click, each row 
-                     % represents a click in the referenc each column represents a click in the file being looked at 
-    for xi = (1:length(clicks_ref));%this makes an array with the distance between each click in the two
-                                    % files
-        diff_array = [diff_array; clicks - clicks_ref(xi)];
-    end
-
-    lagdiff = mode(diff_array(:)); % the time difference between the two signals is the most common distance between clicks
 
     if lagdiff > 0;
         % positive lagdiff means that the data array is delayed compared to the reference
