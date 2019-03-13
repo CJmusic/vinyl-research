@@ -9,21 +9,27 @@
 
 classdef audio_recordclass
     properties 
-        data = [];
+        dataL = [];
+        dataR = [];
         time = [];
         fs = 0;
 
-        clicks = [];
+        clicksL = [];
+        clicksR = [];
 
-        signals = []; %
-
-        path;
+        signalsL = []; %
+        signalsR = []; %
+        
+            path;
     end % properties
     methods 
         function rec = audio_recordclass(file_path);
             path = file_path;
-            [rec.data, rec.fs] = audioread(path);
-            rec.clicks = audio_clickdetect(rec.data, rec.fs);
+            [data, rec.fs] = audioread(path);
+            rec.dataL = data(:,1);
+            rec.dataR = data(:,2);
+            rec.clicksL = audio_clickdetect(rec.dataL, rec.fs);
+            rec.clicksR = audio_clickdetect(rec.dataR, rec.fs);
         end
         function signals  = signal_process();
             signals = {'leadin','1kHz', '10kHz', '100Hz', 'freqsweep', 'quiet', '3150Hz', '1kHzL', 'swepL', '1kHzR', 'sweepR', '1kHzV', 'sweepV', 'leadout'} 

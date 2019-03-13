@@ -5,7 +5,7 @@
 %
 
 addpath('audio_functions')
-addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/');
+addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/040319_A0000B0000r26fivetrials/');
 
 record_dir = dir('');
 
@@ -16,7 +16,10 @@ wave_files = dir('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audi
 %[wave_files] = dir(record_dir); 
 wave_files
 %reference_file = strfind(wave_files.name, '*reference.wav');
-reference_file = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/040319_A0000B0000r26fivetrials/*reference.wav'; 
+%reference_file = ['/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/040319_A0000B0000r26fivetrials/reference.wav']; 
+
+reference_file = ['/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/020818_A0000B0000/02072019_A0000B000r25-A.wav']; 
+
 
 % string the file names of relevant data 
 
@@ -36,15 +39,23 @@ bottom_stamper_hits = 0;
 path_csv = 0; 
 csv_file = 0; 
 
-
-[data_ref, time_ref, fs_ref] = audio_loadfile(reference_file);
-[clicks_ref] = audio_clickdetect(data_ref, fs);
-%loop through each file: 
-for i = (1:length(wave_files)); 
-    file_path = strcat(wave_files(i).folder,wave_files(i).name);
-    record_id = 'r*.wav';
-    [data, time, fs] = audio_loadfile(file_path); 
-    [cdata_ref, cdata] = 
+reference = audio_recordclass(reference_file)
+signal_array = audio_detectsignal(reference.dataL); 
 
 
-end
+%for i = (1:length(wave_files)); 
+%    file_path = strcat(wave_files(i).folder,'/',wave_files(i).name)
+%    record = audio_recordclass(file_path)
+%    signal_array = audio_detectsignal(record.data); 
+%    %click_mat = audio_clickmatrix(record.clicks, reference.clicks)
+%    
+%    %record_id = 'r*.wav';
+%
+%    %[data, fs] = audioread(file_path); 
+%    %[clicks] = audio_clickdetect(data, fs);
+%    %lagdiff = mode(click_mat);
+%    %click_info = audio_clickcompare(clicks, clicks) 
+%    %[cdata, ctime, cdata_ref, ctime_ref] = audio_lineup(data, fs, data_ref, fs_ref, lagdiff);
+%end
+%
+
