@@ -14,16 +14,35 @@ classdef audio_recordclass
         fs = 0;
 
         clicks = [];
+
+        signals = []; %
+
         path;
-    end
+    end % properties
     methods 
         function rec = audio_recordclass(file_path);
             path = file_path;
-            [data, fs] = audioread(path);
-            clicks = audio_clickdetect(data, fs);
+            [rec.data, rec.fs] = audioread(path);
+            rec.clicks = audio_clickdetect(rec.data, rec.fs);
         end
-        %function r = func(in);
-        %    r = 0;
-        %end
-    end
-end
+        function signals  = signal_process();
+            signals = {'leadin','1kHz', '10kHz', '100Hz', 'freqsweep', 'quiet', '3150Hz', '1kHzL', 'swepL', '1kHzR', 'sweepR', '1kHzV', 'sweepV', 'leadout'} 
+            timesstamps = []; %need detect vinyl noise, probably with detect signal  
+             
+            %TRACK LISTINGS ON TEST RECORDS 
+            %00:02 : 1KHz@7cm-s lateral
+            %01:02 : 10kHz @ -20dB
+            %01:32 : 100Hz
+            %02:04 : frequency sweep 20Hz-16kHz 
+            %02:40 : quiet groove
+            %03:02 : 3150 wow & flutter
+            %04:08 : 1kHz left
+            %04:28 : frequency sweep left
+            %05:06 : 1kHz right
+            %05:26 : frequency sweep right
+            %06:04 : 1kHz vertical
+            %06:24 : frequency sweep vertical
+        
+        end
+    end % methods
+end % recordclass
