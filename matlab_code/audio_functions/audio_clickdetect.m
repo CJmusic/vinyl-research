@@ -19,7 +19,7 @@ function clicks = audio_clickdetect(data, fs);
    d_data = diff(data,1)*fs;% since delta_t = 1/fs:w;
    clicks = [];
    threshold = rms(d_data(1:1025));
-   for i = (1:length(data));
+   for i = (1:length(data)-1);
       if i > 512 && i + 512 < length(d_data);
         threshold = threshold - abs(d_data(i-511)) + abs(d_data(i+511));
       end
