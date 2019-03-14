@@ -33,7 +33,8 @@ classdef audio_recordclass
         end
         function signals  = signal_process();
             signals = {'leadin','1kHz', '10kHz', '100Hz', 'freqsweep', 'quiet', '3150Hz', '1kHzL', 'swepL', '1kHzR', 'sweepR', '1kHzV', 'sweepV', 'leadout'} 
-            timesstamps = []; %need detect vinyl noise, probably with detect signal  
+            timesstamps = [2, 62, 92,124,160, 182, 248, 268, 306, 326, 364, 384];% this is how many seconds each signal is according to Chris Muth's track listing
+            %need detect vinyl noise, probably with detect signal  
              
             %TRACK LISTINGS ON TEST RECORDS 
             %00:02 : 1KHz@7cm-s lateral

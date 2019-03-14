@@ -20,14 +20,14 @@ function clicks = audio_clickdetect(data, fs);
    clicks = [];
    threshold = rms(d_data(1:1025));
    for i = (1:length(data));
-      if i > 512 && i + 512 > length(d_data);
+      if i > 512 && i + 512 < length(d_data);
         threshold = threshold - abs(d_data(i-511)) + abs(d_data(i+511));
       end
-          if d_data(i) > threshold;
-                click = i;
-                %click_timestamp = i/fs;   
-                clicks = [clicks, click];   
-          end
+      if d_data(i) > threshold;
+        click = i;
+        %click_timestamp = i/fs;   
+        clicks = [clicks, click];   
+     end
    end
    disp('Number of clicks');
    size(clicks) 
