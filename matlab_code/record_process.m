@@ -50,12 +50,15 @@ time = (0:length(reference.dataL)-1)/reference.fs;
 
 clf(figure(1));
 figure(1);hold on; grid on;
-plot(time, reference.dataL);
+%plot(time, reference.dataL);
 title('Amplitude vs. Time'); 
 xlabel('Time [s]');
 ylabel('Amplitude');
 
-for i = (1:length(timestamps));
+for i = (1:length(timestamps)-1);
+    data_seg = reference.dataL(floor(timestamps(i)*reference.fs):floor(timestamps(i+1)*reference.fs));
+    time_seg = time(floor(timestamps(i)*reference.fs):floor(timestamps(i+1)*reference.fs));
+    plot(time_seg, data_seg);
     line([timestamps(i) timestamps(i)], get(gca, 'ylim'),'Color', 'blue','LineStyle', '--');
 %    line([timestamps(i)+lengths(i)  timestamps(i)+lengths(i)], get(gca, 'ylim'),'Color', 'red','LineStyle', '--');
 end
@@ -64,7 +67,7 @@ end
 % figure out where the signals are in the reference track
 % line up all signals with the reference
 % use the reference timestamps
-
+% I also need to add the second set of signals (since they repeat, and the transition
 
 %for i = (1:length(wave_files)); 
 %    file_path = strcat(wave_files(i).folder,'/',wave_files(i).name)
