@@ -41,6 +41,29 @@ csv_file = 0;
 
 reference = audio_recordclass(reference_file)
 signal_array = audio_detectsignal(reference.dataL); 
+reference_offset = 4.25;
+timestamps = [0, 2, 62, 92, 124, 160, 182, 248, 268, 306, 326, 364, 384];% this is how many seconds each signal is according to Chris Muth's track listing
+lengths = [60, 30, 31, 36, 21, 66, 20, 37, 19, 37, 19, 37, 19]; %starts with 1kHz
+timestamps = timestamps + reference_offset;
+time = (0:length(reference.dataL)-1)/reference.fs;
+
+
+clf(figure(1));
+figure(1);hold on; grid on;
+plot(time, reference.dataL);
+title('Amplitude vs. Time'); 
+xlabel('Time [s]');
+ylabel('Amplitude');
+
+for i = (1:length(timestamps));
+    line([timestamps(i) timestamps(i)], get(gca, 'ylim'),'Color', 'blue','LineStyle', '--');
+%    line([timestamps(i)+lengths(i)  timestamps(i)+lengths(i)], get(gca, 'ylim'),'Color', 'red','LineStyle', '--');
+end
+
+
+% figure out where the signals are in the reference track
+% line up all signals with the reference
+% use the reference timestamps
 
 
 %for i = (1:length(wave_files)); 

@@ -32,8 +32,10 @@ classdef audio_recordclass
             rec.clicksR = audio_clickdetect(rec.dataR, rec.fs);
         end
         function signals  = signal_process();
-            signals = {'leadin','1kHz', '10kHz', '100Hz', 'freqsweep', 'quiet', '3150Hz', '1kHzL', 'swepL', '1kHzR', 'sweepR', '1kHzV', 'sweepV', 'leadout'} 
-            timesstamps = [2, 62, 92,124,160, 182, 248, 268, 306, 326, 364, 384];% this is how many seconds each signal is according to Chris Muth's track listing
+            signals = {'leadin','1kHz', '10kHz', '100Hz', 'freqsweep', 'quiet', '3150Hz', '1kHzL', 'swepL', '1kHzR', 'sweepR', '1kHzV', 'sweepV', 'extra_signal','leadout'}; 
+            timesstamps = [0,2, 62, 92, 124, 160, 182, 248, 268, 306, 326, 364, 384, 421];% this is how many seconds each signal is according to Chris Muth's track listing
+            lengths = [60, 30, 31, 36, 21, 66, 20, 37, 19, 37, 19, 37, 19]; %starts with 1kHz
+
             %need detect vinyl noise, probably with detect signal  
              
             %TRACK LISTINGS ON TEST RECORDS 

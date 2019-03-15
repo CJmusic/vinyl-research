@@ -26,9 +26,9 @@ function signal_array = audio_detectsignal(data, fs);
             signal_array = [signal_array, 0]; 
         end
     end
-    clf(figure(1));
-    figure(1);hold on; grid on;
-    plot(data);
-    plot(signal_array,'r');
+%    clf(figure(1));
+%    figure(1);hold on; grid on;
+%    plot(data);
+%    plot(signal_array,'r');
 end
 
