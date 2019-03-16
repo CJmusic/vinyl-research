@@ -41,40 +41,86 @@ csv_file = 0;
 
 reference = audio_recordclass(reference_file)
 signal_array = audio_detectsignal(reference.dataL); 
-reference_offset = 4.25; % as measured on /020818_A0000B0000/02072019_A0000B000r25-A.wav
-timestamps = [0, 2, 62, 92, 124, 160, 182, 248, 268, 306, 326, 364, 384, 419.5];% this is how many seconds each signal is according to Chris Muth's track listing
+
+%%% RECORD INFO 
+signals = {'leadin','1kHz', '10kHz', '100Hz', 'freqsweep', 'quiet', '3150Hz', '1kHzL', 'swepL', '1kHzR', 'sweepR', '1kHzV', 'sweepV', 'extra_signal','leadout'}; 
+ref_timestamps = [0, 2, 62, 92, 124, 160, 182, 248, 268, 306, 326, 364, 384, 419.5];% this is how many seconds each signal is according to Chris Muth's track listing
 lengths = [60, 30, 31, 36, 21, 66, 20, 37, 19, 37, 19, 37, 19]; %starts with 1kHz
-timestamps = timestamps + reference_offset;
+
+ref_offset = 4.25; % as measured on /020818_A0000B0000/02072019_A0000B000r25-A.wav
+ref_timestamps = ref_timestamps + ref_offset;
 time = (0:length(reference.dataL)-1)/reference.fs;
-transition = 518.25 % as measured on /020818_A0000B0000/02072019_A0000B000r25-A.wav
-timestamps2 = timestamps + transition;
+ref_transition = 518.25; % as measured on /020818_A0000B0000/02072019_A0000B000r25-A.wav
+ref_timestamps2 = ref_timestamps + ref_transition;
 
-clf(figure(1));
-figure(1);hold on; grid on;
-plot(time, reference.dataL);
-title('Amplitude vs. Time'); 
-xlabel('Time [s]');
-ylabel('Amplitude');
+%clf(figure(1));
+%figure(1);hold on; grid on;
+%plot(time, reference.dataL);
+%title('Amplitude vs. Time'); 
+%xlabel('Time [s]');
+%ylabel('Amplitude');
 
-for i = (1:length(timestamps)-1);
-    data_seg = reference.dataL(floor(timestamps(i)*reference.fs):floor(timestamps(i+1)*reference.fs));
-    time_seg = time(floor(timestamps(i)*reference.fs):floor(timestamps(i+1)*reference.fs));
-    plot(time_seg, data_seg);
-    line([timestamps(i) timestamps(i)], get(gca, 'ylim'),'Color', 'blue','LineStyle', '--');
-    
-    data_seg = reference.dataL(floor(timestamps2(i)*reference.fs):floor(timestamps2(i+1)*reference.fs));
-    time_seg = time(floor(timestamps2(i)*reference.fs):floor(timestamps2(i+1)*reference.fs));
-    plot(time_seg, data_seg);
-    line([timestamps2(i) timestamps2(i)], get(gca, 'ylim'),'Color', 'blue','LineStyle', '--');
-%    line([timestamps(i)+lengths(i)  timestamps(i)+lengths(i)], get(gca, 'ylim'),'Color', 'red','LineStyle', '--');
+ref_signalsL = [];
+ref_signalsR = [];
+ref_signals = {};
+
+%   newMap = containers.Map(keys, values);
+
+for i = (1:length(ref_timestamps)-1);
+    ref_signalsL = reference.dataL(floor(ref_timestamps(i)*reference.fs):floor(ref_timestamps(i+1)*reference.fs));
+    ref_signalsR = reference.dataR(floor(ref_timestamps(i)*reference.fs):floor(ref_timestamps(i+1)*reference.fs)); 
+    ref_signals{end + 1} = [ref_signalsL, ref_signalsR];
 end
+
+for i = (1:length(ref_timestamps2)-1);
+    ref_signalsL = reference.dataL(floor(ref_timestamps2(i)*reference.fs):floor(ref_timestamps2(i+1)*reference.fs));
+    ref_signalsR = reference.dataR(floor(ref_timestamps2(i)*reference.fs):floor(ref_timestamps2(i+1)*reference.fs));
+    size(ref_signalsL) 
+    size(ref_signalsR) 
+    ref_signals{end + 1} = [ref_signalsL, ref_signalsR];
+end
+
+size(ref_signals)
+size(signals)
+ref_signals
+
+for i = (1:length(ref_signals)); 
+    disp('next signal');
+    size(ref_signals{i});
+    length(ref_signals{i})/reference.fs;
+%    length(ref_signals(i,:,2))
+%    length(ref_signals(i,:,1))/reference.fs
+%    length(ref_signals(i,:,2))/reference.fs
+end
+
+
+% looks like ref_signals is 1x26 
+% and signals is 1x15
+
+
+
+%ref_signals  = containers.map(signals(i), [ref_signalsL, ref_signalsR]; % probably wont work, I need a list of these
+                                                                        % arrays above and map keys to them all at once
+
+%%% This code left for reference, it should plot out each segement that's been cut from the timestamps and track listing
+%for i = (1:length(ref_timestamps)-1);
+%    data_seg = reference.dataL(floor(ref_timestamps(i)*reference.fs):floor(ref_timestamps(i+1)*reference.fs));
+%    time_seg = time(floor(ref_timestamps(i)*reference.fs):floor(ref_timestamps(i+1)*reference.fs));
+%    plot(time_seg, data_seg);
+%    line([ref_timestamps(i) ref_timestamps(i)], get(gca, 'ylim'),'Color', 'blue','LineStyle', '--');
+%    
+%    data_seg = reference.dataL(floor(ref_timestamps2(i)*reference.fs):floor(ref_timestamps2(i+1)*reference.fs));
+%    time_seg = time(floor(ref_timestamps2(i)*reference.fs):floor(ref_timestamps2(i+1)*reference.fs));
+%    plot(time_seg, data_seg);
+%    line([ref_timestamps2(i) ref_timestamps2(i)], get(gca, 'ylim'),'Color', 'blue','LineStyle', '--');
+%end
 
 
 % figure out where the signals are in the reference track
 % line up all signals with the reference
-% use the reference timestamps
+% use the reference ref_timestamps
 %
-% I also need to add the second set of signals (since they repeat, and the transition)
+% I also need to add the second set of signals (since they repeat, and the ref_transition)
 % for some reason theres a second log sweep
 
 %for i = (1:length(wave_files)); 
