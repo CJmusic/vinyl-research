@@ -44,7 +44,7 @@ signal_array = audio_detectsignal(reference.dataL);
 
 %%% RECORD INFO 
 %signal_names = {'leadin','1kHz', '10kHz', '100Hz', 'freqsweep', 'quiet', '3150Hz', '1kHzL', 'swepL', '1kHzR', 'sweepR', '1kHzV', 'sweepV', 'extra_signal','leadout'}; 
-signal_names = {'needledrop','leadin','1kHz', '10kHz', '100Hz', 'freqsweep', 'quiet', '3150Hz', '1kHzL', 'swepL', '1kHzR', 'sweepR', '1kHzV', 'sweepV','transition','leadin2','1kHz2', '10kHz2', '100Hz2', 'freqsweep2', 'quiet2', '3150Hz2', '1kHzL2', 'swepL2', '1kHzR2', 'sweepR2', '1kHzV2', 'sweepV2','leadout2'};
+signal_names = {'needledrop','leadin','1kHz', '10kHz', '100Hz', 'freqsweep', 'quiet', '3150Hz', '1kHzL', 'sweepL', '1kHzR', 'sweepR', '1kHzV', 'sweepV','transition','leadin2','1kHz2', '10kHz2', '100Hz2', 'freqsweep2', 'quiet2', '3150Hz2', '1kHzL2', 'sweepL2', '1kHzR2', 'sweepR2', '1kHzV2', 'sweepV2','leadout2'};
 ref_timestamps = [0, 2, 62, 92, 124, 160, 182, 248, 268, 306, 326, 364, 384, 419.5];% this is how many seconds each signal is according to Chris Muth's track listing
 lengths = [60, 30, 31, 36, 21, 66, 20, 37, 19, 37, 19, 37, 19]; %starts with 1kHz
 
@@ -126,9 +126,11 @@ datas = values(ref_tracks);
 for i = (1:length(ref_tracks));
     %ref_tracks(i)
     disp('next track')
-    names{i} 
+    name = names{i}
+    figure(i);
+    plot(datas{i});
+    title(name);
     length(datas{i})/reference.fs
-
 end
 
 % looks like ref_signals is 1x26 
