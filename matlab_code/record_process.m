@@ -80,10 +80,10 @@ end
 
 % the extended silence section 'transition' between the two sets of signals 
 ref_signalsL = reference.dataL(floor(ref_timestamps(end)*reference.fs): ...
-                                floor((ref_timestamps(end)+ref_transition)*reference.fs));
+                               floor((ref_timestamps2(1))*reference.fs));
 
 ref_signalsR = reference.dataR(floor(ref_timestamps(end)*reference.fs): ...
-                                floor((ref_timestamps(end)+ref_transition)*reference.fs));
+                               floor((ref_timestamps2(1))*reference.fs));
 ref_signals{end + 1} = [ref_signalsL, ref_signalsR];
 
 % second set of signals on the disk
@@ -122,16 +122,19 @@ ref_tracks = containers.Map(signal_names, ref_signals);
 
 names = keys(ref_tracks);
 datas = values(ref_tracks);
-
-for i = (1:length(ref_tracks));
-    %ref_tracks(i)
-    disp('next track')
-    name = names{i}
-    figure(i);
-    plot(datas{i});
-    title(name);
-    length(datas{i})/reference.fs
-end
+figure(1)
+trans = ref_tracks('transition');
+size(trans)
+plot(trans);
+%for i = (1:length(ref_tracks));
+%    %ref_tracks(i)
+%    disp('next track')
+%    name = names{i}
+%    figure(i);
+%    plot(datas{i});
+%    title(name);
+%    length(datas{i})/reference.fs
+%end
 
 % looks like ref_signals is 1x26 
 % and signals is 1x15
