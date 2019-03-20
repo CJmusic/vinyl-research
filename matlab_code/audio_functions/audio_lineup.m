@@ -11,36 +11,38 @@
 %
 %
 %
-function [cdata, ctime] = audio_lineup(data_file, fs_file, time_file, data_ref)
+%function [cdata, ctime] = audio_lineup(data_file, fs_file, time_file, data_ref)
+function lagDiff = audio_lineup(data_file, fs_file, data_ref)
     %size(data_file)
     %size(data_ref)
-    data_ref_L = data_ref(:,1); 
-    data_ref_R = data_ref(:,2); 
-    data_file_L = data_file(:,1); 
-    data_file_R = data_file(:,2); 
+   % data_ref_L = data_ref(:,1); 
+   % data_ref_R = data_ref(:,2); 
+   % data_file_L = data_file(:,1); 
+   % data_file_R = data_file(:,2); 
    
 
 
-    [acor,lag] = xcorr(data_file_L,data_ref_L);
-    figure(3); hold on; grid on;
-    plot(acor)
+   % [acor,lag] = xcorr(data_file_L,data_ref_L);
+    [acor,lag] = xcorr(data_file,data_ref);
+    %figure(3); hold on; grid on;
+    %plot(acor)
     [~,I] = max(abs(acor));
-    lagDiff = lag(I)
-    timeDiff = lagDiff/fs_file
-    cdata_file_L = data_file_L(lagDiff+1:end);
-    ctime_file = (0:length(cdata_file_L)-1)/fs_file;
+    lagDiff = lag(I);
+    timeDiff = lagDiff/fs_file;
+  %  cdata_file_L = data_file_L(lagDiff+1:end);
+  %  ctime_file = (0:length(cdata_file_L)-1)/fs_file;
 
-    %[acor,lag] = xcorr(data_file_R,data_ref_R);
-    %[~,I] = max(abs(acor));
-    %lagDiff = lag(I)
-    %timeDiff = lagDiff/fs_file
-    %cdata_file_R = data_file_R(lagDiff+1:end);
-    %ctime_file = (0:length(cdata_file_R)-1)/fs_file;
+  %  %[acor,lag] = xcorr(data_file_R,data_ref_R);
+  %  %[~,I] = max(abs(acor));
+  %  %lagDiff = lag(I)
+  %  %timeDiff = lagDiff/fs_file
+  %  %cdata_file_R = data_file_R(lagDiff+1:end);
+  %  %ctime_file = (0:length(cdata_file_R)-1)/fs_file;
 
-    cdata = data_file(lagDiff+1:end,:);
+  %  cdata = data_file(lagDiff+1:end,:);
 
-    %cdata = [cdata_file_L, cdata_file_R];
-    ctime = ctime_file;
+  %  %cdata = [cdata_file_L, cdata_file_R];
+  %  ctime = ctime_file;
 
 
 %
