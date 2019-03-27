@@ -8,9 +8,8 @@ aren't.
 addpath('audio_functions')
 addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/260219_noisereferenceinst/');
 
-
-addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/040319_r26fivetrials/');
-audio_dir = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/040319_r26fivetrials/'
+addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/040319_A0000B0000r26fivetrials/');
+audio_dir = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/040319_A0000B0000r26fivetrials/'
 
 AUDIO_FILES = {'one.wav','two.wav','three.wav', 'four.wav', 'five.wav'};
 %AUDIO_FILES = {[fsinst_shorted, fsinst_shortedgained, gain10reference, gain10recordnoise, recordnoise, reference, system_noise, system_gained] };
@@ -23,19 +22,34 @@ time_ref = (0:length(data_ref)-1)/fs_ref;
 t_s = 4%67.0;% seconds, the start of the region in the file being analyzed
 t_e = 30%70.0;% seconds, the end of the region being analyzed
 
-data_ref = data_ref(t_s*fs_ref:t_e*fs_ref,:);
+data_ref = data_ref(t_s*fs_ref:t_e*fs_ref,1);
 time_ref = (0:length(data_ref)-1)/fs_ref; 
 
 [ clicks_ref ] = audio_clickdetect(data_ref, fs_ref);
 
 clf(figure(1)); clf(figure(2)); %clear any figures used for plotting 
 
-for i = (1:length(AUDIO_FILES));         
+for i = (1:2);%length(AUDIO_FILES));         
     [data, time, fs] = audio_load(strcat(audio_dir,AUDIO_FILES{i}));
-    data = data(t_s*fs:t_e*fs,:);
+    data = data(t_s*fs:t_e*fs,1);
     time = (1:length(data))/fs;
     %[data, time] = audio_lineup(data, fs, time, data_ref);
     [ clicks ] = audio_clickdetect(data, fs);
+    %lagdiff = mode(clicks)
+
+    time = (1:length(data))/fs;
+       %[clicks_ref] = audio_clickdetect(data_ref, fs_ref);
+
+    diff_array = [] % this array contains the distances between every click, each row 
+                     % represents a click in the referenc each column represents a click in the file being looked at 
+    for xi = (1:length(clicks_ref));%this makes an array with the distance between each click in the two
+                                    % files
+        diff_array = [diff_array; clicks - clicks_ref(xi)];
+    end
+
+    lagdiff = mode(diff_array(:)) % the time difference between the two signals is the most common distance between clicks
+    timediff = lagdiff/fs
+
 
     if lagdiff > 0;
         % positive lagdiff means that the data array is delayed compared to the reference

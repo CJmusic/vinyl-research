@@ -32,6 +32,7 @@ function clicks = audio_clickdetect(data, fs);
      end
    end
    disp('Number of clicks');
+   disp('new file')
    size(clicks) 
    
    %plotting below
