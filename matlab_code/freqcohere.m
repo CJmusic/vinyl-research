@@ -5,7 +5,7 @@
 %
 %
 clear all; clc;close all;
-disp('----------------start of program--------------------')
+disp('------------freqcohere.m---------------')
 
 addpath('audio_functions')
 addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/260219_noisereferenceinst/');

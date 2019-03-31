@@ -6,6 +6,8 @@
 %
 
 function record_process(folder,ref);
+    clc;close all;
+    disp('-----------recordprocess.m---------------')
     addpath('audio_functions')
     addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/');
     path_folder = strcat('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/', folder)
