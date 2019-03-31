@@ -32,6 +32,14 @@ clicks_ref = audio_clickdetect(data_ref, fs_ref);
 cdata_ref  = data_ref;
 %cdata_ref = data_ref(7.0*fs_ref : 15*fs_ref);
 
+
+
+
+
+%%% The code below is legacy, and does not use the implementation of the record class
+
+
+
 % the loop below is based on manual click detection
 manual_clicks = [7.203497085, 11.50687415, 16.336197884] % these are the timestamps for John's Bcorrelation files
 %cdata_manual_ref = data_ref(manual_clicks(1)*fs_ref:manual_clicks(1)*fs_ref + 15.0*fs_ref);
