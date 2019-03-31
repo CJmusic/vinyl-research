@@ -1,6 +1,6 @@
 % audio_recordclass
 % christopher zaworski
-% last edit : march 13 2019 
+% last edit : march 30 2019 
 %
 % This is the matlab implementation fo the record class. 
 %
@@ -98,13 +98,12 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             %05:26 : frequency sweep right
             %06:04 : 1kHz vertical
             %06:24 : frequency sweep vertical
-        
-            signals = {};
 
-
+            rec.tracks = 0; % clear any previous tracks info
+            rec.signals = {};
 
             timestamps  = rec.timestamps + rec.offset;
-            timestamps2 = timestamps + rec.transition;
+            timestamps2 = timestamps + rec.transition + rec.offset;
             
             % get the needledrop
             signalsL = rec.dataL(1:floor((timestamps(1))*rec.fs));

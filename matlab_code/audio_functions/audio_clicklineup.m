@@ -17,7 +17,7 @@
 
 
 %    Code below left for reference
-function [cdata, ctime] = audio_clicklineup(data, fs, clicks_ref, clicks);
+function [cdata, ctime, lagdiff] = audio_clicklineup(data, fs, clicks_ref, clicks);
    % diff_array = []; % this array contains the distances between every click, each row 
    %                  % represents a click in the referenc each column represents a click in the file being looked at 
    % for xi = (1:length(clicks_ref));%this makes an array with the distance between each click in the two
@@ -43,19 +43,19 @@ function [cdata, ctime] = audio_clicklineup(data, fs, clicks_ref, clicks);
      end
      lagdiff = mode(diff_array(:)) % the time difference between the two signals is the most common distance between clicks
 
-
-    if lagdiff > 0;
-        % positive lagdiff means that the data array is delayed compared to the reference
-        cdata = data(lagdiff + 1:end,:); 
-%        ctime = time - lagdiff/fs; 
-    elseif lagdiff < 0; 
-        % negative lagdiff means that the data array is ahead of the reference  
-        cdata = data(1: end + lagdiff,:);   
-%        ctime = time - lagdiff/fs;
-    elseif lagdiff == 0; %then nothing needs to be corrected  
-        cdata = data; %no lag 
-%        ctime = time - lagdiff/fs; 
-    end
+    cdata = circshift(data, lagdiff, 1);
+%    if lagdiff > 0;
+%        % positive lagdiff means that the data array is delayed compared to the reference
+%        cdata = data(lagdiff + 1:end,:); 
+%%        ctime = time - lagdiff/fs; 
+%    elseif lagdiff < 0; 
+%        % negative lagdiff means that the data array is ahead of the reference  
+%        cdata = data(1: end + lagdiff,:);   
+%%        ctime = time - lagdiff/fs;
+%    elseif lagdiff == 0; %then nothing needs to be corrected  
+%        cdata = data; %no lag 
+%%        ctime = time - lagdiff/fs; 
+%    end
 
     ctime = (0:length(cdata)-1)/fs;
     size_diff = length(ctime) - length(cdata)    
