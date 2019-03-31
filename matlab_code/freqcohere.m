@@ -1,10 +1,14 @@
-
+% This file calculated the coherence between multiple files 
+%
+% christopher zaworski
+% last edit : march 31, 2019
+%
+%
 clear all; clc;close all;
 disp('----------------start of program--------------------')
 
 addpath('audio_functions')
 addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/260219_noisereferenceinst/');
-
 
 %addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/040319_r26fivetrials/');
 %audio_dir = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/040319_r26fivetrials/'
@@ -20,6 +24,18 @@ addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/');
 audio_dir = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/';
 AUDIO_FILES = {'031418_A0000B0000r29a-cutsilence.wav','031418_A0000B0000r27a-cutsilence.wav','031418_A0000B0000r28a-cutsilence.wav'}
 path_ref = strcat(audio_dir,AUDIO_FILES{1});
+
+
+
+
+
+
+
+
+
+
+%%% The code below is legacy, and does not use the implementation of the record class
+%{
 path_ref
 [data_ref, fs_ref] = audioread(path_ref);
 %data_ref = data_ref(:,1);
@@ -31,13 +47,6 @@ ref_coh = data_ref;%(length(data_ref)/4:length(data_ref)/4+2^20,:);
 clicks_ref = audio_clickdetect(data_ref, fs_ref);
 cdata_ref  = data_ref;
 %cdata_ref = data_ref(7.0*fs_ref : 15*fs_ref);
-
-
-
-
-
-%%% The code below is legacy, and does not use the implementation of the record class
-
 
 
 % the loop below is based on manual click detection
@@ -122,3 +131,4 @@ for i = (1:length(AUDIO_FILES));
     % legend(AUDIO_FILES)
 
 end
+%}

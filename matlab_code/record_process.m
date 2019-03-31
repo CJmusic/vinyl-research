@@ -9,6 +9,7 @@ addpath('audio_functions')
 addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/040319_A0000B0000r26fivetrials/');
 
 addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/');
+addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/');
 record_dir = dir('');
 
 
