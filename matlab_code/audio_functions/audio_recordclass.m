@@ -5,16 +5,16 @@
 % This is the matlab implementation fo the record class. 
 %
 
-
-
 classdef audio_recordclass < handle %inheriting handle allows methods to update properties
     properties 
+        data = [];
         dataL = [];
         dataR = [];
         timeL = [];
         timeR = [];
         fs = 0;
 
+        clicks = [];
         clicksL = [];
         clicksR = [];
 
@@ -39,6 +39,7 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             disp('record class constructor')
             file_path
             [data, rec.fs] = audioread(file_path);
+            rec.data = data;
             rec.dataL = data(:,1);
             rec.dataR = data(:,2);
             %rec.clicksL = audio_clickdetect(rec.dataL, rec.fs);
@@ -144,9 +145,11 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             disp('done processing tracks')
 
         end % function signals
+        
         function clickdetect(rec);
             rec.clicks = audio_clickdetect(rec.data, rec.fs); 
         end % function detect_clicks
+
         function clicklineup(rec, clicks_ref)
             click_matrix = audio_clickmatrix(rec.clicks, clicks_ref);
             lagdiff = mode(click_matrix);
