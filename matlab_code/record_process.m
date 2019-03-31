@@ -1,6 +1,7 @@
 % This file will look at a sample recording of our test record and perform all the necessary measurements/analysis. 
-% Christopher Zaworski
-% Last edit : March 7, 2019
+%
+% christopher zaworski
+% last edit : march 31, 2019
 %
 %
 
@@ -51,77 +52,49 @@ reference = audio_refrecordclass(reference_file)
 
 % I also need to add the second set of signals (since they repeat, and the ref_transition)
 % for some reason theres a second log sweep
+
+% take the clicks array and the portion of the record used to calculate the coherence
+coh_start = coh_start;
+coh_end = coh_end;
+
 clicks_ref = audio_clickdetect(reference.tracks('transition'), reference.fs);
 ref_cohere = reference.tracks('transition');
-ref_cohere = ref_cohere(10.0*reference.fs:30.0*reference.fs,:); 
-
-
+ref_cohere = ref_cohere(coh_start*reference.fs:coh_end*reference.fs,:); 
 
 for i = (1:length(wave_files)); 
     file_path = strcat(wave_files(i).folder,'/',wave_files(i).name)
     record = audio_recordclass(file_path)
-    %signal_array = audio_detectsignal(record.data); 
-    %click_mat = audio_clickmatrix(record.clicks, reference.clicks)
-    
-    %lagDiffL = audio_lineup(record.dataL(2*record.fs:5*record.fs), record.fs, reference.dataL(2*record.fs:5*record.fs))
-    %lagDiffR = audio_lineup(record.dataR(2*record.fs:5*record.fs), record.fs, reference.dataR(2*record.fs:5*record.fs))
-    %record.lagcorrect(lagDiffL, lagDiffR);
-    
-    %[cdataL, ctimeL, cdata_refL, ctime_refL] = audio_lagcorrect(record.dataL, record.fs, reference.dataL, reference.fs, lagDiffL);
-    %[cdataR, ctimeR, cdata_refR, ctime_refR] = audio_lagcorrect(record.dataR, record.fs, reference.dataR, reference.fs, lagDiffR);
-    disp('FIGURE TIME')
-    figure(1); hold on; grid on;
-   % plot(record.dataL(1:10:end))
-    %plot(reference.dataL,'g')
 
-
-
-    %record = record.process_tracks();
     record.process_tracks();
-   % figure(i);hold on;
-    disp('in script printing tracks')
-    record.tracks
-    %keys(record.tracks)
-    %plot(record.tracks('transition'));
-    %plot(reference.tracks('1kHz'));
 
-    [cdata, ctime, lagDiff] = audio_clicklineup(record.tracks('transition'), record.fs, clicks_ref);
+    [cdata, ctime, lagDiff] = audio_clicklineup(record.tracks('transition'), record.fs, clicks_ref); %need to make this a method of the record class
+
     record.offset = lagDiff/record.fs + reference.offset
     record.process_tracks();
+
     time = (1:length(record.tracks('transition')))/record.fs;
+
+    figure(1); hold on; grid on;
     plot(time, record.tracks('transition')); 
     title('Records 25-30, waveforms')
-    % plot(ctime,cdata) 
+    
+    % take the proper portion of the recording to calculate the coherence 
+    % the two arrays MUST be the same size
     rec_cohere = record.tracks('transition');
-    rec_cohere = rec_cohere(10.0*record.fs:30.0*record.fs,:);
-    % size(ref_cohere)
-    % size(rec_cohere)
-    % size(cdata)
-    % size(reference.tracks('transition'))
-    % [ amp_coh, freq_coh ] = audio_mscohere(reference.tracks('transition'), cdata, reference.fs);
+    rec_cohere = rec_cohere(coh_start*record.fs:coh_end*record.fs,:);
     [ amp_coh, freq_coh ] = audio_mscohere(ref_cohere, rec_cohere, reference.fs);
+
+    % plot the coherence for the left and right channels 
     figure(2); grid on; hold on;
     plot(freq_coh,amp_coh(:,1))
     set(gca, 'XScale', 'log');
-    % axis([0,fs_ref/2,0,1])
     xlabel('frequency [Hz]')
     title('Groove Coherences, Left Channel')
+
     figure(3); grid on; hold on;
     plot(freq_coh,amp_coh(:,2))
     set(gca, 'XScale', 'log');
-    % axis([0,fs_ref/2,0,1])
-    xlabel('frequency [Hz]')
     title('Groove Coherences, Right Channel')
-    %lagdiffL = audio_clicklineup(record.clicksL(1:100), reference.clicksL(1:100))
-    %lagdiffR = audio_clicklineup(record.clicksR(1:100), reference.clicksR(1:100))
-    %record_id = 'r*.wav';
-    % audiowrite('transition-i.wav',record.tracks('transition'),record.fs);
-
-    %[data, fs] = audioread(file_path); 
-    %[clicks] = audio_clickdetect(data, fs);
-    %lagdiff = mode(click_mat);
-    %click_info = audio_clickcompare(clicks, clicks) 
-    %[cdata, ctime, cdata_ref, ctime_ref] = audio_lineup(data, fs, data_ref, fs_ref, lagdiff);
 end
 
 figure(1)
