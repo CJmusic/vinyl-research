@@ -18,6 +18,8 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
         clicksL = [];
         clicksR = [];
 
+        click_matrix = [];
+
         signalsL = []; %
         signalsR = []; %
         signals = {};
@@ -31,6 +33,7 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
         offset = 4.25; % as measured on /020818_A0000B0000/02072019_A0000B000r25-A.wav
         %time = (0:length(dataL)-1)/rec.fs;
         transition = 518.25; % as measured on /020818_A0000B0000/02072019_A0000B000r25-A.wav
+        lagdiff = 0;
         timediff = 0; % this is a time diff calculated as compared to a reference 
         tracks;
     end % properties
@@ -151,9 +154,11 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
         end % function detect_clicks
 
         function clicklineup(rec, clicks_ref)
-            click_matrix = audio_clickmatrix(rec.clicks, clicks_ref);
-            lagdiff = mode(click_matrix);
-            rec.timediff = lagdiff/rec.fs;
+            rec.click_matrix, rec.lagdiff = audio_clickmatrix(rec.clicks, clicks_ref);
+            disp('lagdiff')
+            % lagdiff
+            rec.timediff = rec.lagdiff/rec.fs;
+            rec.data = circshift(rec.data, rec.lagdiff);
             
         end % function click_lineup
     end % methods

@@ -7,7 +7,7 @@
 
 function wav_process(folder,ref);
     clc;close all;
-    disp('------------freqcohere.m---------------')
+    disp('------------wav_process.m---------------')
     addpath('audio_functions')
     addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/');
     path_folder = strcat('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/', folder, '/')
@@ -25,16 +25,9 @@ function wav_process(folder,ref);
 
     wave_files = dir(strcat(path_folder,'*.wav'))
 
-    reference = audio_recordclass(reference_file)
 
     coh_start = 7.0;
     coh_end = 15.0;
-
-    clicks_ref = audio_clickdetect(reference.data, reference.fs);
-    disp('number of clicks in reference: ')
-    size(clicks_ref)
-    ref_cohere = reference.data(coh_start*reference.fs:coh_end*reference.fs,:); 
-    time_ref = (0:length(ref_cohere)-1)/reference.fs; 
     % figure(1);
     % plot(time_ref, ref_cohere, 'g', 'LineWidth', 3)
 
@@ -45,7 +38,15 @@ function wav_process(folder,ref);
         file_path = strcat(wave_files(i).folder,'/',wave_files(i).name)
         wave_names{i} = sprintf(wave_files(i).name);
         record = audio_recordclass(file_path)
-
+        if i == 1; % choose first wav file as the reference to line up all the other files
+            % reference = audio_recordclass(reference_file)
+            reference = record;
+            clicks_ref = audio_clickdetect(reference.data, reference.fs);
+            disp('number of clicks in reference: ')
+            size(clicks_ref)
+            ref_cohere = reference.data(coh_start*reference.fs:coh_end*reference.fs,:); 
+            time_ref = (0:length(ref_cohere)-1)/reference.fs; 
+        end 
         % [cdata, ctime, lagDiff] = audio_clicklineup(record.tracks('transition'), record.fs, clicks_ref); %need to make this a method of the record class
         record.clickdetect();
         disp('number of clicks: ')
