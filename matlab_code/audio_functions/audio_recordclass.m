@@ -49,42 +49,28 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             %rec.clicksR = audio_clickdetect(rec.dataR, rec.fs);
         end
 
-        function lagcorrect(rec, lagDiffL, lagDiffR);
-
-           timeL = (0:length(rec.dataL)); 
-           if lagDiffL > 0;
+        function lagcorrect(rec, lagDiff);
+            % this function should correct the record for any lagDiff calculated by another method: 
+            % the method currently implemented is okay, I want to try circshift
+            % also see the matlab function lag !!!! 
+           time = (0:length(rec.data)); 
+           if lagDiff > 0;
                % positive lagDiffL means that the data array is delayed compared to the reference
-               cdataL = rec.dataL(lagDiffL + 1:end,:); 
-               ctimeL = timeL - lagDiffL/rec.fs; 
-           elseif lagDiffL < 0; 
+               cdata = rec.data(lagDiff + 1:end,:); 
+               ctime = time - lagDiff/rec.fs; 
+           elseif lagDiff < 0; 
                % negative lagDiffL means that the data array is ahead of the reference  
-               cdataL = rec.dataL(1: end + lagDiffL,:);   
-               ctimeL = timeL - lagDiffL/rec.fs;
-           elseif lagDiffL == 0; %then nothing needs to be corrected  
-               cdataL = rec.dataL; %no lag 
-               ctimeL = timeL - lagDiffL/rec.fs; 
+               cdataL = rec.data(1: end + lagDiff,:);   
+               ctimeL = time - lagDiff/rec.fs;
+           elseif lagDiff == 0; %then nothing needs to be corrected  
+               cdata = rec.data; %no lag 
+               ctime = time - lagDiff/rec.fs; 
            end
 
-
-           timeR = (0:length(rec.dataR)); 
-           if lagDiffR > 0;
-               % positive lagDiffR means that the data array is delayed compared to the reference
-               cdataR = rec.dataR(lagDiffR + 1:end,:); 
-               ctimeR = timeR - lagDiffR/rec.fs; 
-           elseif lagDiffR < 0; 
-               % negative lagDiffR means that the data array is ahead of the reference  
-               cdataR = rec.dataR(1: end + lagDiffR,:);   
-               ctimeR = timeR - lagDiffR/rec.fs;
-           elseif lagDiffR == 0; %then nothing needs to be corrected  
-               cdataR = rec.dataR; %no lag 
-               ctimeR = timeR - lagDiffR/rec.fs; 
-           end
            
-           rec.dataL = cdataL;
-           rec.dataR = cdataR;
+           rec.data = cdata;
 
-           rec.timeL = ctimeL;
-           rec.timeR = ctimeR;
+           rec.time = ctime;
         end % function lagcorrect
 
         function process_tracks(rec);
@@ -154,9 +140,11 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
         end % function detect_clicks
 
         function clicklineup(rec, clicks_ref)
-            rec.click_matrix, rec.lagdiff = audio_clickmatrix(rec.clicks, clicks_ref);
+            [rec.click_matrix, rec.lagdiff] = audio_clickmatrix(rec.clicks, clicks_ref);
             disp('lagdiff')
-            % lagdiff
+            size(rec.click_matrix)
+            size(rec.lagdiff)
+            rec.lagdiff
             rec.timediff = rec.lagdiff/rec.fs;
             rec.data = circshift(rec.data, rec.lagdiff);
             

@@ -7,7 +7,7 @@
 
 function wav_process(folder,ref);
     clc;close all;
-    disp('------------wav_process.m---------------')
+    disp('-----------wav_process.m---------------')
     addpath('audio_functions')
     addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/');
     path_folder = strcat('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/', folder, '/')
@@ -51,7 +51,13 @@ function wav_process(folder,ref);
         record.clickdetect();
         disp('number of clicks: ')
         size(record.clicks)
-        record.clicklineup(clicks_ref);
+        % record.clicklineup(clicks_ref);
+
+        disp('Click lagdiff: ')
+        record.lagdiff
+
+        disp('Xcorr lagdiff')
+        xcorr_diff = audio_lineup(record.data, reference.data, record.fs)
 
         % record.offset = lagDiff/record.fs + reference.offset
         % record.process_tracks();

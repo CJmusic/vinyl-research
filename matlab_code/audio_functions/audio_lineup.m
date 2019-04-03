@@ -12,7 +12,7 @@
 %
 %
 %function [cdata, ctime] = audio_lineup(data_file, fs_file, time_file, data_ref)
-function lagDiff = audio_lineup(data_file, fs_file, data_ref)
+function lagDiff = audio_lineup(data_file, data_ref, fs_file)
     %size(data_file)
     %size(data_ref)
    % data_ref_L = data_ref(:,1); 
@@ -20,15 +20,29 @@ function lagDiff = audio_lineup(data_file, fs_file, data_ref)
    % data_file_L = data_file(:,1); 
    % data_file_R = data_file(:,2); 
    
-
+    disp('audio_lineup function')
+    size(data_file)
+    size(data_ref)
 
    % [acor,lag] = xcorr(data_file_L,data_ref_L);
-    [acor,lag] = xcorr(data_file,data_ref);
+    [acor_L,lag_L] = xcorr(data_file(:,1),data_ref(:,1));
+    [acor_R,lag_R] = xcorr(data_file(:,2),data_ref(:,2));
     %figure(3); hold on; grid on;
     %plot(acor)
-    [~,I] = max(abs(acor));
-    lagDiff = lag(I);
-    timeDiff = lagDiff/fs_file;
+    [~,I_L] = max(abs(acor_L));
+    %lagDiff_L = lag(I_L);
+    lagDiff_L = I_L
+    [~,I_R] = max(abs(acor_R));
+    lagDiff_R = I_R
+    % lagDiff_R = lag(I_R);
+    % timeDiff = lagDiff/fs_file;
+    
+    disp('lagDiff_L')
+    lagDiff_L
+    disp('lagDiff_R')
+    lagDiff_R
+    lagDiff = lagDiff_L
+    disp ('ending audio_lineup function')
   %  cdata_file_L = data_file_L(lagDiff+1:end);
   %  ctime_file = (0:length(cdata_file_L)-1)/fs_file;
 
