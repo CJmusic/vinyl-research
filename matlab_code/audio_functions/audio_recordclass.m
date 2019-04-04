@@ -10,6 +10,8 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
         data = [];
         dataL = [];
         dataR = [];
+
+        time = [];
         timeL = [];
         timeR = [];
         fs = 0;
@@ -53,24 +55,26 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             % this function should correct the record for any lagDiff calculated by another method: 
             % the method currently implemented is okay, I want to try circshift
             % also see the matlab function lag !!!! 
-           time = (0:length(rec.data)); 
-           if lagDiff > 0;
-               % positive lagDiffL means that the data array is delayed compared to the reference
-               cdata = rec.data(lagDiff + 1:end,:); 
-               ctime = time - lagDiff/rec.fs; 
-           elseif lagDiff < 0; 
-               % negative lagDiffL means that the data array is ahead of the reference  
-               cdataL = rec.data(1: end + lagDiff,:);   
-               ctimeL = time - lagDiff/rec.fs;
-           elseif lagDiff == 0; %then nothing needs to be corrected  
-               cdata = rec.data; %no lag 
-               ctime = time - lagDiff/rec.fs; 
-           end
+            rec.data = circshift(rec.data, rec.lagdiff);
+            rec.time = (0:length(rec.data)-1)/rec.fs;
+            % time = (0:length(rec.data)); 
+        %    if lagDiff > 0;
+        %        % positive lagDiffL means that the data array is delayed compared to the reference
+        %        cdata = rec.data(lagDiff + 1:end,:); 
+        %        ctime = time - lagDiff/rec.fs; 
+        %    elseif lagDiff < 0; 
+        %        % negative lagDiffL means that the data array is ahead of the reference  
+        %        cdataL = rec.data(1: end + lagDiff,:);   
+        %        ctimeL = time - lagDiff/rec.fs;
+        %    elseif lagDiff == 0; %then nothing needs to be corrected  
+        %        cdata = rec.data; %no lag 
+        %        ctime = time - lagDiff/rec.fs; 
+        %    end
 
            
-           rec.data = cdata;
+        %    rec.data = cdata;
 
-           rec.time = ctime;
+        %    rec.time = ctime;
         end % function lagcorrect
 
         function process_tracks(rec);
@@ -146,7 +150,7 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             size(rec.lagdiff)
             rec.lagdiff
             rec.timediff = rec.lagdiff/rec.fs;
-            rec.data = circshift(rec.data, rec.lagdiff);
+            % rec.data = circshift(rec.data, rec.lagdiff);
             
         end % function click_lineup
     end % methods

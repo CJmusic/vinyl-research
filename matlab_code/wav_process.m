@@ -54,10 +54,22 @@ function wav_process(folder,ref);
         % record.clicklineup(clicks_ref);
 
         disp('Click lagdiff: ')
-        record.lagdiff
+        record.lagdiff = 0;
+        record.lagcorrect()
+        figure(10); grid on; hold on;
+        plot(record.time, record.data(:,1))
+        title('Click lineup')
+
+        record.lagdiff = -1*record.lagdiff;
+        record.lagcorrect;
 
         disp('Xcorr lagdiff')
         xcorr_diff = audio_lineup(record.data, reference.data, record.fs)
+        record.lagdiff = xcorr_diff;
+        record.lagcorrect()
+        figure(20); grid on; hold on;
+        plot(record.time, record.data(:,1))
+        title('Xcorr lineup')
 
         % record.offset = lagDiff/record.fs + reference.offset
         % record.process_tracks();
@@ -101,4 +113,9 @@ function wav_process(folder,ref);
     figure(3)
     legend(wave_names)
 
+    figure(10)
+    legend(wave_names)
+
+    figure(10)
+    legend(wave_names)
 end % function record_process
