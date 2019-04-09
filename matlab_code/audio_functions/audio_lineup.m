@@ -27,6 +27,16 @@ function lagDiff = audio_lineup(data_file, data_ref, fs_file)
    % [acor,lag] = xcorr(data_file_L,data_ref_L);
     [acor_L,lag_L] = xcorr(data_file(:,1),data_ref(:,1));
     [acor_R,lag_R] = xcorr(data_file(:,2),data_ref(:,2));
+    figure(50); hold on; grid on; 
+    plot(acor_L)
+    plot(acor_R,'--')
+
+
+    %disp('lag_L')
+    %max(lag_L) 
+    %disp('lag_R')
+    %max(lag_R)
+
     %figure(3); hold on; grid on;
     %plot(acor)
     [~,I_L] = max(abs(acor_L));

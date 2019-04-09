@@ -5,7 +5,7 @@
 %
 %
 
-function wav_process(folder,ref);
+function wav_process(folder);
     clc;close all;
     disp('-----------wav_process.m---------------')
     addpath('audio_functions')
@@ -16,7 +16,7 @@ function wav_process(folder,ref);
     references = {
     '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/Bcorr/Bcorrelation_test_1.wav' 
     };    
-    reference_file = references{ref}
+    % reference_file = references{ref}
 
     %addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/040319_A0000B0000r26fivetrials/');
 
@@ -48,26 +48,41 @@ function wav_process(folder,ref);
             time_ref = (0:length(ref_cohere)-1)/reference.fs; 
         end 
         % [cdata, ctime, lagDiff] = audio_clicklineup(record.tracks('transition'), record.fs, clicks_ref); %need to make this a method of the record class
+
         record.clickdetect();
         disp('number of clicks: ')
         size(record.clicks)
-        % record.clicklineup(clicks_ref);
+        figure(10); grid on; hold on;
+        plot(record.time, record.data(:,1))
+        title('Original Audio')
+
+
+        record.clicklineup(clicks_ref);
 
         disp('Click lagdiff: ')
         record.lagdiff = 0;
         record.lagcorrect()
-        figure(10); grid on; hold on;
+        figure(20); grid on; hold on;
         plot(record.time, record.data(:,1))
         title('Click lineup')
 
         record.lagdiff = -1*record.lagdiff;
         record.lagcorrect;
 
+        figure(40); grid on; hold on;
+        plot(record.time, record.data(:,1))
+        title('Original-messed Audio')
+
+
+
+        % I need to plot what the actual correlation function looks like
+        % and possibly experiment by giving it a smaller chunck of audio 
+        % to calculate the correlation function with 
         disp('Xcorr lagdiff')
-        xcorr_diff = audio_lineup(record.data, reference.data, record.fs)
+        xcorr_diff = audio_lineup(record.data, reference.data, record.fs);
         record.lagdiff = xcorr_diff;
         record.lagcorrect()
-        figure(20); grid on; hold on;
+        figure(30); grid on; hold on;
         plot(record.time, record.data(:,1))
         title('Xcorr lineup')
 
@@ -116,6 +131,9 @@ function wav_process(folder,ref);
     figure(10)
     legend(wave_names)
 
-    figure(10)
+    figure(20)
+    legend(wave_names)
+
+    figure(30)
     legend(wave_names)
 end % function record_process

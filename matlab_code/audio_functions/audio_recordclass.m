@@ -45,6 +45,7 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             file_path
             [data, rec.fs] = audioread(file_path);
             rec.data = data;
+            rec.time = (0:length(rec.data)-1)/rec.fs;
             rec.dataL = data(:,1);
             rec.dataR = data(:,2);
             %rec.clicksL = audio_clickdetect(rec.dataL, rec.fs);
