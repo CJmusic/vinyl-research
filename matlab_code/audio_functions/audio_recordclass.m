@@ -56,7 +56,7 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             % this function should correct the record for any lagDiff calculated by another method: 
             % the method currently implemented is okay, I want to try circshift
             % also see the matlab function lag !!!! 
-            rec.data = circshift(rec.data, rec.lagdiff);
+            rec.data = circshift(rec.data, -1*rec.lagdiff);
             rec.time = (0:length(rec.data)-1)/rec.fs;
             % time = (0:length(rec.data)); 
         %    if lagDiff > 0;
