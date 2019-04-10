@@ -88,71 +88,83 @@ function record_process(folder,ref);
         record.process_tracks();
         track_names = keys(record.tracks) ;
         track_data  = values(record.tracks) ;
+        RMS_values = [];
         for j = (1:length(record.tracks));
 
             %% line up the audio via click detection
-
+            record.clickdetect();
 
             %%% RMS VALUES TO CSV 
             RMS_value = rms(track_data{j});
+            RMS_values = [RMS_values, RMS_value];
 
             %%% WAVEFORM PLOTTING 
             track_time = (0:length(track_data{j})-1)/record.fs;
-            figure(1); grid on; hold on;
+            figure(1); grid on; 
             plot(track_time, track_data{j});
-            saveas(figure(1),strcat(wave_files(i).name,'wave.png'))
+            saveas(figure(1),strcat(wave_name,'wave.png'))
 
 
             %%% SPECTRUM PLOTTING
             freq_fft = fs*(0:(n_sam/2))/n_sam;
             data_fft = fft(data(start_sam:start_sam+n_sam, :))/n_sam;
             data_fft = data_fft(1:size(data_fft)/2-1);
+            figure(2); grid on; 
             plot(freq, 20.0*log10(data_fft))  
             set(gca, 'XScale', 'log');
-            title(title_string)
+            title('Spectrum')
             xlabel('Frequency (Hz)')
             ylabel('Level (dB)')  
+            saveas(figure(2),strcat(wave_files(i).name,'wave.png'))
 
             %%% COHERENCES TO REFERENCE RECORD
             [ amp_coh, freq_coh ] = audio_mscohere(record.tracks(tracknames{j}), reference.tracks(tracknames{j}), reference.fs);
 
-            figure(2); grid on; hold on;
+            figure(3); grid on; 
             plot(freq_coh,amp_coh(:,1))
             set(gca, 'XScale', 'log');
             xlabel('frequency [Hz]')
-            title('Coherences, Left Channel')
+            title('Coherences to Reference, Left Channel')
             wave_names = [wave_names, wave_files(i).name];
-            saveas(fig,filename,formattype)
+            filename = strcat(wave_name,'cohleft_ref.png')
+            saveas(figure(3),filename)
 
-            figure(3); grid on; hold on;
+            figure(4); grid on; 
             plot(freq_coh,amp_coh(:,2))
             set(gca, 'XScale', 'log');
-            title('Coherences, Right Channel')
-            saveas(fig,filename,formattype)
+            title('Coherences to Reference, Right Channel')
+            filename = strcat(wave_name,'cohright_ref.png')
+            saveas(figure(4),filename)
 
             %%% COHERENCES TO PREVIOUS RECORD
             [ amp_coh, freq_coh ] = audio_mscohere(record.tracks(tracknames{j}), previous.tracks(tracknames{j}), previous.fs);
 
-            figure(2); grid on; hold on;
+            figure(5); grid on; 
             plot(freq_coh,amp_coh(:,1))
             set(gca, 'XScale', 'log');
             xlabel('frequency [Hz]')
-            title('Coherences, Left Channel')
-            saveas(fig,filename,formattype)
+            title('Coherences to Previous, Left Channel')
+            filename = strcat(wave_name,'cohleft_prev.png')
+            saveas(figure(5),filename)
 
-            figure(3); grid on; hold on;
+            figure(6); grid on; 
             plot(freq_coh,amp_coh(:,2))
             set(gca, 'XScale', 'log');
-            title('Coherences, Right Channel')
-            saveas(fig,filename,formattype)
-        end
+            title('Coherences to Previous, Right Channel')
+            filename = strcat(wave_name,'cohleft_prev.png')
+            saveas(figure(6),filename)
+
+        end % for loop through record tracks
+
         % [cdata, ctime, lagDiff] = audio_clicklineup(record.tracks('transition'), record.fs, clicks_ref); %need to make this a method of the record class
 
         % plot the coherence for the left and right channels compared to the reference 
 
         previous = record; % set the current record class to the previous one for analysis
-    end
+        CSV_MATRIX(i) = [wave_name, RMS_values, length(clicks)]
+    end % for loop of record files
 
+    writematrix(CSV_MATRIX,'A0000B0000_analysis.csv');
     figure(1)
     legend(wave_names)
 
