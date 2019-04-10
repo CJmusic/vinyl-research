@@ -12,10 +12,7 @@ function record_process(folder,ref);
     addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/');
     path_folder = strcat('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/', folder)
     folder
-    path_folder = ('/Volumes/AUDIOBANK/audio_files/A0000B0000');
-    references = {'/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/031418_A0000B0000r27a.wav',
-    '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/Bcorr/Bcorrelation_test_1.wav' 
-    };    
+    references = {'/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/031418_A0000B0000r27a.wav'};    
     reference_file = references{ref}
 
     %addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/040319_A0000B0000r26fivetrials/');
@@ -25,6 +22,7 @@ function record_process(folder,ref);
 
     if strcmp(folder,'A0000B0000');
         wave_files = dir('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/*a.wav'); 
+        % wave_files = dir('/Volumes/AUDIOBANK/audio_files/A0000B0000/*a.wav');
     else
         wave_files = dir(strcat(path_folder,'*.wav')); 
     end
@@ -58,32 +56,40 @@ function record_process(folder,ref);
     % for some reason theres a second log sweep
 
     % take the clicks array and the portion of the record used to calculate the coherence
-    coh_start = coh_start;
-    coh_end = coh_end;
+    % coh_start = coh_start;
+    % coh_end = coh_end;
 
     clicks_ref = audio_clickdetect(reference.tracks('transition'), reference.fs);
-    ref_cohere = reference.tracks('transition');
-    ref_cohere = ref_cohere(coh_start*reference.fs:coh_end*reference.fs,:); 
+    % ref_cohere = reference.tracks('transition');
+    % ref_cohere = ref_cohere(coh_start*reference.fs:coh_end*reference.fs,:); 
 
     wave_names = [];
 
     for i = (1:length(wave_files)); 
+        disp('~~~~~~~~~~NEXT FILE~~~~~~~~~~~~')
         file_path = strcat(wave_files(i).folder,'/',wave_files(i).name)
         wave_names = [wave_names, wave_files(i).name];
-        wave_name = wave_files(i).name 
+        disp('wave_name')
+        wave_name = wave_files(i).name(1:end-4) 
         record = audio_recordclass(file_path)
         if i == 1; % choose first wav file as the reference to line up all the other files
             previous = record;
         end 
 
-        record.clickdetect()
-        record.clicklineup(clicks_ref)
-        record.lagcorrect()
+        record.transition_track()
+        [~,~,lagDiff] = audio_clicklineup(record.tracks('transition'), record.fs, clicks_ref);
+        record.lagdiff = lagDiff;
+        record.lagcorrect();
+
+        % record.clickdetect()
+        % record.clicklineup(clicks_ref)
+        % record.lagcorrect()
 
         record.process_tracks();
         track_names = keys(record.tracks) ;
         track_data  = values(record.tracks) ;
         for j = (1:length(record.tracks));
+            %% line up the audio via click detection
             %%% RMS VALUES TO CSV 
             RMS_value = rms(track_data{j});
 
@@ -92,9 +98,17 @@ function record_process(folder,ref);
             figure(1); grid on; hold on;
             plot(track_time, track_data{j});
             saveas(figure(1),strcat(wave_files(i).name,'wave.png'))
+
+
             %%% SPECTRUM PLOTTING
-
-
+            freq_fft = fs*(0:(n_sam/2))/n_sam;
+            data_fft = fft(data(start_sam:start_sam+n_sam, :))/n_sam;
+            data_fft = data_fft(1:size(data_fft)/2-1);
+            plot(freq, 20.0*log10(data_fft))  
+            set(gca, 'XScale', 'log');
+            title(title_string)
+            xlabel('Frequency (Hz)')
+            ylabel('Level (dB)')  
 
             %%% COHERENCES TO REFERENCE RECORD
             [ amp_coh, freq_coh ] = audio_mscohere(record.tracks(tracknames{j}), reference.tracks(tracknames{j}), reference.fs);

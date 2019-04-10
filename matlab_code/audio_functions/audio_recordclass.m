@@ -114,7 +114,7 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             end
             
             % the extended silence section 'transition' between the two sets of signals 
-            signalsL = rec.dataL(floor(timestamps(end)*rec.fs): ...
+            signalsL = rec.dataL(floor(timestamps(end)*rec.fs): ...V
                                            floor((timestamps2(1))*rec.fs));
             
             signalsR = rec.dataR(floor(timestamps(end)*rec.fs): ...
@@ -139,6 +139,26 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             disp('done processing tracks')
 
         end % function signals
+        function transition_track();
+            % this function grabs the approximate position of the transition track for the purpose of 
+            % lining up the file to a reference
+            rec.tracks = 0; % clear any previous tracks info
+            rec.signals = {};
+            
+            timestamps  = rec.timestamps + rec.offset + rec.timediff;
+            timestamps2 = timestamps + rec.transition + rec.offset + rec.timediff;
+
+            % the extended silence section 'transition' between the two sets of signals 
+            signalsL = rec.dataL(floor(timestamps(end)*rec.fs): ...
+                                           floor((timestamps2(1))*rec.fs));
+            
+            signalsR = rec.dataR(floor(timestamps(end)*rec.fs): ...
+                                           floor((timestamps2(1))*rec.fs));
+            transition = [signalsL, signalsR];
+
+            rec.tracks = containers.Map('transition', transition);
+
+        end % transition track
         
         function clickdetect(rec);
             rec.clicks = audio_clickdetect(rec.data, rec.fs); 
