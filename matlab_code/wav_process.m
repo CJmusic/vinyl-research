@@ -26,8 +26,8 @@ function wav_process(folder);
     wave_files = dir(strcat(path_folder,'*.wav'))
 
 
-    coh_start = 6.0;
-    coh_end = 25.0;
+    coh_start = 8.0;
+    coh_end = 18.0;
     % figure(1);
     % plot(time_ref, ref_cohere, 'g', 'LineWidth', 3)
 
@@ -72,17 +72,19 @@ function wav_process(folder);
         plot(record.time,record.data)
 
         % record.time = record.time + record.lagdiff/record.fs;
-        record.lagdiff = -1.0*record.lagdiff;
-        record.lagcorrect()
+        % record.lagdiff = -1.0*record.lagdiff;
+        % record.lagcorrect()
 
-        xcorr_diff = audio_lineup(record.data, reference.data, record.fs);
-        record.lagdiff = xcorr_diff;
-        record.lagcorrect()
-        % record.time = record.time - record.lagdiff/record.fs;
+        % xcorr_diff = audio_lineup(record.data, reference.data, record.fs);
+        % record.lagdiff = xcorr_diff;
+        % record.lagcorrect()
+        % % record.time = record.time - record.lagdiff/record.fs;
 
-        figure(30); hold on; grid on;
-        title('post lineup xcorr')
-        plot(record.time,record.data)
+        % figure(30); hold on; grid on;
+        % title('post lineup xcorr')
+        % plot(record.time,record.data)
+
+
         % take the proper portion of the recording to calculate the coherence 
         rec_cohere = record.data;
         rec_cohere = rec_cohere(coh_start*record.fs:coh_end*record.fs,:);
@@ -113,6 +115,9 @@ function wav_process(folder);
 
     figure(20)
     legend(wave_names)
+
+    % figure(30)
+    % legend(wave_names)
 
     % figure(1)
     % legend(wave_names)
