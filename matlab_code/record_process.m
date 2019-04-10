@@ -71,6 +71,16 @@ function record_process(folder,ref);
         file_path = strcat(wave_files(i).folder,'/',wave_files(i).name)
         wave_names = [wave_names, wave_files(i).name];
         record = audio_recordclass(file_path)
+        % if i == 1; % choose first wav file as the reference to line up all the other files
+        %     % reference = audio_recordclass(reference_file)
+        %     reference = record;
+        %     clicks_ref = audio_clickdetect(reference.data, reference.fs);
+        %     % disp('number of clicks in reference: ')
+        %     % size(clicks_ref)
+        %     ref_cohere = reference.data(coh_start*reference.fs:coh_end*reference.fs,:); 
+        %     time_ref = (0:length(ref_cohere)-1)/reference.fs; 
+        % end 
+
 
         record.process_tracks();
 
@@ -91,7 +101,7 @@ function record_process(folder,ref);
         rec_cohere = rec_cohere(coh_start*record.fs:coh_end*record.fs,:);
         [ amp_coh, freq_coh ] = audio_mscohere(ref_cohere, rec_cohere, reference.fs);
 
-        % plot the coherence for the left and right channels 
+        % plot the coherence for the left and right channels compared to the reference 
         figure(2); grid on; hold on;
         plot(freq_coh,amp_coh(:,1))
         set(gca, 'XScale', 'log');
@@ -102,6 +112,8 @@ function record_process(folder,ref);
         plot(freq_coh,amp_coh(:,2))
         set(gca, 'XScale', 'log');
         title('Coherences, Right Channel')
+
+        previous = record; % set the current record class to the previous one for analysis
     end
 
     figure(1)
