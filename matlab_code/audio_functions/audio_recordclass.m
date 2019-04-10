@@ -148,7 +148,7 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             [rec.click_matrix, rec.lagdiff] = audio_clickmatrix(rec.clicks, clicks_ref);
             disp('lagdiff')
             size(rec.click_matrix)
-            size(rec.lagdiff)
+            % size(rec.lagdiff)
             rec.lagdiff
             rec.timediff = rec.lagdiff/rec.fs;
             % rec.data = circshift(rec.data, rec.lagdiff);

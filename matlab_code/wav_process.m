@@ -42,16 +42,13 @@ function wav_process(folder);
             % reference = audio_recordclass(reference_file)
             reference = record;
             clicks_ref = audio_clickdetect(reference.data, reference.fs);
-            disp('number of clicks in reference: ')
-            size(clicks_ref)
-            ref_cohere = reference.data(coh_start*reference.fs:coh_end*reference.fs,:); 
-            time_ref = (0:length(ref_cohere)-1)/reference.fs; 
+            % disp('number of clicks in reference: ')
+            % size(clicks_ref)
+            % ref_cohere = reference.data(coh_start*reference.fs:coh_end*reference.fs,:); 
+            % time_ref = (0:length(ref_cohere)-1)/reference.fs; 
         end 
 
         %% this is to try the click lineup method
-        % record.clickdetect();
-        % record.clicklineup(clicks_ref);
-        % disp('Click lagdiff: ')
         % figure(20); grid on; hold on;
         % plot(record.time, record.data(:,1))
         % title('Click lineup')
@@ -59,46 +56,69 @@ function wav_process(folder);
         % record.lagdiff = -1*record.lagdiff;
         % record.lagcorrect;
 
-        % I need to plot what the actual correlation function looks like
-        % and possibly experiment by giving it a smaller chunck of audio 
-        % to calculate the correlation function with 
+        figure(10); hold on; grid on; 
+        title('pre lineup')
+        plot(record.time, record.data)
+
+
+        record.clickdetect();
+        record.clicklineup(clicks_ref);
+        % record.lagcorrect()
+        record.time = record.time - record.lagdiff/record.fs;
+
+
+        figure(20); hold on; grid on;
+        title('post lineup clicks')
+        plot(record.time,record.data)
+
+        record.time = record.time + record.lagdiff/record.fs;
+
         xcorr_diff = audio_lineup(record.data, reference.data, record.fs);
         record.lagdiff = xcorr_diff;
-        record.lagcorrect()
+        % record.lagcorrect()
+        record.time = record.time - record.lagdiff/record.fs;
 
+        figure(30); hold on; grid on;
+        title('post lineup xcorr')
+        plot(record.time,record.data)
         % take the proper portion of the recording to calculate the coherence 
-        % the two arrays MUST be the same size
-        rec_cohere = record.data;
-        rec_cohere = rec_cohere(coh_start*record.fs:coh_end*record.fs,:);
-        time = (0:length(rec_cohere)-1)/record.fs;
+        % rec_cohere = record.data;
+        % rec_cohere = rec_cohere(coh_start*record.fs:coh_end*record.fs,:);
+        % time = (0:length(rec_cohere)-1)/record.fs;
 
-        [ amp_coh, freq_coh ] = audio_mscohere(ref_cohere, rec_cohere, reference.fs);
+        % [ amp_coh, freq_coh ] = audio_mscohere(ref_cohere, rec_cohere, reference.fs);
 
-        figure(1); hold on; grid on;
-        plot(time, rec_cohere); 
-        title('Records Waveforms')
+        % figure(1); hold on; grid on;
+        % plot(time, rec_cohere); 
+        % title('Records Waveforms')
 
-        % plot the coherence for the left and right channels 
-        figure(2); grid on; hold on;
-        plot(freq_coh,amp_coh(:,1))
-        set(gca, 'XScale', 'log');
-        xlabel('frequency [Hz]')
-        title('Coherences, Left Channel')
+        % % plot the coherence for the left and right channels 
+        % figure(2); grid on; hold on;
+        % plot(freq_coh,amp_coh(:,1))
+        % set(gca, 'XScale', 'log');
+        % xlabel('frequency [Hz]')
+        % title('Coherences, Left Channel')
 
-        figure(3); grid on; hold on;
-        plot(freq_coh,amp_coh(:,2))
-        set(gca, 'XScale', 'log');
-        title('Coherences, Right Channel')
+        % figure(3); grid on; hold on;
+        % plot(freq_coh,amp_coh(:,2))
+        % set(gca, 'XScale', 'log');
+        % title('Coherences, Right Channel')
 
     end
 
-    figure(1)
+    figure(10)
     legend(wave_names)
 
-    figure(2)
+    figure(20)
     legend(wave_names)
 
-    figure(3)
-    legend(wave_names)
+    % figure(1)
+    % legend(wave_names)
+
+    % figure(2)
+    % legend(wave_names)
+
+    % figure(3)
+    % legend(wave_names)
 
 end % function record_process
