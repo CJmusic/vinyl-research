@@ -12,7 +12,7 @@ function record_process(folder,ref);
     addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/');
     path_folder = strcat('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/', folder)
     folder
-
+    path_folder = ('/Volumes/AUDIOBANK/audio_files/A0000B0000');
     references = {'/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/031418_A0000B0000r27a.wav',
     '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/Bcorr/Bcorrelation_test_1.wav' 
     };    
@@ -70,48 +70,68 @@ function record_process(folder,ref);
     for i = (1:length(wave_files)); 
         file_path = strcat(wave_files(i).folder,'/',wave_files(i).name)
         wave_names = [wave_names, wave_files(i).name];
+        wave_name = wave_files(i).name 
         record = audio_recordclass(file_path)
-        % if i == 1; % choose first wav file as the reference to line up all the other files
-        %     % reference = audio_recordclass(reference_file)
-        %     reference = record;
-        %     clicks_ref = audio_clickdetect(reference.data, reference.fs);
-        %     % disp('number of clicks in reference: ')
-        %     % size(clicks_ref)
-        %     ref_cohere = reference.data(coh_start*reference.fs:coh_end*reference.fs,:); 
-        %     time_ref = (0:length(ref_cohere)-1)/reference.fs; 
-        % end 
+        if i == 1; % choose first wav file as the reference to line up all the other files
+            previous = record;
+        end 
 
+        record.clickdetect()
+        record.clicklineup(clicks_ref)
+        record.lagcorrect()
 
         record.process_tracks();
+        track_names = keys(record.tracks) ;
+        track_data  = values(record.tracks) ;
+        for j = (1:length(record.tracks));
+            %%% RMS VALUES TO CSV 
+            RMS_value = rms(track_data{j});
 
-        [cdata, ctime, lagDiff] = audio_clicklineup(record.tracks('transition'), record.fs, clicks_ref); %need to make this a method of the record class
+            %%% WAVEFORM PLOTTING 
+            track_time = (0:length(track_data{j})-1)/record.fs;
+            figure(1); grid on; hold on;
+            plot(track_time, track_data{j});
+            saveas(figure(1),strcat(wave_files(i).name,'wave.png'))
+            %%% SPECTRUM PLOTTING
 
-        record.offset = lagDiff/record.fs + reference.offset
-        record.process_tracks();
 
-        time = (1:length(record.tracks('transition')))/record.fs;
 
-        figure(1); hold on; grid on;
-        plot(time, record.tracks('transition')); 
-        title('Records Waveforms')
-        
-        % take the proper portion of the recording to calculate the coherence 
-        % the two arrays MUST be the same size
-        rec_cohere = record.tracks('transition');
-        rec_cohere = rec_cohere(coh_start*record.fs:coh_end*record.fs,:);
-        [ amp_coh, freq_coh ] = audio_mscohere(ref_cohere, rec_cohere, reference.fs);
+            %%% COHERENCES TO REFERENCE RECORD
+            [ amp_coh, freq_coh ] = audio_mscohere(record.tracks(tracknames{j}), reference.tracks(tracknames{j}), reference.fs);
+
+            figure(2); grid on; hold on;
+            plot(freq_coh,amp_coh(:,1))
+            set(gca, 'XScale', 'log');
+            xlabel('frequency [Hz]')
+            title('Coherences, Left Channel')
+            wave_names = [wave_names, wave_files(i).name];
+            saveas(fig,filename,formattype)
+
+            figure(3); grid on; hold on;
+            plot(freq_coh,amp_coh(:,2))
+            set(gca, 'XScale', 'log');
+            title('Coherences, Right Channel')
+            saveas(fig,filename,formattype)
+
+            %%% COHERENCES TO PREVIOUS RECORD
+            [ amp_coh, freq_coh ] = audio_mscohere(record.tracks(tracknames{j}), previous.tracks(tracknames{j}), previous.fs);
+
+            figure(2); grid on; hold on;
+            plot(freq_coh,amp_coh(:,1))
+            set(gca, 'XScale', 'log');
+            xlabel('frequency [Hz]')
+            title('Coherences, Left Channel')
+            saveas(fig,filename,formattype)
+
+            figure(3); grid on; hold on;
+            plot(freq_coh,amp_coh(:,2))
+            set(gca, 'XScale', 'log');
+            title('Coherences, Right Channel')
+            saveas(fig,filename,formattype)
+        end
+        % [cdata, ctime, lagDiff] = audio_clicklineup(record.tracks('transition'), record.fs, clicks_ref); %need to make this a method of the record class
 
         % plot the coherence for the left and right channels compared to the reference 
-        figure(2); grid on; hold on;
-        plot(freq_coh,amp_coh(:,1))
-        set(gca, 'XScale', 'log');
-        xlabel('frequency [Hz]')
-        title('Coherences, Left Channel')
-
-        figure(3); grid on; hold on;
-        plot(freq_coh,amp_coh(:,2))
-        set(gca, 'XScale', 'log');
-        title('Coherences, Right Channel')
 
         previous = record; % set the current record class to the previous one for analysis
     end
