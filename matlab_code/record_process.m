@@ -89,7 +89,10 @@ function record_process(folder,ref);
         track_names = keys(record.tracks) ;
         track_data  = values(record.tracks) ;
         for j = (1:length(record.tracks));
+
             %% line up the audio via click detection
+
+
             %%% RMS VALUES TO CSV 
             RMS_value = rms(track_data{j});
 
