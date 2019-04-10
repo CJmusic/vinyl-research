@@ -47,50 +47,25 @@ function wav_process(folder);
             ref_cohere = reference.data(coh_start*reference.fs:coh_end*reference.fs,:); 
             time_ref = (0:length(ref_cohere)-1)/reference.fs; 
         end 
-        % [cdata, ctime, lagDiff] = audio_clicklineup(record.tracks('transition'), record.fs, clicks_ref); %need to make this a method of the record class
 
-        record.clickdetect();
-        disp('number of clicks: ')
-        size(record.clicks)
-        figure(10); grid on; hold on;
-        plot(record.time, record.data(:,1))
-        title('Original Audio')
+        %% this is to try the click lineup method
+        % record.clickdetect();
+        % record.clicklineup(clicks_ref);
+        % disp('Click lagdiff: ')
+        % figure(20); grid on; hold on;
+        % plot(record.time, record.data(:,1))
+        % title('Click lineup')
 
-
-        record.clicklineup(clicks_ref);
-
-        disp('Click lagdiff: ')
-        record.lagdiff = 0;
-        record.lagcorrect()
-        figure(20); grid on; hold on;
-        plot(record.time, record.data(:,1))
-        title('Click lineup')
-
-        record.lagdiff = -1*record.lagdiff;
-        record.lagcorrect;
-
-        figure(40); grid on; hold on;
-        plot(record.time, record.data(:,1))
-        title('Original-messed Audio')
-
-
+        % record.lagdiff = -1*record.lagdiff;
+        % record.lagcorrect;
 
         % I need to plot what the actual correlation function looks like
         % and possibly experiment by giving it a smaller chunck of audio 
         % to calculate the correlation function with 
-        disp('Xcorr lagdiff')
         xcorr_diff = audio_lineup(record.data, reference.data, record.fs);
         record.lagdiff = xcorr_diff;
         record.lagcorrect()
-        figure(30); grid on; hold on;
-        plot(record.time, record.data(:,1))
-        title('Xcorr lineup')
 
-        % record.offset = lagDiff/record.fs + reference.offset
-        % record.process_tracks();
-
-
-        
         % take the proper portion of the recording to calculate the coherence 
         % the two arrays MUST be the same size
         rec_cohere = record.data;
@@ -98,8 +73,6 @@ function wav_process(folder);
         time = (0:length(rec_cohere)-1)/record.fs;
 
         [ amp_coh, freq_coh ] = audio_mscohere(ref_cohere, rec_cohere, reference.fs);
-
-        % tg = uitabgroup; % opens figures in a tabbed interface 
 
         figure(1); hold on; grid on;
         plot(time, rec_cohere); 
@@ -128,12 +101,4 @@ function wav_process(folder);
     figure(3)
     legend(wave_names)
 
-    figure(10)
-    legend(wave_names)
-
-    figure(20)
-    legend(wave_names)
-
-    figure(30)
-    legend(wave_names)
 end % function record_process
