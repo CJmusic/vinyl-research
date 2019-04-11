@@ -60,16 +60,12 @@ function record_process(folder,ref);
     % coh_end = coh_end;
 
     clicks_ref = audio_clickdetect(reference.tracks('transition'), reference.fs);
-    % ref_cohere = reference.tracks('transition');
-    % ref_cohere = ref_cohere(coh_start*reference.fs:coh_end*reference.fs,:); 
 
     wave_names = [];
 
     CSV_titles = {'wavefile','track name', 'RMS', 'total clicks', 'common clicks', 'unique clicks'};
     CSV_MATRIX = cell(1,6);
     CSV_MATRIX(1,:) = CSV_titles;
-    % disp('CSV_MATRIX')
-    % CSV_MATRIX
 
     for i = (1:length(wave_files)); 
         disp('~~~~~~~~~~NEXT FILE~~~~~~~~~~~~')
@@ -89,11 +85,6 @@ function record_process(folder,ref);
         % [lagDiff] = audio_clicklineup(record.tracks('transition'), record.fs, clicks_ref);
         [click_matrix_tran, lagDiff] = audio_clickmatrix(clicks_tran, clicks_ref);
 
-        %% line up the audio via click detection
-        % record.clickdetect();
-        % record.clickdetect()
-        % record.clicklineup(clicks_ref)
-        % record.lagcorrect()
 
         record.lagdiff = lagDiff;
         record.lagcorrect()
@@ -101,8 +92,7 @@ function record_process(folder,ref);
 
         track_names = keys(record.tracks) ;
         track_data  = values(record.tracks) ;
-        % RMS_values = [];
-        % CLICKS_CSV = [];
+
         for j = (1:length(record.tracks));
             %%% RMS VALUES TO CSV 
             RMS_value = rms(track_data{j});
@@ -181,7 +171,6 @@ function record_process(folder,ref);
             if strcmp(track_names{j},'transition');
                 clicks = audio_clickdetect(record.tracks('transition'), record.fs);
                 [click_matrix, lagdiff] = audio_clickmatrix();
-                % NUM_clicks = [NUM_clicks, length(clicks)];
 
                 coarseness = 20; % number of samples we allow the mode to be off by when counting common clicks 
                 [dt_row, dt_column] = find(click_matrix > lagDiff - coarseness && click_matrix < lagDiff + coarseness);
@@ -190,12 +179,8 @@ function record_process(folder,ref);
                 clicks_unique = size(clicks, 1) - len(dt_row);
 
                 CSV_MATRIX = {CSV_MATRIX ; strcat(wave_name), track_names{j}, RMS_value, clicks_total, clicks_common, clicks_unique};
-                % disp('CSV_MATRIX')
-                % CSV_MATRIX
 
             else; 
-                disp('CSV_MATRIX')
-                % CSV_MATRIX
                 track_name = track_names{j}
                 CSV_MATRIX(end+1,:) = {wave_name, track_names, RMS_value, 'n/a', 'n/a', 'n/a'};
             
@@ -208,27 +193,11 @@ function record_process(folder,ref);
             clf(figure(6))
         end % for loop through record tracks
 
-        % [cdata, ctime, lagDiff] = audio_clicklineup(record.tracks('transition'), record.fs, clicks_ref); %need to make this a method of the record class
-
-        % plot the coherence for the left and right channels compared to the reference 
-
         previous = record; % set the current record class to the previous one for analysis
     end % for loop of record files
 
-    % writematrix(CSV_MATRIX,'A0000B0000_analysis.csv');
-    % Convert cell to a table and use first row as variable names
-    CSV_TABLE = cell2table(CSV_MATRIX,'VariableNames',CSV_titles)
-    
     % Write the table to a CSV file
+    CSV_TABLE = cell2table(CSV_MATRIX,'VariableNames',CSV_titles)
     writetable(CSV_TABLE,'A0000B0000_analysis.csv')
-
-    % figure(1)
-    % legend(wave_names)
-
-    % figure(2)
-    % legend(wave_names)
-
-    % figure(3)
-    % legend(wave_names)
 
 end % function record_process
