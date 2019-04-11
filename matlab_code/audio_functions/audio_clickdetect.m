@@ -115,8 +115,8 @@ function clicks = audio_clickdetect(data, fs);
     disp('starting click detect')
     for i = (1:length(data)-1);
         if i > 512 && i + 512 < length(d_data);
-            threshold = threshold - abs(d_data(i-511)) + abs(d_data(i+511));
-            % threshold = 10*rms(d_data(i-511:i+512))
+            % threshold = threshold - abs(d_data(i-511)) + abs(d_data(i+511));
+            threshold = 10*rms(d_data(i-511:i+512));
         end
         if d_data(i) > threshold;
             click = i;

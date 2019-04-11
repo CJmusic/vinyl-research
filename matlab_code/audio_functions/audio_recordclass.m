@@ -52,11 +52,21 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             %rec.clicksR = audio_clickdetect(rec.dataR, rec.fs);
         end
 
-        function lagcorrect(rec, lagDiff);
+        function lagcorrect(rec);
             % this function should correct the record for any lagDiff calculated by another method: 
             % the method currently implemented is okay, I want to try circshift
             % also see the matlab function lag !!!! 
-            rec.data = circshift(rec.data, -1*rec.lagdiff);
+            disp('inside lagcorrect')
+            rec.lagdiff
+
+            if rec.lagdiff == 0; %then nothing needs to be corrected  
+                disp('no lag diff')
+            else;
+                rec.data = circshift(rec.data, -1*rec.lagdiff);
+                rec.dataL = rec.data(:,1);
+                rec.dataR = rec.data(:,2);
+            end
+            
             rec.time = (0:length(rec.data)-1)/rec.fs;
             % time = (0:length(rec.data)); 
         %    if lagDiff > 0;
@@ -139,14 +149,15 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             disp('done processing tracks')
 
         end % function signals
-        function transition_track();
+        function transition_track(rec);
             % this function grabs the approximate position of the transition track for the purpose of 
             % lining up the file to a reference
-            rec.tracks = 0; % clear any previous tracks info
-            rec.signals = {};
+            % rec.tracks = 0; % clear any previous tracks info
+            % rec.signals = {};
             
             timestamps  = rec.timestamps + rec.offset + rec.timediff;
             timestamps2 = timestamps + rec.transition + rec.offset + rec.timediff;
+
 
             % the extended silence section 'transition' between the two sets of signals 
             signalsL = rec.dataL(floor(timestamps(end)*rec.fs): ...
@@ -155,9 +166,11 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             signalsR = rec.dataR(floor(timestamps(end)*rec.fs): ...
                                            floor((timestamps2(1))*rec.fs));
             transition = [signalsL, signalsR];
-
+            disp('inside rec class')
+            size(transition)
             rec.tracks = containers.Map('transition', transition);
-
+            class(rec.tracks)
+            size(rec.tracks('transition'))
         end % transition track
         
         function clickdetect(rec);
