@@ -7,7 +7,7 @@
 %
 
 % This class is currently tuned to use the following: 
-% /020818_A0000B0000/02072019_A0000B000r25-A.wav
+% /020818_A0000B0000/02072019_A0000B000r27-A.wav
 % as the file
 
 classdef audio_refrecordclass < audio_recordclass
