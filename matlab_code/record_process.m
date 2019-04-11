@@ -66,7 +66,10 @@ function record_process(folder,ref);
     wave_names = [];
 
     CSV_titles = {'wavefile','track name', 'RMS', 'total clicks', 'common clicks', 'unique clicks'};
-    CSV_MATRIX = [];
+    CSV_MATRIX = cell(1,6);
+    CSV_MATRIX(1,:) = CSV_titles;
+    % disp('CSV_MATRIX')
+    % CSV_MATRIX
 
     for i = (1:length(wave_files)); 
         disp('~~~~~~~~~~NEXT FILE~~~~~~~~~~~~')
@@ -116,10 +119,16 @@ function record_process(folder,ref);
 
 
             %%% SPECTRUM PLOTTING
+            disp('SPECTRUM PLOTTING')
             n_sam = length(track_data{j})
+            
             freq_fft = record.fs*(0:(n_sam/2))/n_sam;
+            
             data_fft = fft(track_data{j})/n_sam;
-            data_fft = data_fft(1:n_sam/2-1);
+            size(freq_fft)
+ 
+            data_fft = data_fft(1:n_sam/2+1);
+            size(data_fft)
             figure(2); grid on; 
             plot(freq_fft, 20.0*log10(data_fft))  
             set(gca, 'XScale', 'log');
@@ -129,7 +138,7 @@ function record_process(folder,ref);
             saveas(figure(2),strcat(wave_name,track_names{j},'spectrum.png'))
 
             %%% COHERENCES TO REFERENCE RECORD
-            [ amp_coh, freq_coh ] = audio_mscohere(record.tracks(tracknames{j}), reference.tracks(tracknames{j}), reference.fs);
+            [ amp_coh, freq_coh ] = audio_mscohere(record.tracks(track_names{j}), reference.tracks(track_names{j}), reference.fs);
 
             figure(3); grid on; 
             plot(freq_coh,amp_coh(:,1))
@@ -150,7 +159,7 @@ function record_process(folder,ref);
             saveas(figure(4),filename)
 
             %%% COHERENCES TO PREVIOUS RECORD
-            [ amp_coh, freq_coh ] = audio_mscohere(record.tracks(tracknames{j}), previous.tracks(tracknames{j}), previous.fs);
+            [ amp_coh, freq_coh ] = audio_mscohere(record.tracks(track_names{j}), previous.tracks(track_names{j}), previous.fs);
 
             figure(5); grid on; 
             plot(freq_coh,amp_coh(:,1))
@@ -169,7 +178,7 @@ function record_process(folder,ref);
             filename = strcat(wave_name,track_names{j},'cohleft_prev.png')
             saveas(figure(6),filename)
 
-            if track_names{j} == 'transition';
+            if strcmp(track_names{j},'transition');
                 clicks = audio_clickdetect(record.tracks('transition'), record.fs);
                 [click_matrix, lagdiff] = audio_clickmatrix();
                 % NUM_clicks = [NUM_clicks, length(clicks)];
@@ -180,12 +189,23 @@ function record_process(folder,ref);
                 clicks_common = len(dt_row);
                 clicks_unique = size(clicks, 1) - len(dt_row);
 
-                CSV_MATRIX = [CSV_MATRIX ; strcat(wave_name), track_names{j}, RMS_value, clicks_total, clicks_common, clicks_unique];
+                CSV_MATRIX = {CSV_MATRIX ; strcat(wave_name), track_names{j}, RMS_value, clicks_total, clicks_common, clicks_unique};
+                % disp('CSV_MATRIX')
+                % CSV_MATRIX
 
             else; 
-                CSV_MATRIX = [CSV_MATRIX ; strcat(wave_name), track_names{j}, RMS_value, 'n/a', 'n/a', 'n/a'];
+                disp('CSV_MATRIX')
+                % CSV_MATRIX
+                track_name = track_names{j}
+                CSV_MATRIX(end+1,:) = {wave_name, track_names, RMS_value, 'n/a', 'n/a', 'n/a'};
             
             end 
+            clf(figure(1))
+            clf(figure(2))
+            clf(figure(3))
+            clf(figure(4))
+            clf(figure(5))
+            clf(figure(6))
         end % for loop through record tracks
 
         % [cdata, ctime, lagDiff] = audio_clicklineup(record.tracks('transition'), record.fs, clicks_ref); %need to make this a method of the record class
@@ -195,14 +215,20 @@ function record_process(folder,ref);
         previous = record; % set the current record class to the previous one for analysis
     end % for loop of record files
 
-    writematrix(CSV_MATRIX,'A0000B0000_analysis.csv');
-    figure(1)
-    legend(wave_names)
+    % writematrix(CSV_MATRIX,'A0000B0000_analysis.csv');
+    % Convert cell to a table and use first row as variable names
+    CSV_TABLE = cell2table(CSV_MATRIX,'VariableNames',CSV_titles)
+    
+    % Write the table to a CSV file
+    writetable(CSV_TABLE,'A0000B0000_analysis.csv')
 
-    figure(2)
-    legend(wave_names)
+    % figure(1)
+    % legend(wave_names)
 
-    figure(3)
-    legend(wave_names)
+    % figure(2)
+    % legend(wave_names)
+
+    % figure(3)
+    % legend(wave_names)
 
 end % function record_process
