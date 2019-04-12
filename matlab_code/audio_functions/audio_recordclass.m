@@ -25,6 +25,7 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
         signalsL = []; %
         signalsR = []; %
         signals = {};
+        signal_times = {};
         
         %%% RECORD INFO 
         timestamps = [0, 2, 62, 92, 124, 160, 182, 248, 268, 306, 326, 364, 384, 419.5];
@@ -38,6 +39,7 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
         lagdiff = 0;
         timediff = 0; % this is a time diff calculated as compared to a reference 
         tracks;
+        track_times;
     end % properties
     methods 
         function rec = audio_recordclass(file_path);

@@ -42,13 +42,17 @@ classdef audio_refrecordclass < audio_recordclass
             % get the needledrop
             signalsL = rec.dataL(1:floor((timestamps(1))*rec.fs));
             signalsR = rec.dataR(1:floor((timestamps(1))*rec.fs));
+            time_seg = rec.time(1:floor((timestamps(1))*rec.fs));
             rec.signals{end + 1} = [signalsL, signalsR];
+            rec.signal_times{end + 1} = [time_seg];
             
             % first set of signals on the disk
             for i = (1:length(timestamps)-1);
                 signalsL = rec.dataL(floor(timestamps(i)*rec.fs):floor(timestamps(i+1)*rec.fs));
                 signalsR = rec.dataR(floor(timestamps(i)*rec.fs):floor(timestamps(i+1)*rec.fs)); 
+                time_seg = rec.time(floor(timestamps(i)*rec.fs):floor(timestamps(i+1)*rec.fs));
                 rec.signals{end + 1} = [signalsL, signalsR];
+                rec.signal_times{end + 1} = [time_seg];
             end
             
             % the extended silence section 'transition' between the two sets of signals 
@@ -57,21 +61,30 @@ classdef audio_refrecordclass < audio_recordclass
             
             signalsR = rec.dataR(floor(timestamps(end)*rec.fs): ...
                                            floor((timestamps2(1))*rec.fs));
+            time_seg = rec.time(floor(timestamps(end)*rec.fs): ...
+            floor((timestamps2(1))*rec.fs));
+	
             rec.signals{end + 1} = [signalsL, signalsR];
+            rec.signal_times{end + 1} = [time_seg];
             
             % second set of signals on the disk
             for i = (1:length(timestamps2)-1);
                 signalsL =rec.dataL(floor(timestamps2(i)*rec.fs):floor(timestamps2(i+1)*rec.fs));
                 signalsR = rec.dataR(floor(timestamps2(i)*rec.fs):floor(timestamps2(i+1)*rec.fs));
+                time_seg = rec.time(floor(timestamps2(i)*rec.fs):floor(timestamps2(i+1)*rec.fs));
                 rec.signals{end + 1} = [signalsL, signalsR];
+                rec.signal_times{end + 1} = [time_seg];
             end
             
             % get the rest of the file
             signalsL =rec.dataL(floor(timestamps2(end)*rec.fs):end);
             signalsR = rec.dataR(floor(timestamps2(end)*rec.fs):end);
+            time_seg = rec.time(floor(timestamps2(end)*rec.fs):end);
             rec.signals{end + 1} = [signalsL, signalsR];
+            rec.signal_times{end + 1} = [time_seg];
             
             rec.tracks = containers.Map(rec.signal_names, rec.signals);
+            rec.track_times = containers.Map(rec.signal_names, rec.signal_times);
         end % constructor
     end % methods
 end % classdef

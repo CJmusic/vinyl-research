@@ -23,20 +23,21 @@ reference = audio_refrecordclass(reference_file)
 time_offset = 0;
 track_names = keys(reference.tracks) ;
 track_data  = values(reference.tracks) ;
+track_times = values(reference.track_times);
 
 figure(1); hold on; grid on;
 for i = (1:length(reference.tracks));
-    track = track_data{i}.';%'
-    time = (time_offset:time_offset + length(track)-1)/reference.fs;%
+    % track = track_data{i}.';%'
+    % time = (time_offset:time_offset + length(track)-1)/reference.fs;%
     % if i > 1;
     %     time_offset = time_offset + time(end);
     % end
-    time(1)
-    time(end)
-    size(time)
-    time_offset = time_offset + length(time);
+    % time(1)
+    % time(end)
+    % size(time)
+    % time_offset = time_offset + length(time);
     % time = time + time_offset;
-    time_offset
-    plot(time, track);
-    time = [];
+    % time_offset
+    plot(track_times{i}, track_data{i});
+    % time = [];
 end
