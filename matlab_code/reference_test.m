@@ -38,6 +38,7 @@ for i = (1:length(reference.tracks));
     % time_offset = time_offset + length(time);
     % time = time + time_offset;
     % time_offset
+    figure(i)
     plot(track_times{i}, track_data{i});
     % time = [];
 end

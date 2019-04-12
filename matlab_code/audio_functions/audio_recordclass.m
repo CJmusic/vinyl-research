@@ -32,7 +32,7 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
         timestamps = [0, 60, 90, 122, 158, 180, 246, 266, 304, 324, 362, 382, 417.5];
         % this is how many seconds each signal is according to Chris Muth's track listing
         lengths = [60, 30, 31, 36, 21, 66, 20, 37, 19, 37, 19, 37, 19]; %starts with 1kHz
-        signal_names = {'leadin','1kHz', '10kHz', '100Hz', 'freqsweep', 'quiet', '3150Hz', '1kHzL', 'sweepL', '1kHzR', 'sweepR', '1kHzV', 'sweepV', 'transition', '1kHz2', '10kHz2', '100Hz2', 'freqsweep2', 'quiet2', '3150Hz2', '1kHzL2', 'sweepL2', '1kHzR2', 'sweepR2', '1kHzV2', 'sweepV2','leadout'};
+        signal_names = {'leadin','1kHz', '10kHz', '100Hz', 'freqsweep', 'quiet', '3150Hz', '1kHzL', 'sweepL', '1kHzR', 'sweepR', '1kHzV', 'sweepV','transition', '1kHz2', '10kHz2', '100Hz2', 'freqsweep2', 'quiet2', '3150Hz2', '1kHzL2', 'sweepL2', '1kHzR2', 'sweepR2', '1kHzV2', 'sweepV2','leadout'};
 
         % offset = 4.25; % as measured on /020818_A0000B0000/02072019_A0000B000r25-A.wav
         offset = 10.625; % as measured on /020818_A0000B0000/02072019_A0000B000r27-A.wav
@@ -112,6 +112,7 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             rec.tracks = 0; % clear any previous tracks info
             rec.signals = {};
 
+            signal_names = {'leadin','1kHz', '10kHz', '100Hz', 'freqsweep', 'quiet', '3150Hz', '1kHzL', 'sweepL', '1kHzR', 'sweepR', '1kHzV', 'sweepV','transition', '1kHz2', '10kHz2', '100Hz2', 'freqsweep2', 'quiet2', '3150Hz2', '1kHzL2', 'sweepL2', '1kHzR2', 'sweepR2', '1kHzV2', 'sweepV2','leadout'};
             % timestamps  = rec.timestamps + rec.offset + rec.timediff;
             % timestamps2 = timestamps + rec.transition + rec.offset + rec.timediff;
             disp('timestamps')
@@ -127,6 +128,10 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             
             % first set of signals on the disk
             for i = (1:length(timestamps)-1);
+                disp('FOR LOOP LENGTHS')
+                starting = floor(timestamps(i))
+                ending = floor(timestamps(i+1))
+                lengthing =  ending - starting 
                 signalsL = rec.dataL(floor(timestamps(i)*rec.fs):floor(timestamps(i+1)*rec.fs));
                 signalsR = rec.dataR(floor(timestamps(i)*rec.fs):floor(timestamps(i+1)*rec.fs)); 
                 time_seg = rec.time(floor(timestamps(i)*rec.fs):floor(timestamps(i+1)*rec.fs));
@@ -139,20 +144,16 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             rec.transition
             timestamps(end)
             timestamps2(1)
-            signalsL = rec.dataL(floor(timestamps(end)*rec.fs): ...
-                                           floor((timestamps2(1))*rec.fs));
-            
-            signalsR = rec.dataR(floor(timestamps(end)*rec.fs): ...
-                                           floor((timestamps2(1))*rec.fs));
-            time_seg = rec.time(floor(timestamps(end)*rec.fs): ...
-            floor((timestamps2(1))*rec.fs));
+            signalsL = rec.dataL(floor(timestamps(end)*rec.fs):floor(timestamps2(1)*rec.fs));
+            signalsR = rec.dataR(floor(timestamps(end)*rec.fs):floor(timestamps2(1)*rec.fs));
+            time_seg = rec.time(floor(timestamps(end)*rec.fs):floor((timestamps2(1))*rec.fs));
 	
             rec.signals{end + 1} = [signalsL, signalsR];
             rec.signal_times{end + 1} = [time_seg];
             
             % second set of signals on the disk
             for i = (1:length(timestamps2)-1);
-                signalsL =rec.dataL(floor(timestamps2(i)*rec.fs):floor(timestamps2(i+1)*rec.fs));
+                signalsL = rec.dataL(floor(timestamps2(i)*rec.fs):floor(timestamps2(i+1)*rec.fs));
                 signalsR = rec.dataR(floor(timestamps2(i)*rec.fs):floor(timestamps2(i+1)*rec.fs));
                 time_seg = rec.time(floor(timestamps2(i)*rec.fs):floor(timestamps2(i+1)*rec.fs));
                 rec.signals{end + 1} = [signalsL, signalsR];
