@@ -115,9 +115,9 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             signal_names = {'leadin','1kHz', '10kHz', '100Hz', 'freqsweep', 'quiet', '3150Hz', '1kHzL', 'sweepL', '1kHzR', 'sweepR', '1kHzV', 'sweepV','transition', '1kHz2', '10kHz2', '100Hz2', 'freqsweep2', 'quiet2', '3150Hz2', '1kHzL2', 'sweepL2', '1kHzR2', 'sweepR2', '1kHzV2', 'sweepV2','leadout'};
             % timestamps  = rec.timestamps + rec.offset + rec.timediff;
             % timestamps2 = timestamps + rec.transition + rec.offset + rec.timediff;
-            disp('timestamps')
-            timestamps  = rec.timestamps + rec.offset + rec.timediff
-            timestamps2 = rec.timestamps + rec.offset + rec.transition + rec.timediff
+            % disp('timestamps')
+            % timestamps  = rec.timestamps + rec.offset + rec.timediff
+            % timestamps2 = rec.timestamps + rec.offset + rec.transition + rec.timediff
             
             % get the needledrop
             signalsL = rec.dataL(1:floor((timestamps(1))*rec.fs));
@@ -140,10 +140,10 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             end
             
             % the extended silence section 'transition' between the two sets of signals 
-            disp('transition track')
-            rec.transition
-            timestamps(end)
-            timestamps2(1)
+            % disp('transition track')
+            % rec.transition
+            % timestamps(end)
+            % timestamps2(1)
             signalsL = rec.dataL(floor(timestamps(end)*rec.fs):floor(timestamps2(1)*rec.fs));
             signalsR = rec.dataR(floor(timestamps(end)*rec.fs):floor(timestamps2(1)*rec.fs));
             time_seg = rec.time(floor(timestamps(end)*rec.fs):floor((timestamps2(1))*rec.fs));
@@ -167,12 +167,12 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             rec.signals{end + 1} = [signalsL, signalsR];
             rec.signal_times{end + 1} = [time_seg];
            
-            disp('Size of signal names, then signals')
-            size(rec.signal_names)
-            size(rec.signals)
+            % disp('Size of signal names, then signals')
+            % size(rec.signal_names)
+            % size(rec.signals)
             rec.tracks = containers.Map(rec.signal_names, rec.signals);
             rec.track_times = containers.Map(rec.signal_names, rec.signal_times);
-            disp('printing tracks')
+            % disp('printing tracks')
             disp('done processing tracks')
 
         end % function signals
