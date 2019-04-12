@@ -17,8 +17,8 @@ references = {'/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_b
 
 
 reference_file = references{1}
-reference = audio_refrecordclass(reference_file)
-
+reference = audio_recordclass(reference_file)
+reference.process_tracks();
 
 time_offset = 0;
 track_names = keys(reference.tracks) ;
