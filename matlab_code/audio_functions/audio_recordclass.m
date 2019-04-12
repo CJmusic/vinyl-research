@@ -32,7 +32,7 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
         timestamps = [0, 60, 90, 122, 158, 180, 246, 266, 304, 324, 362, 382, 417.5];
         % this is how many seconds each signal is according to Chris Muth's track listing
         lengths = [60, 30, 31, 36, 21, 66, 20, 37, 19, 37, 19, 37, 19]; %starts with 1kHz
-        signal_names = {'needledrop','leadin','1kHz', '10kHz', '100Hz', 'freqsweep', 'quiet', '3150Hz', '1kHzL', 'sweepL', '1kHzR', 'sweepR', '1kHzV', 'sweepV','transition','leadin2','1kHz2', '10kHz2', '100Hz2', 'freqsweep2', 'quiet2', '3150Hz2', '1kHzL2', 'sweepL2', '1kHzR2', 'sweepR2', '1kHzV2', 'sweepV2','leadout2'};
+        signal_names = {'leadin','1kHz', '10kHz', '100Hz', 'freqsweep', 'quiet', '3150Hz', '1kHzL', 'sweepL', '1kHzR', 'sweepR', '1kHzV', 'sweepV', 'transition', '1kHz2', '10kHz2', '100Hz2', 'freqsweep2', 'quiet2', '3150Hz2', '1kHzL2', 'sweepL2', '1kHzR2', 'sweepR2', '1kHzV2', 'sweepV2'};%,'leadout'};
 
         % offset = 4.25; % as measured on /020818_A0000B0000/02072019_A0000B000r25-A.wav
         offset = 10.625; % as measured on /020818_A0000B0000/02072019_A0000B000r27-A.wav
@@ -146,10 +146,10 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             signalsL =rec.dataL(floor(timestamps2(end)*rec.fs):end);
             signalsR = rec.dataR(floor(timestamps2(end)*rec.fs):end);
             rec.signals{end + 1} = [signalsL, signalsR];
-            
+           
+
             rec.tracks = containers.Map(rec.signal_names, rec.signals);
             disp('printing tracks')
-            rec.tracks
             disp('done processing tracks')
 
         end % function signals
