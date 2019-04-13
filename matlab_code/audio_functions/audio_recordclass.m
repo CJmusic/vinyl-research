@@ -116,8 +116,8 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             % timestamps  = rec.timestamps + rec.offset + rec.timediff;
             % timestamps2 = timestamps + rec.transition + rec.offset + rec.timediff;
             % disp('timestamps')
-            % timestamps  = rec.timestamps + rec.offset + rec.timediff
-            % timestamps2 = rec.timestamps + rec.offset + rec.transition + rec.timediff
+            timestamps  = rec.timestamps + rec.offset + rec.timediff;
+            timestamps2 = rec.timestamps + rec.offset + rec.transition + rec.timediff;
             
             % get the needledrop
             signalsL = rec.dataL(1:floor((timestamps(1))*rec.fs));
@@ -128,10 +128,6 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             
             % first set of signals on the disk
             for i = (1:length(timestamps)-1);
-                disp('FOR LOOP LENGTHS')
-                starting = floor(timestamps(i))
-                ending = floor(timestamps(i+1))
-                lengthing =  ending - starting 
                 signalsL = rec.dataL(floor(timestamps(i)*rec.fs):floor(timestamps(i+1)*rec.fs));
                 signalsR = rec.dataR(floor(timestamps(i)*rec.fs):floor(timestamps(i+1)*rec.fs)); 
                 time_seg = rec.time(floor(timestamps(i)*rec.fs):floor(timestamps(i+1)*rec.fs));
