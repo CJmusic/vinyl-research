@@ -15,7 +15,7 @@ addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/');
 
 % path_folder = strcat('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/', folder)
 
-references = {'/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/031418_A0000B0000r27a.wav'};    
+references = {'/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/reference_files/031418_A0000B0000r27a.wav'};    
 
 
 reference_file = references{1}
@@ -27,7 +27,8 @@ track_names = keys(reference.tracks) ;
 track_data  = values(reference.tracks) ;
 track_times = values(reference.track_times);
 
-reference_obj = save('031418_A0000B0000r27a.mat', reference_file, '-mat')
+% reference_obj = save('031418_A0000B0000r27a.mat', reference_file, '-mat')
+% reference.save_obj('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/reference_files/031418_A0000B0000r27a')
 
 % figure(1); hold on; grid on;
 % for i = (1:length(reference.tracks));

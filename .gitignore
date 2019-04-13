@@ -6,3 +6,4 @@
 *.fig
 *.asd
 *.DS_Store
+*.mat

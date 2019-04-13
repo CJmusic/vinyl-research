@@ -43,9 +43,51 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
         tracks;
         track_times;
     end % properties
+
     methods 
         function rec = audio_recordclass(file_path);
             disp('record class constructor')
+            % strip the filename and path 
+            [directory, file_name, extension] = fileparts(file_path);
+            % strcat(directory,'/',file_name,'.mat'); 
+            % check if there's already a .mat file of the same name in the directory 
+            if exist(strcat(directory,'/',file_name,'.mat')) == 2;
+                disp('.mat file found, loading......')
+                obj = load(strcat(directory,'/',file_name,'.mat'));
+
+                rec.data = obj.data;
+                rec.dataL = obj.dataL;
+                rec.dataR = obj.dataR;
+    
+                rec.time = obj.time;
+                rec.fs = obj.fs;
+    
+                rec.clicks = obj.clicks;
+                rec.clicksL = obj.clicksL;
+                rec.clicksR = obj.clicksR;
+    
+                rec.click_matrix = obj.click_matrix;
+    
+                rec.signalsL = obj.signalsL; %
+                rec.signalsR = obj.signalsR; %
+                rec.signals = obj.signals;
+                rec.signal_times = obj.signal_times;
+    
+                rec.timestamps = obj.timestamps;
+                rec.lengths = obj.lengths; 
+                rec.signal_names = obj.signal_names; 
+    
+    
+                rec.offset = obj.offset; 
+                rec.transition = obj.transition;
+                rec.lagdiff = obj.lagdiff;
+                rec.timediff = obj.timediff; 
+                rec.tracks = obj.tracks;
+                rec.track_times = obj.track_times;
+    
+            else
+            disp('no .mat file found, loading in audio data')
+
             file_path
             [data, rec.fs] = audioread(file_path);
             rec.data = data;
@@ -54,7 +96,46 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             rec.dataR = data(:,2);
             %rec.clicksL = audio_clickdetect(rec.dataL, rec.fs);
             %rec.clicksR = audio_clickdetect(rec.dataR, rec.fs);
-        end
+
+            end % if .mat file exists
+        end % constructor
+
+        function obj = save_obj(rec, path);
+            disp('inside save_obj')
+            obj.data = rec.data;
+            obj.dataL = rec.dataL;
+            obj.dataR = rec.dataR;
+
+            obj.time = rec.time;
+            obj.fs = rec.fs;
+
+            obj.clicks = rec.clicks;
+            obj.clicksL = rec.clicksL;
+            obj.clicksR = rec.clicksR;
+
+            obj.click_matrix = rec.click_matrix;
+
+            obj.signalsL = rec.signalsL; %
+            obj.signalsR = rec.signalsR; %
+            obj.signals = rec.signals;
+            obj.signal_times = rec.signal_times;
+
+            obj.timestamps = rec.timestamps;
+            obj.lengths = rec.lengths; 
+            obj.signal_names = rec.signal_names; 
+
+
+            obj.offset = rec.offset; 
+            obj.transition = rec.transition;
+            obj.lagdiff = rec.lagdiff;
+            obj.timediff = rec.timediff; 
+            obj.tracks = rec.tracks;
+            obj.track_times = rec.track_times;
+
+            % type(obj)
+            obj            
+            save(path, '-v7.3', '-struct','obj')
+        end % save_recordclass
 
         function lagcorrect(rec);
             % this function should correct the record for any lagDiff calculated by another method: 
@@ -110,7 +191,9 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             %06:24 : frequency sweep vertical
 
             rec.tracks = 0; % clear any previous tracks info
+            rec.track_times = {};
             rec.signals = {};
+            rec.signal_times = {};
 
             signal_names = {'leadin','1kHz', '10kHz', '100Hz', 'freqsweep', 'quiet', '3150Hz', '1kHzL', 'sweepL', '1kHzR', 'sweepR', '1kHzV', 'sweepV','transition', '1kHz2', '10kHz2', '100Hz2', 'freqsweep2', 'quiet2', '3150Hz2', '1kHzL2', 'sweepL2', '1kHzR2', 'sweepR2', '1kHzV2', 'sweepV2','leadout'};
             % timestamps  = rec.timestamps + rec.offset + rec.timediff;
@@ -163,9 +246,10 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             rec.signals{end + 1} = [signalsL, signalsR];
             rec.signal_times{end + 1} = [time_seg];
            
-            % disp('Size of signal names, then signals')
-            % size(rec.signal_names)
-            % size(rec.signals)
+            disp('Size of signal names, then signals, then times')
+            size(rec.signal_names)
+            size(rec.signals)
+
             rec.tracks = containers.Map(rec.signal_names, rec.signals);
             rec.track_times = containers.Map(rec.signal_names, rec.signal_times);
             % disp('printing tracks')
