@@ -205,7 +205,7 @@ function record_process(folder,ref);
             clf(figure(6))
         end %if transition statement
         end % for loop through record tracks
-
+        record.save_obj();
         previous = record; % set the current record class to the previous one for analysis
     end % for loop of record files
 

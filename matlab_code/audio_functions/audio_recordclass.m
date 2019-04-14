@@ -53,12 +53,12 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
         function rec = audio_recordclass(file_path);
             disp('record class constructor')
             % strip the filename and path 
-            [rec.directory, rec.file_name, rec.extension] = fileparts(file_path);
-            % strcat(directory,'/',file_name,'.mat'); 
+            [rec.directory, rec.filename, rec.extension] = fileparts(file_path);
+            % strcat(directory,'/',filename,'.mat'); 
             % check if there's already a .mat file of the same name in the directory 
-            if exist(strcat(rec.directory,'/',rec.file_name,'.mat')) == 2;
-                disp('.mat file found, loading......')
-                obj = load(strcat(rec.directory,'/',rec.file_name,'.mat'));
+            if exist(strcat(rec.directory,'/',rec.filename,'.mat')) == 2;
+                disp('.mat file found, loading....')
+                obj = load(strcat(rec.directory,'/',rec.filename,'.mat'));
 
                 rec.data = obj.data;
                 rec.dataL = obj.dataL;
@@ -139,7 +139,7 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
 
             % type(obj)
             obj            
-            path = strcat(rec.directory,'/',rec.file_name,'.mat'))
+            path = strcat(rec.directory,'/', rec.filename,'.mat')
             save(path, '-v7.3', '-struct','obj')
         end % save_recordclass
 
