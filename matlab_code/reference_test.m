@@ -62,9 +62,9 @@ for i = (1:length(reference.tracks));
     CSV_MATRIX = [CSV_MATRIX ; {wave_name, track_names{i}, RMS_value, clicks_total, clicks_common, clicks_unique}];
 
     % track_name = track_names{i}
-    size(CSV_MATRIX)
-    disp('CSV MATRIX')
-    CSV_MATRIX
+    % size(CSV_MATRIX)
+    % disp('CSV MATRIX')
+    % CSV_MATRIX
     % CSV_MATRIX(end+1) = {wave_name, track_names, RMS_value, 'n/a', 'n/a', 'n/a'};
     % size(CSV_MATRIX)
 end

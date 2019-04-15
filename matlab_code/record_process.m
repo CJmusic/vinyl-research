@@ -9,13 +9,14 @@ function record_process(folder,ref);
     clc;close all;
     disp('-----------recordprocess.m-------------')
     addpath('audio_functions')
+    addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/');
     addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/');
     addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/vinyl-research/matlab_code/A0000B0000plots/')
     path_folder = strcat('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/', folder)
     folder
     references = {'/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/031418_A0000B0000r27a.wav'};    
     reference_file = references{ref}
-    path_plots =' /Users/cz/OneDrive - University of Waterloo/Vinyl_Project/vinyl-research/matlab_code/A0000B0000plots/'
+    path_plots = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/vinyl-research/matlab_code/A0000B0000plots/'
     %addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/040319_A0000B0000r26fivetrials/');
 
     % addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/');
@@ -66,7 +67,8 @@ function record_process(folder,ref);
 
     wave_names = [];
 
-    CSV_titles = {'wavefile','track name', 'RMS', 'total clicks', 'common clicks', 'unique clicks'};
+    % CSV_titles = {'wavefile','track name', 'RMS', 'total clicks', 'common clicks', 'unique clicks'};
+    CSV_titles = {"wavefile","track_name", "RMS", "total_clicks", "common_clicks", "unique_clicks"};
     CSV_MATRIX = cell(1,6);
     CSV_MATRIX(1,:) = CSV_titles;
 
@@ -102,83 +104,83 @@ function record_process(folder,ref);
             RMS_value = rms(track_data{j});
             % RMS_values = [RMS_values, RMS_value];
 
-            % %%% WAVEFORM PLOTTING 
-            % track_time = (0:length(track_data{j})-1)/record.fs;
-            % figure(1); grid on; 
-            % plot(track_time, track_data{j});
-            % title(strcat(wave_name,track_names{j},'Waveform'))
-            % xlabel('time (s)')
-            % ylabel('Amplitude')  
-            % % saveas(figure(1),strcat(path_plots,wave_name,track_names{j},'wave.png'))
-            % saveas(figure(1),strcat(wave_name,track_names{j},'wave.png'))
+            %%% WAVEFORM PLOTTING 
+            track_time = (0:length(track_data{j})-1)/record.fs;
+            figure(1); grid on; 
+            plot(track_time, track_data{j});
+            title(strcat(wave_name,track_names{j},'Waveform'))
+            xlabel('time (s)')
+            ylabel('Amplitude')  
+            % saveas(figure(1),strcat(path_plots,wave_name,track_names{j},'wave.png'))
+            saveas(figure(1),strcat(wave_name,track_names{j},'wave.png'))
 
 
-            % %%% SPECTRUM PLOTTING
-            % disp('SPECTRUM PLOTTING')
-            % n_sam = length(track_data{j})
+            %%% SPECTRUM PLOTTING
+            disp('SPECTRUM PLOTTING')
+            n_sam = length(track_data{j})
             
-            % freq_fft = record.fs*(0:(n_sam/2))/n_sam;
+            freq_fft = record.fs*(0:(n_sam/2))/n_sam;
             
-            % data_fft = fft(track_data{j})/n_sam;
-            % size(freq_fft)
+            data_fft = fft(track_data{j})/n_sam;
+            size(freq_fft)
  
-            % data_fft = data_fft(1:n_sam/2+1);
-            % size(data_fft)
-            % figure(2); grid on; 
-            % plot(freq_fft, 20.0*log10(data_fft))  
-            % set(gca, 'XScale', 'log');
-            % title(strcat(wave_name,track_names{j},'Spectrum'))
-            % xlabel('Frequency (Hz)')
-            % ylabel('Level (dB)')  
-            % % saveas(figure(2),strcat(path_plots,wave_name,track_names{j},'spectrum.png'))
-            % saveas(figure(2),strcat(wave_name,track_names{j},'spectrum.png'))
+            data_fft = data_fft(1:n_sam/2+1);
+            size(data_fft)
+            figure(2); grid on; 
+            plot(freq_fft, 20.0*log10(data_fft))  
+            set(gca, 'XScale', 'log');
+            title(strcat(wave_name,track_names{j},'Spectrum'))
+            xlabel('Frequency (Hz)')
+            ylabel('Level (dB)')  
+            % saveas(figure(2),strcat(path_plots,wave_name,track_names{j},'spectrum.png'))
+            saveas(figure(2),strcat(wave_name,track_names{j},'spectrum.png'))
 
-            % %%% COHERENCES TO REFERENCE RECORD
-            % [ amp_coh, freq_coh ] = audio_mscohere(record.tracks(track_names{j}), reference.tracks(track_names{j}), reference.fs);
+            %%% COHERENCES TO REFERENCE RECORD
+            [ amp_coh, freq_coh ] = audio_mscohere(record.tracks(track_names{j}), reference.tracks(track_names{j}), reference.fs);
 
-            % figure(3); grid on; 
-            % plot(freq_coh,amp_coh(:,1))
-            % set(gca, 'XScale', 'log');
-            % xlabel('Frequency (Hz)')
-            % % title('Coherences to Reference, Left Channel')
-            % title(strcat(wave_name,track_names{j},'Coherences to Reference, Left Channel'))
-            % wave_names = [wave_names, wave_files(i).name];
-            % % filename = strcat(path_plots,wave_name,track_names{j},'cohleft_ref.png')
-            % filename = strcat(wave_name,track_names{j},'cohleft_ref.png')
-            % saveas(figure(3),filename)
+            figure(3); grid on; 
+            plot(freq_coh,amp_coh(:,1))
+            set(gca, 'XScale', 'log');
+            xlabel('Frequency (Hz)')
+            % title('Coherences to Reference, Left Channel')
+            title(strcat(wave_name,track_names{j},'Coherences to Reference, Left Channel'))
+            wave_names = [wave_names, wave_files(i).name];
+            % filename = strcat(path_plots,wave_name,track_names{j},'cohleft_ref.png')
+            filename = strcat(wave_name,track_names{j},'cohleft_ref.png')
+            saveas(figure(3),filename)
 
-            % figure(4); grid on; 
-            % plot(freq_coh,amp_coh(:,2))
-            % set(gca, 'XScale', 'log');
-            % xlabel('Frequency (Hz)')
-            % % title('Coherences to Reference, Right Channel')
-            % title(strcat(wave_name,track_names{j},'Coherences to Reference, Right Channel'))
-            % % filename = strcat(path_plots,wave_name,track_names{j},'cohright_ref.png')
-            % filename = strcat(wave_name,track_names{j},'cohright_ref.png')
-            % saveas(figure(4),filename)
+            figure(4); grid on; 
+            plot(freq_coh,amp_coh(:,2))
+            set(gca, 'XScale', 'log');
+            xlabel('Frequency (Hz)')
+            % title('Coherences to Reference, Right Channel')
+            title(strcat(wave_name,track_names{j},'Coherences to Reference, Right Channel'))
+            % filename = strcat(path_plots,wave_name,track_names{j},'cohright_ref.png')
+            filename = strcat(wave_name,track_names{j},'cohright_ref.png')
+            saveas(figure(4),filename)
 
-            % %%% COHERENCES TO PREVIOUS RECORD
-            % [ amp_coh, freq_coh ] = audio_mscohere(record.tracks(track_names{j}), previous.tracks(track_names{j}), previous.fs);
+            %%% COHERENCES TO PREVIOUS RECORD
+            [ amp_coh, freq_coh ] = audio_mscohere(record.tracks(track_names{j}), previous.tracks(track_names{j}), previous.fs);
 
-            % figure(5); grid on; 
-            % plot(freq_coh,amp_coh(:,1))
-            % set(gca, 'XScale', 'log');
-            % xlabel('Frequency (Hz)')
-            % % title('Coherences to Previous, Left Channel')
-            % title(strcat(wave_name,track_names{j},'Coherences to Previous, Right Channel'))
-            % % filename = strcat(path_plots,wave_name,track_names{j},'cohleft_prev.png')
-            % filename = strcat(wave_name,track_names{j},'cohleft_prev.png')
-            % saveas(figure(5),filename)
+            figure(5); grid on; 
+            plot(freq_coh,amp_coh(:,1))
+            set(gca, 'XScale', 'log');
+            xlabel('Frequency (Hz)')
+            % title('Coherences to Previous, Left Channel')
+            title(strcat(wave_name,track_names{j},'Coherences to Previous, Right Channel'))
+            % filename = strcat(path_plots,wave_name,track_names{j},'cohleft_prev.png')
+            filename = strcat(wave_name,track_names{j},'cohleft_prev.png')
+            saveas(figure(5),filename)
 
-            % figure(6); grid on; 
-            % plot(freq_coh,amp_coh(:,2))
-            % set(gca, 'XScale', 'log');
-            % xlabel('Frequency (Hz)')
-            % title('Coherences to Previous, Right Channel')
-            % title(strcat(wave_name,track_names{j},'Coherences to Previous, Right Channel'))
-            % % filename = strcat(path_plots,wave_name,track_names{j},'cohleft_prev.png')
-            % filename = strcat(wave_name,track_names{j},'cohleft_prev.png')
-            % saveas(figure(6),filename)
+            figure(6); grid on; 
+            plot(freq_coh,amp_coh(:,2))
+            set(gca, 'XScale', 'log');
+            xlabel('Frequency (Hz)')
+            title('Coherences to Previous, Right Channel')
+            title(strcat(wave_name,track_names{j},'Coherences to Previous, Right Channel'))
+            % filename = strcat(path_plots,wave_name,track_names{j},'cohleft_prev.png')
+            filename = strcat(wave_name,track_names{j},'cohleft_prev.png')
+            saveas(figure(6),filename)
 
             if strcmp(track_names{j},'transition');
                 clicks = audio_clickdetect(record.tracks('transition'), record.fs);
@@ -190,11 +192,12 @@ function record_process(folder,ref);
                 clicks_common = length(dt_row);
                 clicks_unique = size(clicks, 1) - length(dt_row);
 
-                CSV_MATRIX = {CSV_MATRIX ; wave_name, track_names{j}, RMS_value, clicks_total, clicks_common, clicks_unique};
+                % CSV_MATRIX = {CSV_MATRIX ; wave_name, track_names{j}, RMS_value, clicks_total, clicks_common, clicks_unique};
 
+                CSV_MATRIX = [CSV_MATRIX ; {wave_name, track_names{i}, RMS_value, clicks_total, clicks_common, clicks_unique}];
             else; 
                 track_name = track_names{j}
-                CSV_MATRIX(end+1,:) = {wave_name, track_names, RMS_value, 'n/a', 'n/a', 'n/a'};
+                CSV_MATRIX = [CSV_MATRIX; {wave_name, track_names, RMS_value, 'n/a', 'n/a', 'n/a'}];
             
             end 
             clf(figure(1))
@@ -205,12 +208,12 @@ function record_process(folder,ref);
             clf(figure(6))
         end %if transition statement
         end % for loop through record tracks
-        record.save_obj();
+        % record.save_obj();
         previous = record; % set the current record class to the previous one for analysis
     end % for loop of record files
 
     % Write the table to a CSV file
-    CSV_TABLE = cell2table(CSV_MATRIX,'VariableNames',CSV_titles)
-    writetable(CSV_TABLE,'A0000B0000_analysis.csv')
+    CSV_TABLE = cell2table(CSV_MATRIX)
+    writetable(CSV_TABLE,strcat(reference.directory,'A0000B0000_analysis.csv'))
 
 end % function record_process

@@ -13,9 +13,10 @@ function wav_process(folder);
     path_folder = strcat('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/', folder, '/')
     folder
 
-    references = {
-    '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/Bcorr/Bcorrelation_test_1.wav' 
-    };    
+    % references = {
+    % '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/Bcorr/Bcorrelation_test_1.wav',
+    % '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/030419_r26fivetrials/one.wav' 
+    % };    
     % reference_file = references{ref}
 
     %addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/040319_A0000B0000r26fivetrials/');
@@ -32,21 +33,19 @@ function wav_process(folder);
     % plot(time_ref, ref_cohere, 'g', 'LineWidth', 3)
 
     wave_names = cell(1, length(wave_files));
-
-
-    for i = (1:length(wave_files)); 
+    for i = (1:2) %(1:length(wave_files)); 
         file_path = strcat(wave_files(i).folder,'/',wave_files(i).name)
         wave_names{i} = sprintf(wave_files(i).name);
         record = audio_recordclass(file_path)
-        if i == 1; % choose first wav file as the reference to line up all the other files
-            % reference = audio_recordclass(reference_file)
-            reference = record;
-            clicks_ref = audio_clickdetect(reference.data, reference.fs);
-            % disp('number of clicks in reference: ')
-            % size(clicks_ref)
-            ref_cohere = reference.data(coh_start*reference.fs:coh_end*reference.fs,:); 
-            time_ref = (0:length(ref_cohere)-1)/reference.fs; 
-        end 
+        % if i == 1; % choose first wav file as the reference to line up all the other files
+        %     % reference = audio_recordclass(reference_file)
+        %     reference = record;
+        %     clicks_ref = audio_clickdetect(reference.data, reference.fs);
+        %     % disp('number of clicks in reference: ')
+        %     % size(clicks_ref)
+        %     ref_cohere = reference.data(coh_start*reference.fs:coh_end*reference.fs,:); 
+        %     time_ref = (0:length(ref_cohere)-1)/reference.fs; 
+        % end 
 
         %% this is to try the click lineup method
         % figure(20); grid on; hold on;
@@ -95,7 +94,22 @@ function wav_process(folder);
         % figure(1); hold on; grid on;
         % plot(time, rec_cohere); 
         % title('Records Waveforms')
+        figure(30); grid on; hold on;
+        n_sam = length(rec_cohere)
 
+        freq_fft = record.fs*(0:(n_sam/2))/n_sam;
+
+        data_fft = fft(rec_cohere)/n_sam;
+        size(freq_fft)
+
+        data_fft = data_fft(1:n_sam/2+1);
+        size(data_fft)
+
+        plot(freq_fft, 20.0*log10(data_fft))  
+        set(gca, 'XScale', 'log');
+        title('Spectrum of noise')
+        xlabel('Frequency (Hz)')
+        ylabel('Level (dB)')  
         % % plot the coherence for the left and right channels 
         figure(2); grid on; hold on;
         plot(freq_coh,amp_coh(:,1))
@@ -108,6 +122,7 @@ function wav_process(folder);
         set(gca, 'XScale', 'log');
         title('Coherences, Right Channel')
 
+        clc;
     end
 
     figure(10)
@@ -116,8 +131,8 @@ function wav_process(folder);
     figure(20)
     legend(wave_names)
 
-    % figure(30)
-    % legend(wave_names)
+    figure(30)
+    legend(wave_names)
 
     % figure(1)
     % legend(wave_names)
