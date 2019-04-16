@@ -144,7 +144,7 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
         end % save_recordclass
 
         function lagcorrect(rec);
-            % this function should correct the record for any lagDiff calculated by another method: 
+            % this function should correct the record for any lagdiff calculated by another method: 
             % the method currently implemented is okay, I want to try circshift
             % also see the matlab function lag !!!! 
             disp('inside lagcorrect')
@@ -156,21 +156,22 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
                 rec.data = circshift(rec.data, -1*rec.lagdiff);
                 rec.dataL = rec.data(:,1);
                 rec.dataR = rec.data(:,2);
+                rec.clicks = rec.clicks - rec.lagdiff;
             end
             
             rec.time = (0:length(rec.data)-1)/rec.fs;
             % time = (0:length(rec.data)); 
-        %    if lagDiff > 0;
-        %        % positive lagDiffL means that the data array is delayed compared to the reference
-        %        cdata = rec.data(lagDiff + 1:end,:); 
-        %        ctime = time - lagDiff/rec.fs; 
-        %    elseif lagDiff < 0; 
-        %        % negative lagDiffL means that the data array is ahead of the reference  
-        %        cdataL = rec.data(1: end + lagDiff,:);   
-        %        ctimeL = time - lagDiff/rec.fs;
-        %    elseif lagDiff == 0; %then nothing needs to be corrected  
+        %    if lagdiff > 0;
+        %        % positive lagdiffL means that the data array is delayed compared to the reference
+        %        cdata = rec.data(lagdiff + 1:end,:); 
+        %        ctime = time - lagdiff/rec.fs; 
+        %    elseif lagdiff < 0; 
+        %        % negative lagdiffL means that the data array is ahead of the reference  
+        %        cdataL = rec.data(1: end + lagdiff,:);   
+        %        ctimeL = time - lagdiff/rec.fs;
+        %    elseif lagdiff == 0; %then nothing needs to be corrected  
         %        cdata = rec.data; %no lag 
-        %        ctime = time - lagDiff/rec.fs; 
+        %        ctime = time - lagdiff/rec.fs; 
         %    end
 
            
