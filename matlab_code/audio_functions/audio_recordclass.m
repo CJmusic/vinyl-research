@@ -56,7 +56,7 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             [rec.directory, rec.filename, rec.extension] = fileparts(file_path);
             % strcat(directory,'/',filename,'.mat'); 
             % check if there's already a .mat file of the same name in the directory 
-            if exist(strcat(rec.directory,'/',rec.filename,'.mat')) == 2;
+            if exist(strcat(rec.directory,'/',rec.filename,'.mat')) == 10; % 2 is the proper value
                 disp('.mat file found, loading....')
                 obj = load(strcat(rec.directory,'/',rec.filename,'.mat'));
 
