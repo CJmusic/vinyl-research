@@ -74,4 +74,35 @@ title('magnitude response');
 
 disp('-----------------------------finished------------------------')
 
+[data, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/030419_r26fivetrials/one.wav');
 
+tstart = 4.0;
+tend = 10.0;
+
+data = data(tstart*fs:tend*fs);
+time = (0:length(data)-1)*fs;
+
+N = length(data);
+freq=([1:N/2+1]'-1)*fs/N;
+
+data_A = filter(b, a, data);
+data_A_fft = fft(data_A);
+data_A_fft = abs(data_A_fft(1:floor(N/2+1)));
+
+figure(1); grid on;
+semilogx(freq,20*log10(data_A_fft),'b');
+grid on;
+xlabel('Frequency [Hz]')
+ylabel('SPL [dB]')
+title('A weighted noise');
+
+
+data_fft = fft(data);
+data_fft = abs(data_fft(1:floor(N/2+1)));
+
+figure(2); 
+semilogx(freq,20*log10(data_fft),'b');
+grid on;
+xlabel('Frequency [Hz]')
+ylabel('SPL [dB]')
+title('Unweighted noise');
