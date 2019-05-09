@@ -10,8 +10,8 @@ function wav_process(folder);
     disp('-----------wav_process.m---------------')
     addpath('audio_functions')
     addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/');
+    % path_folder = strcat('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/', folder, '/')
     path_folder = strcat('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/', folder, '/')
-    folder
 
     % references = {
     % '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/Bcorr/Bcorrelation_test_1.wav',
@@ -19,7 +19,7 @@ function wav_process(folder);
     % };    
     % reference_file = references{ref}
 
-    %addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/040319_A0000B0000r26fivetrials/');
+    addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/040319_r26fivetrials/');
 
     % addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/');
     %record_dir = dir('');
@@ -33,28 +33,37 @@ function wav_process(folder);
     % plot(time_ref, ref_cohere, 'g', 'LineWidth', 3)
 
     wave_names = cell(1, length(wave_files));
-    for i = (1:2) %(1:length(wave_files)); 
+    for i = (1:(1:length(wave_files))); 
         file_path = strcat(wave_files(i).folder,'/',wave_files(i).name)
         wave_names{i} = sprintf(wave_files(i).name);
         record = audio_recordclass(file_path)
-        % if i == 1; % choose first wav file as the reference to line up all the other files
-        %     % reference = audio_recordclass(reference_file)
-        %     reference = record;
-        %     clicks_ref = audio_clickdetect(reference.data, reference.fs);
-        %     % disp('number of clicks in reference: ')
-        %     % size(clicks_ref)
-        %     ref_cohere = reference.data(coh_start*reference.fs:coh_end*reference.fs,:); 
-        %     time_ref = (0:length(ref_cohere)-1)/reference.fs; 
-        % end 
+        if i == 1; % choose first wav file as the reference to line up all the other files
+            reference = record;
+            % clicks_ref = audio_clickdetect(reference.data, reference.fs);
+            ref_cohere = reference.data(coh_start*reference.fs:coh_end*reference.fs,:); 
+            time_ref = (0:length(ref_cohere)-1)/reference.fs; 
+        end 
 
-        %% this is to try the click lineup method
-        % figure(20); grid on; hold on;
-        % plot(record.time, record.data(:,1))
-        % title('Click lineup')
+%~~~~~~~~~~~~~~~~~NORMALIZATION TEST~~~~~~~~~~~~~~~~~~~~~
 
-        % record.lagdiff = -1*record.lagdiff;
-        % record.lagcorrect;
+        amplitude = audio_findamplitude(record.data, 1000.0, record.fs);
+        amplitude
 
+%~~~~~~~~~~~~~~~NORMALIZATION TEST END~~~~~~~~~~~~~~~~~~~
+
+
+
+
+%{ 
+%~~~~~~~~~~~~~~~~~~CLICK LINEUP TEST~~~~~~~~~~~~~~~~~~~~~
+
+        figure(20); grid on; hold on;
+        plot(record.time, record.data(:,1))
+        title('Click lineup')
+
+        record.lagdiff = -1*record.lagdiff;
+        record.lagcorrect;
+        
         figure(10); hold on; grid on; 
         title('pre lineup')
         plot(record.time, record.data)
@@ -63,27 +72,31 @@ function wav_process(folder);
         record.clickdetect();
         record.clicklineup(clicks_ref);
         record.lagcorrect()
-        % record.time = record.time - record.lagdiff/record.fs;
+        record.time = record.time - record.lagdiff/record.fs;
 
 
         figure(20); hold on; grid on;
         title('post lineup clicks')
         plot(record.time,record.data)
 
-        % record.time = record.time + record.lagdiff/record.fs;
-        % record.lagdiff = -1.0*record.lagdiff;
-        % record.lagcorrect()
+        record.time = record.time + record.lagdiff/record.fs;
+        record.lagdiff = -1.0*record.lagdiff;
+        record.lagcorrect()
 
-        % xcorr_diff = audio_lineup(record.data, reference.data, record.fs);
-        % record.lagdiff = xcorr_diff;
-        % record.lagcorrect()
-        % % record.time = record.time - record.lagdiff/record.fs;
+        xcorr_diff = audio_lineup(record.data, reference.data, record.fs);
+        record.lagdiff = xcorr_diff;
+        record.lagcorrect()
+        % record.time = record.time - record.lagdiff/record.fs;
 
-        % figure(30); hold on; grid on;
-        % title('post lineup xcorr')
-        % plot(record.time,record.data)
+        figure(30); hold on; grid on;
+        title('post lineup xcorr')
+        plot(record.time,record.data)
+
+~~~~~~~~~~~~~~~CLICK LINEUP TEST END~~~~~~~~~~~~~~~~~~~
+%}
 
 
+%~~~~~~~~~~~~~~~~~~~~COHERENCE TEST~~~~~~~~~~~~~~~~~~~~~~
         % take the proper portion of the recording to calculate the coherence 
         rec_cohere = record.data;
         rec_cohere = rec_cohere(coh_start*record.fs:coh_end*record.fs,:);
@@ -122,6 +135,8 @@ function wav_process(folder);
         set(gca, 'XScale', 'log');
         title('Coherences, Right Channel')
 
+% ~~~~~~~~~~~~~~~COHERENCE TEST END~~~~~~~~~~~~~~~~~~~
+%}
         clc;
     end
 
