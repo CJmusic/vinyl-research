@@ -24,7 +24,7 @@ function wav_process(folder);
     % addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/');
     %record_dir = dir('');
 
-    wave_files = dir(strcat(path_folder,'*.wav'))
+    wave_files = dir(strcat(path_folder,'*.wav'));
 
 
     coh_start = 8.0;
@@ -32,29 +32,29 @@ function wav_process(folder);
     % figure(1);
     % plot(time_ref, ref_cohere, 'g', 'LineWidth', 3)
 
-    wave_names = cell(1, length(wave_files));
-    for i = (1:(1:length(wave_files))); 
+    wave_names = cell(1, length(wave_files))
+    for i = (1:length(wave_files)); 
         file_path = strcat(wave_files(i).folder,'/',wave_files(i).name)
-        wave_names{i} = sprintf(wave_files(i).name);
+        wave_names{i} = sprintf(wave_files(i).name)
         record = audio_recordclass(file_path)
         if i == 1; % choose first wav file as the reference to line up all the other files
             reference = record;
-            % clicks_ref = audio_clickdetect(reference.data, reference.fs);
+            clicks_ref = audio_clickdetect(reference.data, reference.fs);
             ref_cohere = reference.data(coh_start*reference.fs:coh_end*reference.fs,:); 
             time_ref = (0:length(ref_cohere)-1)/reference.fs; 
         end 
 
 %~~~~~~~~~~~~~~~~~NORMALIZATION TEST~~~~~~~~~~~~~~~~~~~~~
 
-        amplitude = audio_findamplitude(record.data, 1000.0, record.fs);
-        amplitude
+        % amplitude = audio_findamplitude(record.data,1000,record.fs)
+        % amplitude
 
 %~~~~~~~~~~~~~~~NORMALIZATION TEST END~~~~~~~~~~~~~~~~~~~
 
 
 
 
-%{ 
+%
 %~~~~~~~~~~~~~~~~~~CLICK LINEUP TEST~~~~~~~~~~~~~~~~~~~~~
 
         figure(20); grid on; hold on;
@@ -92,7 +92,7 @@ function wav_process(folder);
         title('post lineup xcorr')
         plot(record.time,record.data)
 
-~~~~~~~~~~~~~~~CLICK LINEUP TEST END~~~~~~~~~~~~~~~~~~~
+% ~~~~~~~~~~~~~~~CLICK LINEUP TEST END~~~~~~~~~~~~~~~~~~~
 %}
 
 
