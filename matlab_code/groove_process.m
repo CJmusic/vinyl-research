@@ -29,6 +29,7 @@ tend = 25;
 data = data(tstart*fs:tend*fs,:);
 
 
+
 time = linspace(0,(length(data)-1)/fs,length(data));
 rotation_speed = 33.33333;%45;
 T = 60/rotation_speed; %this is the length of one groove segment
@@ -41,92 +42,90 @@ seg_array = []; %need to
 for ng = 1:num_segs
     seg_array(:,:,ng) = data(1+(ng-1)*n_sam:ng*n_sam,:);
 end
+% for ng = 1:num_segs-1
 
-figure(1);
-grid on; hold on;
+%     %%% coherences in the left channel 
+%     disp('NEW LOOP~~~~~~~~~~~~~~~~~~~~~~~~~')
+%     [coh_nextL, freq_coh] = audio_mscohere(seg_array(:,1,ng), seg_array(:,1,ng+1), fs);
+%     [coh_firstL, ~] = audio_mscohere(seg_array(:,1,1), seg_array(:,1,ng+1), fs);
 
-for ng = 1:num_segs-1
-    %%% coherences in the left channel 
-    [coh_nextL, freq_coh] = audio_mscohere(seg_array(:,1,ng), seg_array(:,1,ng+1), fs);
-    [coh_firstL, ~] = audio_mscohere(seg_array(:,1,1), seg_array(:,1,ng+1), fs);
-
-    %%% coherences in the right channel    
-    [coh_nextR, ~] = audio_mscohere(seg_array(:,2,ng), seg_array(:,2,ng+1), fs);
-    [coh_firstR, ~] = audio_mscohere(seg_array(:,2,1), seg_array(:,2,ng+1), fs);
+%     %%% coherences in the right channel    
+%     [coh_nextR, ~] = audio_mscohere(seg_array(:,2,ng), seg_array(:,2,ng+1), fs);
+%     [coh_firstR, ~] = audio_mscohere(seg_array(:,2,1), seg_array(:,2,ng+1), fs);
 
 
-    figure(1); hold on;
-    plot(time_seg,seg_array(:,1,ng), 'DisplayName',['segment',num2str(ng)]) 
-    % plot(time_seg,seg_array(:,1,ng), 'DisplayName',['segment',num2str(ng)], 'Color', [1 - 1.0*ng/100 ,0,1.0*ng/100,0.5]);
-    set(gca,'YGrid','on')
-    set(gca,'XGrid','on')
-    xlabel('time (s)')
-    ylabel('Amplitude')
+    % figure(1); hold on;
+    % plot(time_seg,seg_array(:,1,ng), 'DisplayName',['segment',num2str(ng)]) 
+    % % plot(time_seg,seg_array(:,1,ng), 'DisplayName',['segment',num2str(ng)], 'Color', [1 - 1.0*ng/100 ,0,1.0*ng/100,0.5]);
+    % set(gca,'YGrid','on')
+    % set(gca,'XGrid','on')
+    % xlabel('time (s)')
+    % ylabel('Amplitude')
 
-    figure(2); hold on;
-    plot(freq_coh, coh_nextL, 'DisplayName',['segment',num2str(ng)])
-    set(gca, 'XScale', 'log');
-    set(gca,'YGrid','on')
-    set(gca,'XGrid','on')
-    xlabel('Frequency (Hz)')
-    title(strcat('Coherences next groove Left Channel'))
-
-
-    figure(3); hold on;
-    plot(freq_coh, coh_nextR, 'DisplayName',['segment',num2str(ng)])
-    set(gca, 'XScale', 'log');
-    set(gca,'YGrid','on')
-    set(gca,'XGrid','on')
-    xlabel('Frequency (Hz)')
-    title(strcat('Coherences next groove Right Channel'))
+    % figure(2); hold on;
+    % plot(freq_coh, coh_nextL, 'DisplayName',['segment',num2str(ng)])
+    % set(gca, 'XScale', 'log');
+    % set(gca,'YGrid','on')
+    % set(gca,'XGrid','on')
+    % xlabel('Frequency (Hz)')
+    % title(strcat('Coherences next groove Left Channel'))
 
 
-    figure(4); hold on;
-    plot(freq_coh, coh_firstL, 'DisplayName',['segment',num2str(ng)])
-    set(gca, 'XScale', 'log');
-    set(gca,'YGrid','on')
-    set(gca,'XGrid','on')
-    xlabel('Frequency (Hz)')
-    title(strcat('Coherences first groove Left Channel'))
-
-    figure(5); hold on;
-    plot(freq_coh, coh_firstR, 'DisplayName',['segment',num2str(ng)])
-    set(gca, 'XScale', 'log');
-    set(gca,'YGrid','on')
-    set(gca,'XGrid','on')
-    xlabel('Frequency (Hz)')
-    title(strcat('Coherences first groove Right Channel'))
+    % figure(3); hold on;
+    % plot(freq_coh, coh_nextR, 'DisplayName',['segment',num2str(ng)])
+    % set(gca, 'XScale', 'log');
+    % set(gca,'YGrid','on')
+    % set(gca,'XGrid','on')
+    % xlabel('Frequency (Hz)')
+    % title(strcat('Coherences next groove Right Channel'))
 
 
-    figure(6); hold on; %% plot the spectrum of each groove
-    n_sam = length(seg_array(:,1,ng));
-    freq_fft = fs*(0:(n_sam/2))/n_sam;
-    data_fft = fft(seg_array(:,1,ng))/n_sam;
-    data_fft = data_fft(1:n_sam/2+1);
+    % figure(4); hold on;
+    % plot(freq_coh, coh_firstL, 'DisplayName',['segment',num2str(ng)])
+    % set(gca, 'XScale', 'log');
+    % set(gca,'YGrid','on')
+    % set(gca,'XGrid','on')
+    % xlabel('Frequency (Hz)')
+    % title(strcat('Coherences first groove Left Channel'))
 
-    plot(freq_fft, 20.0*log10(data_fft)) 
-    grid on; 
-    set(gca, 'XScale', 'log');
-    title(strcat("Groove's Spectrum"))
-    xlabel('Frequency (Hz)')
-    ylabel('Level (dB)')  
+    % figure(5); hold on;
+    % plot(freq_coh, coh_firstR, 'DisplayName',['segment',num2str(ng)])
+    % set(gca, 'XScale', 'log');
+    % set(gca,'YGrid','on')
+    % set(gca,'XGrid','on')
+    % xlabel('Frequency (Hz)')
+    % title(strcat('Coherences first groove Right Channel'))
 
-    [cor_first, lags_first] = xcorr(seg_array(:,1,1), seg_array(:,1,ng));
-    [cor_next, lags_next] = xcorr(seg_array(:,1,ng), seg_array(:,1,ng+1));
+
+    % figure(6); hold on; %% plot the spectrum of each groove
+    % n_sam = length(seg_array(:,1,ng));
+    % freq_fft = fs*(0:(n_sam/2))/n_sam;
+    % data_fft = fft(seg_array(:,1,ng))/n_sam;
+    % data_fft = data_fft(1:n_sam/2+1);
+
+    % plot(freq_fft, 20.0*log10(data_fft)) 
+    % grid on; 
+    % set(gca, 'XScale', 'log');
+    % title(strcat("Groove's Spectrum"))
+    % xlabel('Frequency (Hz)')
+    % ylabel('Level (dB)')  
+
+    % [cor_first, lags_first] = xcorr(seg_array(:,1,1), seg_array(:,1,ng));
+    % [cor_next, lags_next] = xcorr(seg_array(:,1,ng), seg_array(:,1,ng+1));
     
-    figure(7); hold on;
-    plot(lags_first, cor_first);
-    grid on; 
-    title('xcorr with first groove')
-    xlabel('lag')
-    ylabel('correlation')
+    % figure(7); hold on;
+    % plot(lags_first, cor_first);
+    % grid on; 
+    % title('xcorr with first groove')
+    % xlabel('lag')
+    % ylabel('correlation')
 
-    figure(8); hold on;
-    plot(lags_next, cor_next);
-    grid on; 
-    title('xcorr with next groove')
-    xlabel('lag')
-    ylabel('correlation')
+    % figure(8); hold on;
+    % plot(lags_next, cor_next);
+    % grid on; 
+    % title('xcorr with next groove')
+    % xlabel('lag')
+    % ylabel('correlation')
 end
 
 figure(1)
