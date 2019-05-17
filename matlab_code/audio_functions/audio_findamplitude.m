@@ -7,12 +7,12 @@
 %
 %
 
-function amplitude = audio_findamplitude(data,freq,fs);
+function [amplitude] = audio_findamplitude(data,freq,fs)
     % frequency is the frequency of the sine wave 
     % you're looking for
-    peak = [];
-    for i = (1, length(data),freq*fs);
-       peak(i) = max(data); 
+    wav_peaks = [];
+    for i = (1, length(data)-1,freq*fs);
+       wav_peaks(i) = max(data(i:i+freq*fs)); 
     end % for loop
     amplitude = mean(peak);
 
