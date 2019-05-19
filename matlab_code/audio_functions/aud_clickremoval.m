@@ -12,6 +12,8 @@ What I think is currently wrong:
    -  theres some messed up indexing, that's causing the clicks to be detected a 
       bit before their actual position
 
+- the code is only looping through the first buffer size, not the whole file
+
 % bool EffectClickRemoval::ProcessOne(int count, WaveTrack * track, sampleCount start, sampleCount len)
 % function testaudClickRemoval(data)
 
@@ -41,15 +43,15 @@ rec_cohere = record.data(coh_start*record.fs:coh_end*record.fs,:);
 recTime = (0:length(rec_cohere)-1)/record.fs; 
 
 disp('BUFFER INFO')
-[data_aud, clicks] = testaudClickRemoval(record.data(:,1));
+[data_aud, clicks] = testaudClickRemoval(rec_cohere(:,1));
 size(data_aud)
 
-fig1 = figure(1)
-plot(record.time, record.data(:,1))
+fig1 = figure(1);
+plot(recTime, rec_cohere(:,1))
 grid on;
 
-fig2 = figure(2)
-plot(record.time, data_aud)
+fig2 = figure(2);
+plot(recTime, data_aud)
 grid on;
 
 % ~~~~~~~~~~~~~~~~~~~TESTING END~~~~~~~~~~~~~~~~~~~ %
@@ -77,6 +79,18 @@ function [data, clicks] = testaudClickRemoval(data, fs)
     % msw = 0.0;
     ww = 0;
 
+    %% Pad data with zeros 
+    pad = mod(length(data), windowSize)
+
+
+    dataPadded = zeros(length(data)+pad,1);
+    size(ismember(dataPadded,data))
+
+    data(1:length(data)+pad) = dataPadded;
+    %% loop through windows of data
+    % for k = (1:len(data), windowSize);
+
+
     % my code to could clicks and list them in an array
     % num_clicks = 0;
     % clicks = [];
@@ -88,7 +102,7 @@ function [data, clicks] = testaudClickRemoval(data, fs)
         data_power(i) = data(i)*data(i);
     end
 
-    % ms_seq = zeros(length(data),2);
+    % ms_seq = zeros(length(data),2); 
     ms_seq = data_power;
     % for i = (1:len)
         % ms_seq(i]=b2[i];
@@ -139,10 +153,12 @@ function [data, clicks] = testaudClickRemoval(data, fs)
         %  ClickWidth (ie: resolution) and tests it to see if there is a click there
         wrc = wrc/2
         
+        
         %% ww is the variable ClickWidth without units
         ww = mClickWidth/wrc  
 
         for i=(1:len-sep)
+            data(i) = 0;
             %% len-sep simply avoids the last iteration I believe
             msw = 0;
             for j=(1:ww+1)
