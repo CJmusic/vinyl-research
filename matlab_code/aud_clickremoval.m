@@ -1,5 +1,25 @@
+%% This file recreates Audacity's click removal in MATLAB. 
+%
+%
+% christopher zaworski  
+%
+% last edit: may 19, 2019
+
+
+%{
+
+What I think is currently wrong:
+   -  theres some messed up indexing, that's causing the clicks to be detected a 
+      bit before their actual position
+
+
+%}
+
 % bool EffectClickRemoval::ProcessOne(int count, WaveTrack * track, sampleCount start, sampleCount len)
 % function aud_clickremoval(data)
+
+
+
 function [data, clicks] = aud_clickremoval(data, fs)
     %%% Variables from other files
 
@@ -9,18 +29,12 @@ function [data, clicks] = aud_clickremoval(data, fs)
     mClickWidth = 30;
     windowSize = 8192;
     sep = 2049;
-
-
-    %%%%
-
-    % in the matlab code data is the array of data
-    % data = data; 
-    len = length(data); 
-    % I believe the above are the two inputs in the audacity functions;
-
+    len = 2^16;
+    % len = length(data); % len is the length of the buffer in audacity,  
 
     %% Audacity function RemoveClicks
-    bResult = false; %says if the func did something
+    bResult = false; % says if the func did something,
+                     % 
     % i = 0;
     % j = 0;
     left = 0;
@@ -28,23 +42,26 @@ function [data, clicks] = aud_clickremoval(data, fs)
     s2 = int16(sep/2); % originally assigned up above but might not need to do it, this is simply 
     % msw = 0.0;
     ww = 0;
-    num_clicks = 0;
+
+    % my code to could clicks and list them in an array
+    % num_clicks = 0;
     % clicks = [];
 
-    data_energy = zeros(len,2);  %%data_energy is the signals energy
+    data_power = zeros(len,2);  %%data_power is the signals energy
 
-    % data_energy is the power of the signal
+    % data_power is the power of the signal
     for i=(1:len) % calculate the rms level
-        data_energy(i) = data(i)*data(i);
+        data_power(i) = data(i)*data(i);
     end
 
     % ms_seq = zeros(length(data),2);
-    ms_seq = data_energy;
+    ms_seq = data_power;
     % for i = (1:len)
         % ms_seq(i]=b2[i];
 
     % for i=(1:i*i:sep) %% in c++ 
-    i = 1
+    i = 1;
+
     while i <= sep
         i = i*2;
         for j=(1:len-i)
@@ -53,6 +70,8 @@ function [data, clicks] = aud_clickremoval(data, fs)
     end
     disp('after ms_seq set')
     % ms_seq
+
+    sep = i;
 
     disp('GOING INTO 4 LOOP')
     % sep looks to be 2^8, probably the width of the samples being looked at
@@ -84,45 +103,39 @@ function [data, clicks] = aud_clickremoval(data, fs)
     while wrc >= 1
         %% wrc looks like a resolution, so it loops through the file multiple times at each 
         %  ClickWidth (ie: resolution) and tests it to see if there is a click there
-        wrc = wrc/2;
+        wrc = wrc/2
         
         %% ww is the variable ClickWidth without units
-        ww = mClickWidth/wrc;  
+        ww = mClickWidth/wrc  
 
-        for i=(1:len-sep);
+        for i=(1:len-sep)
             %% len-sep simply avoids the last iteration I believe
-            
-            % i
             msw = 0;
             for j=(1:ww+1)
-                msw = msw + data_energy(i+s2+j); %% msw seems to be a sum of the power at weird indices
+                msw = msw + data_power(i+s2+j); %% msw seems to be a sum of the power at weird indices
                                         %  or using some weird c++ syntax 
             end
             msw = msw/ww;
 
-
             %% this is the point where clicks are detected and replaced in 
-            %  the data = the list of data 
+            %  data = the list of data 
             %  ms_seq = main test for clicks? 
-            % disp('msw')
-            % msw
-            % disp('mThresholdLevel * ms_seq(i)/10 ')
-            % mThresholdLevel * ms_seq(i)/10 
             if msw >= mThresholdLevel * ms_seq(i)/10
-                % data(i) = 0;
-                % num_clicks = num_clicks + 1;
-                % clicks(num_clicks) = i;   
+                %%  if theres a click detected in the msw, then I believe this loop 
+                %   goes through in more detail to locate the click more precisely
+                disp('CLICK DETECTED?')
+                data(i) = 0;
                 if left == 0
                     % disp('LEFT 0')
                     % disp('CLICK DETECTED?')
-                left = i+s2; %% this is where left gets assigned its initial value
+                    left = i+s2; %% this is where left gets assigned its initial value
                 end
                 elseif (left ~= 0 && (i-left) <= ww*2); %% ww ClickWidth/4
                 % disp('i-left')
                 % i-left
                 % disp('ww*2')
                 % ww*2
-                if ((i-left) <= ww*2); %% ww ClickWidth/4
+                % if ((i-left) <= ww*2); %% ww ClickWidth/4
                     % disp('CLICK BEING REMOVED')
                     lv = data(left);
                     rv = data(i+ww+s2);
@@ -130,9 +143,9 @@ function [data, clicks] = aud_clickremoval(data, fs)
                         bResult = true;
                         %% The line below replaces the sample in the data with I think
                         %  is the average of the remaining samples being analyzed
-                        data(j) = (rv*(j-left) + lv*(i+ww+s2-j))/(i+ww+s2-left);
-                        % data(j) = 1.0;
-                        data_energy(j) = data(j)*data(j);
+                        % data(j) = (rv*(j-left) + lv*(i+ww+s2-j))/(i+ww+s2-left);
+                        data(j) = 1.0;
+                        % data_power(j) = data(j)*data(j);
                     end
                 left = 0;
                 elseif(left ~= 0)

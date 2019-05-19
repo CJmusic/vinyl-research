@@ -6,7 +6,7 @@
 %
 
 function wav_process(folder);
-    clc;close all;
+    clc;%close all;
     disp('-----------wav_process.m---------------')
     addpath('audio_functions')
     addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/');
@@ -19,6 +19,7 @@ function wav_process(folder);
     % };    
     % reference_file = references{ref}
 
+    clf(figure(1));clf(figure(2));
     addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/040319_r26fivetrials/');
 
     % addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/');
@@ -49,11 +50,11 @@ function wav_process(folder);
         [data_aud, clicks] = aud_clickremoval(record.data(:,1));
         size(data_aud)
         
-        figure(1)
+        fig1 = figure(1)
         plot(record.time, record.data(:,1))
         grid on;
 
-        figure(2)
+        fig2 = figure(2)
         plot(record.time, data_aud)
         grid on;
         % SP=1; %your point goes here 
@@ -61,7 +62,6 @@ function wav_process(folder);
         % for j = (1:length(clicks))
         %     line([clicks(j) clicks(j)],get(hax,'YLim'),'Color',[1 0 0])
         % end
-
 
 %~~~~~~~~~~~~~~~~~NORMALIZATION TEST~~~~~~~~~~~~~~~~~~~~~
 
