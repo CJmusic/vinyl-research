@@ -39,19 +39,33 @@ record = audio_recordclass(file_path);
 % reference = record;
 % clicks_ref = audio_clickdetect(reference.data, reference.fs);
 %     clicks_ref = testaudClickRemoval(reference.data, reference.fs);
-rec_cohere = record.data(coh_start*record.fs:coh_end*record.fs,:); 
-recTime = (0:length(rec_cohere)-1)/record.fs; 
+data = record.data(coh_start*record.fs:coh_end*record.fs,:); 
+recTime = (0:length(data)-1)/record.fs; 
+
+
+windowSize = 8192;
+%% Pad data with zeros 
+pad = mod((data), windowSize);
+size(data)
+size(pad)
+
+dataPadded = [data, zeros(length(pad),2)];
+% size(ismember(dataPadded,data))
+% disp('SUM dataPadded')
+% sum(dataPadded)
+% data(1:length(data)+pad) = dataPadded;
 
 disp('BUFFER INFO')
-[data_aud, clicks] = testaudClickRemoval(rec_cohere(:,1));
+[data_aud, clicks] = testaudClickRemoval(data(:,1));
 size(data_aud)
 
 fig1 = figure(1);
-plot(recTime, rec_cohere(:,1))
+plot(recTimePadded, dataPadded)
 grid on;
 
+recTimePadded = (0:length(data_aud)-1)/record.fs; 
 fig2 = figure(2);
-plot(recTime, data_aud)
+plot(recTimePadded, data_aud)
 grid on;
 
 % ~~~~~~~~~~~~~~~~~~~TESTING END~~~~~~~~~~~~~~~~~~~ %
@@ -79,14 +93,6 @@ function [data, clicks] = testaudClickRemoval(data, fs)
     % msw = 0.0;
     ww = 0;
 
-    %% Pad data with zeros 
-    pad = mod(length(data), windowSize)
-
-
-    dataPadded = zeros(length(data)+pad,1);
-    size(ismember(dataPadded,data))
-
-    data(1:length(data)+pad) = dataPadded;
     %% loop through windows of data
     % for k = (1:len(data), windowSize);
 
@@ -158,7 +164,7 @@ function [data, clicks] = testaudClickRemoval(data, fs)
         ww = mClickWidth/wrc  
 
         for i=(1:len-sep)
-            data(i) = 0;
+            % data(i) = 0;
             %% len-sep simply avoids the last iteration I believe
             msw = 0;
             for j=(1:ww+1)
