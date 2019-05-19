@@ -44,7 +44,7 @@ function wav_process(folder);
         %     clicks_ref = aud_clickremoval(reference.data, reference.fs);
             ref_cohere = reference.data(coh_start*reference.fs:coh_end*reference.fs,:); 
             time_ref = (0:length(ref_cohere)-1)/reference.fs; 
-        end 
+       end 
 
         disp('BUFFER INFO')
         [data_aud, clicks] = aud_clickremoval(record.data(:,1));

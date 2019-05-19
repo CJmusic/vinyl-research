@@ -12,15 +12,49 @@ What I think is currently wrong:
    -  theres some messed up indexing, that's causing the clicks to be detected a 
       bit before their actual position
 
+% bool EffectClickRemoval::ProcessOne(int count, WaveTrack * track, sampleCount start, sampleCount len)
+% function testaudClickRemoval(data)
+
 
 %}
 
-% bool EffectClickRemoval::ProcessOne(int count, WaveTrack * track, sampleCount start, sampleCount len)
-% function aud_clickremoval(data)
+% ~~~~~~~~~~~~~~~~~~~~~TESTING~~~~~~~~~~~~~~~~~~~~~ %{
 
+clf(figure(1));clf(figure(2));
+addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/040319_r26fivetrials/');
+% addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_functions/');
+% addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/');
+%record_dir = dir('');
 
+% wave_files = dir(strcat(path_folder,'*.wav'));
 
-function [data, clicks] = aud_clickremoval(data, fs)
+file_path = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/030419_r26fivetrials/one.wav';
+
+coh_start = 8.0;
+coh_end = 18.0;
+% wave_names{i} = sprintf(wave_files(i).name)
+record = audio_recordclass(file_path);
+% reference = record;
+% clicks_ref = audio_clickdetect(reference.data, reference.fs);
+%     clicks_ref = testaudClickRemoval(reference.data, reference.fs);
+rec_cohere = record.data(coh_start*record.fs:coh_end*record.fs,:); 
+recTime = (0:length(rec_cohere)-1)/record.fs; 
+
+disp('BUFFER INFO')
+[data_aud, clicks] = testaudClickRemoval(record.data(:,1));
+size(data_aud)
+
+fig1 = figure(1)
+plot(record.time, record.data(:,1))
+grid on;
+
+fig2 = figure(2)
+plot(record.time, data_aud)
+grid on;
+
+% ~~~~~~~~~~~~~~~~~~~TESTING END~~~~~~~~~~~~~~~~~~~ %
+
+function [data, clicks] = testaudClickRemoval(data, fs)
     %%% Variables from other files
 
     % Param( Threshold, int,     wxT("Threshold"),  200,     0,       900,     1  );
@@ -250,4 +284,4 @@ function [data, clicks] = aud_clickremoval(data, fs)
 %             break;
 
 
-end %function aud_clickremoval
+end %function testaudClickRemoval
