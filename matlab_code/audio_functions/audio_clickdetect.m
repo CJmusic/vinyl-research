@@ -73,18 +73,25 @@ function clicks = audio_clickdetecttest(data, fs);
     disp('peak values')
     size(peak_values)
     %[peak_values, clicks] = findpeaks(p_data(:,1));
-    for i = (1:length(zero_indexes)-1);
-        [peak_value, peak_index] = max(p_data(zero_indexes(i): zero_indexes(i+1)));
-        peak_values = [peak_values, peak_value];
-        peak_indices = [peak_indices, peak_index];
-        %if peak_value > 10.0*prev_peak;
-       if peak_value/prev_peak > 10.0;
-          click = zero_indexes(i) + peak_index;
-          clicks = [clicks, click];
-       else; 
-          avg_peak = (avg_peak + prev_peak)/2;
-       end
-       prev_peak = peak_value;
+    for i = (11:length(zero_indexes)-10)
+        if i ~= 11;
+            mAvg = 1/(N+1)*sum(peak_values(i-10:1+10));
+        end
+        mAvg = mAvg - (x(i+10) - x(i-10-1))/(21);
+        if peak_value(i) > 5*mAvg
+            clicks = [clicks, peak_indices(i)]
+        end
+    %     [peak_value, peak_index] = max(p_data(zero_indexes(i): zero_indexes(i+1)));
+    %     peak_values = [peak_values, peak_value];
+    %     peak_indices = [peak_indices, peak_index];
+    %     %if peak_value > 10.0*prev_peak;
+    %    if peak_value/prev_peak > 10.0;
+    %       click = zero_indexes(i) + peak_index;
+    %       clicks = [clicks, click];
+    %    else; 
+    %       avg_peak = (avg_peak + prev_peak - )/2;
+    %    end
+    %    prev_peak = peak_value;
     end
     size(peak_values)
     %avg_peak = mean(peak_value) 
