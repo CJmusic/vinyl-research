@@ -51,16 +51,16 @@ size(pad)
 
 dataPadded = [data, zeros(length(pad),2)];
 % size(ismember(dataPadded,data))
-% disp('SUM dataPadded')
+% %disp('SUM dataPadded')
 % sum(dataPadded)
 % data(1:length(data)+pad) = dataPadded;
 
-disp('BUFFER INFO')
+%disp('BUFFER INFO')
 [data_aud, clicks] = testaudClickRemoval(data(:,1));
 size(data_aud)
 
 fig1 = figure(1);
-plot(recTimePadded, dataPadded)
+plot(recTimePadded, dataPadded(:,1))
 grid on;
 
 recTimePadded = (0:length(data_aud)-1)/record.fs; 
@@ -92,126 +92,147 @@ function [data, clicks] = testaudClickRemoval(data, fs)
     s2 = int16(sep/2); % originally assigned up above but might not need to do it, this is simply 
     % msw = 0.0;
     ww = 0;
-
-    %% loop through windows of data
-    % for k = (1:len(data), windowSize);
-
-
-    % my code to could clicks and list them in an array
-    % num_clicks = 0;
-    % clicks = [];
-
-    data_power = zeros(len,2);  %%data_power is the signals energy
-
-    % data_power is the power of the signal
-    for i=(1:len) % calculate the rms level
-        data_power(i) = data(i)*data(i);
-    end
-
-    % ms_seq = zeros(length(data),2); 
-    ms_seq = data_power;
-    % for i = (1:len)
-        % ms_seq(i]=b2[i];
-
-    % for i=(1:i*i:sep) %% in c++ 
-    i = 1;
-
-    while i <= sep
-        i = i*2;
-        for j=(1:len-i)
-            ms_seq(j) = ms_seq(j) + ms_seq(j+i);
-        end
-    end
-    disp('after ms_seq set')
-    % ms_seq
-
-    sep = i;
-
-    disp('GOING INTO 4 LOOP')
-    % sep looks to be 2^8, probably the width of the samples being looked at
-    disp('length data')
-    size(data)
-    disp('len-sep')
-    len-sep
-
     clicks = [];
+    disp('loop sizes')
+    windowSize
+    length(data)
+    length(data)/windowSize
+    int_size = floor(length(data)/windowSize)
+    % int_size = int16(length(data)/windowSize)
+    size_diff =  abs(length(data) - int_size*windowSize)
+    data_padded = padarray(data,[size_diff,1]);
+    size(data)
+    length(data)/windowSize
+    (int_size+1)*windowSize
+    %% loop through windows of data
+    disp('into MAIN for loop')
+    for k = (1:int16((length(data)-1)/windowSize))
+        k;
+        k = k*windowSize;
+        len = windowSize;
+        %disp('new window')
+        % size(data)
+        % len
+        % my code to could clicks and list them in an array
+        % num_clicks = 0;
+        % clicks = [];
+        dataWindow = data(k:k+windowSize,1);
+        dataWindowPower = zeros(len,2);  %%dataWindowPower is the signals energy
+        size(dataWindowPower)
+        % size(dataWindowPower(1))
+        % dataWindowPower is the power of the signal
+        i = 0;
+        for x=(1:len-1) % calculate the rms level
+            % x
+            % i
+            dataWindowPower(x,:) = dataWindow(x,:)*dataWindow(x,:);
+        end
 
+        % ms_seq = zeros(length(dataWindow),2); 
+        ms_seq = dataWindowPower;
+        % for i = (1:len)
+            % ms_seq(i]=b2[i];
 
-    for i=(1:len-sep)
-        % size(ms_seq(i))
-        % size(sep)
-        % size(ms_seq)
-        ms_seq(i) = ms_seq(i)/sep;
-    end
+        % for i=(1:i*i:sep) %% in c++ 
+        i = 1;
 
-    % truncate sep to the next lowest power of two
-    % sep appears to be the len
-    % sep = i; 
-                % length of data/2  
-    % wrc = 0;
+        while i <= sep
+            i = i*2;
+            for j=(1:len-i)
+                ms_seq(j) = ms_seq(j) + ms_seq(j+i);
+            end
+        end
+        %disp('after ms_seq set')
+        % ms_seq
 
-    %%% this is a for loop in the C++ but probably needs to be converted to a while loop 
-%    for(wrc=mClickWidth/4; wrc>=1; wrc /= 2) {
-    wrc = mClickWidth/4;
-    disp('Final While loop')
-    while wrc >= 1
-        %% wrc looks like a resolution, so it loops through the file multiple times at each 
-        %  ClickWidth (ie: resolution) and tests it to see if there is a click there
-        wrc = wrc/2
-        
-        
-        %% ww is the variable ClickWidth without units
-        ww = mClickWidth/wrc  
+        sep = i;
+
+        %disp('GOING INTO 4 LOOP')
+        % sep looks to be 2^8, probably the width of the samples being looked at
+        % disp('length dataWindow')
+        size(dataWindow);
+        % disp('len-sep')
+        len-sep;
+
+        clicks = [];
+
 
         for i=(1:len-sep)
-            % data(i) = 0;
-            %% len-sep simply avoids the last iteration I believe
-            msw = 0;
-            for j=(1:ww+1)
-                msw = msw + data_power(i+s2+j); %% msw seems to be a sum of the power at weird indices
-                                        %  or using some weird c++ syntax 
-            end
-            msw = msw/ww;
+            % size(ms_seq(i))
+            % size(sep)
+            % size(ms_seq)
+            ms_seq(i) = ms_seq(i)/sep;
+        end
 
-            %% this is the point where clicks are detected and replaced in 
-            %  data = the list of data 
-            %  ms_seq = main test for clicks? 
-            if msw >= mThresholdLevel * ms_seq(i)/10
-                %%  if theres a click detected in the msw, then I believe this loop 
-                %   goes through in more detail to locate the click more precisely
-                disp('CLICK DETECTED?')
-                data(i) = 0;
-                if left == 0
-                    % disp('LEFT 0')
-                    % disp('CLICK DETECTED?')
-                    left = i+s2; %% this is where left gets assigned its initial value
+        % truncate sep to the next lowest power of two
+        % sep appears to be the len
+        % sep = i; 
+                    % length of dataWindow/2  
+        % wrc = 0;
+
+        %%% this is a for loop in the C++ but probably needs to be converted to a while loop 
+    %    for(wrc=mClickWidth/4; wrc>=1; wrc /= 2) {
+        wrc = mClickWidth/4;
+        %%disp('Final While loop')
+        while wrc >= 1
+            %% wrc looks like a resolution, so it loops through the file multiple times at each 
+            %  ClickWidth (ie: resolution) and tests it to see if there is a click there
+            wrc = wrc/2;
+            
+            
+            %% ww is the variable ClickWidth without units
+            ww = mClickWidth/wrc;
+
+            for i=(1:len-sep)
+                % dataWindow(i) = 0;
+                %% len-sep simply avoids the last iteration I believe
+                msw = 0;
+                for j=(1:ww+1)
+                    msw = msw + dataWindowPower(i+s2+j); %% msw seems to be a sum of the power at weird indices
+                                            %  or using some weird c++ syntax 
                 end
-                elseif (left ~= 0 && (i-left) <= ww*2); %% ww ClickWidth/4
-                % disp('i-left')
-                % i-left
-                % disp('ww*2')
-                % ww*2
-                % if ((i-left) <= ww*2); %% ww ClickWidth/4
-                    % disp('CLICK BEING REMOVED')
-                    lv = data(left);
-                    rv = data(i+ww+s2);
-                    for j = (left:i+ww+s2)
-                        bResult = true;
-                        %% The line below replaces the sample in the data with I think
-                        %  is the average of the remaining samples being analyzed
-                        % data(j) = (rv*(j-left) + lv*(i+ww+s2-j))/(i+ww+s2-left);
-                        data(j) = 1.0;
-                        % data_power(j) = data(j)*data(j);
-                    end
-                left = 0;
-                elseif(left ~= 0)
-                    left = 0;
-                % end % if left ~=
-            end %if msw >=
+                msw = msw/ww;
 
-            % data(i) = 0;
-        end %while wrc loop
-    end % end for loop
+                %% this is the point where clicks are detected and replaced in 
+                %  dataWindow = the list of dataWindow 
+                %  ms_seq = main test for clicks? 
+                if msw >= mThresholdLevel * ms_seq(i)/10
+                    %%  if theres a click detected in the msw, then I believe this loop 
+                    %   goes through in more detail to locate the click more precisely
+                    %disp('CLICK DETECTED?')
+                    dataWindow(i) = 0;
+                    if left == 0
+                        % %disp('LEFT 0')
+                        % %disp('CLICK DETECTED?')
+                        left = i+s2; %% this is where left gets assigned its initial value
+                    end
+                    elseif (left ~= 0 && (i-left) <= ww*2) %% ww ClickWidth/4
+                    % %disp('i-left')
+                    % i-left
+                    % %disp('ww*2')
+                    % ww*2
+                    % if ((i-left) <= ww*2); %% ww ClickWidth/4
+                        % %disp('CLICK BEING REMOVED')
+                        lv = dataWindow(left);
+                        rv = dataWindow(i+ww+s2);
+                        for j = (left:i+ww+s2)
+                            bResult = true;
+                            %% The line below replaces the sample in the dataWindow with I think
+                            %  is the average of the remaining samples being analyzed
+                            % dataWindow(j) = (rv*(j-left) + lv*(i+ww+s2-j))/(i+ww+s2-left);
+                            dataWindow(j) = 1.0;
+                            % dataWindowPower(j) = dataWindow(j)*dataWindow(j);
+                        end
+                    left = 0;
+                    elseif(left ~= 0)
+                        left = 0;
+                    % end % if left ~=
+                end %if msw >=
+
+                % dataWindow(i) = 0;
+            end %while wrc loop
+        end % end for loop
+    end %windowSize loop
     % return bResult
     % Comment from Audacity writer
 %    ww runs from about 4 to mClickWidth.  wrc is the reciprocal;
@@ -235,7 +256,7 @@ function [data, clicks] = testaudClickRemoval(data, fs)
 
     % "below is the function ProcessOne translated, as far as I can tell it really just cleans up the wave data from Audacity and gets things ready to be processed. Not needed for our case" 
 %     if(len <= windowSize/2);
-%         disp("windowSize must be bigger than ", windowSize/2);
+%         %disp("windowSize must be bigger than ", windowSize/2);
 %     end
 
 %     idealBlockLen = track.GetMaxBlockSize * 4; 
