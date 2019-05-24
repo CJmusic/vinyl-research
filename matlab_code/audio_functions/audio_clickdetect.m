@@ -16,27 +16,31 @@ audio_dir = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_fil
 
 AUDIO_FILES = {'one.wav','two.wav','three.wav', 'four.wav', 'five.wav'};
 
-clear all; clc; close all;
+clear all; clc; %close all;
 addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/from_John/');
 audio_dir = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/from_John/';
 
+% audio_bin = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/r26-96kHz.wav';
 audio_bin = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/r26-96kHz.wav';
 
 AUDIO_FILES = {'Bcorrelation_test_1.wav','Bcorrelation_test_2.wav','Bcorrelation_test_3.wav'};
 
 %[data, time, fs] = audio_load(strcat(audio_dir,AUDIO_FILES{1}));
 [data, time, fs] = audio_load(audio_bin);
-data = data(5.1*fs : 8.1*fs,:);
+data = data(8.1*fs : 25.1*fs,:);
 audio_clickdetecttest(data, fs);
 
 function clicks = audio_clickdetecttest(data, fs);
     data = data(:,1);
 %~~~~~~~~~~~~~~~~PRE-FILTERS~~~~~~~~~~~~~~~~~~~
     fc = 50;
-    [b,a] = butter(6,fc/(fs/2),'low');
-        
+    [b,a] = butter(6,1000/(fs/2),'high');
     data = filter(b, a, data); % use filtfilt
 
+    [b,a] = butter(6,200/(fs/2),'low');
+    data = filter(b, a, data); % use filtfilt
+    % [b,a] = butter(6,fc/(fs/2),'low');
+    % data = filter(b, a, data); % use filtfilt
     %fc = 1000.0 
     %  [A,B,C,D] = butter(10,[1000 10000]/fs/2);
     % [b, a] = butter(1, [1000.0 4000.0]/(fs/2),'bandpass'); % this should 
@@ -59,6 +63,7 @@ function clicks = audio_clickdetecttest(data, fs);
     plot(time, p_data)
     title('audio power')
  
+%~~~~~~~~~~~~~~~~~~~~~~~~~AVG PEAK METHOD~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     clicks = [];
     zci = @(v) find(v(:).*circshift(v(:), [-1 0]) <= 0);% Returns Zero-Crossing Indices Of Argument Vector
     zero_indices = zci(data);
@@ -67,32 +72,16 @@ function clicks = audio_clickdetecttest(data, fs);
     avg_peak = 0.0;
     prev_peak = 1.0;
     peak_value = 0.0;
-    %[peak_values, peak_indices] = max(p_data(zero_indices));
+
     peak_values = zeros(length(zero_indices)-1);   
     peak_indices = zeros(length(zero_indices)-1);
-    % for i = (1:length(zero_indices)-1);
-    %     % p_data(zero_indices(i): zero_indices(i+1))
-    %     [peak_value, peak_index] = max(p_data(zero_indices(i): zero_indices(i+1)));
-    %     % peak_value
-    %     % peak_index
-    %     peak_values(i) =  peak_value;
-    %     peak_indices(i) = peak_index;
-    % end
+    
     [peak_values, peak_indices] = findpeaks(p_data(:,1));
-    disp('peak values')
-    size(peak_values)
-    mAvgWidth = 10;
-    length(peak_values)
-    disp('Detection for loop') 
-    for i = (mAvgWidth+1:length(peak_values)-mAvgWidth-1)
-        i
-        if i == mAvgWidth + 1
-            i-mAvgWidth
-            i+mAvgWidth
 
-            peak_values(i-mAvgWidth)
-            peak_values(i+mAvgWidth)
-            peak_values(i-mAvgWidth : i+mAvgWidth)
+    mAvgWidth = 2;
+    for i = (mAvgWidth+1:length(peak_values)-mAvgWidth-1)
+        if i == mAvgWidth + 1
+            peak_values(i-mAvgWidth : i+mAvgWidth);
             iPeaks = peak_values(i-mAvgWidth : i+mAvgWidth);
             mAvg = (1/(mAvgWidth*2 + 1))*sum(iPeaks);
         end
@@ -102,9 +91,15 @@ function clicks = audio_clickdetecttest(data, fs);
 
         threshold = 5;
         if peak_values(i) > threshold*mAvg
-            disp('click detected')
-            clicks = [clicks, peak_indices(i)]
+            if length(peak_values(peak_values(i : i+10) > 0.5*peak_values(i))) < 2;
+                continue    
+            end
+            clicks = [clicks, peak_indices(i)];
         end
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~AVG PEAK METHOD END~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
     %     [peak_value, peak_index] = max(p_data(zero_indices(i): zero_indices(i+1)));
     %     peak_values = [peak_values, peak_value];
     %     peak_indices = [peak_indices, peak_index];
@@ -132,9 +127,12 @@ function clicks = audio_clickdetecttest(data, fs);
     %     % x1 = peak_indices(xi);
     %     line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
     % end
-    figure(1); hold on;
     for xi = 1:length(clicks)-1
         x1 = time(clicks(xi));
+        figure(1); hold on;
+        line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
+
+        figure(2); hold on;
         line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
     end
 %~~~~~~~~~~~~~~~~PLOTTING END~~~~~~~~~~~~~~~
