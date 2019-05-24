@@ -82,33 +82,41 @@ function clicks = audio_clickdetecttest(data, fs);
     disp('peak values')
     size(peak_values)
     mAvgWidth = 10;
-    length(zero_indices)
     length(peak_values)
     disp('Detection for loop') 
-    % for i = (mAvgWidth+1:length(peak_values)-mAvgWidth-1)
-    %     i
-    %     if i == mAvgWidth + 1
-    %         i-mAvgWidth
-    %         i+mAvgWidth
-    %         mAvg = (1/21)*sum(peak_values(i-mAvgWidth:i+mAvgWidth));
-    %     end
-    %     mAvg = mAvg - (peak_values(i+10) - peak_values(i-10-1))/(21);
-        
-    %     if peak_value(i) > 5*mAvg
-    %         clicks = [clicks, peak_indices(i)]
-    %     end
-    % %     [peak_value, peak_index] = max(p_data(zero_indices(i): zero_indices(i+1)));
-    % %     peak_values = [peak_values, peak_value];
-    % %     peak_indices = [peak_indices, peak_index];
-    % %     %if peak_value > 10.0*prev_peak;
-    % %    if peak_value/prev_peak > 10.0;
-    % %       click = zero_indices(i) + peak_index;
-    % %       clicks = [clicks, click];
-    % %    else; 
-    % %       avg_peak = (avg_peak + prev_peak - )/2;
-    % %    end
-    % %    prev_peak = peak_value;
-    % end
+    for i = (mAvgWidth+1:length(peak_values)-mAvgWidth-1)
+        i
+        if i == mAvgWidth + 1
+            i-mAvgWidth
+            i+mAvgWidth
+
+            peak_values(i-mAvgWidth)
+            peak_values(i+mAvgWidth)
+            peak_values(i-mAvgWidth : i+mAvgWidth)
+            iPeaks = peak_values(i-mAvgWidth : i+mAvgWidth);
+            mAvg = (1/(mAvgWidth*2 + 1))*sum(iPeaks);
+        end
+        plow = peak_values(i+mAvgWidth); 
+        phigh =  peak_values(i-mAvgWidth);
+        mAvg = mAvg - (phigh - plow)/(21);
+
+        threshold = 5;
+        if peak_values(i) > threshold*mAvg
+            disp('click detected')
+            clicks = [clicks, peak_indices(i)]
+        end
+    %     [peak_value, peak_index] = max(p_data(zero_indices(i): zero_indices(i+1)));
+    %     peak_values = [peak_values, peak_value];
+    %     peak_indices = [peak_indices, peak_index];
+    %     %if peak_value > 10.0*prev_peak;
+    %    if peak_value/prev_peak > 10.0;
+    %       click = zero_indices(i) + peak_index;
+    %       clicks = [clicks, click];
+    %    else; 
+    %       avg_peak = (avg_peak + prev_peak - )/2;
+    %    end
+    %    prev_peak = peak_value;
+    end
     size(peak_values)
     
 %~~~~~~~~~~~~~~~~PLOTTING~~~~~~~~~~~~~~~~~~~
@@ -118,17 +126,17 @@ function clicks = audio_clickdetecttest(data, fs);
     %     x1 = time(zero_indices(xi));
     %     line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
     % end
-    figure(1); hold on;
-    for xi = 1:length(peak_indices)-1
-        x1 = peak_indices(xi)/fs;
-        % x1 = peak_indices(xi);
-        line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
-    end
-    % figure(3); hold on;
-    % for xi = 1:length(clicks)-1
-    %     x1 = time(clicks(xi));
+    % figure(1); hold on;
+    % for xi = 1:length(peak_indices)-1
+    %     x1 = peak_indices(xi)/fs;
+    %     % x1 = peak_indices(xi);
     %     line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
     % end
+    figure(1); hold on;
+    for xi = 1:length(clicks)-1
+        x1 = time(clicks(xi));
+        line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
+    end
 %~~~~~~~~~~~~~~~~PLOTTING END~~~~~~~~~~~~~~~
     % determine the click's polarity 
     
