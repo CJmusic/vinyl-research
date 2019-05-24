@@ -30,20 +30,21 @@ data = data(5.1*fs : 8.1*fs,:);
 audio_clickdetecttest(data, fs);
 
 function clicks = audio_clickdetecttest(data, fs);
-    % implement a band pass filter 1-2 kHz
+    data = data(:,1);
+%~~~~~~~~~~~~~~~~PRE-FILTERS~~~~~~~~~~~~~~~~~~~
+    fc = 50;
+    [b,a] = butter(6,fc/(fs/2),'low');
+    freqz(b,a)
+        
+    data = filter(b, a, data); % use filtfilt
+
     %fc = 1000.0 
     %  [A,B,C,D] = butter(10,[1000 10000]/fs/2);
-    %  d = designfilt('bandpassiir','FilterOrder',20, ...
-    %    'HalfPowerFrequency1',1000,'HalfPowerFrequency2',10000, ...
-    %    'SampleRate',fs);
-    %
-    %  sos = ss2sos(A,B,C,D);
-    %  fvt = fvtool(sos,d,'Fs',1500);
-    %  legend(fvt,'butter','designfilt')
-    time = (1:length(data))/fs;
     % [b, a] = butter(1, [1000.0 4000.0]/(fs/2),'bandpass'); % this should 
-    % data_f = filter(b, a, data); % use filtfilt
-    data = data;%filter(b, a, data); % use filtfilt
+    % % data_f = filter(b, a, data); % use filtfilt
+    % data = filter(b, a, data); % use filtfilt
+%~~~~~~~~~~~~~~~~PRE-FILTERS END~~~~~~~~~~~~~~~~~~~
+    time = (1:length(data))/fs;
     % figure(1);
     % freqs(b,a)
     % title('bandpass filter')
@@ -61,53 +62,67 @@ function clicks = audio_clickdetecttest(data, fs);
  
     clicks = [];
     zci = @(v) find(v(:).*circshift(v(:), [-1 0]) <= 0);% Returns Zero-Crossing Indices Of Argument Vector
-    zero_indexes = zci(data);
-    size(zero_indexes)
+    zero_indices = zci(data);
+    size(zero_indices)
     size(p_data)
     avg_peak = 0.0;
     prev_peak = 1.0;
     peak_value = 0.0;
-    %[peak_values, peak_indices] = max(p_data(zero_indexes));
-    peak_values = [];   
+    %[peak_values, peak_indices] = max(p_data(zero_indices));
+    peak_values = zeros(length(zero_indices)-1);   
     peak_indices = [];
-    disp('peak values')
-    size(peak_values)
-    %[peak_values, clicks] = findpeaks(p_data(:,1));
-    for i = (11:length(zero_indexes)-10)
-        if i ~= 11;
-            mAvg = 1/(N+1)*sum(peak_values(i-10:1+10));
-        end
-        mAvg = mAvg - (x(i+10) - x(i-10-1))/(21);
-        if peak_value(i) > 5*mAvg
-            clicks = [clicks, peak_indices(i)]
-        end
-    %     [peak_value, peak_index] = max(p_data(zero_indexes(i): zero_indexes(i+1)));
+    % for i = (1:length(zero_indices)-1);
+    %     [peak_value, peak_index] = max(p_data(zero_indices(i): zero_indices(i+1)));
     %     peak_values = [peak_values, peak_value];
     %     peak_indices = [peak_indices, peak_index];
-    %     %if peak_value > 10.0*prev_peak;
-    %    if peak_value/prev_peak > 10.0;
-    %       click = zero_indexes(i) + peak_index;
-    %       clicks = [clicks, click];
-    %    else; 
-    %       avg_peak = (avg_peak + prev_peak - )/2;
-    %    end
-    %    prev_peak = peak_value;
-    end
+    % end
+    % peak_buffer = [];
+    %[peak_values, clicks] = findpeaks(p_data(:,1));
+    disp('peak values')
     size(peak_values)
-    %avg_peak = mean(peak_value) 
-    %clicks
-    size(clicks)
-    %  plot(time(1:end-t_diff),d_data); grid on; hold on;
-    figure(2); hold on;
-    for xi = 1:length(clicks)-1;
-        x1 = time(clicks(xi));
-        line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
-    end
+    mAvgWidth = 10;
+    length(zero_indices)
+    length(peak_values)
+    disp('Detection for loop') 
+    % for i = (mAvgWidth+1:length(peak_values)-mAvgWidth-1)
+    %     i
+    %     if i == mAvgWidth + 1
+    %         i-mAvgWidth
+    %         i+mAvgWidth
+    %         mAvg = (1/21)*sum(peak_values(i-mAvgWidth:i+mAvgWidth));
+    %     end
+    %     mAvg = mAvg - (peak_values(i+10) - peak_values(i-10-1))/(21);
+        
+    %     if peak_value(i) > 5*mAvg
+    %         clicks = [clicks, peak_indices(i)]
+    %     end
+    % %     [peak_value, peak_index] = max(p_data(zero_indices(i): zero_indices(i+1)));
+    % %     peak_values = [peak_values, peak_value];
+    % %     peak_indices = [peak_indices, peak_index];
+    % %     %if peak_value > 10.0*prev_peak;
+    % %    if peak_value/prev_peak > 10.0;
+    % %       click = zero_indices(i) + peak_index;
+    % %       clicks = [clicks, click];
+    % %    else; 
+    % %       avg_peak = (avg_peak + prev_peak - )/2;
+    % %    end
+    % %    prev_peak = peak_value;
+    % end
+    size(peak_values)
+    
+%~~~~~~~~~~~~~~~~PLOTTING~~~~~~~~~~~~~~~~~~~
+    % figure(2); hold on;
+    % for xi = 1:length(zero_indices)-1
+    %     % xi
+    %     x1 = time(zero_indices(xi));
+    %     line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
+    % end
     figure(3); hold on;
-    for xi = 1:length(clicks)-1;
+    for xi = 1:length(clicks)-1
         x1 = time(clicks(xi));
         line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
     end
+%~~~~~~~~~~~~~~~~PLOTTING END~~~~~~~~~~~~~~~
     % determine the click's polarity 
     
     % length and number of Oscillations 
