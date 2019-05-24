@@ -34,7 +34,6 @@ function clicks = audio_clickdetecttest(data, fs);
 %~~~~~~~~~~~~~~~~PRE-FILTERS~~~~~~~~~~~~~~~~~~~
     fc = 50;
     [b,a] = butter(6,fc/(fs/2),'low');
-    freqz(b,a)
         
     data = filter(b, a, data); % use filtfilt
 
@@ -48,15 +47,15 @@ function clicks = audio_clickdetecttest(data, fs);
     % figure(1);
     % freqs(b,a)
     % title('bandpass filter')
-    figure(2); grid on; hold 
-    plot(time, data)
-    title('audio data')
+    % figure(2); grid on; hold 
+    % plot(time, data)
+    % title('audio data')
     % find the start of the click 
-    figure(4); grid on; hold 
+    figure(1); grid on; hold on 
     plot(time, data)
     title('audio data')
     p_data = data.^2;
-    figure(3); grid on; hold on;
+    figure(2); grid on; hold on;
     plot(time, p_data)
     title('audio power')
  
@@ -70,14 +69,16 @@ function clicks = audio_clickdetecttest(data, fs);
     peak_value = 0.0;
     %[peak_values, peak_indices] = max(p_data(zero_indices));
     peak_values = zeros(length(zero_indices)-1);   
-    peak_indices = [];
+    peak_indices = zeros(length(zero_indices)-1);
     % for i = (1:length(zero_indices)-1);
+    %     % p_data(zero_indices(i): zero_indices(i+1))
     %     [peak_value, peak_index] = max(p_data(zero_indices(i): zero_indices(i+1)));
-    %     peak_values = [peak_values, peak_value];
-    %     peak_indices = [peak_indices, peak_index];
+    %     % peak_value
+    %     % peak_index
+    %     peak_values(i) =  peak_value;
+    %     peak_indices(i) = peak_index;
     % end
-    % peak_buffer = [];
-    %[peak_values, clicks] = findpeaks(p_data(:,1));
+    [peak_values, peak_indices] = findpeaks(p_data(:,1));
     disp('peak values')
     size(peak_values)
     mAvgWidth = 10;
@@ -117,11 +118,17 @@ function clicks = audio_clickdetecttest(data, fs);
     %     x1 = time(zero_indices(xi));
     %     line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
     % end
-    figure(3); hold on;
-    for xi = 1:length(clicks)-1
-        x1 = time(clicks(xi));
+    figure(1); hold on;
+    for xi = 1:length(peak_indices)-1
+        x1 = peak_indices(xi)/fs;
+        % x1 = peak_indices(xi);
         line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
     end
+    % figure(3); hold on;
+    % for xi = 1:length(clicks)-1
+    %     x1 = time(clicks(xi));
+    %     line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
+    % end
 %~~~~~~~~~~~~~~~~PLOTTING END~~~~~~~~~~~~~~~
     % determine the click's polarity 
     
