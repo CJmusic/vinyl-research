@@ -172,7 +172,6 @@ function clicks = audio_clickdetecttest(data, fs);
 %~~~~~~~~~~~~~~~~~~~~~~~~~AVG PEAK METHOD~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     % p_data = data.^2;
     p_data = abs(data);
-    clicks = [];
     zci = @(v) find(v(:).*circshift(v(:), [-1 0]) <= 0);% Returns Zero-Crossing Indices Of Argument Vector
     zero_indices = zci(data);
     size(zero_indices)
@@ -185,6 +184,10 @@ function clicks = audio_clickdetecttest(data, fs);
     peak_indices = zeros(length(zero_indices)-1);
     
     [peak_values, peak_indices] = findpeaks(p_data(:,1));
+
+    clicks = [];
+    clicks_peaks = [];
+
 
     mAvgWidth = 2;
     for i = (mAvgWidth+1:length(peak_values)-mAvgWidth-1)
@@ -202,7 +205,10 @@ function clicks = audio_clickdetecttest(data, fs);
             if length(peak_values(peak_values(i : i+10) > 0.5*peak_values(i))) < 2;
                 continue    
             end
-            clicks = [clicks, peak_indices(i)];
+            clicks = [clicks, peak_indices(i)];  
+            % clicks = [clicks, [peak_indices(i-3:i+8)]]; %% What's recorded here is the   
+                                                        %  indices of the peaks, perhaps
+                                                        %  the zeros make more sense
         end
     end
 %~~~~~~~~~~~~~~~~~~~~~~~~~AVG PEAK METHOD END~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -247,8 +253,30 @@ function clicks = audio_clickdetecttest(data, fs);
     % determine the click's polarity 
     
     % length and number of Oscillations 
+
     
-end   
+%~~~~~~~~~~CLASSIFYING CLICKS~~~~~~~~~~~~~~~ 
+   
+    %% need the sample number of the clicks main peaks 
+    %  as well as the peak number
+    disp('CLASSIFYING CLICKS')
+    % figure(4); grid on; hold on;
+    size(clicks)
+    size(clicks(1,:))
+    
+    % plot(data(clicks(1,1):clicks(length(clicks)-1,length(clicks(i)-1))))
+    for i=(1:length(clicks));
+        figure(10+i); grid on;
+        plot(data(clicks(i)-576:clicks(i)+576,:));
+
+    end
+
+
+%~~~~~~~~CLASSIFYING CLICKS END~~~~~~~~~~~~~
+
+
+end %% function declaration  
+
 
 
 % CODE BELOW is old click method of first differences  
