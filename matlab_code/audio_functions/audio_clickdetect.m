@@ -188,7 +188,8 @@ function clicks = audio_clickdetecttest(data, fs);
     clicks = [];
     clicks_peaks = [];
 
-
+    threshold = 5;
+    lenClick = 1412;
     mAvgWidth = 2;
     for i = (mAvgWidth+1:length(peak_values)-mAvgWidth-1)
         if i == mAvgWidth + 1
@@ -200,12 +201,17 @@ function clicks = audio_clickdetecttest(data, fs);
         phigh =  peak_values(i-mAvgWidth);
         mAvg = mAvg - (phigh - plow)/(21);
 
-        threshold = 5;
         if peak_values(i) > threshold*mAvg
-            if length(peak_values(peak_values(i : i+10) > 0.5*peak_values(i))) < 2;
-                continue    
+            % if length(peak_values(peak_values(i : i+10) > 0.5*peak_values(i))) < 2;
+            %     continue    
+            % end
+
+            if length(clicks) == 0;
+                clicks = [clicks, peak_indices(i)];  
+            elseif peak_indices(i) - clicks(length(clicks)) > lenClick %% makes sure the same click isn't recorded
+                clicks = [clicks, peak_indices(i)];  
             end
-            clicks = [clicks, peak_indices(i)];  
+
             % clicks = [clicks, [peak_indices(i-3:i+8)]]; %% What's recorded here is the   
                                                         %  indices of the peaks, perhaps
                                                         %  the zeros make more sense
@@ -265,10 +271,11 @@ function clicks = audio_clickdetecttest(data, fs);
     size(clicks(1,:))
     
     % plot(data(clicks(1,1):clicks(length(clicks)-1,length(clicks(i)-1))))
-    for i=(1:length(clicks));
-        figure(10+i); grid on;
-        plot(data(clicks(i)-576:clicks(i)+576,:));
-
+    for i=(1:length(clicks))
+        i
+        figure(10+i); 
+        plot(time(clicks(i)-lenClick/2:clicks(i)+lenClick/2),data(clicks(i)-lenClick/2:clicks(i)+lenClick/2,:));
+        grid on;
     end
 
 
