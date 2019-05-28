@@ -31,7 +31,8 @@ data = data(5.1*fs : 10.1*fs,:);
 audio_clickdetecttest(data, fs);
 
 function clicks = audio_clickdetecttest(data, fs);
-    data = data(:,1);
+    % data = data(:,1);
+    time = (1:length(data))/fs;
 %~~~~~~~~~~~~~~~~PRE-FILTERS~~~~~~~~~~~~~~~~~~~
     fc = 50;
     [b,a] = butter(6,300/(fs/2),'low');
@@ -51,22 +52,23 @@ function clicks = audio_clickdetecttest(data, fs);
 
 
 %~~~~~~~~~~~~~~~~PLOT DATA~~~~~~~~~~~~~~~~~~~~~~~~~
-    time = (1:length(data))/fs;
     % figure(1);
     % freqs(b,a)
     % title('bandpass filter')
+    
     % figure(2); grid on; hold 
     % plot(time, data)
     % title('audio data')
     % find the start of the click 
-    figure(1); grid on; hold on 
-    plot(time, data)
-    title('audio data')
 
-    p_data = data.^2;
-    figure(2); grid on; hold on;
-    plot(time, p_data)
-    title('audio power')
+    % figure(1); grid on; hold on 
+    % plot(time, data)
+    % title('audio data')
+
+    % p_data = data.^2;
+    % figure(2); grid on; hold on;
+    % plot(time, p_data)
+    % title('audio power')
 %~~~~~~~~~~~~~~~~PLOT DATA END~~~~~~~~~~~~~~~~~~~~~
 
 %~~~~~~~~~~~~~~COMBI PEAKS/ENV METHOD~~~~~~~~~~~~~~
@@ -272,7 +274,29 @@ function clicks = audio_clickdetecttest(data, fs);
     
     % plot(data(clicks(1,1):clicks(length(clicks)-1,length(clicks(i)-1))))
     for i=(1:length(clicks))
-        i
+        cldata = data(clicks(i)-lenClick/2:clicks(i)+lenClick/2,:);
+
+
+        %% determine click polarity
+        %% should probably sum the power in each channel for this test
+        %  (ie: the energy in the click)
+        El = sum(data(:,1).^2);
+        Er = sum(data(:,2).^2);
+
+        if El > Er;
+            clpolarity = 0; %% click is in the left channel
+        else
+            clpolarity = 1; %% click is in the right channel 
+        end
+        clpolarity
+
+        %% determine click channel
+          
+
+
+
+
+        %% plot each individual clicks
         figure(10+i); 
         plot(time(clicks(i)-lenClick/2:clicks(i)+lenClick/2),data(clicks(i)-lenClick/2:clicks(i)+lenClick/2,:));
         grid on;
