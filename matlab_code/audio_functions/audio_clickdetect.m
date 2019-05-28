@@ -61,9 +61,9 @@ function clicks = audio_clickdetecttest(data, fs);
     % title('audio data')
     % find the start of the click 
 
-    % figure(1); grid on; hold on 
-    % plot(time, data)
-    % title('audio data')
+    figure(1); grid on; hold on 
+    plot(time, data)
+    title('audio data')
 
     % p_data = data.^2;
     % figure(2); grid on; hold on;
@@ -72,106 +72,6 @@ function clicks = audio_clickdetecttest(data, fs);
 %~~~~~~~~~~~~~~~~PLOT DATA END~~~~~~~~~~~~~~~~~~~~~
 
 %~~~~~~~~~~~~~~COMBI PEAKS/ENV METHOD~~~~~~~~~~~~~~
-
-    % p_data = data.^2;
-    % clicks = [];
-    % zci = @(v) find(v(:).*circshift(v(:), [-1 0]) <= 0);% Returns Zero-Crossing Indices Of Argument Vector
-    % zero_indices = zci(data);
-    % size(zero_indices)
-    % size(p_data)
-    % avg_peak = 0.0;
-    % prev_peak = 1.0;
-    % peak_value = 0.0;
-
-    % peak_values = zeros(length(zero_indices)-1);   
-    % peak_indices = zeros(length(zero_indices)-1);
-    
-    % [peak_values, peak_indices] = findpeaks(p_data(:,1));
-    % adata = peak_values;
-    % % adata = abs(data);
-    % lenClick = 6*96; % 6 ms
-    % lenClick = 3;
-    % prevPeak = 0.0;
-    % peakLen = 0;
-    % clicks = [];
-
-    % figure(3); grid on;
-    % plot(peak_values);
-
-
-
-    % for i=(1:length(adata))
-    %     comparator = true;
-    %     % buff = data(i+lenClick);
-    %     % if comparator == false
-    %     %     prevPeak = 0.0;
-    %     %     peakLen = 0;
-    %     % elseif comparator == true
-    %         % prevPeak = data(i);
-    %         % peakLen = peakLen + 1;
-    %     % end % if comparator
-    %     if peakLen > lenClick
-    %         %%% CLICK DETECTED %%%
-    %         clicks = [clicks, i-lenClick];
-    %         comparator = false;
-    %         prevPeak = 0.0;
-    %         peakLen = 0;
-    %     end 
-
-    %     threshold = 100;
-
-    %     if adata(i) > threshold*prevPeak
-    %         prevPeak = adata(i);
-    %         peakLen = 0; 
-    %         % comparator = true;
-    %     elseif adata(i) < prevPeak
-    %         peakLen = peakLen + 1;
-    %     end
-    % end % for adata
-
-
-
-
-%~~~~~~~~~~~~COMBI PEAKS/ENV METHOD END~~~~~~~~~~~
-
-%~~~~~~~~~~~~~~~~~~~~~~~~~DECAY ENV METHOD~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    % adata = abs(data);
-    % lenClick = 6*96; % 6 ms
-    % prevPeak = 0.0;
-    % peakLen = 0;
-    % clicks = [];
-    % for i=(1:length(adata))
-    %     comparator = true;
-    %     % buff = data(i+lenClick);
-    %     % if comparator == false
-    %     %     prevPeak = 0.0;
-    %     %     peakLen = 0;
-    %     % elseif comparator == true
-    %         % prevPeak = data(i);
-    %         % peakLen = peakLen + 1;
-    %     % end % if comparator
-    %     if peakLen > lenClick
-    %         %%% CLICK DETECTED %%%
-    %         clicks = [clicks, i-lenClick];
-    %         comparator = false;
-    %         prevPeak = 0.0;
-    %         peakLen = 0;
-    %     end 
-
-    %     threshold = 0.9;
-
-    %     if adata(i) > threshold*prevPeak
-    %         prevPeak = adata(i);
-    %         peakLen = 0; 
-    %         % comparator = true;
-    %     elseif adata(i) < prevPeak
-    %         peakLen = peakLen + 1;
-    %     end
-    % end % for adata
-
-%~~~~~~~~~~~~~~~~~~~~~~~DECAY ENV METHOD END~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-%~~~~~~~~~~~~~~~~~~~~~~~~~AVG PEAK METHOD~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     % p_data = data.^2;
     p_data = abs(data);
     zci = @(v) find(v(:).*circshift(v(:), [-1 0]) <= 0);% Returns Zero-Crossing Indices Of Argument Vector
@@ -219,6 +119,97 @@ function clicks = audio_clickdetecttest(data, fs);
                                                         %  the zeros make more sense
         end
     end
+
+
+
+
+%~~~~~~~~~~~~COMBI PEAKS/ENV METHOD END~~~~~~~~~~~
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~DECAY ENV METHOD~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    % adata = abs(data);
+    % lenClick = 6*96; % 6 ms
+    % prevPeak = 0.0;
+    % peakLen = 0;
+    % clicks = [];
+    % for i=(1:length(adata))
+    %     comparator = true;
+    %     % buff = data(i+lenClick);
+    %     % if comparator == false
+    %     %     prevPeak = 0.0;
+    %     %     peakLen = 0;
+    %     % elseif comparator == true
+    %         % prevPeak = data(i);
+    %         % peakLen = peakLen + 1;
+    %     % end % if comparator
+    %     if peakLen > lenClick
+    %         %%% CLICK DETECTED %%%
+    %         clicks = [clicks, i-lenClick];
+    %         comparator = false;
+    %         prevPeak = 0.0;
+    %         peakLen = 0;
+    %     end 
+
+    %     threshold = 0.9;
+
+    %     if adata(i) > threshold*prevPeak
+    %         prevPeak = adata(i);
+    %         peakLen = 0; 
+    %         % comparator = true;
+    %     elseif adata(i) < prevPeak
+    %         peakLen = peakLen + 1;
+    %     end
+    % end % for adata
+
+%~~~~~~~~~~~~~~~~~~~~~~~DECAY ENV METHOD END~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~AVG PEAK METHOD~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    % % p_data = data.^2;
+    % p_data = abs(data);
+    % zci = @(v) find(v(:).*circshift(v(:), [-1 0]) <= 0);% Returns Zero-Crossing Indices Of Argument Vector
+    % zero_indices = zci(data);
+    % size(zero_indices)
+    % size(p_data)
+    % avg_peak = 0.0;
+    % prev_peak = 1.0;
+    % peak_value = 0.0;
+
+    % peak_values = zeros(length(zero_indices)-1);   
+    % peak_indices = zeros(length(zero_indices)-1);
+    
+    % [peak_values, peak_indices] = findpeaks(p_data(:,1));
+
+    % clicks = [];
+    % clicks_peaks = [];
+
+    % threshold = 5;
+    % lenClick = 1412;
+    % mAvgWidth = 2;
+    % for i = (mAvgWidth+1:length(peak_values)-mAvgWidth-1)
+    %     if i == mAvgWidth + 1
+    %         peak_values(i-mAvgWidth : i+mAvgWidth);
+    %         iPeaks = peak_values(i-mAvgWidth : i+mAvgWidth);
+    %         mAvg = (1/(mAvgWidth*2 + 1))*sum(iPeaks);
+    %     end
+    %     plow = peak_values(i+mAvgWidth); 
+    %     phigh =  peak_values(i-mAvgWidth);
+    %     mAvg = mAvg - (phigh - plow)/(21);
+
+    %     if peak_values(i) > threshold*mAvg
+    %         % if length(peak_values(peak_values(i : i+10) > 0.5*peak_values(i))) < 2;
+    %         %     continue    
+    %         % end
+
+    %         if length(clicks) == 0;
+    %             clicks = [clicks, peak_indices(i)];  
+    %         elseif peak_indices(i) - clicks(length(clicks)) > lenClick %% makes sure the same click isn't recorded
+    %             clicks = [clicks, peak_indices(i)];  
+    %         end
+
+    %         % clicks = [clicks, [peak_indices(i-3:i+8)]]; %% What's recorded here is the   
+    %                                                     %  indices of the peaks, perhaps
+    %                                                     %  the zeros make more sense
+    %     end
+    % end
 %~~~~~~~~~~~~~~~~~~~~~~~~~AVG PEAK METHOD END~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
@@ -249,13 +240,13 @@ function clicks = audio_clickdetecttest(data, fs);
     %     % x1 = peak_indices(xi);
     %     line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
     % end
-    for xi = 1:length(clicks)-1
+    for xi = 1:length(clicks)
         x1 = time(clicks(xi));
         figure(1); hold on;
         line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
 
-        figure(2); hold on;
-        line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
+        % figure(2); hold on;
+        % line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
     end
 %~~~~~~~~~~~~~~~~PLOTTING END~~~~~~~~~~~~~~~
     % determine the click's polarity 
