@@ -35,10 +35,10 @@ function clicks = audio_clickdetecttest(data, fs);
     time = (1:length(data))/fs;
 %~~~~~~~~~~~~~~~~PRE-FILTERS~~~~~~~~~~~~~~~~~~~
     fc = 50;
-    [b,a] = butter(6,300/(fs/2),'low');
+    [b,a] = butter(6,2000/(fs/2),'low');
     data = filter(b, a, data); % use filtfilt
 
-    [b,a] = butter(6,3000/(fs/2),'high');
+    [b,a] = butter(6,10000/(fs/2),'high');
     data = filter(b, a, data); % use filtfilt
 
     % [b,a] = butter(6,fc/(fs/2),'low');
@@ -51,25 +51,6 @@ function clicks = audio_clickdetecttest(data, fs);
 %~~~~~~~~~~~~~~~~PRE-FILTERS END~~~~~~~~~~~~~~~~~~~
 
 
-%~~~~~~~~~~~~~~~~PLOT DATA~~~~~~~~~~~~~~~~~~~~~~~~~
-    % figure(1);
-    % freqs(b,a)
-    % title('bandpass filter')
-    
-    % figure(2); grid on; hold 
-    % plot(time, data)
-    % title('audio data')
-    % find the start of the click 
-
-    figure(1); grid on; hold on 
-    plot(time, data)
-    title('audio data')
-
-    % p_data = data.^2;
-    % figure(2); grid on; hold on;
-    % plot(time, p_data)
-    % title('audio power')
-%~~~~~~~~~~~~~~~~PLOT DATA END~~~~~~~~~~~~~~~~~~~~~
 
 %~~~~~~~~~~~~~~COMBI PEAKS/ENV METHOD~~~~~~~~~~~~~~
     % p_data = data.^2;
@@ -82,41 +63,60 @@ function clicks = audio_clickdetecttest(data, fs);
     prev_peak = 1.0;
     peak_value = 0.0;
 
-    peak_values = zeros(length(zero_indices)-1);   
-    peak_indices = zeros(length(zero_indices)-1);
+    % peak_values = zeros(length(zero_indices)-1);   
+    % peak_indices = zeros(length(zero_indices)-1);
     
     [peak_values, peak_indices] = findpeaks(p_data(:,1));
+    disp('Sizes')
+    size(peak_indices)
+    size(zero_indices)
+
 
     clicks = [];
     clicks_peaks = [];
 
-    threshold = 5;
+    threshold = 1.2;
     lenClick = 1412;
     mAvgWidth = 2;
-    for i = (mAvgWidth+1:length(peak_values)-mAvgWidth-1)
-        if i == mAvgWidth + 1
-            peak_values(i-mAvgWidth : i+mAvgWidth);
-            iPeaks = peak_values(i-mAvgWidth : i+mAvgWidth);
-            mAvg = (1/(mAvgWidth*2 + 1))*sum(iPeaks);
-        end
-        plow = peak_values(i+mAvgWidth); 
-        phigh =  peak_values(i-mAvgWidth);
-        mAvg = mAvg - (phigh - plow)/(21);
+    avgBuffersize = 100; %% how many peaks to take into account for the moving avg
+    
+    N = 0;
+    mAvg = 0;
+    for i = (1:length(peak_values))
+        N = i;
+        % takes the moving average from the left
+        % if N ~= avgBuffersize %% takes a variable avg until the buffers been saturated 
+            % N = i;
+        mAvg = mAvg + peak_values(i)/N;
+
+        % end
+        % if i == mAvgWidth + 1
+        %     peak_values(i-mAvgWidth : i+mAvgWidth);
+        %     iPeaks = peak_values(i-mAvgWidth : i+mAvgWidth);
+        %     mAvg = (1/(mAvgWidth*2 + 1))*sum(iPeaks);
+        % end
+
 
         if peak_values(i) > threshold*mAvg
             % if length(peak_values(peak_values(i : i+10) > 0.5*peak_values(i))) < 2;
             %     continue    
             % end
+            % pLow = peak_values(i-avgBuffersize); 
+            mAvg = mAvg - peak_values(i)/N; %% DON'T include clicks in the moving avg
 
             if length(clicks) == 0;
                 clicks = [clicks, peak_indices(i)];  
             elseif peak_indices(i) - clicks(length(clicks)) > lenClick %% makes sure the same click isn't recorded
                 clicks = [clicks, peak_indices(i)];  
+                % clicks = [clicks, zero_indices(i)];  
             end
+            % clicks = [clicks, [peak_indices(i-3:i+8)]]; %% What's recorded here is the indices of the peaks, perhaps the zeros make more sense
 
-            % clicks = [clicks, [peak_indices(i-3:i+8)]]; %% What's recorded here is the   
-                                                        %  indices of the peaks, perhaps
-                                                        %  the zeros make more sense
+        end
+
+
+        if N > avgBuffersize
+            mAvg = mAvg - peak_values(i-avgBuffersize)/N;
         end
     end
 
@@ -228,6 +228,25 @@ function clicks = audio_clickdetecttest(data, fs);
     % size(peak_values)
     
 %~~~~~~~~~~~~~~~~PLOTTING~~~~~~~~~~~~~~~~~~~
+%~~~~~~~~~~~~~~~~PLOT DATA~~~~~~~~~~~~~~~~~~~~~~~~~
+    % figure(1);
+    % freqs(b,a)
+    % title('bandpass filter')
+    
+    % figure(2); grid on; hold 
+    % plot(time, data)
+    % title('audio data')
+    % find the start of the click 
+
+    figure(1); grid on; hold on 
+    plot(time, data)
+    title('audio data')
+
+    % p_data = data.^2;
+    % figure(2); grid on; hold on;
+    % plot(time, p_data)
+    % title('audio power')
+%~~~~~~~~~~~~~~~~PLOT DATA END~~~~~~~~~~~~~~~~~~~~~
     % figure(2); hold on;
     % for xi = 1:length(zero_indices)-1
     %     % xi
