@@ -9,14 +9,7 @@ clicks = [ sample numbers ]
 %} 
 
 % TESTING THE CLICK DETECT FUNCTION
-addpath('audio_functions')
-addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/260219_noisereferenceinst/');
-addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/040319_r26fivetrials/');
-audio_dir = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/040319_r26fivetrials/'
-
-AUDIO_FILES = {'one.wav','two.wav','three.wav', 'four.wav', 'five.wav'};
-
-clear all; clc; close all;
+clc; close all;
 addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/from_John/');
 audio_dir = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/from_John/';
 
@@ -25,12 +18,11 @@ audio_bin = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin
 
 AUDIO_FILES = {'Bcorrelation_test_1.wav','Bcorrelation_test_2.wav','Bcorrelation_test_3.wav'};
 
-%[data, time, fs] = audio_load(strcat(audio_dir,AUDIO_FILES{1}));
 [data, time, fs] = audio_load(audio_bin);
 data = data(5.1*fs : 10.1*fs,:);
 audio_clickdetecttest(data, fs);
 
-function clicks = audio_clickdetecttest(data, fs);
+function clicks = audio_clickdetecttest(data, fs)
     % data = data(:,1);
     time = (1:length(data))/fs;
 %~~~~~~~~~~~~~~~~PRE-FILTERS~~~~~~~~~~~~~~~~~~~
@@ -56,21 +48,40 @@ function clicks = audio_clickdetecttest(data, fs);
     % p_data = data.^2;
     p_data = abs(data);
     zci = @(v) find(v(:).*circshift(v(:), [-1 0]) <= 0);% Returns Zero-Crossing Indices Of Argument Vector
-    zero_indices = zci(data);
-    size(zero_indices)
-    size(p_data)
-    avg_peak = 0.0;
-    prev_peak = 1.0;
-    peak_value = 0.0;
+    zerosL = zci(data(:,1));
+    zerosR = zci(data(:,2));
 
-    % peak_values = zeros(length(zero_indices)-1);   
-    % peak_indices = zeros(length(zero_indices)-1);
-    
-    [peak_values, peak_indices] = findpeaks(p_data(:,1));
+    peak_values = zeros(length(zerosL)-1,2);
+    peak_indices = zeros(length(zerosL)-1,2);
+    % length(zerosL)
+    % length(p_data)
+    % disp('last zero')
+    % length(p_data) - zerosL(length(zerosL))
+    % length(p_data) - length(zerosL)
+    % zerosL(length(zerosL)-10:length(zerosL))
+    size(p_data)
+    for i = (1:length(zerosL)-1)
+        buffL = p_data(zerosL(i):zerosL(i+1),1);
+        buffR = p_data(zerosL(i):zerosL(i+1),2);
+        [peakL, indexL] = max(buffL);
+        [peakR, indexR] = max(buffR);
+        peak_values(i,1)  = peakL;
+        peak_indices(i,1) = indexL;
+        peak_indices(i,2) = indexR;
+
+    end
+    for i = (1:length(zerosR)-1)
+
+        peak_indices(i,2) = indexR;
+        peak_values(i,2)  = peakR;
+        [peakR, indexR] = max(buffR);
+    end
+
+
+    % [peak_values, peak_indices] = findpeaks(p_data(:,1));
     disp('Sizes')
     size(peak_indices)
-    size(zero_indices)
-
+    size(zerosL)
 
     clicks = [];
     clicks_peaks = [];
@@ -85,45 +96,34 @@ function clicks = audio_clickdetecttest(data, fs);
     for i = (1:length(peak_values))
         N = i;
         % takes the moving average from the left
-        % if N ~= avgBuffersize %% takes a variable avg until the buffers been saturated 
-            % N = i;
-        mAvg = mAvg + peak_values(i)/N;
-
-        % end
-        % if i == mAvgWidth + 1
-        %     peak_values(i-mAvgWidth : i+mAvgWidth);
-        %     iPeaks = peak_values(i-mAvgWidth : i+mAvgWidth);
-        %     mAvg = (1/(mAvgWidth*2 + 1))*sum(iPeaks);
-        % end
-
+        mAvg = mAvg + peak_values(i,:)/N;
 
         if peak_values(i) > threshold*mAvg
-            % if length(peak_values(peak_values(i : i+10) > 0.5*peak_values(i))) < 2;
-            %     continue    
-            % end
-            % pLow = peak_values(i-avgBuffersize); 
             mAvg = mAvg - peak_values(i)/N; %% DON'T include clicks in the moving avg
+
+    %~~~~~~~~~~CLASSIFYING CLICKS~~~~~~~~~~~~~~~ 
+            
+            if max(peak_values(i,1)) > max(peak_values(i,2))
+                clpolarity = 0; %% click is in the left channel
+            else
+                clpolarity = 1; %% click is in the right channel 
+            end
+
 
             if length(clicks) == 0;
                 clicks = [clicks, peak_indices(i)];  
             elseif peak_indices(i) - clicks(length(clicks)) > lenClick %% makes sure the same click isn't recorded
                 clicks = [clicks, peak_indices(i)];  
-                % clicks = [clicks, zero_indices(i)];  
+                % clicks = [clicks, zerosL(i)];  
             end
             % clicks = [clicks, [peak_indices(i-3:i+8)]]; %% What's recorded here is the indices of the peaks, perhaps the zeros make more sense
-
         end
-
 
         if N > avgBuffersize
             mAvg = mAvg - peak_values(i-avgBuffersize)/N;
         end
     end
 
-
-
-
-%~~~~~~~~~~~~COMBI PEAKS/ENV METHOD END~~~~~~~~~~~
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~DECAY ENV METHOD~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     % adata = abs(data);
@@ -161,74 +161,7 @@ function clicks = audio_clickdetecttest(data, fs);
     % end % for adata
 
 %~~~~~~~~~~~~~~~~~~~~~~~DECAY ENV METHOD END~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-%~~~~~~~~~~~~~~~~~~~~~~~~~AVG PEAK METHOD~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    % % p_data = data.^2;
-    % p_data = abs(data);
-    % zci = @(v) find(v(:).*circshift(v(:), [-1 0]) <= 0);% Returns Zero-Crossing Indices Of Argument Vector
-    % zero_indices = zci(data);
-    % size(zero_indices)
-    % size(p_data)
-    % avg_peak = 0.0;
-    % prev_peak = 1.0;
-    % peak_value = 0.0;
-
-    % peak_values = zeros(length(zero_indices)-1);   
-    % peak_indices = zeros(length(zero_indices)-1);
-    
-    % [peak_values, peak_indices] = findpeaks(p_data(:,1));
-
-    % clicks = [];
-    % clicks_peaks = [];
-
-    % threshold = 5;
-    % lenClick = 1412;
-    % mAvgWidth = 2;
-    % for i = (mAvgWidth+1:length(peak_values)-mAvgWidth-1)
-    %     if i == mAvgWidth + 1
-    %         peak_values(i-mAvgWidth : i+mAvgWidth);
-    %         iPeaks = peak_values(i-mAvgWidth : i+mAvgWidth);
-    %         mAvg = (1/(mAvgWidth*2 + 1))*sum(iPeaks);
-    %     end
-    %     plow = peak_values(i+mAvgWidth); 
-    %     phigh =  peak_values(i-mAvgWidth);
-    %     mAvg = mAvg - (phigh - plow)/(21);
-
-    %     if peak_values(i) > threshold*mAvg
-    %         % if length(peak_values(peak_values(i : i+10) > 0.5*peak_values(i))) < 2;
-    %         %     continue    
-    %         % end
-
-    %         if length(clicks) == 0;
-    %             clicks = [clicks, peak_indices(i)];  
-    %         elseif peak_indices(i) - clicks(length(clicks)) > lenClick %% makes sure the same click isn't recorded
-    %             clicks = [clicks, peak_indices(i)];  
-    %         end
-
-    %         % clicks = [clicks, [peak_indices(i-3:i+8)]]; %% What's recorded here is the   
-    %                                                     %  indices of the peaks, perhaps
-    %                                                     %  the zeros make more sense
-    %     end
-    % end
-%~~~~~~~~~~~~~~~~~~~~~~~~~AVG PEAK METHOD END~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-    %     [peak_value, peak_index] = max(p_data(zero_indices(i): zero_indices(i+1)));
-    %     peak_values = [peak_values, peak_value];
-    %     peak_indices = [peak_indices, peak_index];
-    %     %if peak_value > 10.0*prev_peak;
-    %    if peak_value/prev_peak > 10.0;
-    %       click = zero_indices(i) + peak_index;
-    %       clicks = [clicks, click];
-    %    else; 
-    %       avg_peak = (avg_peak + prev_peak - )/2;
-    %    end
-    %    prev_peak = peak_value;
-    % end
-    % size(peak_values)
-    
 %~~~~~~~~~~~~~~~~PLOTTING~~~~~~~~~~~~~~~~~~~
-%~~~~~~~~~~~~~~~~PLOT DATA~~~~~~~~~~~~~~~~~~~~~~~~~
     % figure(1);
     % freqs(b,a)
     % title('bandpass filter')
@@ -246,11 +179,10 @@ function clicks = audio_clickdetecttest(data, fs);
     % figure(2); grid on; hold on;
     % plot(time, p_data)
     % title('audio power')
-%~~~~~~~~~~~~~~~~PLOT DATA END~~~~~~~~~~~~~~~~~~~~~
     % figure(2); hold on;
-    % for xi = 1:length(zero_indices)-1
+    % for xi = 1:length(zerosL)-1
     %     % xi
-    %     x1 = time(zero_indices(xi));
+    %     x1 = time(zerosL(xi));
     %     line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
     % end
     % figure(1); hold on;
@@ -264,113 +196,13 @@ function clicks = audio_clickdetecttest(data, fs);
         figure(1); hold on;
         line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
 
-        % figure(2); hold on;
-        % line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
+%         % figure(2); hold on;
+%         % line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
+% %~~~~~~~~~~~~~~~~PLOTTING END~~~~~~~~~~~~~~~
+%         %% plot each individual clicks
+%         figure(10+i); 
+%         plot(time(clicks(i)-lenClick/2:clicks(i)+lenClick/2),data(clicks(i)-lenClick/2:clicks(i)+lenClick/2,:));
+%         grid on;
     end
-%~~~~~~~~~~~~~~~~PLOTTING END~~~~~~~~~~~~~~~
-    % determine the click's polarity 
-    
-    % length and number of Oscillations 
-
-    
-%~~~~~~~~~~CLASSIFYING CLICKS~~~~~~~~~~~~~~~ 
-   
-    %% need the sample number of the clicks main peaks 
-    %  as well as the peak number
-    disp('CLASSIFYING CLICKS')
-    % figure(4); grid on; hold on;
-    size(clicks)
-    size(clicks(1,:))
-    
-    % plot(data(clicks(1,1):clicks(length(clicks)-1,length(clicks(i)-1))))
-    for i=(1:length(clicks))
-        cldata = data(clicks(i)-lenClick/2:clicks(i)+lenClick/2,:);
-
-
-        %% determine click polarity
-        %% should probably sum the power in each channel for this test
-        %  (ie: the energy in the click)
-        El = sum(data(:,1).^2);
-        Er = sum(data(:,2).^2);
-
-        if El > Er;
-            clpolarity = 0; %% click is in the left channel
-        else
-            clpolarity = 1; %% click is in the right channel 
-        end
-        clpolarity
-
-        %% determine click channel
-          
-
-
-
-
-        %% plot each individual clicks
-        figure(10+i); 
-        plot(time(clicks(i)-lenClick/2:clicks(i)+lenClick/2),data(clicks(i)-lenClick/2:clicks(i)+lenClick/2,:));
-        grid on;
-    end
-
-
-%~~~~~~~~CLASSIFYING CLICKS END~~~~~~~~~~~~~
-
-
 end %% function declaration  
 
-
-
-% CODE BELOW is old click method of first differences  
-
-
-% function clicks = audio_clickdetect(data, fs);
-%     time = (0:length(data)-1)/fs; 
-%     d_data = diff(data,1)*fs;% since delta_t = 1/fs:w;
-%     clicks = [];
-%     threshold = 10*rms(d_data(1:1025));
-%     disp('starting click detect')
-%     for i = (1:length(data)-1);
-%         if i > 512 && i + 512 < length(d_data);
-%             % threshold = threshold - abs(d_data(i-511)) + abs(d_data(i+511));
-%             threshold = 10*rms(d_data(i-511:i+512));
-%         end
-%         if d_data(i) > threshold;
-%             click = i;
-%             %click_timestamp = i/fs;   
-%             clicks = [clicks, click];   
-%         end
-%     end
-%     disp('Number of clicks');
-%     disp('new file')
-%     size(clicks) 
-    
-%     %plotting below
-    
-%     %clf(figure(1));clf(figure(2)); 
-%     %figure(1); grid on; hold on;
-%     %plot(time, data); 
-%     % for xi = 1:length(clicks);
-%     %      x1 = time(clicks(xi));
-%     %      line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
-%     % end
-%     % title('Click detection: Amplitude vs. Time'); 
-%     % xlabel('Time [s]');
-%     % ylabel('Amplitude');
-    
-%     %figure(2); grid on; hold on;
-%     %t_diff = length(time) - length(d_data)
-%     %plot(time(1:end-t_diff),d_data); grid on; hold on;
-%     %for xi = 1:length(clicks);
-%     %     x1 = time(clicks(xi));
-%     %     line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
-%     % end
-    
-%     % title('Click detection: 1st Derivative vs. Time'); 
-%     % xlabel('Time [s]');
-%     % ylabel('dA/dt (s^-1)');
-% end 
-
-
-
-
-% %}
