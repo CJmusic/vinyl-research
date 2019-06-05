@@ -81,6 +81,7 @@ function clicks = audio_clickdetecttest(data, fs)
     % [peak_values, peak_indices] = findpeaks(p_data(:,1));
     disp('Sizes')
     size(peak_indices)
+    size(peak_values)
     size(zerosL)
 
     clicks = [];
@@ -89,7 +90,7 @@ function clicks = audio_clickdetecttest(data, fs)
     threshold = 1.2;
     lenClick = 1412;
     mAvgWidth = 2;
-    avgBuffersize = 100; %% how many peaks to take into account for the moving avg
+    avgBuffersize = 20; %% how many peaks to take into account for the moving avg
     
     N = 0;
     mAvg = 0;
@@ -99,20 +100,17 @@ function clicks = audio_clickdetecttest(data, fs)
         mAvg = mAvg + peak_values(i,:)/N;
 
         if peak_values(i) > threshold*mAvg
+            % disp('CLICK DETECTED')
             mAvg = mAvg - peak_values(i)/N; %% DON'T include clicks in the moving avg
-
-    %~~~~~~~~~~CLASSIFYING CLICKS~~~~~~~~~~~~~~~ 
-            
-            if max(peak_values(i,1)) > max(peak_values(i,2))
-                clpolarity = 0; %% click is in the left channel
-            else
-                clpolarity = 1; %% click is in the right channel 
-            end
-
+            % if max(peak_values(i,1)) > max(peak_values(i,2))
+            %     clpolarity = 0; %% click is in the left channel
+            % else
+            %     clpolarity = 1; %% click is in the right channel 
+            % end
 
             if length(clicks) == 0;
                 clicks = [clicks, peak_indices(i)];  
-            elseif peak_indices(i) - clicks(length(clicks)) > lenClick %% makes sure the same click isn't recorded
+            elseif peak_indices(i) - clicks(length(clicks)) > lenClick %% makes sure the same click isn't recorded multiple times
                 clicks = [clicks, peak_indices(i)];  
                 % clicks = [clicks, zerosL(i)];  
             end
@@ -191,6 +189,9 @@ function clicks = audio_clickdetecttest(data, fs)
     %     % x1 = peak_indices(xi);
     %     line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
     % end
+    disp('NUM CLICKS')
+    clicks
+    length(clicks)
     for xi = 1:length(clicks)
         x1 = time(clicks(xi));
         figure(1); hold on;
