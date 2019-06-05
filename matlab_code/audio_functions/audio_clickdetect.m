@@ -45,43 +45,43 @@ function clicks = audio_clickdetecttest(data, fs)
 
 
 %~~~~~~~~~~~~~~COMBI PEAKS/ENV METHOD~~~~~~~~~~~~~~
-    % p_data = data.^2;
-    p_data = abs(data);
+    % pData = data.^2;
+    pData = abs(data);
     zci = @(v) find(v(:).*circshift(v(:), [-1 0]) <= 0);% Returns Zero-Crossing Indices Of Argument Vector
     zerosL = zci(data(:,1));
     zerosR = zci(data(:,2));
 
-    peak_values = zeros(length(zerosL)-1,2);
-    peak_indices = zeros(length(zerosL)-1,2);
+    peakValues = zeros(length(zerosL)-1,2);
+    peakIndices = zeros(length(zerosL)-1,2);
     % length(zerosL)
-    % length(p_data)
+    % length(pData)
     % disp('last zero')
-    % length(p_data) - zerosL(length(zerosL))
-    % length(p_data) - length(zerosL)
+    % length(pData) - zerosL(length(zerosL))
+    % length(pData) - length(zerosL)
     % zerosL(length(zerosL)-10:length(zerosL))
-    size(p_data)
+    size(pData)
     for i = (1:length(zerosL)-1)
-        buffL = p_data(zerosL(i):zerosL(i+1),1);
-        buffR = p_data(zerosL(i):zerosL(i+1),2);
+        buffL = pData(zerosL(i):zerosL(i+1),1);
+        buffR = pData(zerosL(i):zerosL(i+1),2);
         [peakL, indexL] = max(buffL);
         [peakR, indexR] = max(buffR);
-        peak_values(i,1)  = peakL;
-        peak_indices(i,1) = indexL;
-        peak_indices(i,2) = indexR;
+        peakValues(i,1)  = peakL;
+        peakIndices(i,1) = indexL;
+        peakIndices(i,2) = indexR;
 
     end
     for i = (1:length(zerosR)-1)
 
-        peak_indices(i,2) = indexR;
-        peak_values(i,2)  = peakR;
+        peakIndices(i,2) = indexR;
+        peakValues(i,2)  = peakR;
         [peakR, indexR] = max(buffR);
     end
 
 
-    % [peak_values, peak_indices] = findpeaks(p_data(:,1));
+    % [peakValues, peakIndices] = findpeaks(pData(:,1));
     disp('Sizes')
-    size(peak_indices)
-    size(peak_values)
+    size(peakIndices)
+    size(peakValues)
     size(zerosL)
 
     clicks = [];
@@ -94,31 +94,31 @@ function clicks = audio_clickdetecttest(data, fs)
     
     N = 0;
     mAvg = 0;
-    for i = (1:length(peak_values))
+    for i = (1:length(peakValues))
         N = i;
         % takes the moving average from the left
-        mAvg = mAvg + peak_values(i,:)/N;
+        mAvg = mAvg + peakValues(i,:)/N;
 
-        if peak_values(i) > threshold*mAvg
+        if peakValues(i) > threshold*mAvg
             % disp('CLICK DETECTED')
-            mAvg = mAvg - peak_values(i)/N; %% DON'T include clicks in the moving avg
-            % if max(peak_values(i,1)) > max(peak_values(i,2))
+            mAvg = mAvg - peakValues(i)/N; %% DON'T include clicks in the moving avg
+            % if max(peakValues(i,1)) > max(peakValues(i,2))
             %     clpolarity = 0; %% click is in the left channel
             % else
             %     clpolarity = 1; %% click is in the right channel 
             % end
 
             if length(clicks) == 0;
-                clicks = [clicks, peak_indices(i)];  
-            elseif peak_indices(i) - clicks(length(clicks)) > lenClick %% makes sure the same click isn't recorded multiple times
-                clicks = [clicks, peak_indices(i)];  
+                clicks = [clicks, peakIndices(i)];  
+            elseif peakIndices(i) - clicks(length(clicks)) > lenClick %% makes sure the same click isn't recorded multiple times
+                clicks = [clicks, peakIndices(i)];  
                 % clicks = [clicks, zerosL(i)];  
             end
-            % clicks = [clicks, [peak_indices(i-3:i+8)]]; %% What's recorded here is the indices of the peaks, perhaps the zeros make more sense
+            % clicks = [clicks, [peakIndices(i-3:i+8)]]; %% What's recorded here is the indices of the peaks, perhaps the zeros make more sense
         end
 
         if N > avgBuffersize
-            mAvg = mAvg - peak_values(i-avgBuffersize)/N;
+            mAvg = mAvg - peakValues(i-avgBuffersize)/N;
         end
     end
 
@@ -173,9 +173,9 @@ function clicks = audio_clickdetecttest(data, fs)
     plot(time, data)
     title('audio data')
 
-    % p_data = data.^2;
+    % pData = data.^2;
     % figure(2); grid on; hold on;
-    % plot(time, p_data)
+    % plot(time, pData)
     % title('audio power')
     % figure(2); hold on;
     % for xi = 1:length(zerosL)-1
@@ -184,9 +184,9 @@ function clicks = audio_clickdetecttest(data, fs)
     %     line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
     % end
     % figure(1); hold on;
-    % for xi = 1:length(peak_indices)-1
-    %     x1 = peak_indices(xi)/fs;
-    %     % x1 = peak_indices(xi);
+    % for xi = 1:length(peakIndices)-1
+    %     x1 = peakIndices(xi)/fs;
+    %     % x1 = peakIndices(xi);
     %     line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
     % end
     disp('NUM CLICKS')
