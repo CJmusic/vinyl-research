@@ -21,11 +21,68 @@ AUDIO_FILES = {'Bcorrelation_test_1.wav','Bcorrelation_test_2.wav','Bcorrelation
 tStart = 5.1;
 tEnd = 10.1;
 data = data(tStart*fs : tEnd*fs,:);
-audio_clickdetecttest(data, fs);
+time = (1:length(data))/fs;
+clicks = audio_clickdetecttest(data, fs);
 
+size(clicks)
+%~~~~~~~~~~~~~~~~PLOTTING~~~~~~~~~~~~~~~~~~~
+    
+
+figure(1); grid on; hold on 
+plot(time, data)
+title('audio data')
+ylim([-0.1 0.1])
+
+figure(4); grid on; hold on 
+plot(time, data)
+title('audio data')
+ylim([-0.1 0.1])
+
+% figure(2); grid on; hold on;
+% plot(time, aData)
+% title('abs audio')
+
+audio_bin2 = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/r26-96kHz-declicked.wav';
+[data2, time2, fs] = audio_load(audio_bin2);
+tStart = 5.1;
+tEnd = 10.1;
+data2 = data2(tStart*fs : tEnd*fs,:);
+time2 = (1:length(data2))/fs;
+
+figure(3); grid on; hold on 
+plot(time, data2)
+ylim([-0.1 0.1])
+title('audio data2')
+% figure(2); hold on;
+% for xi = 1:length(zerosL)-1
+%     % xi
+%     x1 = time(zerosL(xi));
+%     line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
+% end
+% figure(1); hold on;
+% for xi = 1:length(peakIndices)-1
+%     x1 = peakIndices(xi)/fs;
+%     % x1 = peakIndices(xi);
+%     line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
+% end
+
+for xi = 1:length(clicks)
+    x1 = time(clicks(xi));
+
+
+    figure(1); hold on;
+    line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
+
+    figure(2); hold on;
+    line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
+
+    % figure(10+xi); 
+    % plot(time(clicks(xi)-lenClick/2:clicks(xi)+lenClick/2),data(clicks(xi)-lenClick/2:clicks(xi)+lenClick/2,:));
+    % grid on;
+end
+% %~~~~~~~~~~~~~~~~PLOTTING END~~~~~~~~~~~~~~~
 function clicks = audio_clickdetecttest(data, fs)
     % data = data(:,1);
-    time = (1:length(data))/fs;
 %~~~~~~~~~~~~~~~~PRE-FILTERS~~~~~~~~~~~~~~~~~~~
     % freqLow = 2000
     % freqHigh = 10000
@@ -39,17 +96,23 @@ function clicks = audio_clickdetecttest(data, fs)
 %~~~~~~~~~~~~~~~~~~~~~~PEAKS METHOD~~~~~~~~~~~~~~~~~~~~~
     aData = abs(data);
     zci = @(v) find(v(:).*circshift(v(:), [-1 0]) <= 0);% Returns Zero-Crossing Indices Of Argument Vector
-    zero_indices = zci(data);
-    size(zero_indices)
+    zerosIndices = zci(data);
+    size(zerosIndices)
     size(aData)
     avg_peak = 0.0;
     prev_peak = 1.0;
     peak_value = 0.0;
 
-    peak_values = zeros(length(zero_indices)-1,1);   
-    peak_indices = zeros(length(zero_indices)-1,1);
+    peakValues = zeros(length(zerosIndices)-1,1);   
+    peakIndices = zeros(length(zerosIndices)-1,1);
     
-    [peak_values, peak_indices] = findpeaks(aData(:,1));
+    for i = (1:length(zerosIndices)-1)
+        [peak, index] = max(aData(zerosIndices(i):zerosIndices(i+1)));
+        
+        peakIndices(i) = index;
+        peakValues(i)  = peak;
+    end
+    [peakValues, peakIndices] = findpeaks(aData(:,1));
 
     clicks = [];
     clicks_peaks = [];
@@ -57,32 +120,33 @@ function clicks = audio_clickdetecttest(data, fs)
     threshold = 5;
     lenClick = 1412;
     mAvgWidth = 2;
-    for i = (mAvgWidth+1:length(peak_values)-mAvgWidth-1)
+    for i = (mAvgWidth+1:length(peakValues)-mAvgWidth-1)
         if i == mAvgWidth + 1
-            peak_values(i-mAvgWidth : i+mAvgWidth);
-            iPeaks = peak_values(i-mAvgWidth : i+mAvgWidth);
+            peakValues(i-mAvgWidth : i+mAvgWidth);
+            iPeaks = peakValues(i-mAvgWidth : i+mAvgWidth);
             mAvg = (1/(mAvgWidth*2 + 1))*sum(iPeaks);
         end
-        plow = peak_values(i+mAvgWidth); 
-        phigh =  peak_values(i-mAvgWidth);
+        plow = peakValues(i+mAvgWidth); 
+        phigh =  peakValues(i-mAvgWidth);
         mAvg = mAvg - (phigh - plow)/(21);
 
-        if peak_values(i) > threshold*mAvg
-            % if length(peak_values(peak_values(i : i+10) > 0.5*peak_values(i))) < 2;
+        if peakValues(i) > threshold*mAvg
+            % if length(peakValues(peakValues(i : i+10) > 0.5*peakValues(i))) < 2;
             %     continue    
             % end
 
             if length(clicks) == 0;
-                clicks = [clicks, peak_indices(i)];  
-            elseif peak_indices(i) - clicks(length(clicks)) > lenClick %% makes sure the same click isn't recorded
-                clicks = [clicks, peak_indices(i)];  
+                clicks = [clicks, peakIndices(i)];  
+            elseif peakIndices(i) - clicks(length(clicks)) > lenClick %% makes sure the same click isn't recorded
+                clicks = [clicks, peakIndices(i)];  
             end
 
-            % clicks = [clicks, [peak_indices(i-3:i+8)]]; %% What's recorded here is the   
+            % clicks = [clicks, [peakIndices(i-3:i+8)]]; %% What's recorded here is the   
                                                         %  indices of the peaks, perhaps
                                                         %  the zeros make more sense
         end
     end
+    size(clicks)
 %~~~~~~~~~~~~~~~~~~~PEAKS METHOD END~~~~~~~~~~~~~~~~~~~~
 
 %~~~~~~~~~~~~~~COMBI PEAKS/ENV METHOD~~~~~~~~~~~~~~
@@ -151,62 +215,6 @@ function clicks = audio_clickdetecttest(data, fs)
 
 
 
-%~~~~~~~~~~~~~~~~PLOTTING~~~~~~~~~~~~~~~~~~~
-    
-
-    figure(1); grid on; hold on 
-    plot(time, data)
-    title('audio data')
-    ylim([-0.1 0.1])
-
-    figure(4); grid on; hold on 
-    plot(time, data)
-    title('audio data')
-    ylim([-0.1 0.1])
-
-    figure(2); grid on; hold on;
-    plot(time, aData)
-    title('abs audio')
-
-    audio_bin2 = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/r26-96kHz-declicked.wav';
-    [data2, time2, fs] = audio_load(audio_bin2);
-    tStart = 5.1;
-    tEnd = 10.1;
-    data2 = data2(tStart*fs : tEnd*fs,:);
-    time2 = (1:length(data2))/fs;
-
-    figure(3); grid on; hold on 
-    plot(time, data2)
-    ylim([-0.1 0.1])
-    title('audio data2')
-    % figure(2); hold on;
-    % for xi = 1:length(zerosL)-1
-    %     % xi
-    %     x1 = time(zerosL(xi));
-    %     line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
-    % end
-    % figure(1); hold on;
-    % for xi = 1:length(peakIndices)-1
-    %     x1 = peakIndices(xi)/fs;
-    %     % x1 = peakIndices(xi);
-    %     line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
-    % end
-
-    for xi = 1:length(clicks)
-        x1 = time(clicks(xi));
-
-
-        figure(1); hold on;
-        line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
-
-        figure(2); hold on;
-        line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
-
-        % figure(10+xi); 
-        % plot(time(clicks(xi)-lenClick/2:clicks(xi)+lenClick/2),data(clicks(xi)-lenClick/2:clicks(xi)+lenClick/2,:));
-        % grid on;
-    end
-% %~~~~~~~~~~~~~~~~PLOTTING END~~~~~~~~~~~~~~~
 end %% function declaration  
 
 
