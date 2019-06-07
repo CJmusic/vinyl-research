@@ -72,13 +72,13 @@ end
 function [clicks] = audio_clickdetecttest(data, fs)
     % data = data(:,1);
 %~~~~~~~~~~~~~~~~PRE-FILTERS~~~~~~~~~~~~~~~~~~~
-    % freqLow = 2000
-    % freqHigh = 10000
-    % [b,a] = butter(6,freqLow/(fs/2),'low');
-    % data = filter(b, a, data); % use filtfilt
+    freqLow = 2000
+    freqHigh = 10000
+    [b,a] = butter(6,freqLow/(fs/2),'low');
+    data = filter(b, a, data); % use filtfilt
 
-    % [b,a] = butter(6,freqHigh/(fs/2),'high');
-    % data = filter(b, a, data); % use filtfilt
+    [b,a] = butter(6,freqHigh/(fs/2),'high');
+    data = filter(b, a, data); % use filtfilt
 %~~~~~~~~~~~~~~~~PRE-FILTERS END~~~~~~~~~~~~~~~~~~~
 
 %~~~~~~~~~~~~~~~~~~~~~~PEAKS METHOD~~~~~~~~~~~~~~~~~~~~~
@@ -110,37 +110,23 @@ function [clicks] = audio_clickdetecttest(data, fs)
     for i = (mAvgWidth+1:length(peakValues)-mAvgWidth-1)
 
         if i == mAvgWidth + 1
-            % peakValues(i-mAvgWidth : i+mAvgWidth);
             iPeaks = peakValues(i-mAvgWidth : i+mAvgWidth);
             mAvg = (1/(mAvgWidth*2 + 1))*sum(iPeaks);
         end
-        % plow = peakValues(i+mAvgWidth); 
-        % phigh =  peakValues(i-mAvgWidth);
-        % mAvg = mAvg - (phigh - plow)/(mAvgWidth);
 
         if peakValues(i) > threshold*mAvg
             %%% I also want to take into account the width of the peak,
             %   preferebly this should be by sample and not just peaks
             %   as then it will catch clicks that appear within music 
-
-            % if length(peakValues(peakValues(i : i+10) > 0.5*peakValues(i))) < 2;
-            %     continue    
-            % end
-
             if length(clicks) == 0;
                 clicks = [clicks, peakIndices(i)];  
             elseif peakIndices(i) - clicks(length(clicks)) > lenClick %% makes sure the same click isn't recorded
                 clicks = [clicks, peakIndices(i)];  
             end
-
-            % clicks = [clicks, [peakIndices(i-3:i+8)]]; %% What's recorded here is the   
-                                                        %  indices of the peaks, perhaps
-                                                        %  the zeros make more sense
         end
     end
     % size(clicks)
 %~~~~~~~~~~~~~~~~~~~PEAKS METHOD END~~~~~~~~~~~~~~~~~~~~
-
 
 end %% function declaration  
 
