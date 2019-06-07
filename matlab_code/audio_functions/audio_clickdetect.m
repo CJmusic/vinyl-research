@@ -18,7 +18,7 @@ audio_bin = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin
 AUDIO_FILES = {'Bcorrelation_test_1.wav','Bcorrelation_test_2.wav','Bcorrelation_test_3.wav'};
 
 [data, time, fs] = audio_load(audio_bin);
-tStart = 5.1;
+tStart = 5.5;
 tEnd = 10.1;
 dataL = data(tStart*fs : tEnd*fs,1);
 dataR = data(tStart*fs : tEnd*fs,2);
@@ -31,7 +31,7 @@ time = (1:length(dataL))/fs;
 
 figure(1); grid on; hold on 
 plot(time, dataL)
-plot(time, dataR)
+% plot(time, dataR)
 title('audio data')
 ylim([-0.1 0.1])
 
@@ -41,8 +41,8 @@ ylim([-0.1 0.1])
 
 audio_bin2 = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/r26-96kHz-declicked.wav';
 [data2, time2, fs] = audio_load(audio_bin2);
-tStart = 5.1;
-tEnd = 10.1;
+% tStart = 5.1;
+% tEnd = 6.1;
 data2 = data2(tStart*fs : tEnd*fs,1);
 time2 = (1:length(data2))/fs;
 
@@ -51,18 +51,19 @@ plot(time, data2)
 ylim([-0.1 0.1])
 title('audio data2')
 
+% PLOT CLICKS
 for xi = 1:length(clicksL)
-    x1 = time(clicks(xi));
+    x1 = time(clicksL(xi));
     figure(1); hold on;
     line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
 end
-for xi = 1:length(clicksL)
-    x1 = time(clicks(xi));
-    figure(1); hold on;
-    line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
-end
+% for xi = 1:length(clicksR)
+%     x1 = time(clicksR(xi));
+%     figure(1); hold on;
+%     line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
+% end
 
-%PLOT INDIVIDUAL CLICKS
+% PLOT INDIVIDUAL CLICKS
 % figure(10+xi); 
 % plot(time(clicks(xi)-lenClick/2:clicks(xi)+lenClick/2),data(clicks(xi)-lenClick/2:clicks(xi)+lenClick/2,:));
 % grid on;
@@ -93,30 +94,35 @@ function [clicks] = audio_clickdetecttest(data, fs)
     peakValues = zeros(length(zerosIndices)-1,1);   
     peakIndices = zeros(length(zerosIndices)-1,1);
     
-    % for i = (1:length(zerosIndices)-1)
-    %     [peak, index] = max(aData(zerosIndices(i):zerosIndices(i+1)));
-    %     peakIndices(i) = index;
-    %     peakValues(i)  = peak;
-    % end
-    [peakValues, peakIndices] = findpeaks(aData(:,1));
+    for i = (1:length(zerosIndices)-1)
+        [peak, index] = max(aData(zerosIndices(i):zerosIndices(i+1)));
+        peakIndices(i) = zerosIndices(i) + index;
+        peakValues(i)  = peak;
+    end
+    % [peakValues, peakIndices] = findpeaks(aData(:,1));
 
     clicks = [];
     clicks_peaks = [];
 
-    threshold = 5;
+    threshold = 10;
     lenClick = 1412;
-    mAvgWidth = 2;
+    mAvgWidth = 20;
     for i = (mAvgWidth+1:length(peakValues)-mAvgWidth-1)
+
         if i == mAvgWidth + 1
-            peakValues(i-mAvgWidth : i+mAvgWidth);
+            % peakValues(i-mAvgWidth : i+mAvgWidth);
             iPeaks = peakValues(i-mAvgWidth : i+mAvgWidth);
             mAvg = (1/(mAvgWidth*2 + 1))*sum(iPeaks);
         end
-        plow = peakValues(i+mAvgWidth); 
-        phigh =  peakValues(i-mAvgWidth);
-        mAvg = mAvg - (phigh - plow)/(21);
+        % plow = peakValues(i+mAvgWidth); 
+        % phigh =  peakValues(i-mAvgWidth);
+        % mAvg = mAvg - (phigh - plow)/(mAvgWidth);
 
         if peakValues(i) > threshold*mAvg
+            %%% I also want to take into account the width of the peak,
+            %   preferebly this should be by sample and not just peaks
+            %   as then it will catch clicks that appear within music 
+
             % if length(peakValues(peakValues(i : i+10) > 0.5*peakValues(i))) < 2;
             %     continue    
             % end
