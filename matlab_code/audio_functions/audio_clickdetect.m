@@ -20,21 +20,18 @@ AUDIO_FILES = {'Bcorrelation_test_1.wav','Bcorrelation_test_2.wav','Bcorrelation
 [data, time, fs] = audio_load(audio_bin);
 tStart = 5.1;
 tEnd = 10.1;
-data = data(tStart*fs : tEnd*fs,:);
-time = (1:length(data))/fs;
-clicks = audio_clickdetecttest(data, fs);
+dataL = data(tStart*fs : tEnd*fs,1);
+dataR = data(tStart*fs : tEnd*fs,2);
+time = (1:length(dataL))/fs;
+[clicksL] = audio_clickdetecttest(dataL, fs);
+[clicksR] = audio_clickdetecttest(dataR, fs);
 
-size(clicks)
+
 %~~~~~~~~~~~~~~~~PLOTTING~~~~~~~~~~~~~~~~~~~
-    
 
 figure(1); grid on; hold on 
-plot(time, data)
-title('audio data')
-ylim([-0.1 0.1])
-
-figure(4); grid on; hold on 
-plot(time, data)
+plot(time, dataL)
+plot(time, dataR)
 title('audio data')
 ylim([-0.1 0.1])
 
@@ -46,42 +43,32 @@ audio_bin2 = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bi
 [data2, time2, fs] = audio_load(audio_bin2);
 tStart = 5.1;
 tEnd = 10.1;
-data2 = data2(tStart*fs : tEnd*fs,:);
+data2 = data2(tStart*fs : tEnd*fs,1);
 time2 = (1:length(data2))/fs;
 
-figure(3); grid on; hold on 
+figure(2); grid on; hold on 
 plot(time, data2)
 ylim([-0.1 0.1])
 title('audio data2')
-% figure(2); hold on;
-% for xi = 1:length(zerosL)-1
-%     % xi
-%     x1 = time(zerosL(xi));
-%     line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
-% end
-% figure(1); hold on;
-% for xi = 1:length(peakIndices)-1
-%     x1 = peakIndices(xi)/fs;
-%     % x1 = peakIndices(xi);
-%     line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
-% end
 
-for xi = 1:length(clicks)
+for xi = 1:length(clicksL)
     x1 = time(clicks(xi));
-
-
     figure(1); hold on;
     line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
-
-    figure(2); hold on;
-    line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
-
-    % figure(10+xi); 
-    % plot(time(clicks(xi)-lenClick/2:clicks(xi)+lenClick/2),data(clicks(xi)-lenClick/2:clicks(xi)+lenClick/2,:));
-    % grid on;
 end
+for xi = 1:length(clicksL)
+    x1 = time(clicks(xi));
+    figure(1); hold on;
+    line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
+end
+
+%PLOT INDIVIDUAL CLICKS
+% figure(10+xi); 
+% plot(time(clicks(xi)-lenClick/2:clicks(xi)+lenClick/2),data(clicks(xi)-lenClick/2:clicks(xi)+lenClick/2,:));
+% grid on;
+
 % %~~~~~~~~~~~~~~~~PLOTTING END~~~~~~~~~~~~~~~
-function clicks = audio_clickdetecttest(data, fs)
+function [clicks] = audio_clickdetecttest(data, fs)
     % data = data(:,1);
 %~~~~~~~~~~~~~~~~PRE-FILTERS~~~~~~~~~~~~~~~~~~~
     % freqLow = 2000
@@ -106,12 +93,11 @@ function clicks = audio_clickdetecttest(data, fs)
     peakValues = zeros(length(zerosIndices)-1,1);   
     peakIndices = zeros(length(zerosIndices)-1,1);
     
-    for i = (1:length(zerosIndices)-1)
-        [peak, index] = max(aData(zerosIndices(i):zerosIndices(i+1)));
-        
-        peakIndices(i) = index;
-        peakValues(i)  = peak;
-    end
+    % for i = (1:length(zerosIndices)-1)
+    %     [peak, index] = max(aData(zerosIndices(i):zerosIndices(i+1)));
+    %     peakIndices(i) = index;
+    %     peakValues(i)  = peak;
+    % end
     [peakValues, peakIndices] = findpeaks(aData(:,1));
 
     clicks = [];
@@ -146,8 +132,58 @@ function clicks = audio_clickdetecttest(data, fs)
                                                         %  the zeros make more sense
         end
     end
-    size(clicks)
+    % size(clicks)
 %~~~~~~~~~~~~~~~~~~~PEAKS METHOD END~~~~~~~~~~~~~~~~~~~~
+
+
+end %% function declaration  
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~DECAY ENV METHOD~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+%{ 
+an alternate method of detecting clicks based on the paper by 
+Kinzie and Graveraux 1971
+
+currently does not work
+
+%}
+
+    % adata = abs(data);
+    % lenClick = 6*96; % 6 ms
+    % prevPeak = 0.0;
+    % peakLen = 0;
+    % clicks = [];
+    % for i=(1:length(adata))
+    %     comparator = true;
+    %     % buff = data(i+lenClick);
+    %     % if comparator == false
+    %     %     prevPeak = 0.0;
+    %     %     peakLen = 0;
+    %     % elseif comparator == true
+    %         % prevPeak = data(i);
+    %         % peakLen = peakLen + 1;
+    %     % end % if comparator
+    %     if peakLen > lenClick
+    %         %%% CLICK DETECTED %%%
+    %         clicks = [clicks, i-lenClick];
+    %         comparator = false;
+    %         prevPeak = 0.0;
+    %         peakLen = 0;
+    %     end 
+
+    %     threshold = 0.9;
+
+    %     if adata(i) > threshold*prevPeak
+    %         prevPeak = adata(i);
+    %         peakLen = 0; 
+    %         % comparator = true;
+    %     elseif adata(i) < prevPeak
+    %         peakLen = peakLen + 1;
+    %     end
+    % end % for adata
+
+%~~~~~~~~~~~~~~~~~~~~~~~DECAY ENV METHOD END~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 %~~~~~~~~~~~~~~COMBI PEAKS/ENV METHOD~~~~~~~~~~~~~~
     % aData = abs(data);
@@ -213,52 +249,4 @@ function clicks = audio_clickdetecttest(data, fs)
     %     end
     % end
 
-
-
-end %% function declaration  
-
-
-%~~~~~~~~~~~~~~~~~~~~~~~~~DECAY ENV METHOD~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-%{ 
-an alternate method of detecting clicks based on the paper by 
-Kinzie and Graveraux 1971
-
-currently does not work
-
-%}
-
-    % adata = abs(data);
-    % lenClick = 6*96; % 6 ms
-    % prevPeak = 0.0;
-    % peakLen = 0;
-    % clicks = [];
-    % for i=(1:length(adata))
-    %     comparator = true;
-    %     % buff = data(i+lenClick);
-    %     % if comparator == false
-    %     %     prevPeak = 0.0;
-    %     %     peakLen = 0;
-    %     % elseif comparator == true
-    %         % prevPeak = data(i);
-    %         % peakLen = peakLen + 1;
-    %     % end % if comparator
-    %     if peakLen > lenClick
-    %         %%% CLICK DETECTED %%%
-    %         clicks = [clicks, i-lenClick];
-    %         comparator = false;
-    %         prevPeak = 0.0;
-    %         peakLen = 0;
-    %     end 
-
-    %     threshold = 0.9;
-
-    %     if adata(i) > threshold*prevPeak
-    %         prevPeak = adata(i);
-    %         peakLen = 0; 
-    %         % comparator = true;
-    %     elseif adata(i) < prevPeak
-    %         peakLen = peakLen + 1;
-    %     end
-    % end % for adata
-
-%~~~~~~~~~~~~~~~~~~~~~~~DECAY ENV METHOD END~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+%~~~~~~~~~~~~COMBI PEAKS/ENV METHOD END~~~~~~~~~~~~
