@@ -31,7 +31,7 @@ time = (1:length(dataL))/fs;
 
 figure(1); grid on; hold on 
 plot(time, dataL)
-% plot(time, dataR)
+plot(time, dataR)
 title('audio data')
 ylim([-0.1 0.1])
 
@@ -57,12 +57,13 @@ for xi = 1:length(clicksL)
     figure(1); hold on;
     line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
 end
-% for xi = 1:length(clicksR)
-%     x1 = time(clicksR(xi));
-%     figure(1); hold on;
-%     line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
-% end
-
+for xi = 1:length(clicksR)
+    x1 = time(clicksR(xi));
+    figure(1); hold on;
+    line([x1 x1], get(gca, 'ylim'),'Color', 'red','LineStyle', '--');
+end
+clicksL
+clicksR
 % PLOT INDIVIDUAL CLICKS
 % figure(10+xi); 
 % plot(time(clicks(xi)-lenClick/2:clicks(xi)+lenClick/2),data(clicks(xi)-lenClick/2:clicks(xi)+lenClick/2,:));
@@ -70,6 +71,7 @@ end
 
 % %~~~~~~~~~~~~~~~~PLOTTING END~~~~~~~~~~~~~~~
 function [clicks] = audio_clickdetecttest(data, fs)
+% function [clicks] = audio_clickdetect(data, fs)
     % data = data(:,1);
 %~~~~~~~~~~~~~~~~PRE-FILTERS~~~~~~~~~~~~~~~~~~~
     freqLow = 2000
@@ -104,7 +106,7 @@ function [clicks] = audio_clickdetecttest(data, fs)
     clicks = [];
     clicks_peaks = [];
 
-    threshold = 10;
+    threshold = 20;
     lenClick = 1412;
     mAvgWidth = 20;
     for i = (mAvgWidth+1:length(peakValues)-mAvgWidth-1)
