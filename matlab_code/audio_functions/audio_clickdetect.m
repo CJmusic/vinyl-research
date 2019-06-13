@@ -9,73 +9,73 @@ clicks = [ sample numbers ]
 %} 
 
 % TESTING THE CLICK DETECT FUNCTION
-clc; close all;
-addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/from_John/');
-audio_dir = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/from_John/';
+% clc; close all;
+% addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/from_John/');
+% audio_dir = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/from_John/';
 
-audio_bin = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/r26-96kHz.wav';
+% audio_bin = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/r26-96kHz.wav';
 
-AUDIO_FILES = {'Bcorrelation_test_1.wav','Bcorrelation_test_2.wav','Bcorrelation_test_3.wav'};
+% AUDIO_FILES = {'Bcorrelation_test_1.wav','Bcorrelation_test_2.wav','Bcorrelation_test_3.wav'};
 
-[data, time, fs] = audio_load(audio_bin);
-tStart = 5.5;
-tEnd = 10.1;
-dataL = data(tStart*fs : tEnd*fs,1);
-dataR = data(tStart*fs : tEnd*fs,2);
-time = (1:length(dataL))/fs;
-[clicksL] = audio_clickdetecttest(dataL, fs);
-[clicksR] = audio_clickdetecttest(dataR, fs);
+% [data, time, fs] = audio_load(audio_bin);
+% tStart = 5.5;
+% tEnd = 10.1;
+% dataL = data(tStart*fs : tEnd*fs,1);
+% dataR = data(tStart*fs : tEnd*fs,2);
+% time = (1:length(dataL))/fs;
+% [clicksL] = audio_clickdetecttest(dataL, fs);
+% [clicksR] = audio_clickdetecttest(dataR, fs);
 
 
-%~~~~~~~~~~~~~~~~PLOTTING~~~~~~~~~~~~~~~~~~~
+% %~~~~~~~~~~~~~~~~PLOTTING~~~~~~~~~~~~~~~~~~~
 
-figure(1); grid on; hold on 
-plot(time, dataL)
-plot(time, dataR)
-title('audio data')
-ylim([-0.1 0.1])
+% figure(1); grid on; hold on 
+% plot(time, dataL)
+% plot(time, dataR)
+% title('audio data')
+% ylim([-0.1 0.1])
 
-% figure(2); grid on; hold on;
-% plot(time, aData)
-% title('abs audio')
+% % figure(2); grid on; hold on;
+% % plot(time, aData)
+% % title('abs audio')
 
-audio_bin2 = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/r26-96kHz-declicked.wav';
-[data2, time2, fs] = audio_load(audio_bin2);
-% tStart = 5.1;
-% tEnd = 6.1;
-data2 = data2(tStart*fs : tEnd*fs,1);
-time2 = (1:length(data2))/fs;
+% audio_bin2 = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/r26-96kHz-declicked.wav';
+% [data2, time2, fs] = audio_load(audio_bin2);
+% % tStart = 5.1;
+% % tEnd = 6.1;
+% data2 = data2(tStart*fs : tEnd*fs,1);
+% time2 = (1:length(data2))/fs;
 
-figure(2); grid on; hold on 
-plot(time, data2)
-ylim([-0.1 0.1])
-title('audio data2')
+% figure(2); grid on; hold on 
+% plot(time, data2)
+% ylim([-0.1 0.1])
+% title('audio data2')
 
-% PLOT CLICKS
-for xi = 1:length(clicksL)
-    x1 = time(clicksL(xi));
-    figure(1); hold on;
-    line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
-end
-for xi = 1:length(clicksR)
-    x1 = time(clicksR(xi));
-    figure(1); hold on;
-    line([x1 x1], get(gca, 'ylim'),'Color', 'red','LineStyle', '--');
-end
-clicksL
-clicksR
-% PLOT INDIVIDUAL CLICKS
-% figure(10+xi); 
-% plot(time(clicks(xi)-lenClick/2:clicks(xi)+lenClick/2),data(clicks(xi)-lenClick/2:clicks(xi)+lenClick/2,:));
-% grid on;
+% % PLOT CLICKS
+% for xi = 1:length(clicksL)
+%     x1 = time(clicksL(xi));
+%     figure(1); hold on;
+%     line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
+% end
+% for xi = 1:length(clicksR)
+%     x1 = time(clicksR(xi));
+%     figure(1); hold on;
+%     line([x1 x1], get(gca, 'ylim'),'Color', 'red','LineStyle', '--');
+% end
+% clicksL
+% clicksR
+% % PLOT INDIVIDUAL CLICKS
+% % figure(10+xi); 
+% % plot(time(clicks(xi)-lenClick/2:clicks(xi)+lenClick/2),data(clicks(xi)-lenClick/2:clicks(xi)+lenClick/2,:));
+% % grid on;
 
-% %~~~~~~~~~~~~~~~~PLOTTING END~~~~~~~~~~~~~~~
-function [clicks] = audio_clickdetecttest(data, fs)
-% function [clicks] = audio_clickdetect(data, fs)
+% % %~~~~~~~~~~~~~~~~PLOTTING END~~~~~~~~~~~~~~~
+% function [clicks] = audio_clickdetecttest(data, fs)
+function [clicks] = audio_clickdetect(data, fs)
     % data = data(:,1);
 %~~~~~~~~~~~~~~~~PRE-FILTERS~~~~~~~~~~~~~~~~~~~
-    freqLow = 2000
-    freqHigh = 10000
+    freqLow = 2000;
+    freqHigh = 10000;
     [b,a] = butter(6,freqLow/(fs/2),'low');
     data = filter(b, a, data); % use filtfilt
 
@@ -87,8 +87,8 @@ function [clicks] = audio_clickdetecttest(data, fs)
     aData = abs(data);
     zci = @(v) find(v(:).*circshift(v(:), [-1 0]) <= 0);% Returns Zero-Crossing Indices Of Argument Vector
     zerosIndices = zci(data);
-    size(zerosIndices)
-    size(aData)
+    % size(zerosIndices)
+    % size(aData)
     avg_peak = 0.0;
     prev_peak = 1.0;
     peak_value = 0.0;
@@ -106,7 +106,7 @@ function [clicks] = audio_clickdetecttest(data, fs)
     clicks = [];
     clicks_peaks = [];
 
-    threshold = 20;
+    threshold = 1;
     lenClick = 1412;
     mAvgWidth = 20;
     for i = (mAvgWidth+1:length(peakValues)-mAvgWidth-1)
@@ -127,7 +127,8 @@ function [clicks] = audio_clickdetecttest(data, fs)
             end
         end
     end
-    % size(clicks)
+    disp('END OF CLICKDETECT')
+    size(clicks)
 %~~~~~~~~~~~~~~~~~~~PEAKS METHOD END~~~~~~~~~~~~~~~~~~~~
 
 end %% function declaration  

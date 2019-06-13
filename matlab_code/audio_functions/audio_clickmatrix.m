@@ -4,6 +4,9 @@
 % last edit : march 12 2018
 
 function [diff_array, lagDiff] = audio_clickmatrix(clicks, clicks_ref);
+    disp('INSIDE CLICKMATRIX')
+    size(clicks)
+    size(clicks_ref)
     diff_array = []; % this array contains the distances between every click, each row 
                      % represents a click in the referenc each column represents a click in the file being looked at 
     for xi = (1:length(clicks_ref));%this makes an array with the distance between each click in the two

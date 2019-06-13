@@ -25,41 +25,63 @@ addpath('/Volumes/AUDIOBANK/audio_files/A0000B0000/')
 reference.process_tracks();
 record.process_tracks();
 
-if length(reference.clicks) > 0; 
-    clicks_ref = reference.clicks;
-else
-    clicks_ref = audio_clickdetect(reference.tracks('transition'), reference.fs);
-end
+% if length(reference.clicks) > 0; 
+%     clicks_ref = reference.clicks;
+% else
+%     transition_ref = reference.tracks('transition')
+%     clicks_refL = audio_clickdetect(transition(:,1), reference.fs);
+%     clicks_refR = audio_clickdetect(transition(:,2), reference.fs);
+% end
 
 
-if length(reference.clicks) > 0; 
-    clicks_tran = record.clicks;
-else
-    clicks_tran = audio_clickdetect(record.tracks('transition'), record.fs);
-end
+% if length(reference.clicks) > 0; 
+%     clicks_tran = record.clicks;
+% else
+%     transition_rec = record.tracks('transition'); 
+%     clicks_tranL = audio_clickdetect(transition(:,1), record.fs);
+%     clicks_tranR = audio_clickdetect(transition(:,2), record.fs);
+% end
 % clicks_tran = audio_clickdetect(record.tracks('transition'), record.fs);
-data_refL = reference.tracks('transition');
-data_refL = data_refL(:,1);
+data_ref = reference.tracks('transition');
+data_refL = data_ref(:,1);
+data_refR = data_ref(:,2);
 
-dataL = record.tracks('transition');
-dataL = dataL(:,1);
+data = record.tracks('transition');
+dataL = data(:,1);
+dataR = data(:,2);
 
 figure(10); hold on; grid on; 
 title('pre lineup')
 plot(reference.track_times('transition'), data_refL); 
 plot(record.track_times('transition'), dataL);
+clicks_refL = audio_clickdetect(data_refL,reference.fs);
+clicks_refR = audio_clickdetect(data_refR,reference.fs);
+
+clicksL = audio_clickdetect(dataL,reference.fs);
+clicksR = audio_clickdetect(dataR,reference.fs);
+
+size(dataL)
+size(data_refL)
+
+disp('sizes of clicks')
+size(clicksL)
+size(clicksR)
+size(clicks_refL)
+size(clicks_refR)
 
 
-[click_matrix, lagdiff] = audio_clickmatrix(clicks_tran, clicks_ref);
-record.lagdiff = lagdiff;
+
+[click_matrixL, lagdiffL] = audio_clickmatrix(clicksL, clicks_refL);
+[click_matrixR, lagdiffR] = audio_clickmatrix(clicksR, clicks_refR);
+
+disp('lagdiffL')
+lagdiffL
+disp('lagdiffR')
+lagdiffR
+
+record.lagdiff = lagdiffR;
 record.lagcorrect();
 record.process_tracks();
-
-data_refL = reference.tracks('transition');
-data_refL = data_refL(:,1);
-
-dataL = record.tracks('transition');
-dataL = dataL(:,1);
 
 figure(20); hold on; grid on; 
 title('post lineup')

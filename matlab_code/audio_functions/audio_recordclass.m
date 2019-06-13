@@ -67,7 +67,7 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
                 rec.time = obj.time;
                 rec.fs = obj.fs;
     
-                rec.clicks = obj.clicks;
+                % rec.clicks = obj.clicks;
                 rec.clicksL = obj.clicksL;
                 rec.clicksR = obj.clicksR;
     
@@ -288,7 +288,9 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
         end % transition track
         
         function clickdetect(rec);
-            rec.clicks = audio_clickdetect(rec.data, rec.fs); 
+            % rec.clicks = audio_clickdetect(rec.data, rec.fs); 
+            rec.clicksL = audio_clickdetect(rec.data(:,1), rec.fs); 
+            rec.clicksR = audio_clickdetect(rec.data(:,2), rec.fs); 
         end % function detect_clicks
 
         function clicklineup(rec, clicks_ref)
