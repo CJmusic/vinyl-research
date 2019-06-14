@@ -107,6 +107,8 @@ function [clicks] = audio_clickdetect(data, fs)
     clicks_peaks = [];
 
     threshold = 1;
+    disp('threshold')
+    % threshold = std(peakValues);
     lenClick = 1412;
     mAvgWidth = 20;
     for i = (mAvgWidth+1:length(peakValues)-mAvgWidth-1)
