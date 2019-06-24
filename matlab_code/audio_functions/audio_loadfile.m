@@ -25,7 +25,7 @@ DONT USE THIS
 %{ LOAD FILES %}
 %This function takes a path and returns the data and time arrays, along with the sample rate
 
-addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/040319_A0000B0000r26fivetrials/');
+// addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_files/040319_A0000B0000r26fivetrials/');
 function [data_ref, time_ref, fs_ref] = audio_loadfile(path_ref);
     [data_ref, fs_ref] = audioread(path_ref);
     time_ref = (0:length(data_ref)-1)/fs_ref;

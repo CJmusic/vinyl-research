@@ -17,7 +17,7 @@
 
 
 %    Code below left for reference
-function [lagdiff] = audio_clicklineup(data, fs, clicks_ref, clicks);
+function [lagdiff] = audio_clicklineup(fs, clicks_ref, clicks);
    % diff_array = []; % this array contains the distances between every click, each row 
    %                  % represents a click in the referenc each column represents a click in the file being looked at 
    % for xi = (1:length(clicks_ref));%this makes an array with the distance between each click in the two
@@ -27,12 +27,12 @@ function [lagdiff] = audio_clicklineup(data, fs, clicks_ref, clicks);
    % lagdiff = mode(diff_array(:)); % the time difference between the two signals is the most common distance between clicks
 
     %time_ref = (1:length(data_ref))/fs_ref;
-    if nargin < 4; 
-        [clicks] = audio_clickdetect(data, fs);
-    end
+    % if nargin < 4; 
+    %     [clicks] = audio_clickdetect(data, fs);
+    % end
         
         
-    time = (1:length(data))/fs;
+    % time = (1:length(data))/fs;
         %[clicks_ref] = audio_clickdetect(data_ref, fs_ref);
 
      diff_array = [] % this array contains the distances between every click, each row 

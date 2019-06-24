@@ -148,7 +148,6 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             % the method currently implemented is okay, I want to try circshift
             % also see the matlab function lag !!!! 
             disp('inside lagcorrect')
-            rec.lagdiff
 
             if rec.lagdiff == 0; %then nothing needs to be corrected  
                 disp('no lag diff')
