@@ -9,69 +9,84 @@ clicks = [ sample numbers ]
 %} 
 
 % TESTING THE CLICK DETECT FUNCTION
-% clc; close all;
-% addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/from_John/');
-% audio_dir = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/from_John/';
+clc; close all;
 
-% audio_bin = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/r26-96kHz.wav';
+audio_bin = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/click_testing/4.wav';
+audio_bin2 = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/click_testing/declicked/4.wav';
 
-% AUDIO_FILES = {'Bcorrelation_test_1.wav','Bcorrelation_test_2.wav','Bcorrelation_test_3.wav'};
-
-% [data, time, fs] = audio_load(audio_bin);
+[data, time, fs] = audio_load(audio_bin);
+[data2, time2, fs] = audio_load(audio_bin2);
 % tStart = 5.5;
 % tEnd = 10.1;
 % dataL = data(tStart*fs : tEnd*fs,1);
 % dataR = data(tStart*fs : tEnd*fs,2);
-% time = (1:length(dataL))/fs;
-% [clicksL] = audio_clickdetecttest(dataL, fs);
-% [clicksR] = audio_clickdetecttest(dataR, fs);
+dataL = data(:,1);
+dataR = data(:,2);
+time = (1:length(dataL))/fs;
+[clicksL] = audio_clickdetecttest(dataL, fs);
+[clicksR] = audio_clickdetecttest(dataR, fs);
 
 
-% %~~~~~~~~~~~~~~~~PLOTTING~~~~~~~~~~~~~~~~~~~
+%~~~~~~~~~~~~~~~~PLOTTING~~~~~~~~~~~~~~~~~~~
 
-% figure(1); grid on; hold on 
-% plot(time, dataL)
-% plot(time, dataR)
-% title('audio data')
-% ylim([-0.1 0.1])
+figure(1); grid on; hold on 
+plot(time, dataL)
+%plot(time, dataR)
+title('audio data')
+%ylim([-0.1 0.1])
 
-% % figure(2); grid on; hold on;
-% % plot(time, aData)
-% % title('abs audio')
+size(data)
+size(data2)
+declick = data2(:,1) - data(:,1); 
+plot(time,declick,'r');
 
-% audio_bin2 = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/r26-96kHz-declicked.wav';
-% [data2, time2, fs] = audio_load(audio_bin2);
-% % tStart = 5.1;
-% % tEnd = 6.1;
+
+
+figure(2); grid on; hold on;
+plot(time, abs(dataL))
+title('abs audio')
+
+
+% tStart = 5.1;
+% tEnd = 6.1;
 % data2 = data2(tStart*fs : tEnd*fs,1);
-% time2 = (1:length(data2))/fs;
+data2 = data2(:,1);
+time2 = (1:length(data2))/fs;
 
-% figure(2); grid on; hold on 
-% plot(time, data2)
-% ylim([-0.1 0.1])
-% title('audio data2')
+%figure(2); grid on; hold on 
+%plot(time, data2)
+%%ylim([-0.1 0.1])
+%title('audio data2')
 
-% % PLOT CLICKS
-% for xi = 1:length(clicksL)
-%     x1 = time(clicksL(xi));
-%     figure(1); hold on;
-%     line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
-% end
-% for xi = 1:length(clicksR)
-%     x1 = time(clicksR(xi));
-%     figure(1); hold on;
-%     line([x1 x1], get(gca, 'ylim'),'Color', 'red','LineStyle', '--');
-% end
-% clicksL
-% clicksR
+
+%figure(3); grid on; hold on 
+%plot(time, data - data2)
+%%ylim([-0.1 0.1])
+%title('audio data2')
+
+
+% PLOT CLICKS
+for xi = 1:length(clicksL)
+    x1 = time(clicksL(xi));
+    figure(1); hold on;
+    line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
+end
+
+%for xi = 1:length(clicksR)
+    %x1 = time(clicksR(xi));
+    %figure(1); hold on;
+    %line([x1 x1], get(gca, 'ylim'),'Color', 'red','LineStyle', '--');
+%end
+%clicksL
+%clicksR
 % PLOT INDIVIDUAL CLICKS
-% figure(10+xi); 
-% plot(time(clicks(xi)-lenClick/2:clicks(xi)+lenClick/2),data(clicks(xi)-lenClick/2:clicks(xi)+lenClick/2,:));
-% grid on;
+%figure(10+xi); 
+%plot(time(clicks(xi)-lenClick/2:clicks(xi)+lenClick/2),data(clicks(xi)-lenClick/2:clicks(xi)+lenClick/2,:));
+%grid on;
 
 % % %~~~~~~~~~~~~~~~~PLOTTING END~~~~~~~~~~~~~~~
-% function [clicks] = audio_clickdetecttest(data, fs)
-function [clicks] = audio_clickdetect(data, fs)
+function [clicks] = audio_clickdetecttest(data, fs)
+% function [clicks] = audio_clickdetect(data, fs)
     % data = data(:,1);
 %~~~~~~~~~~~~~~~~PRE-FILTERS~~~~~~~~~~~~~~~~~~~
     freqLow = 2000;
@@ -106,11 +121,11 @@ function [clicks] = audio_clickdetect(data, fs)
     clicks = [];
     clicks_peaks = [];
 
-    threshold = 20;
+    threshold = 2000;
     disp('threshold')
     % threshold = std(peakValues);
     lenClick = 1412;
-    mAvgWidth = 20;
+    mAvgWidth = 500;
     for i = (mAvgWidth+1:length(peakValues)-mAvgWidth-1)
 
         if i == mAvgWidth + 1
