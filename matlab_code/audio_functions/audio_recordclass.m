@@ -34,6 +34,7 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
         
         %%% RECORD INFO 
         % timestamps = [0, 2, 62, 92, 124, 160, 182, 248, 268, 306, 326, 364, 384, 419.5];
+
         timestamps = [0, 60, 90, 122, 158, 180, 246, 266, 304, 324, 362, 382, 417.5];
         % this is how many seconds each signal is according to Chris Muth's track listing
         lengths = [60, 30, 31, 36, 21, 66, 20, 37, 19, 37, 19, 37, 19]; %starts with 1kHz
@@ -86,7 +87,7 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
                 rec.offset = obj.offset; 
                 rec.transition = obj.transition;
                 rec.lagdiff = obj.lagdiff;
-                rec.timediff = obj.timediff; 
+                rec.timediff = obj.timediff;                 
                 rec.tracks = obj.tracks;
                 rec.track_times = obj.track_times;
     
@@ -152,10 +153,10 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             if rec.lagdiff == 0; %then nothing needs to be corrected  
                 disp('no lag diff')
             else;
-                rec.data = circshift(rec.data, -1*rec.lagdiff);
+                rec.data = circshift(rec.data, rec.lagdiff);
                 rec.dataL = rec.data(:,1);
                 rec.dataR = rec.data(:,2);
-                rec.clicks = rec.clicks - rec.lagdiff;
+                rec.clicks = rec.clicks + rec.lagdiff;
             end
             
             rec.time = (0:length(rec.data)-1)/rec.fs;

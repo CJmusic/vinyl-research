@@ -21,7 +21,6 @@ function record_process()
 
     reference = audio_recordclass('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/03141_A0000B0000r28a.wav');
     
-
     reference.process_tracks();
 
     clicks_ref = audio_clickdetect(reference.tracks('transition'), reference.fs);
