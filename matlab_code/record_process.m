@@ -52,13 +52,14 @@ function record_process()
 
         clicks = audio_clickdetect(record.tracks('transition'), record.fs);
         [click_matrix, lagdiff] = audio_clickmatrix(clicks, clicks_ref);
-        record.lagdiff = lagdiff;
+        % record.lagdiff = lagdiff;
+        record.lagdiff = audio_corrlineup(data, data_ref, record.fs);
         record.lagcorrect();
         record.process_tracks();
 
-        data = record.tracks('transition');
-        dataL = data(:,1);
-        dataR = data(:,1);
+        % data = record.tracks('transition');
+        % dataL = data(:,1);
+        % dataR = data(:,1);
 
         figure(20);  grid on;
         title('post lineup L')
