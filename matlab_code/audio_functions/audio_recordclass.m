@@ -253,9 +253,9 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             rec.signals{end + 1} = [signalsL, signalsR];
             rec.signal_times{end + 1} = [time_seg];
            
-            disp('Size of signal names, then signals, then times')
-            size(rec.signal_names)
-            size(rec.signals)
+            % disp('Size of signal names, then signals, then times')
+            % size(rec.signal_names)
+            % size(rec.signals)
 
             rec.tracks = containers.Map(rec.signal_names, rec.signals);
             rec.track_times = containers.Map(rec.signal_names, rec.signal_times);
