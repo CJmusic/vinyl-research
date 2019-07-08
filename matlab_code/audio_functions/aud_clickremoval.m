@@ -11,6 +11,8 @@
 What I think is currently wrong:
    -  theres some messed up indexing, that's causing the clicks to be detected a 
       bit before their actual position
+    - it also looks like the array isn't being properly padded (by zeros?)
+
 
 - the code is only looping through the first buffer size, not the whole file
 
@@ -50,6 +52,7 @@ size(data)
 size(pad)
 
 dataPadded = [data, zeros(length(pad),2)];
+recTimePadded = (0:length(dataPadded)-1)/record.fs; 
 % size(ismember(dataPadded,data))
 % %disp('SUM dataPadded')
 % sum(dataPadded)
@@ -93,20 +96,23 @@ function [data, clicks] = testaudClickRemoval(data, fs)
     % msw = 0.0;
     ww = 0;
     clicks = [];
-    disp('loop sizes')
-    windowSize
-    length(data)
-    length(data)/windowSize
-    int_size = floor(length(data)/windowSize)
+    % disp('loop sizes')
+    % windowSize
+    % length(data)
+    % length(data)/windowSize
+    int_size = floor(length(data)/windowSize);
     % int_size = int16(length(data)/windowSize)
-    size_diff =  abs(length(data) - int_size*windowSize)
+    size_diff =  abs(length(data) - int_size*windowSize);
     data_padded = padarray(data,[size_diff,1]);
-    size(data)
-    length(data)/windowSize
-    (int_size+1)*windowSize
+    % size(data)
+    % length(data)/windowSize
+    % (int_size+1)*windowSize
     %% loop through windows of data
     disp('into MAIN for loop')
+    (length(data)-1)/windowSize
+    (length(data_padded)-1)/windowSize
     for k = (1:int16((length(data)-1)/windowSize))
+    % for k = (1:int16((length(data_padded)-1)/windowSize))
         k;
         k = k*windowSize;
         len = windowSize;
@@ -117,15 +123,19 @@ function [data, clicks] = testaudClickRemoval(data, fs)
         % num_clicks = 0;
         % clicks = [];
         dataWindow = data(k:k+windowSize,1);
+        % dataWindow = data_padded(k:k+windowSize,1);
         dataWindowPower = zeros(len,2);  %%dataWindowPower is the signals energy
+        disp('SIZES power then window')
         size(dataWindowPower)
+        size(dataWindow)
+        len - 1
         % size(dataWindowPower(1))
         % dataWindowPower is the power of the signal
         i = 0;
         for x=(1:len-1) % calculate the rms level
             % x
             % i
-            dataWindowPower(x,:) = dataWindow(x,:)*dataWindow(x,:);
+            % dataWindowPower(x,:) = dataWindow(x,:)*dataWindow(x,:);
         end
 
         % ms_seq = zeros(length(dataWindow),2); 
