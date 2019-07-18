@@ -42,6 +42,7 @@ function BatchProcess(folder)
         record = audio_recordclass(filepath);
         % record = audio_recordclass(strcat(wave_files(i).folder,'/',wave_files(i).name));
 
+        %% GO BACK TO CLICK LINE UP 
         record.lagdiff = audio_corrlineup(record.data(1:60*record.fs), reference.tracks('1kHz'), record.fs);
         record.lagcorrect();
         % lagdiff(reference, record)

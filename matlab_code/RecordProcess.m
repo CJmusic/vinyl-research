@@ -1,9 +1,19 @@
 %% This file runs all the calibration and testing on a recording of a test 
 %  record. 
+  
+disp('-----------RecordProcess.m------------')
+addpath('audio_functions')
+addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/');
+addpath('/Volumes/AUDIOBANK/audio_files/')
+addpath('/Volumes/AUDIOBANK/audio_files/pressings/')
 
+filepath = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/03141_A0000B0000r28a.wav'
+record = audio_recordclass(filepath);
+disp('CALLING FUNCTION')
+[rmsValues, clicks] = RecordProcessTest(record); 
 
-
-function [RMS_Values, Clicks] = RecordProcess(record)
+function [rmsValues, Clicks] = RecordProcessTest(record)
+% function [rmsValues, Clicks] = RecordProcess(record)
 
         % if CSV == true; 
 
@@ -13,14 +23,17 @@ function [RMS_Values, Clicks] = RecordProcess(record)
         % record = audio_recordclass(file_path);
 
         %% line up the audio 
-
+        % record.process_tracks
 
 
         %%% NORMALIZE THE AUDIO 
+
+        record.process_tracks;
         data = record.tracks('1kHz');
-        level = rms(record.tracks('1kHz')(10*record.fs:30*record.fs)); % just take the rms level of a decent portion of the 7 cm/s sine 
+        level = rms(data(10*record.fs:30*record.fs)); % just take the rms level of a decent portion of the 7 cm/s sine 
     
-        record.process_tracks();
+        trackNames = keys(record.tracks)
+        trackData = values(record.tracks)
         %% LOOP THROUGH EACH TRACK RECORD 
 
         % first the recording needs to be lined up to the reference
@@ -38,17 +51,26 @@ function [RMS_Values, Clicks] = RecordProcess(record)
         rmsValues = []; 
         Clicks = [];
 
-        for i = (1:length(record.tracks));
-            track = record.tracks(i)
+        disp('BEFORE FOR LOOP')
+        for i = (1:length(trackNames));
+            disp('IN FOR LOOP')
+            track = trackData(i);
+            track = track{1};
 
             rmsL = rms(track(length(track)/2 - length(track)/4:length(track)/2 + length(track)/4),1); 
             rmsR = rms(track(length(track)/2 - length(track)/4:length(track)/2 + length(track)/4),2);
 
-            clicksL = audio_clickdetect(track(:,1)); 
-            clicksR = audio_clickdetect(track(:,2)); 
+            %% A WEIGHTING AND CCIR WEIGHTING RMS VALUES 
 
-            rmsValues = [rmsValues, [rmsL, rmsR]]
-            Clicks = [Clicks, [clicksL, clicksR]]
+            clicksL = audio_clickdetect(track(:,1), record.fs); 
+            clicksR = audio_clickdetect(track(:,2), record.fs); 
+
+            %% DIVIDE SPECTRUM INTO CHUNKS (ARM RESONANCE, HIGH COHERENCE (1000-300Hz) and HIGH FREQ)
+            %  SAVE dB power in these regions
+
+            rmsValues = [rmsValues, [rmsL, rmsR]];
+            Clicks = [Clicks, [clicksL, clicksR]];
+
 
             % if CSV = true;
             %     % WRITE ALL THE APPROPRIATE VALUES TO THE CSV FILE 
@@ -72,6 +94,45 @@ function [RMS_Values, Clicks] = RecordProcess(record)
         %   NOTCH FILTERS to measure background noise
         %   this will tell us the signal to noise of the 
         %   test disk 
+
+
+        %% SIGNAL TO NOISE FOR EACH TRACKS
+        % measure the strength of the harmonics by counting bins that contain signal
+        % and bins that contain noise, dividing them by number of bins and comparing
+
+        harmonics = (1:20)/2 % 20 harmonics ?  
+        n_sam = 2^16;
+        fs = record.fs;
+
+        %% 1 kHz
+        disp('at 1kHz')
+        data = record.tracks('1kHz');
+        data_fft = fft(data)/n_sam;
+        data_fft = data_fft(1:n_sam/2+1);
+        % 1k_bins =(harmonics*1000/fs); % use the floor operator to get integer bins
+        kbins = floor(harmonics*1000)
+        n_sam = 2^16;
+        freq_fft = fs*(0:(n_sam/2))/n_sam;
+
+        k = sum(data_fft(kbins))/length(harmonics);
+        data_fft(kbins) = 0.0;
+        noise = sum(data_fft)/(length(data_fft) - length(harmonics));
+
+        % for i = (1:length(1k))
+
+
+
+        %% 10 kHz 
+
+
+        %% 100 Hz
+
+
+        %% 3150 Hz 
+
+
+
+
 
 
         % CSV_TABLE = cell2table(CSV_MATRIX)

@@ -103,7 +103,7 @@ function [clicks] = audio_clickdetect(data, fs)
 %~~~~~~~~~~~~~~~~PRE-FILTERS~~~~~~~~~~~~~~~~~~~
     freqLow = 2000;
     freqHigh = 10000;
-    [b,a] = butter(6,freqLow/(fs/2),'low');
+    [b,a] = butter(6, freqLow/(fs/2), 'low');
     data = filter(b, a, data); % use filtfilt
 
     [b,a] = butter(6,freqHigh/(fs/2),'high');

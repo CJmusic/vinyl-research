@@ -124,7 +124,8 @@ function [data, clicks] = testaudClickRemoval(data, fs)
         % clicks = [];
         dataWindow = data(k:k+windowSize,1);
         % dataWindow = data_padded(k:k+windowSize,1);
-        dataWindowPower = zeros(len,2);  %%dataWindowPower is the signals energy
+        % dataWindowPower = zeros(len,2);  %%dataWindowPower is the signals energy
+        dataWindowPower = dataWindow.^2;  %%dataWindowPower is the signals energy
         disp('SIZES power then window')
         size(dataWindowPower)
         size(dataWindow)
@@ -132,17 +133,19 @@ function [data, clicks] = testaudClickRemoval(data, fs)
         % size(dataWindowPower(1))
         % dataWindowPower is the power of the signal
         i = 0;
-        for x=(1:len-1) % calculate the rms level
+        % for x=(1:len-1) % calculate the rms level
             % x
             % i
             % dataWindowPower(x,:) = dataWindow(x,:)*dataWindow(x,:);
-        end
+        % end
 
         % ms_seq = zeros(length(dataWindow),2); 
+
+
+
         ms_seq = dataWindowPower;
         % for i = (1:len)
             % ms_seq(i]=b2[i];
-
         % for i=(1:i*i:sep) %% in c++ 
         i = 1;
 
