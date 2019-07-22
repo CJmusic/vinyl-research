@@ -260,6 +260,7 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             rec.tracks = containers.Map(rec.signal_names, rec.signals);
             rec.track_times = containers.Map(rec.signal_names, rec.signal_times);
             % disp('printing tracks')
+            
             disp('done processing tracks')
 
         end % function signals

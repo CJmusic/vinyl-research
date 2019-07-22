@@ -15,8 +15,11 @@
 % clc; close all;
 % addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/from_John/');
 
-% audio_bin1 = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/r30a-sin.wav';
-% audio_bin2 = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/r27a-sin.wav';
+% % audio_bin1 = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/r30a-sin.wav';
+% % audio_bin2 = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/r27a-sin.wav';
+
+% audio_bin1 = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/leadouts/03141_A0000B0000r30a.wav';
+% audio_bin2 = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/leadouts/03141_A0000B0000r28a.wav';
 
 % [data1, fs] = audioread(audio_bin1);
 % [data2, fs] = audioread(audio_bin2);
@@ -56,35 +59,6 @@
 % datax = data1(1:length(data2corr)) - data2corr(:,1).';
 % plot(datax)
 
-% %% compare against using the click method to line up files 
-
-% %% The correlation method is MUCH better
-
-
-% [clicks_refL] = audio_clickdetect(data1(:,1), fs);
-% [clicksL] = audio_clickdetect(data2(:,1), fs);
-% clagdiffL = audio_clicklineup(fs, clicks_refL, clicksR)
-
-% data2cd = circshift(data2, clagdiffL);
-% figure(3)
-% hold on; grid on; 
-% plot(time1, data1(:,1))
-% % plot(time2, data2(:,1), '--')
-% plot(time2, data2cd(:,1))
-
-
-% % disp('data')
-% % size(data1(1:length(data2corr)))
-% % size(data2corr(:,1))
-
-
-
-% figure(4)
-% hold on; grid on;
-% datay = data1(1:length(data2cd)) - data2cd(:,1).';
-% plot(datay)
-
-%function [cdata, ctime] = audio_lineup(data_file, fs_file, time_file, data_ref)
 % function lagdiff = audio_corrlineuptest(data_file, data_ref, fs_file)
 function lagdiff = audio_corrlineup(data_file, data_ref, fs_file)
     disp('audio_lineup function')
