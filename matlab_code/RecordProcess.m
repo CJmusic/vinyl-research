@@ -30,13 +30,13 @@ function [rmsValues, Clicks] = RecordProcessTest(record, reference);
     class(record.tracks('leadout'))
 
     %% ISOLATING LINEUP 
-    % data = record.tracks('leadout');
-    % dataRef = reference.tracks('leadout');
+    data = record.tracks('leadout');
+    dataRef = reference.tracks('leadout');
     
-    [data, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/leadouts/03141_A0000B0000r30a.wav');
-    [dataRef, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/leadouts/03141_A0000B0000r28a.wav');
+    % [data, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/leadouts/03141_A0000B0000r30a.wav');
+    % [dataRef, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/leadouts/03141_A0000B0000r28a.wav');
 
-    lagdiff = audio_corrlineup(data, dataRef, record.fs)
+    lagdiff = audio_corrlineup(data, dataRef)
     data2corr = circshift(data, lagdiff);
 
     
@@ -50,7 +50,7 @@ function [rmsValues, Clicks] = RecordProcessTest(record, reference);
 
     %%%
     
-    record.lagdiff = audio_corrlineup(record.tracks('leadout'), reference.tracks('leadout'), reference.fs);
+    record.lagdiff = audio_corrlineup(record.tracks('leadout'), reference.tracks('leadout'));
 
     % record.lagcorrect()
     record.timediff = record.lagdiff/record.fs
