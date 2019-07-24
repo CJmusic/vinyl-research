@@ -150,6 +150,12 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             % also see the matlab function lag !!!! 
             disp('inside lagcorrect')
 
+            % rec.data = circshift(rec.data, rec.lagdiff);
+            % rec.dataL = rec.data(:,1);
+            % rec.dataR = rec.data(:,2);
+            % rec.timediff = -rec.lagdiff/rec.fs;
+            % rec.lagdiff = -rec.lagdiff;
+
             if rec.lagdiff == 0; %then nothing needs to be corrected  
                 disp('no lag diff')
             else;
@@ -159,7 +165,10 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
                 rec.clicks = rec.clicks + rec.lagdiff;
             end
             
-            rec.time = (0:length(rec.data)-1)/rec.fs;
+            % rec.time = (0:length(rec.data)-1)/rec.fs;
+
+
+
             % time = (0:length(rec.data)); 
         %    if lagdiff > 0;
         %        % positive lagdiffL means that the data array is delayed compared to the reference

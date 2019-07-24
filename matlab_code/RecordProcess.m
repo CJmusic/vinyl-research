@@ -7,8 +7,8 @@ addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/');
 addpath('/Volumes/AUDIOBANK/audio_files/')
 addpath('/Volumes/AUDIOBANK/audio_files/pressings/')
 
-clc; clear all; close all; 
-referencePath = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/031418_A0000B0000r27a.wav' 
+clc; close all; 
+referencePath = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/03141_A0000B0000r28a.wav' 
 recordPath = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/03141_A0000B0000r30a.wav'
 
 reference = audio_recordclass(referencePath);
@@ -28,11 +28,31 @@ function [rmsValues, Clicks] = RecordProcessTest(record, reference);
     record.tracks('transition');
     reference.tracks('transition');
     class(record.tracks('leadout'))
+
+    %% ISOLATING LINEUP 
     % data = record.tracks('leadout');
     % dataRef = reference.tracks('leadout');
+    
+    [data, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/leadouts/03141_A0000B0000r30a.wav');
+    [dataRef, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/leadouts/03141_A0000B0000r28a.wav');
+
+    lagdiff = audio_corrlineup(data, dataRef, record.fs)
+    data2corr = circshift(data, lagdiff);
+
+    
+    time = (0:(length(data2corr)-1))/record.fs;
+    timeRef = (0:(length(dataRef)-1))/record.fs;
+    figure(30)
+    hold on; grid on; 
+    plot(timeRef, dataRef(:,1))
+    plot(time, data2corr(:,1))
+
+
+    %%%
+    
     record.lagdiff = audio_corrlineup(record.tracks('leadout'), reference.tracks('leadout'), reference.fs);
 
-    record.lagcorrect()
+    % record.lagcorrect()
     record.timediff = record.lagdiff/record.fs
     record.process_tracks()
 
