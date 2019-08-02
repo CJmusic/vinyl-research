@@ -38,10 +38,10 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
         timestamps = [0, 60, 90, 122, 158, 180, 246, 266, 304, 324, 362, 382, 417.5];
         % this is how many seconds each signal is according to Chris Muth's track listing
         lengths = [60, 30, 31, 36, 21, 66, 20, 37, 19, 37, 19, 37, 19]; %starts with 1kHz
-        signal_names = {'leadin','1kHz', '10kHz', '100Hz', 'freqsweep', 'quiet', '3150Hz', '1kHzL', 'sweepL', '1kHzR', 'sweepR', '1kHzV', 'sweepV','transition', '1kHz2', '10kHz2', '100Hz2', 'freqsweep2', 'quiet2', '3150Hz2', '1kHzL2', 'sweepL2', '1kHzR2', 'sweepR2', '1kHzV2', 'sweepV2','leadout'};
-
-        % offset = 4.25; % as measured on /020818_A0000B0000/02072019_A0000B000r25-A.wav
-        offset = 10.625; % as measured on /020818_A0000B0000/02072019_A0000B000r27-A.wav
+        signal_names = {'leadin','1kHz', '10kHz', '100Hz', 'sweep', 'quiet', '3150Hz', '1kHzL', 'sweepL', '1kHzR', 'sweepR', '1kHzV', 'sweepV','transition', '1kHz2', '10kHz2', '100Hz2', 'freqsweep2', 'quiet2', '3150Hz2', '1kHzL2', 'sweepL2', '1kHzR2', 'sweepR2', '1kHzV2', 'sweepV2','leadout'};
+        % offset = 0
+        offset = 4.25; % as measured on /020818_A0000B0000/02072019_A0000B000r25-A.wav
+        % offset = 10.625; % as measured on /020818_A0000B0000/02072019_A0000B000r27-A.wav
         transition = 517.375; % as measured on /020818_A0000B0000/02072019_A0000B000r27-A.wav
         % transition = 518.25; % as measured on /020818_A0000B0000/02072019_A0000B000r25-A.wav
         lagdiff = 0;
@@ -150,20 +150,21 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             % also see the matlab function lag !!!! 
             disp('inside lagcorrect')
 
-            % rec.data = circshift(rec.data, rec.lagdiff);
+            rec.data = circshift(rec.data, rec.lagdiff);
             % rec.dataL = rec.data(:,1);
             % rec.dataR = rec.data(:,2);
-            % rec.timediff = -rec.lagdiff/rec.fs;
+            rec.timediff = rec.lagdiff/rec.fs;
+            rec.process_tracks();
             % rec.lagdiff = -rec.lagdiff;
 
-            if rec.lagdiff == 0; %then nothing needs to be corrected  
-                disp('no lag diff')
-            else;
-                rec.data = circshift(rec.data, rec.lagdiff);
-                rec.dataL = rec.data(:,1);
-                rec.dataR = rec.data(:,2);
-                rec.clicks = rec.clicks + rec.lagdiff;
-            end
+            % if rec.lagdiff == 0; %then nothing needs to be corrected  
+            %     disp('no lag diff')
+            % else;
+            %     rec.data = circshift(rec.data, rec.lagdiff);
+            %     rec.dataL = rec.data(:,1);
+            %     rec.dataR = rec.data(:,2);
+            %     rec.clicks = rec.clicks + rec.lagdiff;
+            % end
             
             % rec.time = (0:length(rec.data)-1)/rec.fs;
 
@@ -211,7 +212,7 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             rec.signals = {};
             rec.signal_times = {};
 
-            signal_names = {'leadin','1kHz', '10kHz', '100Hz', 'freqsweep', 'quiet', '3150Hz', '1kHzL', 'sweepL', '1kHzR', 'sweepR', '1kHzV', 'sweepV','transition', '1kHz2', '10kHz2', '100Hz2', 'freqsweep2', 'quiet2', '3150Hz2', '1kHzL2', 'sweepL2', '1kHzR2', 'sweepR2', '1kHzV2', 'sweepV2','leadout'};
+            signal_names = {'leadin','1kHz', '10kHz', '100Hz', 'sweep', 'quiet', '3150Hz', '1kHzL', 'sweepL', '1kHzR', 'sweepR', '1kHzV', 'sweepV','transition', '1kHz2', '10kHz2', '100Hz2', 'freqsweep2', 'quiet2', '3150Hz2', '1kHzL2', 'sweepL2', '1kHzR2', 'sweepR2', '1kHzV2', 'sweepV2','leadout'};
             % timestamps  = rec.timestamps + rec.offset + rec.timediff;
             % timestamps2 = timestamps + rec.transition + rec.offset + rec.timediff;
             % disp('timestamps')

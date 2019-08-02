@@ -21,58 +21,118 @@ disp('CALLING FUNCTION')
 
 function [rmsValues, Clicks] = RecordProcessTest(record, reference);
 
-    disp('inside function')
+        disp('inside function')
+
+        Clicks = [];
+        rmsValues = [];
+
+        %%%~~~~~~~ LINEUP AUDIO ~~~~~~~%%%
+
+        %% ISOLATING LINEUP %% 
+        data = record.tracks('leadout');
+        dataRef = reference.tracks('leadout');
+
+        lagdiff = audio_corrlineup(data, dataRef)
+        data2corr = circshift(data, lagdiff);
+
+        time = (0:(length(data2corr)-1))/record.fs;
+        timeRef = (0:(length(dataRef)-1))/record.fs;
+        figure(30)
+        hold on; grid on; 
+        plot(timeRef, dataRef(:,1))
+        plot(time, data2corr(:,1))
+        %%%   ISOLATING END    %%%
+
+        record.lagdiff = -1*audio_corrlineup(record.tracks('leadout'), reference.tracks('leadout'));
+
+        record.lagcorrect()
+        % record.tracks('leadout') = circshift(record.tracks('leadout'),record.lagdiff);
+        data = record.tracks('leadout');
+        dataRef = reference.tracks('leadout');
+
+        figure(1); hold on;
+        plot(reference.track_times('1kHz'),reference.tracks('1kHz'));
+        plot(record.track_times('1kHz'),record.tracks('1kHz'));
+        grid on;
+
+        figure(2); hold on;
+        plot(reference.track_times('leadout'),reference.tracks('leadout'))
+        plot(record.track_times('leadout'),record.tracks('leadout'))
+        grid on;
+
+        figure(3); hold on; 
+        plot(data)
+        plot(dataRef)
+        plot(data2corr)
+        grid on;
+
+        %%%~~~~~~~ LINEUP END ~~~~~~~%%%
+
+        %%%~~~~~~~ NORMALIZE ~~~~~~~~%%%
+        data = record.tracks('1kHz');
+        tstart = 15;
+        tend = 30;
+
+        dataL = data(tstart*record.fs:tend*record.fs,1);
+        dataR = data(tstart*record.fs:tend*record.fs,2);
+
+        RMSdataR = sqrt(sum(dataR.^2)/((tstart-tend)*record.fs))
+        RMSdataL = sqrt(sum(dataL.^2)/((tstart-tend)*record.fs))
+
+        PEAKdataR=sqrt(2)*RMSdataR*40/7; %digital value of peak level
+        PEAKdataL=sqrt(2)*RMSdataL*40/7; %digital value of peak level
+        record.data = [record.data(:,1)/PEAKdataR, record.data(:,2)/PEAKdataL];
+
+        Normalization = [PEAKdataL, PEAKdataR];
+
+        %%%~~~~~ NORMALIZE END ~~~~~~%%%
+
+        %%%~~~~~~ CLICK DETECT ~~~~~~%%%
+        [ClicksL, ClicksR] = length(audio_clickdetect(record.data))
+        %%%~~~~ CLICK DETECT END ~~~~~~%%%
+        
+        %%~~~ TRACK SPECIFIC TESTS ~~~%%%
+        % signal_names = keys(record.tracks);
+
+        for i = (1:length(record.signal_names));
+                % if record.signal_names(i) == ('1kHz') || record.signal_names(i) == ('1kHz2') || record.signal_names(i) == ('1kHzV') 
+                if ismember(record.signal_names(i),{'1kHz','1kHzL', '1kHzR', '1kHzV','1kHz2','1kHzL2', '1kHzR2', '1kHzV2'});
+                        disp('1kHz')
+                        %% Flattop window to measure the peaks 
+                end % 1 kHz tests
 
 
+                if ismember(record.signal_names(i),{'10kHz','10kHz', '10kHzL', '10kHzR', '10kHz2','10kHz2', '10kHzL2', '10kHzR2'});
+                        disp('10kHz')
 
-    record.tracks('transition');
-    reference.tracks('transition');
-    class(record.tracks('leadout'))
-
-    %% ISOLATING LINEUP 
-    data = record.tracks('leadout');
-    dataRef = reference.tracks('leadout');
-    
-    % [data, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/leadouts/03141_A0000B0000r30a.wav');
-    % [dataRef, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/leadouts/03141_A0000B0000r28a.wav');
-
-    lagdiff = audio_corrlineup(data, dataRef)
-    data2corr = circshift(data, lagdiff);
-
-    
-    time = (0:(length(data2corr)-1))/record.fs;
-    timeRef = (0:(length(dataRef)-1))/record.fs;
-    figure(30)
-    hold on; grid on; 
-    plot(timeRef, dataRef(:,1))
-    plot(time, data2corr(:,1))
+                end % 10 kHz tests
 
 
-    %%%
-    
-    record.lagdiff = audio_corrlineup(record.tracks('leadout'), reference.tracks('leadout'));
+                if ismember(record.signal_names(i),{'100Hz', '100HzL', '100HzR','100Hz2', '100HzL2', '100HzR2'});
+                        disp('100Hz')
 
-    % record.lagcorrect()
-    record.timediff = record.lagdiff/record.fs
-    record.process_tracks()
-
-    % reference
-    keys(reference.tracks)
-
-    figure(1); hold on;
-    plot(reference.track_times('1kHz'),reference.tracks('1kHz'));
-    plot(record.track_times('1kHz'),record.tracks('1kHz'));
-    grid on;
-
-    figure(2); hold on;
-    plot(reference.track_times('leadout'),reference.tracks('leadout'))
-    plot(record.track_times('leadout'),record.tracks('leadout'))
-    grid on;
+                end % 100 Hz tests
 
 
-    rmsValues = [];
-    clicks = [];
+                if ismember(record.signal_names(i),{'sweep', 'sweepL', 'sweepR', 'sweepV', 'sweep2', 'sweepL2', 'sweepR2', 'sweepV2'});
+                        disp('sweep')
 
+                end % sweep tests
+                
+
+                if ismember(record.signal_names(i),{'3150Hz','3150Hz2'});
+                        disp('3150Hz')
+                end % 3150Hz tests
+
+
+                if ismember(record.signal_names(i),{'transition'});
+                        disp('transition')
+
+                end % transition tests
+
+        end % for loop signal_names 
+
+        %%~~~ TRACK SPECIFIC TESTS ~~~%%%
 end %RecordProcess
 
 
@@ -85,7 +145,7 @@ end %RecordProcess
 %         data = record.tracks('1kHz');
 %         level = rms(data(10*record.fs:30*record.fs)); % just take the rms level of a decent portion of the 7 cm/s sine 
     
-%         trackNames = keys(record.tracks)
+%         signal_names = keys(record.tracks)
 %         trackData = values(record.tracks)
 %         %% LOOP THROUGH EACH TRACK RECORD 
 
@@ -105,7 +165,7 @@ end %RecordProcess
 %         Clicks = [];
 
 %         disp('BEFORE FOR LOOP')
-%         for i = (1:length(trackNames));
+%         for i = (1:length(signal_names));
 %             disp('IN FOR LOOP')
 %             track = trackData(i);
 %             track = track{1};
