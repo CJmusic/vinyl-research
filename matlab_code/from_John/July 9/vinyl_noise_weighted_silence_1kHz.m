@@ -21,7 +21,8 @@ end
 addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/');
 % path_folder = strcat('/Volumes/AUDIOBANK/audio_files/pressings/', folder, '/')
 % filename = ('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/CZr9pioneer.wav');ts=0;tf=97;tts=108;ttf=135;
-filename = ('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/r26-96khz-declicked.wav');ts=0;tf=97;tts=108;ttf=135;
+filename = ('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/r27a-mac.wav');ts=0;tf=97;tts=435;ttf=455;
+% [data, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/r27a-mac.wav'); tstart = 435; tend = 455;%535;
 lr=1;%left=1, right=2
 %filename='r9technics_declick_sil&1kHz.wav';ts=0;tf=92;tts=105;ttf=145;
 % filename='r9pioneer_declick_sil&1kHz.wav';ts=0;tf=97;tts=103;ttf=120;
@@ -146,6 +147,7 @@ disp(['avgA:' num2str(avgA) '   dBAavg:   ' num2str(dBAavg)])
 %------------------yule-walker 96kHz CCIRarm filter design----------------
 if fs ~= 96000;
    disp('incompatible sampling freq')
+   fs
    halt
 end
 frdc=[0 31.5 63 100 200 400 800 1000 2000 3150 4000 5000 6300 7100 8000 9000 10000 12500 14000 16000 20000 25000 30000 fs/2];
