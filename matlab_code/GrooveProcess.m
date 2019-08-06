@@ -1,4 +1,4 @@
-%% This file will measure the coherences in grooves of a record 
+% This file will measure the coherences in grooves of a record 
 
 
 
@@ -51,8 +51,12 @@ for ng = 1:nGrooves
 end
 
 grCorr = [];
+disp('Size')
+size(grArray)
 
-for ng = 1:nGrooves
+disp('For loop')
+% for ng = 1:nGrooves
+for ng = 1:10
     % ORIGINAL WAVEFORM 
     figure(1); hold on;
     % plot(grTime,grArray(:,1,ng), 'DisplayName',['groove',num2str(ng)]) 
@@ -65,22 +69,81 @@ for ng = 1:nGrooves
     % ORIGINAL FFT 
 
 
-    % CORRELATION TO FIRST GROOVE 
-    grCorr = [grCorr, sum(grArray(:,:,1)*grArray(:,:,ng))];
+    % COHERENCE TO NEXT GROOVE 
+    [coh_nextL, freq_coh] = audio_mscohere(grArray(:,1,ng), grArray(:,1,ng+1), fs);
+    [coh_nextR, ~] = audio_mscohere(grArray(:,2,ng), grArray(:,2,ng+1), fs);
+
+    figure(2); hold on;
+    plot(freq_coh, coh_nextL, 'DisplayName',['groove',num2str(ng)])
+    set(gca, 'XScale', 'log');
+    set(gca,'YGrid','on')
+    set(gca,'XGrid','on')
+    xlabel('Frequency (Hz)')
+    title(strcat('Coherences next groove Left Channel'))
+
+    figure(3); hold on;
+    plot(freq_coh, coh_nextR, 'DisplayName',['groove',num2str(ng)])
+    set(gca, 'XScale', 'log');
+    set(gca,'YGrid','on')
+    set(gca,'XGrid','on')
+    xlabel('Frequency (Hz)')
+    title(strcat('Coherences next groove Right Channel'))
 
     % COHERENCE TO FIRST GROOVE 
 
+    [coh_firstL, ~] = audio_mscohere(grArray(:,1,1), grArray(:,1,ng+1), fs);
+    [coh_firstR, ~] = audio_mscohere(grArray(:,2,1), grArray(:,2,ng+1), fs);
 
-    % COHERENCE TO NEXT GROOVE 
+    % CORRELATION COEFFICIENT TO FIRST GROOVE 
+    grCorr = [grCorr, [sum(sqrt(coh_firstL.*coh_firstL)), sum(sqrt(coh_firstR.*coh_firstR))]];
 
 
-    % XCORR for lineup
+    figure(4); hold on;
+    plot(freq_coh, coh_firstL, 'DisplayName',['groove',num2str(ng)])
+    set(gca, 'XScale', 'log');
+    set(gca,'YGrid','on')
+    set(gca,'XGrid','on')
+    xlabel('Frequency (Hz)')
+    title(strcat('Coherences first groove Left Channel'))
+
+    figure(5); hold on;
+    plot(freq_coh, coh_firstR, 'DisplayName',['groove',num2str(ng)])
+    set(gca, 'XScale', 'log');
+    set(gca,'YGrid','on')
+    set(gca,'XGrid','on')
+    xlabel('Frequency (Hz)')
+    title(strcat('Coherences first groove Right Channel'))
 
 
+
+    % XCorrelation functions 
+
+    [cor_first, lags_first] = xcorr(grArray(:,1,1), grArray(:,1,ng));
+    [cor_next, lags_next] = xcorr(grArray(:,1,ng), grArray(:,1,ng+1));
+    
+    figure(7); hold on;
+    plot(lags_first, cor_first);
+    grid on; 
+    title('xcorr with first groove')
+    xlabel('lag')
+    ylabel('correlation')
+
+    figure(8); hold on;
+    plot(lags_next, cor_next);
+    grid on; 
+    title('xcorr with next groove')
+    xlabel('lag')
+    ylabel('correlation')
 end
 
 
 
+figure(10); hold on;
+plot(grCorr)
+set(gca,'YGrid','on')
+set(gca,'XGrid','on')
+xlabel('Groove number')
+title(strcat('Correlation to first groove'))
 
 
 
