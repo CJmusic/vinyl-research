@@ -44,6 +44,9 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
         % offset = 10.625; % as measured on /020818_A0000B0000/02072019_A0000B000r27-A.wav
         transition = 517.375; % as measured on /020818_A0000B0000/02072019_A0000B000r27-A.wav
         % transition = 518.25; % as measured on /020818_A0000B0000/02072019_A0000B000r25-A.wav
+        % lockoutClipped = 953.746;
+        lockout = 953.770; % as measured on 031418_A0000B0000r27a %probably the same one
+
         lagdiff = 0;
         timediff = 0; % this is a time diff calculated as compared to a reference 
         tracks;

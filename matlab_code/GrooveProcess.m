@@ -15,7 +15,12 @@ addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/');
 addpath('/Volumes/AUDIOBANK/audio_files/A0000B0000/')
 
 
-filename = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/r27a-mac.wav'; RECORD = true; 
+% filename = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/r27a-mac.wav'; RECORD = true; 
+% filename = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/r27a-mac.wav'; RECORD = true; 
+
+filename = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/ableton/r28a-ableton1024.wav'; RECORD = false; tstart = 10; tend = 25; 
+
+
 
 if RECORD == true; 
     referencePath = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/03141_A0000B0000r28a.wav' 
@@ -31,22 +36,33 @@ if RECORD == true;
 
     data = record.tracks('transition');
     fs = record.fs;
-
+    tstart = 1/fs;
+    tend = length(data)/fs;
 else 
-    nstart = 0;
-    nend = 0; 
-    tstart = 0;
-    tend = 0;
-    data = 0; 
+    [data, fs] = audioread(filename);
+%     nstart = 0;
+%     nend = 0; 
+%     tstart = 0;
+%     tend = 0;
+%     data = 0; 
 end 
 
+grCorrection = 0; %% the correction factor needed to account for the turntable not being exactly 33 1/3 rpm 
+grLen = 1.8*fs - grCorrection; 
 
-grLen = 1.8*fs; 
-nGrooves = floor(length(data)/grLen);
+data = data(tstart*fs:tend*fs);
+
+
+nGrooves = floor(length(data)/grLen)
 grArray = [];
 grTime = (0:grLen-1)/fs;
 
 for ng = 1:nGrooves
+    ng
+    size(data)
+    1+(ng-1)*grLen
+    ng*grLen
+    data(1+(ng-1)*grLen:ng*grLen,:)
     grArray(:,:,ng) = data(1+(ng-1)*grLen:ng*grLen,:);
 end
 
@@ -73,7 +89,8 @@ for ng = 1:10
     [coh_nextL, freq_coh] = audio_mscohere(grArray(:,1,ng), grArray(:,1,ng+1), fs);
     [coh_nextR, ~] = audio_mscohere(grArray(:,2,ng), grArray(:,2,ng+1), fs);
 
-    figure(2); hold on;
+    figure(2); 
+    subplot(2,1,1); hold on;
     plot(freq_coh, coh_nextL, 'DisplayName',['groove',num2str(ng)])
     set(gca, 'XScale', 'log');
     set(gca,'YGrid','on')
@@ -81,7 +98,9 @@ for ng = 1:10
     xlabel('Frequency (Hz)')
     title(strcat('Coherences next groove Left Channel'))
 
-    figure(3); hold on;
+    % figure(3); hold on;
+    % figure(2);
+    subplot(2,1,2); hold on;
     plot(freq_coh, coh_nextR, 'DisplayName',['groove',num2str(ng)])
     set(gca, 'XScale', 'log');
     set(gca,'YGrid','on')
@@ -95,10 +114,28 @@ for ng = 1:10
     [coh_firstR, ~] = audio_mscohere(grArray(:,2,1), grArray(:,2,ng+1), fs);
 
     % CORRELATION COEFFICIENT TO FIRST GROOVE 
+    % % REFERENCE CODE %{
+    % ex1=rev4ng(:,1,1); % groove1 left
+    % ex2=rev4ng(:,1,2); % groove2 left
+    % wy1=rev4ng(:,2,1); % groove1 right
+    % wy2=rev4ng(:,2,2); % groove2 right
+
+    % Cxy=xcorr(ex1,wy1);
+    % Cxx=xcorr(ex1);
+    % Cyy=xcorr(wy1);
+    % RHOxy=Cxy./(sqrt(Cxx(n_per_rev+1)).*Cyy(n_per_rev+1));
+
+    % tau=t(1:2*n_per_rev-1);
+    % figure(20)
+    % plot(tau-tau(n_per_rev+1),RHOxy,'b') 
+    % %}
+
+
     grCorr = [grCorr, [sum(sqrt(coh_firstL.*coh_firstL)), sum(sqrt(coh_firstR.*coh_firstR))]];
 
 
     figure(4); hold on;
+    subplot(2,1,1); hold on;
     plot(freq_coh, coh_firstL, 'DisplayName',['groove',num2str(ng)])
     set(gca, 'XScale', 'log');
     set(gca,'YGrid','on')
@@ -106,7 +143,8 @@ for ng = 1:10
     xlabel('Frequency (Hz)')
     title(strcat('Coherences first groove Left Channel'))
 
-    figure(5); hold on;
+    % figure(5); hold on;
+    subplot(2,1,2); hold on;
     plot(freq_coh, coh_firstR, 'DisplayName',['groove',num2str(ng)])
     set(gca, 'XScale', 'log');
     set(gca,'YGrid','on')
@@ -118,22 +156,22 @@ for ng = 1:10
 
     % XCorrelation functions 
 
-    [cor_first, lags_first] = xcorr(grArray(:,1,1), grArray(:,1,ng));
-    [cor_next, lags_next] = xcorr(grArray(:,1,ng), grArray(:,1,ng+1));
+    % [cor_first, lags_first] = xcorr(grArray(:,1,1), grArray(:,1,ng));
+    % [cor_next, lags_next] = xcorr(grArray(:,1,ng), grArray(:,1,ng+1));
     
-    figure(7); hold on;
-    plot(lags_first, cor_first);
-    grid on; 
-    title('xcorr with first groove')
-    xlabel('lag')
-    ylabel('correlation')
+    % figure(7); hold on;
+    % plot(lags_first, cor_first);
+    % grid on; 
+    % title('xcorr with first groove')
+    % xlabel('lag')
+    % ylabel('correlation')
 
-    figure(8); hold on;
-    plot(lags_next, cor_next);
-    grid on; 
-    title('xcorr with next groove')
-    xlabel('lag')
-    ylabel('correlation')
+    % figure(8); hold on;
+    % plot(lags_next, cor_next);
+    % grid on; 
+    % title('xcorr with next groove')
+    % xlabel('lag')
+    % ylabel('correlation')
 end
 
 
