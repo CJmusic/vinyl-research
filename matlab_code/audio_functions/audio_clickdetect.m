@@ -101,13 +101,13 @@ clicks = [ sample numbers ]
 function [clicks] = audio_clickdetect(data, fs)
     % data = data(:,1);
 %~~~~~~~~~~~~~~~~PRE-FILTERS~~~~~~~~~~~~~~~~~~~
-    freqLow = 2000;
-    freqHigh = 10000;
-    [b,a] = butter(6, freqLow/(fs/2), 'low');
-    data = filter(b, a, data); % use filtfilt
+    % freqLow = 2000;
+    % freqHigh = 10000;
+    % [b,a] = butter(6, freqLow/(fs/2), 'low');
+    % data = filter(b, a, data); % use filtfilt
 
-    [b,a] = butter(6,freqHigh/(fs/2),'high');
-    data = filter(b, a, data); % use filtfilt
+    % [b,a] = butter(6,freqHigh/(fs/2),'high');
+    % data = filter(b, a, data); % use filtfilt
 %~~~~~~~~~~~~~~~~PRE-FILTERS END~~~~~~~~~~~~~~~~~~~
 
 %~~~~~~~~~~~~~~~~~~~~~~PEAKS METHOD~~~~~~~~~~~~~~~~~~~~~

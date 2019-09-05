@@ -7,7 +7,7 @@ addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/');
 addpath('/Volumes/AUDIOBANK/audio_files/')
 addpath('/Volumes/AUDIOBANK/audio_files/pressings/')
 
-clc; close all; 
+clc; close all;
 referencePath = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/03141_A0000B0000r28a.wav' 
 recordPath = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/03141_A0000B0000r30a.wav'
 
@@ -32,39 +32,48 @@ function [rmsValues, Clicks] = RecordProcessTest(record, reference);
         data = record.tracks('leadout');
         dataRef = reference.tracks('leadout');
 
-        lagdiff = audio_corrlineup(data, dataRef)
+        lagdiff = audio_corrlineup(data, dataRef);
         data2corr = circshift(data, lagdiff);
 
         time = (0:(length(data2corr)-1))/record.fs;
         timeRef = (0:(length(dataRef)-1))/record.fs;
         figure(30)
         hold on; grid on; 
-        plot(timeRef, dataRef(:,1))
-        plot(time, data2corr(:,1))
+        plot(timeRef, dataRef)
+        plot(time, data2corr)
         %%%   ISOLATING END    %%%
 
-        record.lagdiff = -1*audio_corrlineup(record.tracks('leadout'), reference.tracks('leadout'));
+        figure(1); hold on;
+        title('Pre-lineup')
+        plot(reference.track_times('leadout'),reference.tracks('leadout'))
+        plot(record.track_times('leadout'),record.tracks('leadout'))
+        grid on;
+
+        record.lagdiff = audio_corrlineup(record.tracks('leadout'), reference.tracks('leadout'));
 
         record.lagcorrect()
         % record.tracks('leadout') = circshift(record.tracks('leadout'),record.lagdiff);
         data = record.tracks('leadout');
         dataRef = reference.tracks('leadout');
 
-        figure(1); hold on;
-        plot(reference.track_times('1kHz'),reference.tracks('1kHz'));
-        plot(record.track_times('1kHz'),record.tracks('1kHz'));
-        grid on;
 
         figure(2); hold on;
+        title('Post-lineup')
         plot(reference.track_times('leadout'),reference.tracks('leadout'))
         plot(record.track_times('leadout'),record.tracks('leadout'))
         grid on;
 
-        figure(3); hold on; 
-        plot(data)
-        plot(dataRef)
-        plot(data2corr)
+        figure(3); hold on;
+        plot(reference.track_times('1kHz'),reference.tracks('1kHz'));
+        plot(record.track_times('1kHz'),record.tracks('1kHz'));
         grid on;
+
+
+        % figure(3); hold on; 
+        % % plot(data)
+        % plot(dataRef)
+        % plot(data2corr)
+        % grid on;
 
         %%%~~~~~~~ LINEUP END ~~~~~~~%%%
 
@@ -88,7 +97,7 @@ function [rmsValues, Clicks] = RecordProcessTest(record, reference);
         %%%~~~~~ NORMALIZE END ~~~~~~%%%
 
         %%%~~~~~~ CLICK DETECT ~~~~~~%%%
-        [ClicksL, ClicksR] = length(audio_clickdetect(record.data))
+        % [ClicksL, ClicksR] = length(audio_clickdetect(record.data))
         %%%~~~~ CLICK DETECT END ~~~~~~%%%
         
         %%~~~ TRACK SPECIFIC TESTS ~~~%%%

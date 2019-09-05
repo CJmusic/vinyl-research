@@ -35,7 +35,7 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
         %%% RECORD INFO 
         % timestamps = [0, 2, 62, 92, 124, 160, 182, 248, 268, 306, 326, 364, 384, 419.5];
 
-        timestamps = [0, 60, 90, 122, 158, 180, 246, 266, 304, 324, 362, 382, 417.5];
+        timestamps_ref = [0, 60, 90, 122, 158, 180, 246, 266, 304, 324, 362, 382, 417.5];
         % this is how many seconds each signal is according to Chris Muth's track listing
         lengths = [60, 30, 31, 36, 21, 66, 20, 37, 19, 37, 19, 37, 19]; %starts with 1kHz
         signal_names = {'leadin','1kHz', '10kHz', '100Hz', 'sweep', 'quiet', '3150Hz', '1kHzL', 'sweepL', '1kHzR', 'sweepR', '1kHzV', 'sweepV','transition', '1kHz2', '10kHz2', '100Hz2', 'freqsweep2', 'quiet2', '3150Hz2', '1kHzL2', 'sweepL2', '1kHzR2', 'sweepR2', '1kHzV2', 'sweepV2','leadout'};
@@ -152,12 +152,19 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             % the method currently implemented is okay, I want to try circshift
             % also see the matlab function lag !!!! 
             disp('inside lagcorrect')
+            % rec.data = circshift(rec.data, rec.lagdiff);
+            % rec.timediff = 100 + rec.lagdiff/rec.fs;
+            rec.track_times
+            keys(rec.track_times)
+            values(rec.track_times)
+            for k = (keys(rec.track_times));
+                % rec.track_times(i)
+                rec.track_times(k{1}) = rec.track_times(k{1}) + rec.lagdiff/rec.fs;
+            end
+            rec.process_tracks();
 
-            rec.data = circshift(rec.data, rec.lagdiff);
             % rec.dataL = rec.data(:,1);
             % rec.dataR = rec.data(:,2);
-            rec.timediff = rec.lagdiff/rec.fs;
-            rec.process_tracks();
             % rec.lagdiff = -rec.lagdiff;
 
             % if rec.lagdiff == 0; %then nothing needs to be corrected  
@@ -219,8 +226,8 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             % timestamps  = rec.timestamps + rec.offset + rec.timediff;
             % timestamps2 = timestamps + rec.transition + rec.offset + rec.timediff;
             % disp('timestamps')
-            timestamps  = rec.timestamps + rec.offset + rec.timediff;
-            timestamps2 = rec.timestamps + rec.offset + rec.transition + rec.timediff;
+            timestamps  = rec.timestamps_ref + rec.offset; %+ rec.timediff;
+            timestamps2 = rec.timestamps_ref + rec.offset + rec.transition; %+ rec.timediff;
             
             % get the needledrop
             signalsL = rec.dataL(1:floor((timestamps(1))*rec.fs));
@@ -283,7 +290,7 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             % rec.tracks = 0; % clear any previous tracks info
             % rec.signals = {};
             
-            timestamps  = rec.timestamps + rec.offset + rec.timediff;
+            timestamps  = rec.timestamps_ref + rec.offset + rec.timediff;
             timestamps2 = timestamps + rec.transition + rec.offset + rec.timediff;
 
 
