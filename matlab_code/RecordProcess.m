@@ -51,7 +51,8 @@ function [rmsValues, Clicks] = RecordProcessTest(record, reference);
 
         record.lagdiff = audio_corrlineup(record.tracks('leadout'), reference.tracks('leadout'));
 
-        record.lagcorrect()
+        % record.lagcorrect()
+
         % record.tracks('leadout') = circshift(record.tracks('leadout'),record.lagdiff);
         data = record.tracks('leadout');
         dataRef = reference.tracks('leadout');

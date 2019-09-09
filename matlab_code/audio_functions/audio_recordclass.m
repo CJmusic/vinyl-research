@@ -147,57 +147,18 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             save(path, '-v7.3', '-struct','obj')
         end % save_recordclass
 
-        function lagcorrect(rec);
+        function lagcorrect(rec, ref);
+        % function lagcorrect(rec); %%% WORKING %%%%
             % this function should correct the record for any lagdiff calculated by another method: 
-            % the method currently implemented is okay, I want to try circshift
-            % also see the matlab function lag !!!! 
-            disp('inside lagcorrect')
-            % rec.data = circshift(rec.data, rec.lagdiff);
-            % rec.timediff = 100 + rec.lagdiff/rec.fs;
-            rec.track_times
-            keys(rec.track_times)
-            values(rec.track_times)
-            for k = (keys(rec.track_times));
-                % rec.track_times(i)
-                rec.track_times(k{1}) = rec.track_times(k{1}) + rec.lagdiff/rec.fs;
-            end
-            rec.process_tracks();
+            % the method currently implemented is okay, it simply adds the lag 
+            % to the track times, need to reslice the tracks based on it
 
-            % rec.dataL = rec.data(:,1);
-            % rec.dataR = rec.data(:,2);
-            % rec.lagdiff = -rec.lagdiff;
-
-            % if rec.lagdiff == 0; %then nothing needs to be corrected  
-            %     disp('no lag diff')
-            % else;
-            %     rec.data = circshift(rec.data, rec.lagdiff);
-            %     rec.dataL = rec.data(:,1);
-            %     rec.dataR = rec.data(:,2);
-            %     rec.clicks = rec.clicks + rec.lagdiff;
+            %%% WORKING $$$
+            % for k = (keys(rec.track_times));
+            %     % rec.track_times(i)
+            %     rec.track_times(k{1}) = rec.track_times(k{1}) + rec.lagdiff/rec.fs;
             % end
-            
-            % rec.time = (0:length(rec.data)-1)/rec.fs;
-
-
-
-            % time = (0:length(rec.data)); 
-        %    if lagdiff > 0;
-        %        % positive lagdiffL means that the data array is delayed compared to the reference
-        %        cdata = rec.data(lagdiff + 1:end,:); 
-        %        ctime = time - lagdiff/rec.fs; 
-        %    elseif lagdiff < 0; 
-        %        % negative lagdiffL means that the data array is ahead of the reference  
-        %        cdataL = rec.data(1: end + lagdiff,:);   
-        %        ctimeL = time - lagdiff/rec.fs;
-        %    elseif lagdiff == 0; %then nothing needs to be corrected  
-        %        cdata = rec.data; %no lag 
-        %        ctime = time - lagdiff/rec.fs; 
-        %    end
-
-           
-        %    rec.data = cdata;
-
-        %    rec.time = ctime;
+            %%% WORKING ENDS %%% 
         end % function lagcorrect
 
         function process_tracks(rec);
@@ -221,13 +182,19 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             rec.track_times = {};
             rec.signals = {};
             rec.signal_times = {};
+            timestamps = [];
+            timestamps2 = [];
+            signalsL = [];
+            signalsR = [];
+            time_seg = [];
+
 
             signal_names = {'leadin','1kHz', '10kHz', '100Hz', 'sweep', 'quiet', '3150Hz', '1kHzL', 'sweepL', '1kHzR', 'sweepR', '1kHzV', 'sweepV','transition', '1kHz2', '10kHz2', '100Hz2', 'freqsweep2', 'quiet2', '3150Hz2', '1kHzL2', 'sweepL2', '1kHzR2', 'sweepR2', '1kHzV2', 'sweepV2','leadout'};
             % timestamps  = rec.timestamps + rec.offset + rec.timediff;
             % timestamps2 = timestamps + rec.transition + rec.offset + rec.timediff;
             % disp('timestamps')
-            timestamps  = rec.timestamps_ref + rec.offset; %+ rec.timediff;
-            timestamps2 = rec.timestamps_ref + rec.offset + rec.transition; %+ rec.timediff;
+            timestamps  = rec.timestamps_ref + rec.offset + rec.lagdiff/rec.fs; %+ rec.timediff;
+            timestamps2 = rec.timestamps_ref + rec.offset + rec.transition + rec.lagdiff/rec.fs; %+ rec.timediff;
             
             % get the needledrop
             signalsL = rec.dataL(1:floor((timestamps(1))*rec.fs));
