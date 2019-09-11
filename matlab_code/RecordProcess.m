@@ -6,10 +6,18 @@ addpath('audio_functions')
 addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/');
 addpath('/Volumes/AUDIOBANK/audio_files/')
 addpath('/Volumes/AUDIOBANK/audio_files/pressings/')
-
+addpath('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000')
 clc; close all;
+%% MAC %%
 referencePath = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/03141_A0000B0000r28a.wav' 
 recordPath = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/03141_A0000B0000r30a.wav'
+%% MAC %%
+%% WINDOWS %%
+referencePath = 'D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000\03141_A0000B0000r28a.wav' 
+recordPath = 'D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000\03141_A0000B0000r30a.wav'
+%% WINDOWS %%
+
+
 
 reference = audio_recordclass(referencePath);
 reference.process_tracks()
@@ -91,7 +99,8 @@ function [rmsValues, Clicks] = RecordProcessTest(record, reference);
 
         PEAKdataR=sqrt(2)*RMSdataR*40/7; %digital value of peak level
         PEAKdataL=sqrt(2)*RMSdataL*40/7; %digital value of peak level
-        record.data = [record.data(:,1)/PEAKdataR, record.data(:,2)/PEAKdataL];
+        record.data(:,1) = record.data(:,1)/PEAKdataR; 
+        record.data(:,2) = record.data(:,2)/PEAKdataL;
 
         Normalization = [PEAKdataL, PEAKdataR];
 

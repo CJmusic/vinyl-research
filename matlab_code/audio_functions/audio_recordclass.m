@@ -101,8 +101,8 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             [data, rec.fs] = audioread(file_path);
             rec.data = data;
             rec.time = (0:length(rec.data)-1)/rec.fs;
-            rec.dataL = data(:,1);
-            rec.dataR = data(:,2);
+            % rec.dataL = data(:,1);
+            % rec.dataR = data(:,2);
             %rec.clicksL = audio_clickdetect(rec.dataL, rec.fs);
             %rec.clicksR = audio_clickdetect(rec.dataR, rec.fs);
 
@@ -193,64 +193,79 @@ classdef audio_recordclass < handle %inheriting handle allows methods to update 
             % timestamps  = rec.timestamps + rec.offset + rec.timediff;
             % timestamps2 = timestamps + rec.transition + rec.offset + rec.timediff;
             % disp('timestamps')
-            timestamps  = rec.timestamps_ref + rec.offset + rec.lagdiff/rec.fs; %+ rec.timediff;
-            timestamps2 = rec.timestamps_ref + rec.offset + rec.transition + rec.lagdiff/rec.fs; %+ rec.timediff;
-            
-            % get the needledrop
-            signalsL = rec.dataL(1:floor((timestamps(1))*rec.fs));
-            signalsR = rec.dataR(1:floor((timestamps(1))*rec.fs));
-            time_seg = rec.time(1:floor((timestamps(1))*rec.fs));
-            rec.signals{end + 1} = [signalsL, signalsR];
-            rec.signal_times{end + 1} = [time_seg];
-            
-            % first set of signals on the disk
-            for i = (1:length(timestamps)-1);
-                signalsL = rec.dataL(floor(timestamps(i)*rec.fs):floor(timestamps(i+1)*rec.fs));
-                signalsR = rec.dataR(floor(timestamps(i)*rec.fs):floor(timestamps(i+1)*rec.fs)); 
-                time_seg = rec.time(floor(timestamps(i)*rec.fs):floor(timestamps(i+1)*rec.fs));
-                rec.signals{end + 1} = [signalsL, signalsR];
-                rec.signal_times{end + 1} = [time_seg];
-            end
-            
-            % the extended silence section 'transition' between the two sets of signals 
-            % disp('transition track')
-            % rec.transition
-            % timestamps(end)
-            % timestamps2(1)
-            signalsL = rec.dataL(floor(timestamps(end)*rec.fs):floor(timestamps2(1)*rec.fs));
-            signalsR = rec.dataR(floor(timestamps(end)*rec.fs):floor(timestamps2(1)*rec.fs));
-            time_seg = rec.time(floor(timestamps(end)*rec.fs):floor((timestamps2(1))*rec.fs));
-	
-            rec.signals{end + 1} = [signalsL, signalsR];
-            rec.signal_times{end + 1} = [time_seg];
-            
-            % second set of signals on the disk
-            for i = (1:length(timestamps2)-1);
-                signalsL = rec.dataL(floor(timestamps2(i)*rec.fs):floor(timestamps2(i+1)*rec.fs));
-                signalsR = rec.dataR(floor(timestamps2(i)*rec.fs):floor(timestamps2(i+1)*rec.fs));
-                time_seg = rec.time(floor(timestamps2(i)*rec.fs):floor(timestamps2(i+1)*rec.fs));
-                rec.signals{end + 1} = [signalsL, signalsR];
-                rec.signal_times{end + 1} = [time_seg];
-            end
-            
-            % get the rest of the file
-            signalsL =rec.dataL(floor(timestamps2(end)*rec.fs):end);
-            signalsR = rec.dataR(floor(timestamps2(end)*rec.fs):end);
-            time_seg = rec.time(floor(timestamps2(end)*rec.fs):end);
-            rec.signals{end + 1} = [signalsL, signalsR];
-            rec.signal_times{end + 1} = [time_seg];
-           
-            % disp('Size of signal names, then signals, then times')
-            % size(rec.signal_names)
-            % size(rec.signals)
+            disp('timestamps')
+            timestamps  = [rec.timestamps_ref + rec.offset + rec.lagdiff/rec.fs, rec.timestamps_ref + rec.offset + rec.transition + rec.lagdiff/rec.fs] %+ rec.timediff;
+            timestamps
+            signal_times(1) = [1,floor(timestamps(1)*rec.fs)]
 
-            rec.tracks = containers.Map(rec.signal_names, rec.signals);
-            rec.track_times = containers.Map(rec.signal_names, rec.signal_times);
-            % disp('printing tracks')
+            for i=(2:length(timestamps)-1)
+                signal_times(i) = [floor(timestamps(i-1))*rec.fs,floor(timestamps(i))*rec.fs];
+            end
+
+            signal_times(length(timestamps)) = [floor(timestamps(length(timestamps)))*rec.fs,length(rec.data)];
+            signal_times
+            % % get the needledrop
+            % % signalsL = rec.dataL(1:floor((timestamps(1))*rec.fs));
+            % % signalsR = rec.dataR(1:floor((timestamps(1))*rec.fs));
+
+            % time_seg = rec.time(1:floor((timestamps(1))*rec.fs));
+            
+            % % rec.signals{end + 1} = [signalsL, signalsR];
+            
+            % rec.signal_times{end + 1} = [time_seg];
+            
+            % % first set of signals on the disk
+            % for i = (1:length(timestamps)-1);            
+
+            % end
+            
+            % % the extended silence section 'transition' between the two sets of signals 
+            % % disp('transition track')
+            % % rec.transition
+            % % timestamps(end)
+            % % timestamps2(1)
+            
+            % % signalsL = rec.dataL(floor(timestamps(end)*rec.fs):floor(timestamps2(1)*rec.fs));
+            % % signalsR = rec.dataR(floor(timestamps(end)*rec.fs):floor(timestamps2(1)*rec.fs));
+            
+            % time_seg = rec.time(floor(timestamps(end)*rec.fs):floor((timestamps2(1))*rec.fs));
+	
+            % rec.signals{end + 1} = [signalsL, signalsR];
+            % rec.signal_times{end + 1} = [time_seg];
+            
+            % % % second set of signals on the disk
+            % % for i = (1:length(timestamps2)-1);
+            % %     signalsL = rec.dataL(floor(timestamps2(i)*rec.fs):floor(timestamps2(i+1)*rec.fs));
+            % %     signalsR = rec.dataR(floor(timestamps2(i)*rec.fs):floor(timestamps2(i+1)*rec.fs));
+            % %     time_seg = rec.time(floor(timestamps2(i)*rec.fs):floor(timestamps2(i+1)*rec.fs));
+            % %     rec.signals{end + 1} = [signalsL, signalsR];
+            % %     rec.signal_times{end + 1} = [time_seg];
+            % % end
+            
+            % % % get the rest of the file
+            % % signalsL =rec.dataL(floor(timestamps2(end)*rec.fs):end);
+            % % signalsR = rec.dataR(floor(timestamps2(end)*rec.fs):end);
+            % % time_seg = rec.time(floor(timestamps2(end)*rec.fs):end);
+            % % rec.signals{end + 1} = [signalsL, signalsR];
+            % rec.signal_times{end + 1} = [time_seg];
+           
+            % % disp('Size of signal names, then signals, then times')
+            % % size(rec.signal_names)
+            % % size(rec.signals)
+
+            % rec.tracks = containers.Map(rec.signal_names, rec.signals);
+            % rec.track_times = containers.Map(rec.signal_names, rec.signal_times);
+            % % disp('printing tracks')
             
             disp('done processing tracks')
 
         end % function signals
+
+        function leadout_track(rec);
+
+        end
+
+
         function transition_track(rec);
             % this function grabs the approximate position of the transition track for the purpose of 
             % lining up the file to a reference
