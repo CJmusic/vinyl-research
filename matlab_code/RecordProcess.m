@@ -4,12 +4,12 @@ close all; clear all; clc;
 % [data, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/031418_A0000B0000r27a.wav');
 
 addpath('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000') %WINDOWS 
-[data, fs] = audioread('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000\031418_A0000B0000r27a.wav');
+[data, fs] = audioread('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000\03141_A0000B0000r30a.wav');
 
 
 
-figure(1)
-plot(data)
+% figure(1)
+% plot(data)
 
 %% load reference leadout 
 % [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/031418_A0000B0000r27a.wav');
@@ -24,7 +24,7 @@ signal_names = {'leadin','1kHz', '10kHz', '100Hz', 'sweep', 'quiet', '3150Hz', '
 offset = 10.625; 
 transition = 517.375; 
 % lockoutClipped = 953.746;
-lockout = 953.770; 
+lockout = 950; 
 refLockout = ref(floor(lockout*fs):end,:);
 %% lineup audio with reference 
 dataLockout = data(floor(950*fs):end,:);
@@ -36,7 +36,8 @@ size(ref)
 size(refLockout)
 size(dataLockout)
 
-figure(2); hold on; grid on;
+figure(2); 
+hold on; grid on;
 plot(refLockout)
 plot(dataLockout)
 title('pre-lineup')
@@ -48,18 +49,30 @@ lagdiff = lagdiff_L;
 disp('lagdiff')
 lagdiff 
 datacorr = circshift(data,lagdiff);
-corrLockout = ref(floor(lockout*fs):end,:);
+corrLockout = datacorr(floor(lockout*fs):end,:);
 
-figure(3); hold on; grid on;
-plot(refLockout)
-plot(corrLockout)
+
+figure(3); 
+hold on; grid on;
+plot(refLockout(:,1))
+plot(corrLockout(:,1))
+
 title('post-lineup')
 
 
-figure(4); hold on; grid on;
-plot(data(1:20*fs,:))
-plot(ref(1:20*fs,:))
+figure(4); 
+hold on; grid on;
+plot(ref(1:20*fs,1))
+plot(datacorr(1:20*fs,1))
 title('post-lineup')
+
+
+% figure(4); 
+% plot(data(1:20*fs,:))
+% hold on;
+% plot(ref(1:20*fs,:))
+% grid on;
+% title('post-lineup')
 
 
 % get 1 kHz level and normalize 
