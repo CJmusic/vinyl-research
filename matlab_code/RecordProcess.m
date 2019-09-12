@@ -1,10 +1,10 @@
 close all; clear all; clc;
 %% load audio
-% addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000') %MAC
-% [data, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/031418_A0000B0000r27a.wav');
+addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000') %MAC
+[data, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/03141_A0000B0000r30a.wav');
 
-addpath('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000') %WINDOWS 
-[data, fs] = audioread('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000\03141_A0000B0000r30a.wav');
+% addpath('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000') %WINDOWS 
+% [data, fs] = audioread('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000\03141_A0000B0000r30a.wav');
 
 
 
@@ -12,8 +12,8 @@ addpath('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000
 % plot(data)
 
 %% load reference leadout 
-% [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/031418_A0000B0000r27a.wav');
-[ref, fs] = audioread('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000\031418_A0000B0000r27a.wav');
+[ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/031418_A0000B0000r27a.wav');
+% [ref, fs] = audioread('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000\031418_A0000B0000r27a.wav');
 
 timestamps_ref = [0, 60, 90, 122, 158, 180, 246, 266, 304, 324, 362, 382, 417.5];
 % this is how many seconds each signal is according to Chris Muth's track listing
@@ -85,9 +85,18 @@ size(timedata)
 
 figure(6); 
 hold on; grid on;
-plot(timeref(floor(950*fs):end),ref(floor(950*fs):end,:))
-plot(timedata(floor(950*fs):end),data(950*fs:end,:))
-title('pre-lineup')
+plot(timeref(floor(950*fs):end),ref(floor(950*fs):end,1))
+plot(timedata(floor(950*fs):end),data(950*fs:end,1))
+title('time-lineup')
+
+
+figure(7); 
+hold on; grid on;
+plot(timeref(floor(670*fs):floor(700*fs)),ref(floor(670*fs):floor(700*fs),1))
+plot(timedata(floor(670*fs):floor(700*fs)),data(floor(670*fs):floor(700*fs),1))
+title('time-lineup')
+
+
 
 % figure(4); 
 % plot(data(1:20*fs,:))
