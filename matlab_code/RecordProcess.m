@@ -67,6 +67,15 @@ plot(datacorr(1:20*fs,1))
 title('post-lineup')
 
 
+figure(5); 
+hold on; grid on;
+timeref = (0:length(ref))/fs;
+timedata = (0:length(data))/fs  + lagdiff/fs;
+plot(timeref(1:20*fs),ref(1:20*fs,1))
+plot(timedata(1:20*fs),data(1:20*fs,1))
+title('time-lineup')
+
+
 % figure(4); 
 % plot(data(1:20*fs,:))
 % hold on;
