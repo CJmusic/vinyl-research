@@ -69,12 +69,25 @@ title('post-lineup')
 
 figure(5); 
 hold on; grid on;
-timeref = (0:length(ref))/fs;
-timedata = (0:length(data))/fs  + lagdiff/fs;
+timeref = (0:length(ref)-1)/fs;
+timedata = (0:length(data)-1)/fs  + lagdiff/fs;
 plot(timeref(1:20*fs),ref(1:20*fs,1))
 plot(timedata(1:20*fs),data(1:20*fs,1))
 title('time-lineup')
 
+
+disp('SIZES')
+size(ref)
+size(timeref)
+size(data)
+size(timedata)
+
+
+figure(6); 
+hold on; grid on;
+plot(timeref(floor(950*fs):end),ref(floor(950*fs):end,:))
+plot(timedata(floor(950*fs):end),data(950*fs:end,:))
+title('pre-lineup')
 
 % figure(4); 
 % plot(data(1:20*fs,:))
