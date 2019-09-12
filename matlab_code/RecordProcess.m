@@ -1,13 +1,19 @@
+close all; clear all; clc;
+%% load audio
+% addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000') %MAC
+% [data, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/031418_A0000B0000r27a.wav');
+
+addpath('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000') %WINDOWS 
+[data, fs] = audioread('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000\031418_A0000B0000r27a.wav');
 
 
-addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000')
-%% load audio 
-[data, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/031418_A0000B0000r27a.wav');
+
 figure(1)
 plot(data)
 
 %% load reference leadout 
-[ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/031418_A0000B0000r27a.wav');
+% [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/031418_A0000B0000r27a.wav');
+[ref, fs] = audioread('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000\031418_A0000B0000r27a.wav');
 
 timestamps_ref = [0, 60, 90, 122, 158, 180, 246, 266, 304, 324, 362, 382, 417.5];
 % this is how many seconds each signal is according to Chris Muth's track listing
@@ -19,9 +25,9 @@ offset = 10.625;
 transition = 517.375; 
 % lockoutClipped = 953.746;
 lockout = 953.770; 
-refLockout = ref(floor(lockout*fs):end);
+refLockout = ref(floor(lockout*fs):end,:);
 %% lineup audio with reference 
-dataLockout = data(floor(950*fs):end);
+dataLockout = data(floor(950*fs):end,:);
 % lagdiff = []
 disp('sizes')
 size(data)
@@ -31,22 +37,31 @@ size(refLockout)
 size(dataLockout)
 
 figure(2); hold on; grid on;
-title('pre-lineup')
 plot(refLockout)
 plot(dataLockout)
+title('pre-lineup')
 
-% [acor_L,lags_L] = xcorr(refLockout(:,1),dataLockout(:,1));
-% [M_L,I_L] = max(abs(acor_L));
-% lagdiff_L = lags_L(I_L);
-% lagdiff = lagdiff_L;
-% disp('lagdiff')
-% lagdiff 
-% datacorr = circshift(data,lagdiff);
+[acor_L,lags_L] = xcorr(refLockout(:,1),dataLockout(:,1));
+[M_L,I_L] = max(abs(acor_L));
+lagdiff_L = lags_L(I_L);
+lagdiff = lagdiff_L;
+disp('lagdiff')
+lagdiff 
+datacorr = circshift(data,lagdiff);
+corrLockout = ref(floor(lockout*fs):end,:);
 
-% figure(3); hold on; grid on;
-% title('post-lineup')
-% plot(refLockout)
-% plot(datacorr)
-%% get 1 kHz level and normalize 
+figure(3); hold on; grid on;
+plot(refLockout)
+plot(corrLockout)
+title('post-lineup')
+
+
+figure(4); hold on; grid on;
+plot(data(1:20*fs,:))
+plot(ref(1:20*fs,:))
+title('post-lineup')
+
+
+% get 1 kHz level and normalize 
 
 
