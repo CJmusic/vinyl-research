@@ -29,59 +29,8 @@ refLockout = ref(floor(lockout*fs):end,:);
 dataLockout = data(floor(950*fs):end,:);
 % lagdiff = []
 
-% timestamps =       [[0, 62],   % 1 kHz
-%                     [62,92],    % 10 kHz
-%                     [92,124],   % 100 Hz
-%                     [124,160],  % sweep
-%                     [160,182],  % quiet
-%                     [182,248],  % 3150 Hz
-%                     [248,268],  % 1 kHz left
-%                     [268, 306], % sweep left
-%                     [306, 326], % 1 kHz right
-%                     [326, 364], % sweep right
-%                     [364, 384], % 1 kHz vertical
-%                     [384, 421], % sweep vertical
-%                     [421, 517], % transition
-%                     [517, 579], % 1 kHz
-%                     [579, 609], % 10 kHz
-%                     [609, 641], % 100 Hz
-%                     [641, 677], % sweep
-%                     [677, 699], % quiet
-%                     [699, 765], % 3150 Hz
-%                     [765, 785], % 1 kHz left
-%                     [785, 823], % sweep left
-%                     [823, 843], % 1 kHz right
-%                     [843, 881], % sweep right
-%                     [881, 901], % 1 kHz vertical
-%                     [901, 938]]; % sweep vertical
-
-% timestamps =       [[0, 60],   % 1 kHz
-%                     [60,90],    % 10 kHz
-%                     [90,120],   % 100 Hz
-%                     [120,160],  % sweep
-%                     [160,180],  % quiet
-%                     [180,250],  % 3150 Hz
-%                     [250,270],  % 1 kHz left
-%                     [270, 300], % sweep left
-%                     [300, 320], % 1 kHz right
-%                     [320, 360], % sweep right
-%                     [360, 380], % 1 kHz vertical
-%                     [380, 420], % sweep vertical
-%                     [420, 520], % transition
-%                     [520, 580], % 1 kHz
-%                     [580, 610], % 10 kHz
-%                     [610, 640], % 100 Hz
-%                     [640, 680], % sweep
-%                     [680, 700], % quiet
-%                     [700, 770], % 3150 Hz
-%                     [770, 790], % 1 kHz left
-%                     [790, 820], % sweep left
-%                     [820, 840], % 1 kHz right
-%                     [840, 880], % sweep right
-%                     [880, 900], % 1 kHz vertical
-%                     [900, 940]]; % sweep vertical  
-%                     %% dont forget lead in and leadout
-
+% 031418_A0000B0000r27a.wav as reference timestamps
+offset = 10.625; 
 timestamps =       [[0, 61],   % 1 kHz
                     [61,91],    % 10 kHz
                     [91,121],   % 100 Hz
@@ -106,8 +55,8 @@ timestamps =       [[0, 61],   % 1 kHz
                     [820, 842], % 1 kHz right
                     [842, 878], % sweep right
                     [878, 900], % 1 kHz vertical
-                    [900, 938]; % sweep vertical  
-                    [938, 950]];               
+                    [900, 938]]; % sweep vertical  
+                    % [938, 950]];               
                     %% dont forget lead in and leadout
 timestamps = timestamps + offset;
 %% lining up audio 
@@ -119,9 +68,17 @@ lagdiff = lagdiff_L;
 timeref = (0:length(ref)-1)/fs;
 timedata = (0:length(data)-1)/fs  + lagdiff/fs;
 
-% figure(1);
-% hold on; grid on;
-% plot(timedata(timestamps(3,1)*fs:timestamps(3,2)*fs),data(timestamps(3,1)*fs:timestamps(3,2)*fs,:));
+figure(1);
+hold on; grid on;
+plot(timedata(1:timestamps(1,1)*fs),data(1:timestamps(1,1)*fs,:));
+plot(timeref(1:timestamps(1,1)*fs),ref(1:timestamps(1,1)*fs,:));
+
+figure(2);
+hold on; grid on;
+plot(timedata(timestamps(25,2)*fs:end),data(timestamps(25,2)*fs:end,:));
+plot(timeref(timestamps(25,2)*fs:end),ref(timestamps(25,2)*fs:end,:));
+
+% plot(timedata(timestamps(1,1)*fs:timestamps(1,2)*fs),data(timestamps(1,1)*fs:timestamps(1,2)*fs,:));
 % plot(timeref(timestamps(1,1)*fs:timestamps(1,2)*fs),ref(timestamps(1,1)*fs:timestamps(1,2)*fs,:));
 
 % figure(1); grid on;
@@ -132,10 +89,10 @@ timedata = (0:length(data)-1)/fs  + lagdiff/fs;
 %             line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
 % end
 
-for i=(1:length(timestamps))
-    figure(i)
-    plot(timeref(timestamps(i,1)*fs:timestamps(i,2)*fs),ref(timestamps(i,1)*fs:timestamps(i,2)*fs,:));
-end
+% for i=(1:length(timestamps))
+%     figure(i)
+%     plot(timeref(timestamps(i,1)*fs:timestamps(i,2)*fs),ref(timestamps(i,1)*fs:timestamps(i,2)*fs,:));
+% end
 
 
 %%% LINEUP TEST PLOTS %%%
