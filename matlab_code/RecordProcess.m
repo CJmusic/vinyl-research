@@ -84,79 +84,112 @@ timedata = (0:length(data)-1)/fs  + lagdiff/fs;
 %% PLOTTING ENDS %%
 
 %% PLOTTING INDIVIDUAL TRACKS %%
-figure(100);
-hold on; grid on;
-plot(timedata(1:timestamps(1,1)*fs),data(1:timestamps(1,1)*fs,:));
-plot(timeref(1:timestamps(1,1)*fs),ref(1:timestamps(1,1)*fs,:));
 
-for i=(1:length(timestamps))
-    figure(i); hold on;
-    plot(timeref(timestamps(i,1)*fs:timestamps(i,2)*fs),ref(timestamps(i,1)*fs:timestamps(i,2)*fs,1));
-    plot(timedata(timestamps(i,1)*fs - lagdiff :timestamps(i,2)*fs - lagdiff),data(timestamps(i,1)*fs - lagdiff :timestamps(i,2)*fs - lagdiff,1));
-end
-
-figure(200);
-hold on; grid on;
-plot(timedata(timestamps(25,2)*fs:end),data(timestamps(25,2)*fs:end,:));
-plot(timeref(timestamps(25,2)*fs:end),ref(timestamps(25,2)*fs:end,:));
-%% PLOTTING INDIVIDUAL TRACKS END %%
-disp('LENGTHS')
-length(ref)/fs
-length(data)/fs
-
-%%% LINEUP TEST PLOTS %%%
-% figure(2); 
+%~~~0. leadin 
+% figure(100);
 % hold on; grid on;
-% plot(refLockout)
-% plot(dataLockout)
-% title('pre-lineup')
+% plot(timedata(1:timestamps(1,1)*fs),data(1:timestamps(1,1)*fs,:));
+% plot(timeref(1:timestamps(1,1)*fs),ref(1:timestamps(1,1)*fs,:));
+
+%~~~1. 1 kHz
+% get 1 kHz level
+sigtime = timedata(timestamps(1,1)*fs - lagdiff :timestamps(1,2)*fs - lagdiff);
+sig = data(timestamps(1,1)*fs - lagdiff : timestamps(1,2)*fs - lagdiff,:);
+
+% normalize
+sigRMS=sqrt(sum(sig)/((timestamps(1,1)-timestamps(1,2))*fs+1)); % for 7 cm/s peak
+normalization=sqrt(2)*sigRMS*40/7; %digital value of peak level
+data=data/normalization;% now normalized to 40cm/s peak    
+
+% measure harmonics
+THD = thd(sig(:,1),fs);
+% thd(sig(:,1),fs);
+% set(gca, 'XScale', 'log');
 
 
-% figure(3); 
+%~~~2. 10kHz 
+%~~~3. 100Hz 
+%~~~4. sweep 
+%~~~5. quiet 
+%~~~6. 3150Hz 
+%~~~7. 1kHzL 
+%~~~8. sweepL 
+%~~~9. 1kHzR 
+%~~~10. sweepR 
+%~~~11. 1kHzV 
+%~~~12. sweepV
+%~~~13. transition 
+%~~~14. 1kHz2 
+%~~~15. 10kHz2 
+%~~~16. 100Hz2 
+%~~~17. freqsweep2 
+%~~~18. quiet2 
+%~~~19. 3150Hz2  
+%~~~20. 1kHzL2 
+%~~~21. sweepL2 
+%~~~22. 1kHzR2 
+%~~~23. sweepR2 
+%~~~24. 1kHzV2 
+%~~~25. sweepV2
+%~~~26. leadout
+% figure(200);
 % hold on; grid on;
-% plot(refLockout(:,1))
-% plot(corrLockout(:,1))
-
-% title('post-lineup')
+% plot(timedata(timestamps(25,2)*fs:end),data(timestamps(25,2)*fs:end,:));
+% plot(timeref(timestamps(25,2)*fs:end),ref(timestamps(25,2)*fs:end,:));
 
 
-% figure(4); 
+
+% for i=(1:length(timestamps))
+%     % if ismember(record.signal_names(i),{'1kHz','1kHzL', '1kHzR', '1kHzV','1kHz2','1kHzL2', '1kHzR2', '1kHzV2'});
+%     %     disp('1kHz')
+%     %     %% Flattop window to measure the peaks 
+%     %     data=sqrt(sum(data)/(ntf-nts+1)); % for 7 cm/s peak
+%     %     %% RMS VALUE weighted bynumber of points - CZ 
+%     %     %------------signal amplitude factor for 0dB=40cm/s peak---------
+%     %     normalization=sqrt(2)*rmsref*40/7; %digital value of peak level
+%     %     data=data/normalization;% now normalized to 40cm/s peak    
+%     % end % 1 kHz tests
+
+
+%     % if ismember(record.signal_names(i),{'10kHz','10kHz', '10kHzL', '10kHzR', '10kHz2','10kHz2', '10kHzL2', '10kHzR2'});
+%     %         disp('10kHz')
+
+%     % end % 10 kHz tests
+
+
+%     % if ismember(record.signal_names(i),{'100Hz', '100HzL', '100HzR','100Hz2', '100HzL2', '100HzR2'});
+%     %         disp('100Hz')
+
+%     % end % 100 Hz tests
+
+
+%     % if ismember(record.signal_names(i),{'sweep', 'sweepL', 'sweepR', 'sweepV', 'sweep2', 'sweepL2', 'sweepR2', 'sweepV2'});
+%     %         disp('sweep')
+
+%     % end % sweep tests
+
+
+%     % if ismember(record.signal_names(i),{'3150Hz','3150Hz2'});
+%     %         disp('3150Hz')
+%     % end % 3150Hz tests
+
+
+%     % if ismember(record.signal_names(i),{'transition'});
+%     %         disp('transition')
+
+%     % end % transition tests
+
+
+%     figure(i); hold on;
+%     plot(timeref(timestamps(i,1)*fs:timestamps(i,2)*fs),ref(timestamps(i,1)*fs:timestamps(i,2)*fs,1));
+%     plot(timedata(timestamps(i,1)*fs - lagdiff :timestamps(i,2)*fs - lagdiff),data(timestamps(i,1)*fs - lagdiff :timestamps(i,2)*fs - lagdiff,1));
+% end
+
+%~~~ LEADOUT ~~~%
+% figure(200);
 % hold on; grid on;
-% plot(ref(1:20*fs,1))
-% plot(datacorr(1:20*fs,1))
-% title('post-lineup')
+% plot(timedata(timestamps(25,2)*fs:end),data(timestamps(25,2)*fs:end,:));
+% plot(timeref(timestamps(25,2)*fs:end),ref(timestamps(25,2)*fs:end,:));
 
-
-% figure(5); 
-% hold on; grid on;
-% timeref = (0:length(ref)-1)/fs;
-% timedata = (0:length(data)-1)/fs  + lagdiff/fs;
-% plot(timeref(1:20*fs),ref(1:20*fs,1))
-% plot(timedata(1:20*fs),data(1:20*fs,1))
-% title('time-lineup')
-
-% figure(6); 
-% hold on; grid on;
-% plot(timeref(floor(950*fs):end),ref(floor(950*fs):end,1))
-% plot(timedata(floor(950*fs):end),data(950*fs:end,1))
-% title('time-lineup')
-
-% figure(7); 
-% hold on; grid on;
-% plot(timeref(floor(670*fs):floor(700*fs)),ref(floor(670*fs):floor(700*fs),1))
-% plot(timedata(floor(670*fs):floor(700*fs)),data(floor(670*fs):floor(700*fs),1))
-% title('time-lineup')
-%%% LINEUP TEST PLOTS ENDS %%%
-
-
-% figure(4); 
-% plot(data(1:20*fs,:))
-% hold on;
-% plot(ref(1:20*fs,:))
-% grid on;
-% title('post-lineup')
-
-
-% get 1 kHz level and normalize 
 
 
