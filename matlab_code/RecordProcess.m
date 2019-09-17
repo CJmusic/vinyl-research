@@ -90,29 +90,72 @@ timedata = (0:length(data)-1)/fs  + lagdiff/fs;
 % hold on; grid on;
 % plot(timedata(1:timestamps(1,1)*fs),data(1:timestamps(1,1)*fs,:));
 % plot(timeref(1:timestamps(1,1)*fs),ref(1:timestamps(1,1)*fs,:));
+disp('prenorm')
+size(data)
 
 %~~~1. 1 kHz
 % get 1 kHz level
-sigtime = timedata(timestamps(1,1)*fs - lagdiff :timestamps(1,2)*fs - lagdiff);
-sig = data(timestamps(1,1)*fs - lagdiff : timestamps(1,2)*fs - lagdiff,:);
+t = 1;
+sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
+sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
+size(sig)
 
 % normalize
-sigRMS=sqrt(sum(sig)/((timestamps(1,1)-timestamps(1,2))*fs+1)); % for 7 cm/s peak
+disp('RMS VALUES')
+% sigRMS=sqrt(sum(sig.^2)/((timestamps(1,1)-timestamps(1,2))*fs+1)) % for 7 cm/s peak
+sigRMS=rms(sig)
 normalization=sqrt(2)*sigRMS*40/7; %digital value of peak level
-data=data/normalization;% now normalized to 40cm/s peak    
 
+data(:,1)=data(:,1)/normalization(1);% now normalized to 40cm/s peak    
+data(:,2)=data(:,2)/normalization(2);% now normalized to 40cm/s peak    
+sig(:,1)=sig(:,1)/normalization(1);% now normalized to 40cm/s peak  
+sig(:,2)=sig(:,2)/normalization(2);% now normalized to 40cm/s peak  
 % measure harmonics
-THD = thd(sig(:,1),fs);
-% thd(sig(:,1),fs);
-% set(gca, 'XScale', 'log');
+THD_L = thd(sig(:,1),fs);
+THD_R = thd(sig(:,2),fs);
 
+% click detect
 
 %~~~2. 10kHz 
+t = 2;
+sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
+sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
+THD_L = thd(sig(:,1),fs);
+THD_R = thd(sig(:,2),fs);
+
 %~~~3. 100Hz 
 %~~~4. sweep 
-%~~~5. quiet 
+t = 4;
+sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
+sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
+
+%% probably should downsample before fft
+% fft(sig);
+
+% figure(6); hold on; %% plot the spectrum of each groove
+% Len = length(sig);
+% freq_fft = fs*(0:(Len/2))/Len;
+% data_fft = fft(sig)/Len;
+% data_fft = data_fft(1:Len/2+1);
+
+% ~~~5. quiet 
+t = 5;
+sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff);
+sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
+
+rmsL = 20*log10(rms(sig(:,1)))
+rmsR = 20*log10(rms(sig(:,2)))
+
 %~~~6. 3150Hz 
 %~~~7. 1kHzL 
+t = 7;
+sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff);
+sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
+
+%stereo bleed 
+%rms level or fft based? 
+
+
 %~~~8. sweepL 
 %~~~9. 1kHzR 
 %~~~10. sweepR 
