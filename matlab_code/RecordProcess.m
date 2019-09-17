@@ -13,8 +13,11 @@ addpath('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000
 % plot(data)
 
 %% load reference leadout 
-% [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/031418_A0000B0000r27a.wav');
-[ref, fs] = audioread('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000\031418_A0000B0000r27a.wav');
+try 
+    [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/031418_A0000B0000r27a.wav');
+catch
+    [ref, fs] = audioread('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000\031418_A0000B0000r27a.wav');
+end 
 
 timestamps_ref = [0, 60, 90, 122, 158, 180, 246, 266, 304, 324, 362, 382, 417.5];
 % this is how many seconds each signal is according to Chris Muth's track listing
@@ -68,34 +71,38 @@ lagdiff = lagdiff_L;
 
 timeref = (0:length(ref)-1)/fs;
 timedata = (0:length(data)-1)/fs  + lagdiff/fs;
-timestampsdata = timestamps %+ 6;
 
-figure(1); grid on; hold on;
-plot(timeref,ref(:,1))
-plot(timedata, data(:,1))
-for xi = 1:length(timestamps)
-            x1 = timestamps(xi,1);
-            figure(1); hold on; grid on;
-            line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
-end
+%% PLOT WHOLE LINED UP FILES %%
+% figure(1); grid on; hold on;
+% plot(timeref,ref(:,1))
+% plot(timedata, data(:,1))
+% for xi = 1:length(timestamps)
+%             x1 = timestamps(xi,1);
+%             figure(1); hold on; grid on;
+%             line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
+% end
+%% PLOTTING ENDS %%
 
 %% PLOTTING INDIVIDUAL TRACKS %%
-% figure(100);
-% hold on; grid on;
-% plot(timedata(1:timestamps(1,1)*fs),data(1:timestamps(1,1)*fs,:));
-% plot(timeref(1:timestamps(1,1)*fs),ref(1:timestamps(1,1)*fs,:));
+figure(100);
+hold on; grid on;
+plot(timedata(1:timestamps(1,1)*fs),data(1:timestamps(1,1)*fs,:));
+plot(timeref(1:timestamps(1,1)*fs),ref(1:timestamps(1,1)*fs,:));
 
-% for i=(1:length(timestamps))
-%     figure(i); hold on;
-%     plot(timeref(timestamps(i,1)*fs:timestamps(i,2)*fs),ref(timestamps(i,1)*fs:timestamps(i,2)*fs,1));
-%     plot(timedata(timestampsdata(i,1)*fs:timestampsdata(i,2)*fs),data(timestampsdata(i,1)*fs:timestampsdata(i,2)*fs,1));
-% end
+for i=(1:length(timestamps))
+    figure(i); hold on;
+    plot(timeref(timestamps(i,1)*fs:timestamps(i,2)*fs),ref(timestamps(i,1)*fs:timestamps(i,2)*fs,1));
+    plot(timedata(timestamps(i,1)*fs - lagdiff :timestamps(i,2)*fs - lagdiff),data(timestamps(i,1)*fs - lagdiff :timestamps(i,2)*fs - lagdiff,1));
+end
 
-% figure(200);
-% hold on; grid on;
-% plot(timedata(timestamps(25,2)*fs:end),data(timestamps(25,2)*fs:end,:));
-% plot(timeref(timestamps(25,2)*fs:end),ref(timestamps(25,2)*fs:end,:));
+figure(200);
+hold on; grid on;
+plot(timedata(timestamps(25,2)*fs:end),data(timestamps(25,2)*fs:end,:));
+plot(timeref(timestamps(25,2)*fs:end),ref(timestamps(25,2)*fs:end,:));
 %% PLOTTING INDIVIDUAL TRACKS END %%
+disp('LENGTHS')
+length(ref)/fs
+length(data)/fs
 
 %%% LINEUP TEST PLOTS %%%
 % figure(2); 
