@@ -2,22 +2,26 @@ close all; clear all; clc;
 %% load audio
 % addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000') %MAC
 % [data, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/03141_A0000B0000r30a.wav');
-
-addpath('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000') %WINDOWS 
-% [data, fs] = audioread('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000\03141_A0000B0000r30a.wav');
-
-[data, fs] = audioread('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000\03141_A0000B0000r28a.wav');
-
-
-% figure(1)
-% plot(data)
-
 %% load reference leadout 
+%%%~~~~ LOAD REFERENCE ~~~~%%%
 try 
     [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/031418_A0000B0000r27a.wav');
 catch
     [ref, fs] = audioread('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000\031418_A0000B0000r27a.wav');
 end 
+
+%%%~~~~ LOAD FILE ~~~~%%%
+try
+    addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000') %MAC
+    [data, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/03141_A0000B0000r30a.wav');
+catch 
+    addpath('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000') %WINDOWS 
+    [data, fs] = audioread('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000\03141_A0000B0000r29a.wav');
+end
+
+% figure(1)
+% plot(data)
+
 
 timestamps_ref = [0, 60, 90, 122, 158, 180, 246, 266, 304, 324, 362, 382, 417.5];
 % this is how many seconds each signal is according to Chris Muth's track listing
@@ -148,13 +152,49 @@ rmsR = 20*log10(rms(sig(:,2)))
 
 %~~~6. 3150Hz 
 %~~~7. 1kHzL 
+disp('1kHzL')
 t = 7;
 sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff);
 sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
 
 %stereo bleed 
 %rms level or fft based? 
+%%%rms based 
+rmsL = rms(sig(:,1))%20*log10(rms(sig(:,1)))
+rmsR = rms(sig(:,2))%20*log10(rms(sig(:,2)))
+ratio1 = rmsL/rmsR
 
+%% fft based 
+L = 2^16;
+win = flattopwin(L);
+seg = sig(floor(length(sig)/2) - L/2:floor(length(sig)/2) + L/2 - 1,:);
+thdL = thd(seg(:,1))
+thdR = thd(seg(:,2))
+seg = seg.*win;
+
+fftsigL = fft(seg(:,1))/L;
+fftsigL = fftsigL(1:L/2+1);
+
+fftsigR = fft(seg(:,2))/L;
+fftsigR = fftsigR(1:L/2+1);
+
+fftfreq = fs*(0:(L/2))/L;
+
+peakL = max(real(fftsigL));
+peakR = max(real(fftsigR));
+ratio2 = peakL/peakR
+
+
+% figure(1); grid on; hold on;
+% set(gca, 'XScale', 'log')
+% plot(fftfreq,20*log10(fftsigL));
+% plot(fftfreq,20*log10(fftsigR));
+
+% plot(fftfreq,(fftsigL));
+% plot(fftfreq,(fftsigR));
+
+% figure(2); grid on; hold on;
+% plot(sig(floor(length(sig)/2) - L/2:floor(length(sig)/2) + L/2 - 1,:))
 
 %~~~8. sweepL 
 %~~~9. 1kHzR 
