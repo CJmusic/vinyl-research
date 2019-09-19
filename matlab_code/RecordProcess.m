@@ -105,16 +105,14 @@ close all; clear all; clc;
     t = 1;
     sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
     sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
-    % normalize
-    disp('RMS VALUES')
-    % sigRMS=sqrt(sum(sig.^2)/((timestamps(1,1)-timestamps(1,2))*fs+1)) % for 7 cm/s peak
-    sigRMS=rms(sig)
+    sigRMS=rms(sig);
     normalization=sqrt(2)*sigRMS*40/7; %digital value of peak level
-
     data(:,1)=data(:,1)/normalization(1);% now normalized to 40cm/s peak    
-    data(:,2)=data(:,2)/normalization(2);% now normalized to 40cm/s peak    
+    data(:,2)=data(:,2)/normalization(2);% now normalized to 40cm/s peak 
+
     sig(:,1)=sig(:,1)/normalization(1);% now normalized to 40cm/s peak  
-    sig(:,2)=sig(:,2)/normalization(2);% now normalized to 40cm/s peak  
+    sig(:,2)=sig(:,2)/normalization(2);% now normalized to 40cm/s peak 
+
     % measure harmonics
     THD_L = thd(sig(:,1),fs);
     THD_R = thd(sig(:,2),fs);
@@ -129,43 +127,32 @@ close all; clear all; clc;
     THD_R = thd(sig(:,2),fs);
 
 %~~~~~~~~~~~~~~~~ 3.  100Hz        ~~~~~~~~~~~~~~~~%
+    t = 3;
+    sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
+    sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
+
 %~~~~~~~~~~~~~~~~ 4.  sweep        ~~~~~~~~~~~~~~~~%
     disp('sweep')
     t = 4;
     sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
     sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
-    figure(3); grid on; 
-    plot(sigtime,sig)
 
-
-
-    % sig = sig(1:pow2(floor(log2(length(sig)))),:);
-    % sigtime = sigtime(1:pow2(floor(log2(length(sig)))));
-
-    %% probably should downsample before fft
-    % fft(sig);
-    L = length(sig)
-    fftsig = fft(sig(:,1))/L;
-    fftsig = fftsig(1:L/2+1);
-    fftfreq = fs*(0:(L/2))/L;
-
-    figure(1); grid on; hold on;
-    set(gca, 'XScale', 'log')
-    plot(fftfreq,20*log10(fftsig));
-
-    figure(2); grid on; 
-    plot(sigtime,sig)
-    % plot(fftfreq,20*log10(fftsigR));
+    figure(1); hold on; grid on;
+    plotspectrum(sig, fs)
+    % set(gca, 'XScale', 'log')
 
 %~~~~~~~~~~~~~~~~ 5.  quiet        ~~~~~~~~~~~~~~~~%
     t = 5;
     sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff);
     sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
 
-    rmsL = 20*log10(rms(sig(:,1)))
-    rmsR = 20*log10(rms(sig(:,2)))
+    rmsL = 20*log10(rms(sig(:,1)));
+    rmsR = 20*log10(rms(sig(:,2)));
 
 %~~~~~~~~~~~~~~~~ 6.  3150Hz       ~~~~~~~~~~~~~~~~%
+    t = 6;
+    sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
+    sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
 %~~~~~~~~~~~~~~~~ 7.  1kHzL        ~~~~~~~~~~~~~~~~% 
     disp('1kHzL')
     t = 7;
@@ -173,18 +160,17 @@ close all; clear all; clc;
     sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
 
     %stereo bleed 
-    %rms level or fft based? 
-    %%%rms based 
-    rmsL = rms(sig(:,1))%20*log10(rms(sig(:,1)))
-    rmsR = rms(sig(:,2))%20*log10(rms(sig(:,2)))
+    %%% rms based 
+    rmsL = rms(sig(:,1));%20*log10(rms(sig(:,1)))
+    rmsR = rms(sig(:,2));%20*log10(rms(sig(:,2)))
     ratio1 = rmsL/rmsR
 
-    %% fft based 
+    %%% fft based 
     L = 2^16;
-    win = flattopwin(L);
     seg = sig(floor(length(sig)/2) - L/2:floor(length(sig)/2) + L/2 - 1,:);
-    thdL = thd(seg(:,1))
-    thdR = thd(seg(:,2))
+    % thdL = thd(seg(:,1))
+    % thdR = thd(seg(:,2))
+    win = flattopwin(L);
     seg = seg.*win;
 
     fftsigL = fft(seg(:,1))/L;
@@ -199,41 +185,112 @@ close all; clear all; clc;
     peakR = max(real(fftsigR));
     ratio2 = peakL/peakR
 
-
-    % figure(1); grid on; hold on;
-    % set(gca, 'XScale', 'log')
-    % plot(fftfreq,20*log10(fftsigL));
-    % plot(fftfreq,20*log10(fftsigR));
-
-    % plot(fftfreq,(fftsigL));
-    % plot(fftfreq,(fftsigR));
-
-    % figure(2); grid on; hold on;
-    % plot(sig(floor(length(sig)/2) - L/2:floor(length(sig)/2) + L/2 - 1,:))
-
 %~~~~~~~~~~~~~~~~ 8.  sweepL       ~~~~~~~~~~~~~~~~% 
+    t = 8;
+    sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
+    sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
 %~~~~~~~~~~~~~~~~ 9.  1kHzR        ~~~~~~~~~~~~~~~~%  
+    t = 9;
+    sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
+    sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
 %~~~~~~~~~~~~~~~~ 10. sweepR       ~~~~~~~~~~~~~~~~%  
+    t = 10;
+    sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
+    sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
 %~~~~~~~~~~~~~~~~ 11. 1kHzV        ~~~~~~~~~~~~~~~~%  
+    t = 11;
+    sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
+    sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
 %~~~~~~~~~~~~~~~~ 12. sweepV       ~~~~~~~~~~~~~~~~% 
-%~~~~~~~~~~~~~~~~ 13. transition   ~~~~~~~~~~~~~~~~%  
+    t = 12;
+    sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
+    sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
+%~~~~~~~~~~~~~~~~ 13. transition   ~~~~~~~~~~~~~~~~%
+    t = 13;
+    sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
+    sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);  
 %~~~~~~~~~~~~~~~~ 14. 1kHz2        ~~~~~~~~~~~~~~~~%  
+    t = 14;
+    sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
+    sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
 %~~~~~~~~~~~~~~~~ 15. 10kHz2       ~~~~~~~~~~~~~~~~%  
+    t = 15;
+    sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
+    sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
 %~~~~~~~~~~~~~~~~ 16. 100Hz2       ~~~~~~~~~~~~~~~~%  
-%~~~~~~~~~~~~~~~~ 17. freqsweep2   ~~~~~~~~~~~~~~~~%  
+    t = 16;
+    sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
+    sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
+%~~~~~~~~~~~~~~~~ 17. freqsweep2   ~~~~~~~~~~~~~~~~%
+    t = 17;
+    sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
+    sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);  
 %~~~~~~~~~~~~~~~~ 18. quiet2       ~~~~~~~~~~~~~~~~%  
-%~~~~~~~~~~~~~~~~ 19. 3150Hz2      ~~~~~~~~~~~~~~~~%   
+    t = 18;
+    sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
+    sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
+%~~~~~~~~~~~~~~~~ 19. 3150Hz2      ~~~~~~~~~~~~~~~~%
+    t = 19;
+    sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
+    sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);   
 %~~~~~~~~~~~~~~~~ 20. 1kHzL2       ~~~~~~~~~~~~~~~~%  
+    t = 20;
+    sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
+    sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
 %~~~~~~~~~~~~~~~~ 21. sweepL2      ~~~~~~~~~~~~~~~~%  
-%~~~~~~~~~~~~~~~~ 22. 1kHzR2       ~~~~~~~~~~~~~~~~%  
-%~~~~~~~~~~~~~~~~ 23. sweepR2      ~~~~~~~~~~~~~~~~%  
+    t = 21;
+    sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
+    sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
+%~~~~~~~~~~~~~~~~ 22. 1kHzR2       ~~~~~~~~~~~~~~~~%
+    t = 22;
+    sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
+    sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);  
+%~~~~~~~~~~~~~~~~ 23. sweepR2      ~~~~~~~~~~~~~~~~%
+    t = 23;
+    sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
+    sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);  
 %~~~~~~~~~~~~~~~~ 24. 1kHzV2       ~~~~~~~~~~~~~~~~%  
-%~~~~~~~~~~~~~~~~ 25. sweepV2      ~~~~~~~~~~~~~~~~% 
+    t = 24;
+    sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
+    sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
+%~~~~~~~~~~~~~~~~ 25. sweepV2      ~~~~~~~~~~~~~~~~%
+    t = 25;
+    sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
+    sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:); 
 %~~~~~~~~~~~~~~~~ 26. leadout      ~~~~~~~~~~~~~~~~% 
-    % figure(200);
-    % hold on; grid on;
-    % plot(timedata(timestamps(25,2)*fs:end),data(timestamps(25,2)*fs:end,:));
-    % plot(timeref(timestamps(25,2)*fs:end),ref(timestamps(25,2)*fs:end,:));
+    t = 25;
+    sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
+    sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
+
+
+%~~~~~~~~~~~~~~~~ AUDIO FUNCTIONS ~~~~~~~~~~~~~~~~~%
+function spec = plotspectrum(sig, fs)
+%myFun - Description
+%
+% Syntax: spec = plotspectrum(sig)
+%
+% Long description
+    L = length(sig);
+    % win = flattopwin(L);
+    % sig = sig.*win;
+
+    fftsigL = fft(sig(:,1))/L;
+    fftsigL = fftsigL(1:L/2+1);
+
+    fftsigR = fft(sig(:,2))/L;
+    fftsigR = fftsigR(1:L/2+1);
+
+    fftfreq = fs*(0:(L/2))/L;
+   
+    % figure(1); grid on; hold on;
+    set(gca, 'XScale', 'log')
+    plot(fftfreq,20*log10(fftsigL));
+    plot(fftfreq,20*log10(fftsigR));
+    % figure(2); grid on; 
+    % plot(sigtime,sig)
+
+end
+
 
 
 
