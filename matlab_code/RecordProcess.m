@@ -129,18 +129,32 @@ THD_R = thd(sig(:,2),fs);
 
 %~~~3. 100Hz 
 %~~~4. sweep 
+disp('sweep')
 t = 4;
 sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
 sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
+figure(3); grid on; 
+plot(sigtime,sig)
+
+
+
+% sig = sig(1:pow2(floor(log2(length(sig)))),:);
+% sigtime = sigtime(1:pow2(floor(log2(length(sig)))));
 
 %% probably should downsample before fft
 % fft(sig);
+L = length(sig)
+fftsig = fft(sig(:,1))/L;
+fftsig = fftsig(1:L/2+1);
+fftfreq = fs*(0:(L/2))/L;
 
-% figure(6); hold on; %% plot the spectrum of each groove
-% Len = length(sig);
-% freq_fft = fs*(0:(Len/2))/Len;
-% data_fft = fft(sig)/Len;
-% data_fft = data_fft(1:Len/2+1);
+figure(1); grid on; hold on;
+set(gca, 'XScale', 'log')
+plot(fftfreq,20*log10(fftsig));
+
+figure(2); grid on; 
+plot(sigtime,sig)
+% plot(fftfreq,20*log10(fftsigR));
 
 % ~~~5. quiet 
 t = 5;
