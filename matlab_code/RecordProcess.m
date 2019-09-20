@@ -209,6 +209,10 @@ close all; clear all; clc;
     t = 13;
     sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
     sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);  
+
+    ClickDetect(sig);
+
+
 %~~~~~~~~~~~~~~~~ 14. 1kHz2        ~~~~~~~~~~~~~~~~%  
     t = 14;
     sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
