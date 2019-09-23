@@ -1,6 +1,37 @@
+clc; close all;
+addpath('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\click_testing\')
+addpath('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\click_testing\declicked')
+
+files = dir('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\click_testing\*.wav')
+
+for i = (1:length(files))
+    file = strcat(files(i).folder,'/',files(i).name)
+    de_file = strcat(files(i).folder,'/declicked/',files(i).name) 
+    
+    [data, fs] = audioread(file);
+    [data2, fs] = audioread(de_file);
+
+    time = (0:length(data)-1)/fs;
+    time2 = (0:length(data)-1)/fs;
+
+    cdata= ClickDetectTest(data);
 
 
-function csig = ClickDetect(sig)
+    %~~~~~~~~~~~~~~~~PLOTTING~~~~~~~~~~~~~~~~~~~
+
+    figure(i); grid on; hold on 
+    plot(time, data)
+    title('audio data')
+
+    declick = data2(:,1) - data(:,1); 
+    plot(time,declick,'r');
+    data2 = data2(:,1);
+    time2 = (1:length(data2))/fs;
+
+end
+
+function csig = ClickDetectTest(sig)
+% function csig = ClickDetect(sig)
     csig = sig;
 
     sep = 2048;
