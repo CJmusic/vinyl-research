@@ -137,8 +137,8 @@ close all; clear all; clc;
     sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
     sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
 
-    figure(1); hold on; grid on;
-    plotspectrum(sig, fs)
+    % figure(1); hold on; grid on;
+    % plotspectrum(sig, fs)
     % set(gca, 'XScale', 'log')
 
 %~~~~~~~~~~~~~~~~ 5.  quiet        ~~~~~~~~~~~~~~~~%
@@ -210,7 +210,11 @@ close all; clear all; clc;
     sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
     sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);  
 
-    ClickDetect(sig);
+    csig = ClickDetect(sig);
+    figure(1); grid on;
+    plot(sigtime,sig)
+    figure(2); grid on;
+    plot(sigtime,csig)
 
 
 %~~~~~~~~~~~~~~~~ 14. 1kHz2        ~~~~~~~~~~~~~~~~%  
@@ -269,11 +273,7 @@ close all; clear all; clc;
 
 %~~~~~~~~~~~~~~~~ AUDIO FUNCTIONS ~~~~~~~~~~~~~~~~~%
 function spec = plotspectrum(sig, fs)
-%myFun - Description
-%
-% Syntax: spec = plotspectrum(sig)
-%
-% Long description
+
     L = length(sig);
     % win = flattopwin(L);
     % sig = sig.*win;
