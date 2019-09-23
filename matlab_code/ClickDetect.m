@@ -4,30 +4,28 @@ addpath('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\click_test
 
 files = dir('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\click_testing\*.wav')
 
-for i = (1:length(files))
+for i = 1%(1:length(files))
     file = strcat(files(i).folder,'/',files(i).name)
     de_file = strcat(files(i).folder,'/declicked/',files(i).name) 
     
-    [data, fs] = audioread(file);
-    [data2, fs] = audioread(de_file);
+    [sig, fs] = audioread(file);
+    [desig, fs] = audioread(de_file);
 
-    time = (0:length(data)-1)/fs;
-    time2 = (0:length(data)-1)/fs;
+    time = (0:length(sig)-1)/fs;
+    time2 = (0:length(sig)-1)/fs;
 
-    cdata= ClickDetectTest(data);
+    csig= ClickDetectTest(sig);
 
 
     %~~~~~~~~~~~~~~~~PLOTTING~~~~~~~~~~~~~~~~~~~
 
-    figure(i); grid on; hold on 
-    plot(time, data)
-    title('audio data')
-
-    declick = data2(:,1) - data(:,1); 
-    plot(time,declick,'r');
-    data2 = data2(:,1);
-    time2 = (1:length(data2))/fs;
-
+    figure(1); grid on; hold on 
+    subplot(3,1,1)
+    plot(time, sig)
+    subplot(3,1,2)
+    plot(time, csig)
+    subplot(3,1,3)
+    plot(time, desig)
 end
 
 function csig = ClickDetectTest(sig)
@@ -81,7 +79,7 @@ function csig = ClickDetectTest(sig)
                     for j = (left:i+ww+s2)
                         % disp('REMOVING CLICK')
                         %%detected click?
-                        csig(j) = rv*(j-left) + lv*(i+ww+s2-j)/(i+ww+s2-left);
+                        csig(j) = (rv*(j-left) + lv*(i+ww+s2-j))/(i+ww+s2-left);
                         %% perhaps I should have a cb2??
                         b2(j) = csig(j).^2;
                     end
