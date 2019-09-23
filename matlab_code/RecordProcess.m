@@ -210,7 +210,8 @@ close all; clear all; clc;
     sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
     sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);  
 
-    csig = ClickDetect(sig);
+    csig(:,1) = ClickDetect(sig(:,1));
+    csig(:,2) = ClickDetect(sig(:,2));
     figure(1); grid on;
     plot(sigtime,sig)
     figure(2); grid on;
