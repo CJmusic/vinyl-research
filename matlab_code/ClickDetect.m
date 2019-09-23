@@ -11,11 +11,15 @@
 %     [sig, fs] = audioread(file);
 %     [desig, fs] = audioread(de_file);
 
+%     sig = sig(500*fs:550*fs,:);
+%     desig = desig(500*fs:550*fs,:);
+
+
 %     time = (0:length(sig)-1)/fs;
 %     time2 = (0:length(sig)-1)/fs;
 
-%     csig(:,1) = ClickDetectTest(sig(:,1));
-%     csig(:,2) = ClickDetectTest(sig(:,2));
+%     [csig(:,1), clicksL] = ClickDetectTest(sig(:,1));
+%     [csig(:,2), clicksR] = ClickDetectTest(sig(:,2));
 
 
 %     %~~~~~~~~~~~~~~~~PLOTTING~~~~~~~~~~~~~~~~~~~
@@ -30,13 +34,23 @@
 %     subplot(3,1,3)
 %     plot(time, desig)
 %     title('audacitys click removal')
+%     for xi = 1:length(clicksL)
+%         x1 = time(clicksL(xi));
+%         figure(100 + i); hold on;
+%         line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
+%     end
+%     for xi = 1:length(clicksR)
+%         x1 = time(clicksR(xi));
+%         figure(100 + i); hold on;
+%         line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
+%     end
 
 %     figure(100 + i); grid on; 
 %     plot(time, desig-csig)
 %     title('audacity - mine')
 % end
 
-% function csig = ClickDetectTest(sig)
+% function [csig, clicks] = ClickDetectTest(sig)
 function csig = ClickDetect(sig)
     csig = sig;
 
@@ -96,6 +110,7 @@ function csig = ClickDetect(sig)
                     for j = (left:i+ww+s2)
                         % disp('REMOVING CLICK')
                         %%detected click?
+                        clicks = [clicks, j];
                         csig(j) = (rv*(j-left) + lv*(i+ww+s2-j))/(i+ww+s2-left);
                         %% perhaps I should have a cb2??
                         b2(j) = csig(j).^2;
