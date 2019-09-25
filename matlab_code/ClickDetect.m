@@ -51,7 +51,7 @@
 % end
 
 % function [csig, clicks] = ClickDetectTest(sig)
-function csig = ClickDetect(sig)
+function [csig, clicks] = ClickDetect(sig)
     csig = sig;
 
     sep = 2048;
