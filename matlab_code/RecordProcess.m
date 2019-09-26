@@ -1,5 +1,5 @@
 % close all; clear all; clc;
-function [lagdiff, normalization, RMS_L, RMS_R, CLICKS_L, CLICKS_R, THD_L, THD_R, wow, stereo_bleed] = RecordProcess(file)
+function [lagdiff, normalization, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R, wow, stereo_bleed] = RecordProcess(file)
     %%%~~~~~~~~~~~~~~~~~ LOAD REFERENCE~~~~~~~~~~~~~~~~~%%%
         try 
             [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/031418_A0000B0000r27a.wav');
@@ -131,8 +131,10 @@ function [lagdiff, normalization, RMS_L, RMS_R, CLICKS_L, CLICKS_R, THD_L, THD_R
             
             [csig(:,1), CLICKS_L] = ClickDetect(sig(:,1));
             [csig(:,2), CLICKS_R] = ClickDetect(sig(:,2));
-            clicks_L = length(CLICKS_L);
-            clicks_R = length(CLICKS_R);
+            
+            disp('clicks')
+            clicks_L = length(CLICKS_L)
+            clicks_R = length(CLICKS_R)
 
             RMS_L = 20.0*log10(rms(csig(:,1)));
             RMS_R = 20.0*log10(rms(csig(:,2)));
@@ -175,19 +177,9 @@ function [lagdiff, normalization, RMS_L, RMS_R, CLICKS_L, CLICKS_R, THD_L, THD_R
                 wow = 'n/a';
             end
         end
-        lagdiff
-        normalization
-        RMS_L
-        RMS_R
-        clicks_L
-        clicks_R
-        THD_L
-        THD_R
-        wow
-        stereo_bleed
 
-        disp('output')
-        output = {lagdiff, normalization, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R, wow, stereo_bleed}
+        % output = {lagdiff, normalization, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R, wow, stereo_bleed};
+
 end %function end
 %     %~~~~~~~~~~~~~~~~ 0.  leadin       ~~~~~~~~~~~~~~~~% 
 %         % figure(100);
