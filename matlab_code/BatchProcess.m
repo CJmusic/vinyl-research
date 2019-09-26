@@ -8,7 +8,7 @@ folder = '';
     % files = dir('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/click_testing/*.wav')
 % end
 
-csvdata = {'date', 'pressing', 'top_stamper', 'top_hits', 'bottom_stamper', 'bottom_hits', 'record', 'side', 'track', 'lagdiff', 'normalization', 'RMS_L', 'RMS_R', 'clicks_L', 'clicks_R', 'THD_L', 'THD_R', 'wow', 'stereo_bleed'};
+csvdata = {'date', 'pressing', 'top_stamper', 'top_hits', 'bottom_stamper', 'bottom_hits', 'record', 'side', 'track', 'lagdiff', 'normalization_L', 'normalization_R','RMS_L', 'RMS_R', 'clicks_L', 'clicks_R', 'THD_L', 'THD_R', 'wow', 'stereo_bleed'};
 % size(headers)
 % csvdata = {};
 % csvdata = {headers};
@@ -37,15 +37,31 @@ for i = (1:length(files))
     record = filename(19:20);
     side = filename(21);
 
-    top_hits = int2str(str2num(top_hits) + str2num(record))
-    bottom_hits = int2str(str2num(bottom_hits) + str2num(record))
+    top_hits = str2num(top_hits) + str2num(record);
+    bottom_hits = str2num(bottom_hits) + str2num(record);
 
 
 
-    [lagdiff, normalization, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R, wow, stereo_bleed] = RecordProcess(file);
-    csvdata
-    csvdata(end+1,:) = {date, pressing, top_stamper, top_hits, bottom_stamper, bottom_hits, record, side, track, lagdiff, normalization, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R, wow, stereo_bleed}
+    % [lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R, wow, stereo_bleed] = RecordProcess(file);
+    output = RecordProcess(file)
+    % output
+    % size(output)
+    for i=(1:length(output))
+        track = output(i,1)
+        lagdiff = output(i,2)
+        normalization_L = output(i,3)
+        normalization_R = output(i,4)
+        RMS_L = output(i,5)
+        RMS_R = output(i,6)
+        clicks_L = output(i,7)
+        clicks_R = output(i,8)
+        THD_L = output(i,9)
+        THD_R = output(i,10)
+        wow = output(i,11)
+        stereo_bleed = output(i,12)
 
+        csvdata(end+1,:) = {date, pressing, top_stamper, top_hits, bottom_stamper, bottom_hits, record, side, track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R, wow, stereo_bleed}
+    end
 
 end
 

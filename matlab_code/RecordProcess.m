@@ -1,5 +1,6 @@
 % close all; clear all; clc;
-function [lagdiff, normalization, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R, wow, stereo_bleed] = RecordProcess(file)
+% function [lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R, wow, stereo_bleed] = RecordProcess(file)
+function output = RecordProcess(file)
     %%%~~~~~~~~~~~~~~~~~ LOAD REFERENCE~~~~~~~~~~~~~~~~~%%%
         try 
             [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/031418_A0000B0000r27a.wav');
@@ -66,7 +67,7 @@ function [lagdiff, normalization, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R
         % end
 
         [data, fs] = audioread(file);
-
+        output = {};
 
     %~~~~~~~~~~~~~~~~~    LINE UP      ~~~~~~~~~~~~~~~~% 
 
@@ -103,7 +104,8 @@ function [lagdiff, normalization, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R
         normalization=sqrt(2)*sigRMS*40/7; %digital value of peak level
         data(:,1)=data(:,1)/normalization(1);% now normalized to 40cm/s peak    
         data(:,2)=data(:,2)/normalization(2);% now normalized to 40cm/s peak 
-
+        normalization_L = normalization(1);
+        normalization_R = normalization(2);
 
         for t = 1:length(timestamps)
             % for each track we need: 
@@ -132,9 +134,8 @@ function [lagdiff, normalization, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R
             [csig(:,1), CLICKS_L] = ClickDetect(sig(:,1));
             [csig(:,2), CLICKS_R] = ClickDetect(sig(:,2));
             
-            disp('clicks')
-            clicks_L = length(CLICKS_L)
-            clicks_R = length(CLICKS_R)
+            clicks_L = length(CLICKS_L);
+            clicks_R = length(CLICKS_R);
 
             RMS_L = 20.0*log10(rms(csig(:,1)));
             RMS_R = 20.0*log10(rms(csig(:,2)));
@@ -176,9 +177,11 @@ function [lagdiff, normalization, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R
             else 
                 wow = 'n/a';
             end
+            track = signal_names(t)
+            output(end+1,:) = {track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R, wow, stereo_bleed};
+
         end
 
-        % output = {lagdiff, normalization, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R, wow, stereo_bleed};
 
 end %function end
 %     %~~~~~~~~~~~~~~~~ 0.  leadin       ~~~~~~~~~~~~~~~~% 
