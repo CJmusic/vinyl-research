@@ -9,10 +9,7 @@ folder = '';
 % end
 
 csvdata = {'date', 'pressing', 'top_stamper', 'top_hits', 'bottom_stamper', 'bottom_hits', 'record', 'side', 'track', 'lagdiff', 'normalization_L', 'normalization_R','RMS_L', 'RMS_R', 'clicks_L', 'clicks_R', 'THD_L', 'THD_R', 'wow', 'stereo_bleed'};
-% size(headers)
-% csvdata = {};
-% csvdata = {headers};
-size(csvdata)
+
 for i = (1:length(files))
     file = strcat(files(i).folder,'/',files(i).name)
 
@@ -42,10 +39,7 @@ for i = (1:length(files))
 
 
 
-    % [lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R, wow, stereo_bleed] = RecordProcess(file);
-    output = RecordProcess(file)
-    % output
-    % size(output)
+    output = RecordProcess(file);
     for i=(1:length(output))
         track = output(i,1)
         lagdiff = output(i,2)
@@ -67,4 +61,4 @@ end
 
 
 T = cell2table(csvdata(2:end,:),'VariableNames',csvdata(1,:))
-writetable(T,'myDataFile.csv')
+writetable(T,'myDataFile.csv'
