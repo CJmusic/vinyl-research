@@ -1,11 +1,7 @@
 % close all; clear all; clc;
-
-
-
-function output = RecordProcess(file)
+function [lagdiff, normalization, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R, wow, stereo_bleed] = RecordProcess(file)
     %%%~~~~~~~~~~~~~~~~~ LOAD REFERENCE~~~~~~~~~~~~~~~~~%%%
         try 
-            [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/031418_A0000B0000r27a.wav');
             [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/031418_A0000B0000r27a.wav');
 
         catch
@@ -15,9 +11,10 @@ function output = RecordProcess(file)
     %Info about reference file
 
         timestamps_ref = [0, 60, 90, 122, 158, 180, 246, 266, 304, 324, 362, 382, 417.5];
-        % this is how many seconds each signal is according to Chris Muth's track listing
+        % this is how many seconds each signal is according to Chris Muths track listing
         lengths = [60, 30, 31, 36, 21, 66, 20, 37, 19, 37, 19, 37, 19]; %starts with 1kHz
-        signal_names = {'leadin','1kHz', '10kHz', '100Hz', 'sweep', 'quiet', '3150Hz', '1kHzL', 'sweepL', '1kHzR', 'sweepR', '1kHzV', 'sweepV','transition', '1kHz2', '10kHz2', '100Hz2', 'freqsweep2', 'quiet2', '3150Hz2',  '1kHzL2', 'sweepL2', '1kHzR2', 'sweepR2', '1kHzV2', 'sweepV2','leadout'};
+        signal_names = {'leadin', '1kHz', '10kHz', '100Hz', 'sweep', 'quiet', '3150Hz', '1kHzL', 'sweepL', '1kHzR', 'sweepR', '1kHzV', 'sweepV','transition', '1kHz2', '10kHz2', '100Hz2', 'freqsweep2', 'quiet2', '3150Hz2',  '1kHzL2', 'sweepL2', '1kHzR2', 'sweepR2', '1kHzV2', 'sweepV2','leadout'
+        };
         %% Reference 02072019_A0000B000r27a.wav 
         offset = 10.625; 
         transition = 517.375; 
@@ -61,11 +58,11 @@ function output = RecordProcess(file)
 
     %~~~~~~~~~~~~~~~~~    LOAD FILE    ~~~~~~~~~~~~~~~~%
         % try
-        %     addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000') %MAC
-        %     [data, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/03141_A0000B0000r30a.wav');
+        %     addpath(/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000) %MAC
+        %     [data, fs] = audioread(/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/03141_A0000B0000r30a.wav);
         % catch 
-        %     addpath('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000') %WINDOWS 
-        %     [data, fs] = audioread('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000\03141_A0000B0000r29a.wav');
+        %     addpath(D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000) %WINDOWS 
+        %     [data, fs] = audioread(D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000\03141_A0000B0000r29a.wav);
         % end
 
         [data, fs] = audioread(file);
@@ -94,7 +91,7 @@ function output = RecordProcess(file)
         % for xi = 1:length(timestamps)
         %             x1 = timestamps(xi,1);
         %             figure(1); hold on; grid on;
-        %             line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
+        %             line([x1 x1], get(gca, ylim),Color, black,LineStyle, --);
         % end
         %% PLOTTING ENDS %%
 
@@ -118,7 +115,7 @@ function output = RecordProcess(file)
             %  - normalization
             %  - stereo bleed (still really unsure about this test)
             %  - wow and flutter 
-            track_name = signal_names{i};
+            track_name = signal_names{t};
 
             csig = [];
             clicks_R = [];
@@ -141,7 +138,7 @@ function output = RecordProcess(file)
             THD_R = thd(csig(:,2),fs);
 
 
-            if ismember(signal_names(t), {'1kHzL', 'sweepL', '1kHzL2', 'sweepL2', }) 
+            if ismember(signal_names(t), {'1kHzL', 'sweepL', '1kHzL2', 'sweepL2'}) 
                 ratio1 = RMS_L/RMS_R;
                 %%% fft based 
                 % L = 2^16;
@@ -163,7 +160,7 @@ function output = RecordProcess(file)
                 % peakR = max(real(fftsigR));
                 % ratio2 = peakL/peakR;
                 stereo_bleed = ratio1;
-            elseif ismember(signal_names(t), { '1kHzR', 'sweepR', '1kHzR2', 'sweepR2'}) 
+            elseif ismember(signal_names(t), {'1kHzR', 'sweepR', '1kHzR2', 'sweepR2'}) 
                 ratio1 = RMS_R/RMS_L;
                 stereo_bleed = ratio1; 
             else
@@ -176,7 +173,8 @@ function output = RecordProcess(file)
                 wow = 'n/a';
             end
         end
-
+        output = [lagdiff, normalization, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R, wow, stereo_bleed]
+end %function end
 %     %~~~~~~~~~~~~~~~~ 0.  leadin       ~~~~~~~~~~~~~~~~% 
 %         % figure(100);
 %         % hold on; grid on;
@@ -216,14 +214,14 @@ function output = RecordProcess(file)
 %         sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
 
 %     %~~~~~~~~~~~~~~~~ 4.  sweep        ~~~~~~~~~~~~~~~~%
-%         disp('sweep')
+%         disp(sweep)
 %         t = 4;
 %         sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
 %         sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
 
 %         % figure(1); hold on; grid on;
 %         % plotspectrum(sig, fs)
-%         % set(gca, 'XScale', 'log')
+%         % set(gca, XScale, log)
 
 %     %~~~~~~~~~~~~~~~~ 5.  quiet        ~~~~~~~~~~~~~~~~%
 %         t = 5;
@@ -238,7 +236,7 @@ function output = RecordProcess(file)
 %         sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
 %         sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
 %     %~~~~~~~~~~~~~~~~ 7.  1kHzL        ~~~~~~~~~~~~~~~~% 
-%         disp('1kHzL')
+%         disp(1kHzL)
 %         t = 7;
 %         sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff);
 %         sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
@@ -358,7 +356,6 @@ function output = RecordProcess(file)
 
 
 
-end %function end
 %~~~~~~~~~~~~~~~~ AUDIO FUNCTIONS ~~~~~~~~~~~~~~~~~%
 % function spec = plotspectrum(sig, fs)
 
@@ -375,7 +372,7 @@ end %function end
 %     fftfreq = fs*(0:(L/2))/L;
    
 %     % figure(1); grid on; hold on;
-%     set(gca, 'XScale', 'log')
+%     set(gca, XScale, log)
 %     plot(fftfreq,20*log10(fftsigL));
 %     plot(fftfreq,20*log10(fftsigR));
 %     % figure(2); grid on; 
