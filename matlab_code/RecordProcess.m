@@ -14,7 +14,33 @@ function output = RecordProcess(file)
         timestamps_ref = [0, 60, 90, 122, 158, 180, 246, 266, 304, 324, 362, 382, 417.5];
         % this is how many seconds each signal is according to Chris Muths track listing
         lengths = [60, 30, 31, 36, 21, 66, 20, 37, 19, 37, 19, 37, 19]; %starts with 1kHz
-        signal_names = {'leadin', '1kHz', '10kHz', '100Hz', 'sweep', 'quiet', '3150Hz', '1kHzL', 'sweepL', '1kHzR', 'sweepR', '1kHzV', 'sweepV','transition', '1kHz2', '10kHz2', '100Hz2', 'freqsweep2', 'quiet2', '3150Hz2',  '1kHzL2', 'sweepL2', '1kHzR2', 'sweepR2', '1kHzV2', 'sweepV2','leadout'
+        signal_names = {'leadin',    % 1
+                        '1kHz',      % 2
+                        '10kHz',     % 3
+                        '100Hz',     % 4
+                        'sweep',     % 5
+                        'quiet',     % 6
+                        '3150Hz',    % 7 
+                        '1kHzL',     % 8
+                        'sweepL',    % 9
+                        '1kHzR',     % 10
+                        'sweepR',    % 11
+                        '1kHzV',     % 12
+                        'sweepV',    % 13
+                        'transition',% 14
+                        '1kHz2',     % 15
+                        '10kHz2',    % 16
+                        '100Hz2',    % 17
+                        'freqsweep2',% 18
+                        'quiet2',    % 19
+                        '3150Hz2',   % 20
+                        '1kHzL2',    % 21
+                        'sweepL2',   % 22
+                        '1kHzR2',    % 23
+                        'sweepR2',   % 24
+                        '1kHzV2',    % 25
+                        'sweepV2',   % 26
+                        'leadout'    % 27
         };
         %% Reference 02072019_A0000B000r27a.wav 
         offset = 10.625; 
@@ -96,7 +122,7 @@ function output = RecordProcess(file)
         normalization_L = normalization(1);
         normalization_R = normalization(2);
 
-        for t = 1:length(timestamps)
+        for t = 1:length(signal_names)
             % for each track we need: 
             %  - RMS level
             %  - Clicks
@@ -115,10 +141,17 @@ function output = RecordProcess(file)
             RMS_R = [];
             THD_L = [];
             THD_R = [];
-
-            sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
-        
-            sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
+            
+            if t == 1
+                sig = data(1 : floor(timestamps(1,1)*fs) - lagdiff,:);
+                sigtime = timedata(1 : floor(timestamps(1,1)*fs) - lagdiff);  
+            elseif t == length(signal_names)
+                sig = data(floor(timestamps(end,2)*fs) - lagdiff : length(data),:);
+                sigtime = timedata(floor(timestamps(end,2)*fs) - lagdiff : length(data));  
+            else
+                sig = data(floor(timestamps(t-1,1)*fs) - lagdiff : floor(timestamps(t-1,2)*fs) - lagdiff,:);
+                sigtime = timedata(floor(timestamps(t-1,1)*fs) - lagdiff :floor(timestamps(t-1,2)*fs) - lagdiff);  
+            end
             
             [csig(:,1), CLICKS_L] = ClickDetect(sig(:,1));
             [csig(:,2), CLICKS_R] = ClickDetect(sig(:,2));
@@ -162,12 +195,17 @@ function output = RecordProcess(file)
             end
 
             if ismember(signal_names(t), {'3150Hz', '3150Hz2'})
-                wow_L = WowFlutter(csig(:,1));
+                wow_L = 0;%WowFlutter(csig(:,1));
                 wow_R = 0;%WowFlutter(csig(:,2));
             else 
                 wow_L = 'n/a';
                 wow_R = 'n/a';
             end
+            % figure(1000+t); hold on; grid on;
+            % title(signal_names(t))
+            % plot(csig(:,1))
+            % plot(csig(:,2))
+
             track = signal_names(t);
             output(end+1,:) = {track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R, wow_L, wow_R, stereo_bleed};
 

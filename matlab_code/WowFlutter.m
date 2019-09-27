@@ -20,13 +20,13 @@ function wow = WowFlutter(rev4_1);
     [b,a]=butter(2,2*100/fs,'high');% not really necessary with fft filter
     %rev4_1=filter(b,a,rev4_1);
     %-------------------plot all data------------
-    figure(20)
-    plot(t,rev4_1(1:Nt),'b') 
-    grid on;
-    % axis([0 Nt/fs ylim])  
-    xlabel('time[s]')
-    legend('left or right')
-    title('untrimmed file data')
+    % figure(20)
+    % plot(t,rev4_1(1:Nt),'b') 
+    % grid on;
+    % % axis([0 Nt/fs ylim])  
+    % xlabel('time[s]')
+    % legend('left or right')
+    % title('untrimmed file data')
     %----------select useful portion------------
     ns=round(ts*fs)+1;nf=round(tf*fs);
     rev4_1=rev4_1(ns:nf);% after this the lr dimension is gone
@@ -36,13 +36,13 @@ function wow = WowFlutter(rev4_1);
     f=[0:Nt/2]*fs/Nt;
     %Rev4=abs(fft(window(@blackmanharris,Nt,'periodic').*rev4_1));
     Rev4=abs(fft(rev4_1));
-    figure(30)
-    plot(f,20*log10(Rev4(1:Nt/2+1)),'b');
-    grid on;
-    xlabel('freq[Hz]')
-    ylabel('Power Spectrum [dB]')
-    legend('N_t data','Location','Best');
-    title('PSD')
+    % figure(30)
+    % plot(f,20*log10(Rev4(1:Nt/2+1)),'b');
+    % grid on;
+    % xlabel('freq[Hz]')
+    % ylabel('Power Spectrum [dB]')
+    % legend('N_t data','Location','Best');
+    % title('PSD')
     %-------------------get rough estimate of test freq--------------------
     [M,I]=max(Rev4(1:Nt/2+1));
     freq_ref=(I-1)*fs/Nt
@@ -68,22 +68,22 @@ function wow = WowFlutter(rev4_1);
     end
     freq(1)=freq(3);freq(2)=freq(3);%%%%%% 2i2 seems to need this %%%%%%%%%%
     tseg=[0:nseg-1]*(nfft/2)/fs;
-    figure(40)
-    plot(tseg,freq)
-    grid on;
-    xlabel('Time[sec]')
-    ylabel('Freq[Hz]')
-    axis([xlim 3149.9932 3149.9938])
-    axis([xlim ylim])
-    title([filename ' ref:' num2str(freq_ref) ' nsum:' num2str(n_sum)])
+    % figure(40)
+    % plot(tseg,freq)
+    % grid on;
+    % xlabel('Time[sec]')
+    % ylabel('Freq[Hz]')
+    % axis([xlim 3149.9932 3149.9938])
+    % axis([xlim ylim])
+    % title([filename ' ref:' num2str(freq_ref) ' nsum:' num2str(n_sum)])
     % ---------- ---closeup plot--------
-    figure(50)
-    plot(tseg,freq)
-    grid on;
-    axis([0 5 ylim])
-    xlabel('Time[sec]')
-    ylabel('Freq[Hz]')
-    title([filename ' ref:' num2str(freq_ref) ' nsum:' num2str(n_sum)])
+    % figure(50)
+    % plot(tseg,freq)
+    % grid on;
+    % axis([0 5 ylim])
+    % xlabel('Time[sec]')
+    % ylabel('Freq[Hz]')
+    % title([filename ' ref:' num2str(freq_ref) ' nsum:' num2str(n_sum)])
 
 
     wow = max(freq) - min(freq); %%peak to peak measurement
