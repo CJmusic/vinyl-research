@@ -9,7 +9,7 @@ folder = '';
     % files = dir('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/click_testing/*.wav')
 % end
 
-csvdata = {'date', 'pressing', 'top_stamper', 'top_hits', 'bottom_stamper', 'bottom_hits', 'record', 'side', 'track', 'lagdiff', 'normalization_L', 'normalization_R','RMS_L', 'RMS_R', 'clicks_L', 'clicks_R', 'THD_L', 'THD_R', 'wow', 'stereo_bleed'};
+csvdata = {'date', 'pressing', 'top_stamper', 'top_hits', 'bottom_stamper', 'bottom_hits', 'record', 'side', 'track', 'lagdiff', 'normalization_L', 'normalization_R','RMS_L', 'RMS_R', 'clicks_L', 'clicks_R', 'THD_L', 'THD_R', 'wow_L', 'wow_R', 'stereo_bleed'};
 
 for i = (1:length(files))
     file = strcat(files(i).folder,'/',files(i).name)
@@ -40,7 +40,7 @@ for i = (1:length(files))
 
 
 
-    output = RecordProcess(file);
+    output = RecordProcess(file)
     numrec = size(output);
     for i=(1:numrec)
         track = output(i,1);
@@ -53,10 +53,11 @@ for i = (1:length(files))
         clicks_R = output(i,8);
         THD_L = output(i,9);
         THD_R = output(i,10);
-        wow = output(i,11);
-        stereo_bleed = output(i,12);
+        wow_L = output(i,11);
+        wow_R = output(i,12);
+        stereo_bleed = output(i,13);
 
-        csvdata(end+1,:) = {date, pressing, top_stamper, top_hits, bottom_stamper, bottom_hits, record, side, track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R, wow, stereo_bleed};
+        csvdata(end+1,:) = {date, pressing, top_stamper, top_hits, bottom_stamper, bottom_hits, record, side, track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R, wow_L, wow_R, stereo_bleed};
     end
 
 end

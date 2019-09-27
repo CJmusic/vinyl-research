@@ -162,12 +162,14 @@ function output = RecordProcess(file)
             end
 
             if ismember(signal_names(t), {'3150Hz', '3150Hz2'})
-                wow = WowFlutter(csig);
+                wow_L = WowFlutter(csig(:,1));
+                wow_R = 0;%WowFlutter(csig(:,2));
             else 
-                wow = 'n/a';
+                wow_L = 'n/a';
+                wow_R = 'n/a';
             end
             track = signal_names(t);
-            output(end+1,:) = {track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R, wow, stereo_bleed};
+            output(end+1,:) = {track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R, wow_L, wow_R, stereo_bleed};
 
         end
 end 
