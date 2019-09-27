@@ -24,31 +24,31 @@ function output = RecordProcess(file)
 
         % 031418_A0000B0000r27a.wav as reference timestamps
         offset = 10.625; 
-        timestamps =       [[0, 61],   % 1 kHz
-                            [61,91],    % 10 kHz
-                            [91,121],   % 100 Hz
-                            [121,159],  % sweep
-                            [159,180],  % quiet
-                            [180,245],  % 3150 Hz
-                            [245,267],  % 1 kHz left
-                            [267, 302], % sweep left
-                            [302, 325], % 1 kHz right
-                            [325, 361], % sweep right
-                            [361, 383], % 1 kHz vertical
-                            [383, 418], % sweep vertical
-                            [418, 515], % transition
-                            [515, 578], % 1 kHz
-                            [578, 608], % 10 kHz
-                            [608, 639], % 100 Hz
-                            [639, 676], % sweep
-                            [676, 698], % quiet
-                            [698, 760], % 3150 Hz
-                            [760, 785], % 1 kHz left
-                            [785, 820], % sweep left
-                            [820, 842], % 1 kHz right
-                            [842, 878], % sweep right
-                            [878, 900], % 1 kHz vertical
-                            [900, 938]]; % sweep vertical  
+        timestamps =       [[0, 61],    % 1. 1 kHz
+                            [61,91],    % 2. 10 kHz
+                            [91,121],   % 3. 100 Hz
+                            [121,159],  % 4. sweep
+                            [159,180],  % 5. quiet
+                            [180,245],  % 6. 3150 Hz
+                            [245,267],  % 7. 1 kHz left
+                            [267, 302], % 8. sweep left
+                            [302, 325], % 9. 1 kHz right
+                            [325, 361], % 10. sweep right
+                            [361, 383], % 11. 1 kHz vertical
+                            [383, 418], % 12. sweep vertical
+                            [418, 515], % 13. transition
+                            [515, 578], % 14. 1 kHz
+                            [578, 608], % 15. 10 kHz
+                            [608, 639], % 16. 100 Hz
+                            [639, 676], % 17. sweep
+                            [676, 698], % 18. quiet
+                            [698, 760], % 19. 3150 Hz
+                            [760, 785], % 20. 1 kHz left
+                            [785, 820], % 21. sweep left
+                            [820, 842], % 22. 1 kHz right
+                            [842, 878], % 23. sweep right
+                            [878, 900], % 24. 1 kHz vertical
+                            [900, 938]];% 25. sweep vertical  
                             % [938, 950]];               
                             %% dont forget lead in and leadout
         timestamps = timestamps + offset;
@@ -96,7 +96,7 @@ function output = RecordProcess(file)
         normalization_L = normalization(1);
         normalization_R = normalization(2);
 
-        for t = 1:length(timestamps)
+        for t = 6%1:length(timestamps)
             % for each track we need: 
             %  - RMS level
             %  - Clicks
@@ -162,12 +162,12 @@ function output = RecordProcess(file)
             end
 
             if ismember(signal_names(t), {'3150Hz', '3150Hz2'})  
-                wow = 0;
+                wow = WowFlutter
             else 
                 wow = 'n/a';
             end
             track = signal_names(t)
-            output(end+1,:) = {track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R, wow, stereo_bleed};
+            output(end+1,:) = {track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R, wow, stereo_bleed}
 
         end
 end 

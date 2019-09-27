@@ -39,8 +39,10 @@ for i = (1:length(files))
 
 
 
-    output = RecordProcess(file);
-    for i=(1:length(output))
+    output = RecordProcess(file)
+    disp('size output')
+    numrec = size(output)
+    for i=(1:numrec)
         track = output(i,1)
         lagdiff = output(i,2)
         normalization_L = output(i,3)
@@ -61,4 +63,4 @@ end
 
 
 T = cell2table(csvdata(2:end,:),'VariableNames',csvdata(1,:))
-writetable(T,'myDataFile.csv'
+writetable(T,'myDataFile.csv');
