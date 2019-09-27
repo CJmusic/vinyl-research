@@ -43,24 +43,24 @@ for i = (1:length(files))
     disp('size output')
     numrec = size(output)
     for i=(1:numrec)
-        track = output(i,1)
-        lagdiff = output(i,2)
-        normalization_L = output(i,3)
-        normalization_R = output(i,4)
-        RMS_L = output(i,5)
-        RMS_R = output(i,6)
-        clicks_L = output(i,7)
-        clicks_R = output(i,8)
-        THD_L = output(i,9)
-        THD_R = output(i,10)
+        track = output(i,1);
+        lagdiff = output(i,2);
+        normalization_L = output(i,3);
+        normalization_R = output(i,4);
+        RMS_L = output(i,5);
+        RMS_R = output(i,6);
+        clicks_L = output(i,7);
+        clicks_R = output(i,8);
+        THD_L = output(i,9);
+        THD_R = output(i,10);
         wow = output(i,11)
-        stereo_bleed = output(i,12)
+        stereo_bleed = output(i,12);
 
-        csvdata(end+1,:) = {date, pressing, top_stamper, top_hits, bottom_stamper, bottom_hits, record, side, track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R, wow, stereo_bleed}
+        csvdata(end+1,:) = {date, pressing, top_stamper, top_hits, bottom_stamper, bottom_hits, record, side, track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R, wow, stereo_bleed};
     end
 
 end
 
 
-T = cell2table(csvdata(2:end,:),'VariableNames',csvdata(1,:))
+T = cell2table(csvdata(2:end,:),'VariableNames',csvdata(1,:));
 writetable(T,'myDataFile.csv');

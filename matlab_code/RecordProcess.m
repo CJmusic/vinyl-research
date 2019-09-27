@@ -96,7 +96,7 @@ function output = RecordProcess(file)
         normalization_L = normalization(1);
         normalization_R = normalization(2);
 
-        for t = 6%1:length(timestamps)
+        for t = 7%1:length(timestamps)
             % for each track we need: 
             %  - RMS level
             %  - Clicks
@@ -106,7 +106,7 @@ function output = RecordProcess(file)
             %  - normalization
             %  - stereo bleed (still really unsure about this test)
             %  - wow and flutter 
-            track_name = signal_names{t};
+            track_name = signal_names{t}
 
             csig = [];
             CLICKS_R = [];
@@ -161,13 +161,14 @@ function output = RecordProcess(file)
                 stereo_bleed = 'n/a';
             end
 
-            if ismember(signal_names(t), {'3150Hz', '3150Hz2'})  
-                wow = WowFlutter
+            if ismember(signal_names(t), {'3150Hz', '3150Hz2'})
+                disp('CALLING WOW AND FLUTTER')
+                wow = WowFlutter(csig)
             else 
                 wow = 'n/a';
             end
             track = signal_names(t)
-            output(end+1,:) = {track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R, wow, stereo_bleed}
+            output(end+1,:) = {track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R, wow, stereo_bleed};
 
         end
 end 

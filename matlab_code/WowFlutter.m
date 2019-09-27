@@ -5,7 +5,12 @@
 %  
 
 function wow = WowFlutter(rev4_1);
-    [rev4_1,fs]=audioread(filename);
+    disp('--------------WOW AND FLUTTER--------------')
+    filename = 'wow'
+    fs = 96000;
+    ts = length(rev4_1)*(1/4)/fs
+    tf = length(rev4_1)*(3/4)/fs
+    % [rev4_1,fs]=audioread(filename);
     lr=1; %1=left, 2=right
     disp(['lr: ' num2str(lr)])
     Nt=length(rev4_1);
@@ -18,7 +23,7 @@ function wow = WowFlutter(rev4_1);
     figure(20)
     plot(t,rev4_1(1:Nt,lr),'b') 
     grid on;
-    % axis([0 Nt/fs ylim])
+    % axis([0 Nt/fs ylim])  
     xlabel('time[s]')
     legend('left or right')
     title('untrimmed file data')
@@ -76,5 +81,11 @@ function wow = WowFlutter(rev4_1);
     xlabel('Time[sec]')
     ylabel('Freq[Hz]')
     title([filename ' ref:' num2str(freq_ref) ' nsum:' num2str(n_sum)])
+
+
+    max(freq)
+    min(freq)
+    wow = max(freq) - min(freq) %%peak to peak measurement
+
     disp('-------------------finished--------------------') 
 end
