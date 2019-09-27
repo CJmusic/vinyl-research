@@ -31,7 +31,7 @@ function wow = WowFlutter(rev4_1);
     ns=round(ts*fs)+1;nf=round(tf*fs);
     rev4_1=rev4_1(ns:nf);% after this the lr dimension is gone
     Nt=length(rev4_1);
-    disp(['N_analyze: ' num2str(Nt) '  duration: ' num2str(Nt/fs)])
+    % disp(['N_analyze: ' num2str(Nt) '  duration: ' num2str(Nt/fs)])
     %-----------------plots------------
     f=[0:Nt/2]*fs/Nt;
     %Rev4=abs(fft(window(@blackmanharris,Nt,'periodic').*rev4_1));
@@ -45,11 +45,11 @@ function wow = WowFlutter(rev4_1);
     % title('PSD')
     %-------------------get rough estimate of test freq--------------------
     [M,I]=max(Rev4(1:Nt/2+1));
-    freq_ref=(I-1)*fs/Nt
+    freq_ref=(I-1)*fs/Nt;
     %------------------section spectra, get weighted line freq-------------
     nfft=2^12 ;%disp(['nfft: ' num2str(nfft)]) %not critical
-    fractional_bin=1+freq_ref*nfft/fs
-    nref=1+round((freq_ref/fs)*nfft)%freq bin nearest reference
+    fractional_bin=1+freq_ref*nfft/fs;
+    nref=1+round((freq_ref/fs)*nfft);%freq bin nearest reference
     nseg=floor(2*Nt/nfft-1);
     w=window(@blackmanharris,nfft,'periodic');
     n_sum=7;% a blackmanharris window allows smaller range

@@ -165,38 +165,17 @@ function output = RecordProcess(file)
             THD_R = thd(csig(:,2),fs);
 
 
-            if ismember(signal_names(t), {'1kHzL', 'sweepL', '1kHzL2', 'sweepL2'}) 
-                ratio1 = RMS_L/RMS_R;
-                %%% fft based 
-                % L = 2^16;
-                % seg = sig(floor(length(sig)/2) - L/2:floor(length(sig)/2) + L/2 - 1,:);
-                % thdL = thd(seg(:,1))
-                % thdR = thd(seg(:,2))
-                % win = flattopwin(L);
-                % seg = seg.*win;
-        
-                % fftsigL = fft(seg(:,1))/L;
-                % fftsigL = fftsigL(1:L/2+1);
-        
-                % fftsigR = fft(seg(:,2))/L;
-                % fftsigR = fftsigR(1:L/2+1);
-        
-                % fftfreq = fs*(0:(L/2))/L;
-        
-                % peakL = max(real(fftsigL));
-                % peakR = max(real(fftsigR));
-                % ratio2 = peakL/peakR;
-                stereo_bleed = ratio1;
+            if ismember(signal_names(t), {'1kHzL', 'sweepL', '1kHzL2', 'sweepL2'})              
+                stereo_bleed = StereoBleed(csig,1);
             elseif ismember(signal_names(t), {'1kHzR', 'sweepR', '1kHzR2', 'sweepR2'}) 
-                ratio1 = RMS_R/RMS_L;
-                stereo_bleed = ratio1; 
+                stereo_bleed = StereoBleed(csig,2);
             else
                 stereo_bleed = 'n/a';
             end
 
             if ismember(signal_names(t), {'3150Hz', '3150Hz2'})
-                wow_L = 0;%WowFlutter(csig(:,1));
-                wow_R = 0;%WowFlutter(csig(:,2));
+                wow_L = WowFlutter(csig(:,1));
+                wow_R = WowFlutter(csig(:,2));
             else 
                 wow_L = 'n/a';
                 wow_R = 'n/a';
