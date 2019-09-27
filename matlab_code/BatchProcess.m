@@ -1,3 +1,4 @@
+close all; clear all; clc;
 
 folder = '';
 % try 
@@ -39,9 +40,8 @@ for i = (1:length(files))
 
 
 
-    output = RecordProcess(file)
-    disp('size output')
-    numrec = size(output)
+    output = RecordProcess(file);
+    numrec = size(output);
     for i=(1:numrec)
         track = output(i,1);
         lagdiff = output(i,2);
@@ -53,7 +53,7 @@ for i = (1:length(files))
         clicks_R = output(i,8);
         THD_L = output(i,9);
         THD_R = output(i,10);
-        wow = output(i,11)
+        wow = output(i,11);
         stereo_bleed = output(i,12);
 
         csvdata(end+1,:) = {date, pressing, top_stamper, top_hits, bottom_stamper, bottom_hits, record, side, track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R, wow, stereo_bleed};
@@ -62,5 +62,5 @@ for i = (1:length(files))
 end
 
 
-T = cell2table(csvdata(2:end,:),'VariableNames',csvdata(1,:));
+T = cell2table(csvdata(2:end,:),'VariableNames',csvdata(1,:))
 writetable(T,'myDataFile.csv');
