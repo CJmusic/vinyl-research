@@ -165,20 +165,20 @@ function output = RecordProcess(file)
             THD_R = thd(csig(:,2),fs);
 
 
-            if ismember(signal_names(t), {'1kHzL', 'sweepL', '1kHzL2', 'sweepL2'})              
+            if ismember(signal_names(t), {'1kHzL', 'sweepL', '1kHzL2', 'sweepL2'})             
                 stereo_bleed = StereoBleed(csig,1);
             elseif ismember(signal_names(t), {'1kHzR', 'sweepR', '1kHzR2', 'sweepR2'}) 
                 stereo_bleed = StereoBleed(csig,2);
             else
-                stereo_bleed = 'n/a';
+                stereo_bleed = 0;
             end
 
             if ismember(signal_names(t), {'3150Hz', '3150Hz2'})
                 wow_L = WowFlutter(csig(:,1));
                 wow_R = WowFlutter(csig(:,2));
             else 
-                wow_L = 'n/a';
-                wow_R = 'n/a';
+                wow_L = 0;
+                wow_R = 0;
             end
             % figure(1000+t); hold on; grid on;
             % title(signal_names(t))
