@@ -2,14 +2,30 @@ close all; clear all; clc;
 
 folder = '';
 % try 
-    addpath('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\')
-    files = dir('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\click_testing\*.wav')
+    % addpath('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\')
+    % files = dir('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\click_testing\*.wav')
 % catch
     % addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/')
     % files = dir('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/click_testing/*.wav')
 % end
 
+addpath('/Volumes/AUDIOBANK/audio_files/A0000B0000/')
+folder = ('/Volumes/AUDIOBANK/audio_files/A0000B0000/')
+files = dir(strcat(folder,'*.wav'))
+
 csvdata = {'date', 'pressing', 'top_stamper', 'top_hits', 'bottom_stamper', 'bottom_hits', 'record', 'side', 'track', 'lagdiff', 'normalization_L', 'normalization_R','RMS_L', 'RMS_R', 'clicks_L', 'clicks_R', 'THD_L', 'THD_R', 'wow_L', 'wow_R', 'stereo_bleed'};
+
+
+pressingID = files.folder
+pressingID = pressingID(end-9:end)
+
+% files.folder(1)
+try
+    T = readtable(strcat(folder,pressingID,'.csv'))
+catch
+    T = cell2table(csvdata,'VariableNames',csvdata(1,:))
+    writetable(T,strcat(folder,pressingID,'.csv'));
+end
 
 for i = (1:length(files))
     file = strcat(files(i).folder,'/',files(i).name)
@@ -58,10 +74,17 @@ for i = (1:length(files))
         stereo_bleed = output(i,13);
 
         csvdata(end+1,:) = {date, pressing, top_stamper, top_hits, bottom_stamper, bottom_hits, record, side, track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R, wow_L, wow_R, stereo_bleed};
+        % N = {date, pressing, top_stamper, top_hits, bottom_stamper, bottom_hits, record, side, track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R, wow_L, wow_R, stereo_bleed};
+        % dlmwrite(strcat(folder,pressingID,'.csv'),N,'delimiter',',','-append');
+        T = cell2table(csvdata(2:end,:),'VariableNames',csvdata(1,:))
+        writetable(T,'myDataFile.csv');
     end
 
 end
 
+% dlmwrite('test.csv',M,'delimiter',',');
+% N = randn(4,4);
+% dlmwrite('test.csv',N,'delimiter',',','-append');
 
-T = cell2table(csvdata(2:end,:),'VariableNames',csvdata(1,:))
-writetable(T,'myDataFile.csv');
+% T = cell2table(csvdata(2:end,:),'VariableNames',csvdata(1,:))
+% writetable(T,'myDataFile.csv');
