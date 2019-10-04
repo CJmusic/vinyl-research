@@ -100,6 +100,9 @@ function output = RecordProcess(file)
         refLockout = ref(floor(lockout*fs):end,:);
         %% lineup audio with reference 
         dataLockout = data(floor(950*fs):end,:);
+        disp(strcat('time diff to ref... ', num2str (length(data)/fs - length(ref)/fs)))
+        disp(strcat('size dataLockout... ', num2str(size(dataLockout))))
+        disp(strcat('size refLockout...  ', num2str(size(refLockout))))
 
         %% lining up audio 
         [acor_L,lags_L] = xcorr(refLockout(:,1),dataLockout(:,1));
@@ -107,16 +110,21 @@ function output = RecordProcess(file)
         lagdiff_L = lags_L(I_L);
         lagdiff = lagdiff_L;
 
-        dis(strcat('lagdiff ...', num2str(lagdiff)))
+        disp(strcat('lagdiff ...', num2str(lagdiff)))
 
         timeref = (0:length(ref)-1)/fs;
         timedata = (0:length(data)-1)/fs  + lagdiff/fs;
 
         %***   DEBUG   ***%
-        figure(t); grid on;
-        plot(timeref,refLockout)
-        plot(timedata,dataLockout)
-        title(track_name)
+        % disp(strcat(num2str(size(timeref)), num2str(size(refLockout))))
+        % disp(strcat(num2str(size(timedata)), num2str(size(dataLockout))))
+        
+
+
+        % figure(100); grid on;
+        % plot(timeref,refLockout)
+        % plot(timedata,dataLockout)
+        % title(track_name)
         %***   DEBUG ENDS  ***%
 
 
@@ -174,9 +182,9 @@ function output = RecordProcess(file)
             RMS_R = 20.0*log10(rms(csig(:,2)));
 
             %***    DEBUG    ***%
-            figure(t); grid on;
-            plot(csig)
-            title(track_name)
+            % figure(t); grid on;
+            % plot(csig)
+            % title(track_name)
             %*** DEBUG ENDS ***%
 
 
