@@ -1,4 +1,4 @@
-close all; clear all; clc;
+close all; %clear all; %clc;
 
 folder = '';
 % try 
@@ -81,9 +81,13 @@ for i = (1:length(files))
     disp([strcat('...bottom_hits:', bottom_hits)])
     disp([strcat('...side:', side)])
 
-
-    output = RecordProcess(file);
-    numrec = size(output);
+    try 
+        output = RecordProcess(file);
+    catch
+        disp(strcat('**CRASHED** RecordProcess(',file,')'))
+        break
+    end
+        numrec = size(output);
     for i=(1:numrec)
         track = output(i,1);
         lagdiff = output(i,2);

@@ -161,6 +161,14 @@ function output = RecordProcess(file)
 
             RMS_L = 20.0*log10(rms(csig(:,1)));
             RMS_R = 20.0*log10(rms(csig(:,2)));
+
+            %***    DEBUG    ***%
+            figure(t); grid on;
+            title(track_name)
+            plot(csig)
+            %*** DEBUG ENDS ***%
+
+
             THD_L = thd(csig(:,1),fs);
             THD_R = thd(csig(:,2),fs);
 
