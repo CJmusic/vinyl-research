@@ -84,7 +84,7 @@ for i = (1:length(files))
     try 
         output = RecordProcess(file);
     catch
-        disp(strcat('**CRASHED** RecordProcess(',file,')'))
+        disp(strcat('**CRASHED** RecordProcess(''',file,''')'))
         break
     end
         numrec = size(output);

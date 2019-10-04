@@ -8,7 +8,6 @@ function output = RecordProcess(file)
         catch
             [ref, fs] = audioread('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000\031418_A0000B0000r27a.wav');
         end 
-
     %~~~~~~~~~~~~~~~~~~ Reference info ~~~~~~~~~~~~~~~~%
 
         timestamps_ref = [0, 60, 90, 122, 158, 180, 246, 266, 304, 324, 362, 382, 417.5];
@@ -108,8 +107,18 @@ function output = RecordProcess(file)
         lagdiff_L = lags_L(I_L);
         lagdiff = lagdiff_L;
 
+        dis(strcat('lagdiff ...', num2str(lagdiff)))
+
         timeref = (0:length(ref)-1)/fs;
         timedata = (0:length(data)-1)/fs  + lagdiff/fs;
+
+        %***   DEBUG   ***%
+        figure(t); grid on;
+        plot(timeref,refLockout)
+        plot(timedata,dataLockout)
+        title(track_name)
+        %***   DEBUG ENDS  ***%
+
 
     %~~~~~~~~~~~~~~~~~~~~ NORMALIZATION ~~~~~~~~~~~~~~~~~~~~%
         t = 1;
@@ -133,6 +142,8 @@ function output = RecordProcess(file)
             %  - stereo bleed (still really unsure about this test)
             %  - wow and flutter 
             track_name = signal_names{t};
+            disp(strcat('track  ...',track_name))
+
 
             csig = [];
             CLICKS_R = [];
@@ -164,8 +175,8 @@ function output = RecordProcess(file)
 
             %***    DEBUG    ***%
             figure(t); grid on;
-            title(track_name)
             plot(csig)
+            title(track_name)
             %*** DEBUG ENDS ***%
 
 
