@@ -19,7 +19,7 @@ disp(['loading folder...:', folder])
 
 files = dir(strcat(folder,'*.wav'));
 
-csvdata = {'date', 'pressing', 'top_stamper', 'top_hits', 'bottom_stamper', 'bottom_hits', 'record', 'side', 'track', 'lagdiff', 'normalization_L', 'normalization_R','RMS_L', 'RMS_R', 'clicks_L', 'clicks_R', 'THD_L', 'THD_R', 'wow_L', 'wow_R', 'stereo_bleed'};
+csvdata = {'date', 'pressing', 'top_stamper', 'top_hits', 'bottom_stamper', 'bottom_hits', 'RECORDID', 'side', 'track', 'lagdiff', 'normalization_L', 'normalization_R','RMS_L', 'RMS_R', 'clicks_L', 'clicks_R', 'THD_L', 'THD_R', 'wow_L', 'wow_R', 'stereo_bleed'};
 
 
 
@@ -43,9 +43,9 @@ for i = (1:length(files))
     filename = files(i).name;
     disp(['opening file...:', filename])
 
-    if isempty(T.record)
-    elseif ismember(str2num(filename(19:21)), T.record)
-        disp('record already processed...')
+    if isempty(T.RECORDID)
+    elseif ismember(str2num(filename(19:21)), T.RECORDID)
+        disp('RECORDID already processed...')
         continue
     end
 
@@ -57,24 +57,24 @@ for i = (1:length(files))
     top_hits = 0;
     bottom_stamper = 0;
     bottom_hits = 0;
-    record = 0;
+    RECORDID = 0;
     side  = 0;
     track  = 0;
     
     %STRIP RELEVANT INFO FROM NAME 
     date = str2num(filename(1:6));
-    record = str2num(filename(19:21));
+    RECORDID = str2num(filename(19:21));
 
     top_stamper = filename(8);
     pressing = filename(8:16);
-    top_hits = str2num(filename(9:12)) + record;
+    top_hits = str2num(filename(9:12)) + RECORDID;
     bottom_stamper = filename(13);
-    bottom_hits = str2num(filename(14:17)) + record;
+    bottom_hits = str2num(filename(14:17)) + RECORDID;
     side = filename(22);
 
     disp([strcat('...date:', date)])
     disp([strcat('...pressing:', pressing)])
-    disp([strcat('...:record', record)])
+    disp([strcat('...:RECORDID', RECORDID)])
     disp([strcat('...top_stamper:', top_stamper)])
     disp([strcat('...top_hits:', top_hits)])
     disp([strcat('...bottom_stamper:', bottom_stamper)])
@@ -82,9 +82,9 @@ for i = (1:length(files))
     disp([strcat('...side:', side)])
 
     try 
-        output = RecordProcess(file);
+        output = RECORDIDProcess(file);
     catch
-        disp(strcat('**CRASHED** RecordProcess(''',file,''')'))
+        disp(strcat('**CRASHED** RECORDIDProcess(''',file,''')'))
         break
     end
         numrec = size(output);
@@ -131,7 +131,7 @@ for i = (1:length(files))
         disp(['wow_L...:', num2str(wow_L)])
         disp(['wow_R...:', num2str(wow_R)])
         disp(['stereo_bleed...:', num2str(stereo_bleed)])
-        csvdata(end+1,:) = {date, pressing, top_stamper, top_hits, bottom_stamper, bottom_hits, record, side, track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R, wow_L, wow_R, stereo_bleed};
+        csvdata(end+1,:) = {date, pressing, top_stamper, top_hits, bottom_stamper, bottom_hits, RECORDID, side, track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R, wow_L, wow_R, stereo_bleed};
 
         numbers = randi(9, 10, 1);
         num_str = num2str(numbers);
