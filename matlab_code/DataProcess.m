@@ -5,13 +5,55 @@ audioFile = ('E:\audio_files\A0000B0000\A0000B0000.csv')
 pressFile = ('E:\audio_files\A0000B0000\oct10A0000B0000.csv')
 
 
-audioData = readtable(audioFile);
+audioData = readtable(audioFile)
 pressData = readtable(pressFile)
-% Tbl.track
-% Tbl.Properties.VariableNames
-% Tbl.track
 
-Tbl = join(audioData,pressData)
+
+%get all the variable names in both csv's and coming into one big cell array
+headers = [audioData.Properties.VariableNames, pressData.Properties.VariableNames];
+%create new table with all the needed variables 
+
+%for loop appending rows to the new table
+Tbl  = cell2table(cell(0,length(csvdata)), 'VariableNames', csvdata);
+
+for aud = 1:length(audioData.record)
+    %matchup by RECORDID and record
+    % num2str(audioData.record)
+    if strcmp(pres,audioData.record(aud)) == 0
+        for pres = 1:length(pressData.RECORDID)
+            if strcmp(pressData.RECORDID(pres), audioData.record(aud))
+                pres = pres;
+                break
+            end
+        end
+    end
+    %now aud should be the row in audio and pres the corresponding row in press 
+    for i = length(audioData.Properties.VariableNames)
+    end
+
+    for i = length(pressData.Properties.VariableNames)
+    end
+
+
+
+    % pres = strfind(pressData.RECORDID, num2str(audioData.record(aud)))
+    % pressData.RECORDID(pres)
+
+
+    %make all track data into one table entry called tracks
+
+    %append rows and columns
+    %convert all columns that can be to numbers in both
+    %if #NaN
+    %if a column doesnt exist in one table replace with '' or NaN 
+
+
+
+end
+
+
+
+% Tbl = join(audioData,pressData)
 
 % leadin = Tbl(strcmp(Tbl.track,'leadin'),:);
 % s1kHz= Tbl(strcmp(Tbl.track,'1kHz'),:);
@@ -41,39 +83,39 @@ Tbl = join(audioData,pressData)
 % sweepV2= Tbl(strcmp(Tbl.track,'sweepV2'),:);
 % leadout= Tbl(strcmp(Tbl.track,'leadout'),:);
 
-figure(1); hold on; grid on;
-title('noise levels in "silent" tracks')
-xlabel('necord Number')
-ylabel('RMS level (dB)')
+% figure(1); hold on; grid on;
+% title('noise levels in "silent" tracks')
+% xlabel('necord Number')
+% ylabel('RMS level (dB)')
 
-% scatter(quiet.record, quiet.RMS_L)
-% scatter(quiet.record, quiet.RMS_R)
-% scatter(quiet2.record, quiet2.RMS_L)
-% scatter(quiet2.record, quiet2.RMS_R)
-scatter(transition.record, transition.RMS_L)
-scatter(transition.record, transition.RMS_R)
-
-
+% % scatter(quiet.record, quiet.RMS_L)
+% % scatter(quiet.record, quiet.RMS_R)
+% % scatter(quiet2.record, quiet2.RMS_L)
+% % scatter(quiet2.record, quiet2.RMS_R)
+% scatter(transition.record, transition.RMS_L)
+% scatter(transition.record, transition.RMS_R)
 
 
-figure(2); hold on; grid on;
-title('number of clicks in "silent" tracks')
-xlabel('necord number')
-ylabel('number of clicks')
-scatter(transition.record, transition.clicks_L )
-scatter(transition.record, transition.clicks_R )
-% scatter(quiet.record, quiet.clicks_L )
-% scatter(quiet.record, quiet.clicks_R )
-% scatter(quiet2.record, quiet2.clicks_L )
-% scatter(quiet2.record, quiet2.clicks_R )
 
 
-figure(3); hold on; grid on;
-title('number of clicks vs. pressure in "silent" tracks')
-xlabel('pressure (tons)')
-ylabel('number of clicks')
-scatter(transition.record, transition.clicks_L)
-scatter(transition.record, transition.clicks_R )
+% figure(2); hold on; grid on;
+% title('number of clicks in "silent" tracks')
+% xlabel('necord number')
+% ylabel('number of clicks')
+% scatter(transition.record, transition.clicks_L )
+% scatter(transition.record, transition.clicks_R )
+% % scatter(quiet.record, quiet.clicks_L )
+% % scatter(quiet.record, quiet.clicks_R )
+% % scatter(quiet2.record, quiet2.clicks_L )
+% % scatter(quiet2.record, quiet2.clicks_R )
 
 
-s1kHz = Tbl(strcmp(Tbl.track,'1kHz'),:);
+% figure(3); hold on; grid on;
+% title('number of clicks vs. pressure in "silent" tracks')
+% xlabel('pressure (tons)')
+% ylabel('number of clicks')
+% scatter(transition.record, transition.clicks_L)
+% scatter(transition.record, transition.clicks_R )
+
+
+% s1kHz = Tbl(strcmp(Tbl.track,'1kHz'),:);
