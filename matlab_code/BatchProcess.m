@@ -19,7 +19,7 @@ disp(['loading folder...:', folder])
 
 files = dir(strcat(folder,'*.wav'));
 
-csvdata = {'date', 'pressing', 'top_stamper', 'top_hits', 'bottom_stamper', 'bottom_hits', 'record', 'side', 'track', 'lagdiff', 'normalization_L', 'normalization_R','RMS_L', 'RMS_R', 'clicks_L', 'clicks_R', 'THD_L', 'THD_R', 'wow_L', 'wow_R', 'stereo_bleed'};
+csvdata = {'date_recorded', 'pressing', 'top_stamper', 'top_hits', 'bottom_stamper', 'bottom_hits', 'record', 'side', 'track', 'lagdiff', 'normalization_L', 'normalization_R','RMS_L', 'RMS_R', 'clicks_L', 'clicks_R', 'THD_L', 'THD_R', 'wow_L', 'wow_R', 'stereo_bleed'};
 
 
 
@@ -51,7 +51,7 @@ for i = (1:length(files))
 
     file = strcat(files(i).folder,'/',files(i).name);
 
-    date = 0;
+    date_recorded = 0;
     pressing = 0;
     top_stamper = 0;
     top_hits = 0;
@@ -62,7 +62,7 @@ for i = (1:length(files))
     track  = 0;
     
     %STRIP RELEVANT INFO FROM NAME 
-    date = str2num(filename(1:6));
+    date_recorded = (filename(1:6));
     record = str2num(filename(19:21));
 
     top_stamper = filename(8);
@@ -72,7 +72,7 @@ for i = (1:length(files))
     bottom_hits = str2num(filename(14:17)) + record;
     side = filename(22);
 
-    disp([strcat('...date:', date)])
+    disp([strcat('...date_recorded:', date_recorded)])
     disp([strcat('...pressing:', pressing)])
     disp([strcat('...:record', record)])
     disp([strcat('...top_stamper:', top_stamper)])
@@ -131,7 +131,7 @@ for i = (1:length(files))
         disp(['wow_L...:', num2str(wow_L)])
         disp(['wow_R...:', num2str(wow_R)])
         disp(['stereo_bleed...:', num2str(stereo_bleed)])
-        csvdata(end+1,:) = {date, pressing, top_stamper, top_hits, bottom_stamper, bottom_hits, record, side, track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R, wow_L, wow_R, stereo_bleed};
+        csvdata(end+1,:) = {date_recorded, pressing, top_stamper, top_hits, bottom_stamper, bottom_hits, record, side, track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R, wow_L, wow_R, stereo_bleed};
 
         numbers = randi(9, 10, 1);
         num_str = num2str(numbers);
