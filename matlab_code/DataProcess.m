@@ -4,18 +4,25 @@ addpath('E:\audio_files\A0000B0000\')
 audioFile = ('E:\audio_files\A0000B0000\A0000B0000.csv')
 pressFile = ('E:\audio_files\A0000B0000\oct10A0000B0000.csv')
 
+% opts = detectImportOptions(audioFile)
+% opts = setvartype(opts, 'char')
+% audioData = readtable(audioFile, opts)
 
 audioData = readtable(audioFile)
 pressData = readtable(pressFile)
 
+
+% cellfun(@(c) num2str, audioData.date_recorded, 'UniformInput', false)
+audioData.date_recorded = string(audioData.date_recorded);
 
 %get all the variable names in both csv's and coming into one big cell array
 headers = [audioData.Properties.VariableNames, pressData.Properties.VariableNames];
 %create new table with all the needed variables 
 
 %for loop appending rows to the new table
-Tbl  = cell2table(cell(0,length(csvdata)), 'VariableNames', csvdata);
+Tbl  = cell2table(cell(0,length(headers)), 'VariableNames', headers);
 
+pres = 1;
 for aud = 1:length(audioData.record)
     %matchup by RECORDID and record
     % num2str(audioData.record)
@@ -28,13 +35,28 @@ for aud = 1:length(audioData.record)
         end
     end
     %now aud should be the row in audio and pres the corresponding row in press 
-    for i = length(audioData.Properties.VariableNames)
+
+    for i = (1:length(audioData.Properties.VariableNames))
+        aud,i
+        audioData.Properties.VariableNames{i}
+        audioData.Properties.VariableNames(i)
+        x = audioData(aud,audioData.Properties.VariableNames{i})
+        x = Tbl(aud,audioData.Properties.VariableNames(i))
+        
+        disp('printing')
+        Tbl(aud,audioData.Properties.VariableNames(i)) = (audioData(aud,audioData.Properties.VariableNames(i)))
     end
-
-    for i = length(pressData.Properties.VariableNames)
+    % disp('audioData for loop done')
+    
+    Tbl
+    disp('pres for loop')
+    for i = (1:length(pressData.Properties.VariableNames))
+        i
+        Tbl(aud,i) = pressData(aud, i);%i + length(audioData.Properties.VariableNames));
     end
+    % disp('pressData for loop done')
 
-
+    % Tbl
 
     % pres = strfind(pressData.RECORDID, num2str(audioData.record(aud)))
     % pressData.RECORDID(pres)
