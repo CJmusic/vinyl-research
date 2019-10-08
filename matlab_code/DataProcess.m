@@ -11,6 +11,9 @@ pressFile = ('E:\audio_files\A0000B0000\oct10A0000B0000.csv')
 audioData = readtable(audioFile)
 pressData = readtable(pressFile)
 
+size(audioData)
+size(pressData)
+
 
 % cellfun(@(c) num2str, audioData.date_recorded, 'UniformInput', false)
 audioData.date_recorded = string(audioData.date_recorded);
@@ -36,25 +39,29 @@ for aud = 1:length(audioData.record)
     end
     %now aud should be the row in audio and pres the corresponding row in press 
 
+    % loop through
     for i = (1:length(audioData.Properties.VariableNames))
-        aud,i
-        audioData.Properties.VariableNames{i}
-        audioData.Properties.VariableNames(i)
-        x = audioData(aud,audioData.Properties.VariableNames{i})
-        x = Tbl(aud,audioData.Properties.VariableNames(i))
+        % aud,i
+        % audioData.Properties.VariableNames{i}
+        % audioData.Properties.VariableNames(i)
+        x = audioData(aud,audioData.Properties.VariableNames{i});
+        % x = Tbl(audioData.Properties.VariableNames{i},i)
+        x = Tbl(:,i);
         
         disp('printing')
-        Tbl(aud,audioData.Properties.VariableNames(i)) = (audioData(aud,audioData.Properties.VariableNames(i)))
+        % Tbl(aud,i) = (audioData(aud,audioData.Properties.VariableNames{i}))
+        % Tbl = [Tbl; (audioData(aud,audioData.Properties.VariableNames{i}))]
     end
     % disp('audioData for loop done')
     
     Tbl
     disp('pres for loop')
     for i = (1:length(pressData.Properties.VariableNames))
-        i
-        Tbl(aud,i) = pressData(aud, i);%i + length(audioData.Properties.VariableNames));
+        i;
+        % Tbl(aud,i) = pressData(aud, i);%i + length(audioData.Properties.VariableNames));
     end
     % disp('pressData for loop done')
+    Tbl = [Tbl; (audioData(aud,audioData.Properties.VariableNames{i}))]
 
     % Tbl
 
