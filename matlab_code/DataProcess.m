@@ -8,11 +8,11 @@ pressFile = ('E:\audio_files\A0000B0000\oct10A0000B0000.csv')
 % opts = setvartype(opts, 'char')
 % audioData = readtable(audioFile, opts)
 
-audioData = readtable(audioFile)
-pressData = readtable(pressFile)
+audioData = readtable(audioFile);
+pressData = readtable(pressFile);
 
-size(audioData)
-size(pressData)
+size(audioData);
+size(pressData);
 
 
 % cellfun(@(c) num2str, audioData.date_recorded, 'UniformInput', false)
@@ -22,63 +22,109 @@ audioData.date_recorded = string(audioData.date_recorded);
 headers = [audioData.Properties.VariableNames, pressData.Properties.VariableNames];
 %create new table with all the needed variables 
 
-%for loop appending rows to the new table
-Tbl  = cell2table(cell(0,length(headers)), 'VariableNames', headers);
-
-pres = 1;
-for aud = 1:length(audioData.record)
-    %matchup by RECORDID and record
-    % num2str(audioData.record)
-    if strcmp(pres,audioData.record(aud)) == 0
-        for pres = 1:length(pressData.RECORDID)
-            if strcmp(pressData.RECORDID(pres), audioData.record(aud))
-                pres = pres;
-                break
-            end
-        end
-    end
-    %now aud should be the row in audio and pres the corresponding row in press 
-
-    % loop through
-    for i = (1:length(audioData.Properties.VariableNames))
-        % aud,i
-        % audioData.Properties.VariableNames{i}
-        % audioData.Properties.VariableNames(i)
-        x = audioData(aud,audioData.Properties.VariableNames{i});
-        % x = Tbl(audioData.Properties.VariableNames{i},i)
-        x = Tbl(:,i);
-        
-        disp('printing')
-        % Tbl(aud,i) = (audioData(aud,audioData.Properties.VariableNames{i}))
-        % Tbl = [Tbl; (audioData(aud,audioData.Properties.VariableNames{i}))]
-    end
-    % disp('audioData for loop done')
-    
-    Tbl
-    disp('pres for loop')
-    for i = (1:length(pressData.Properties.VariableNames))
-        i;
-        % Tbl(aud,i) = pressData(aud, i);%i + length(audioData.Properties.VariableNames));
-    end
-    % disp('pressData for loop done')
-    Tbl = [Tbl; (audioData(aud,audioData.Properties.VariableNames{i}))]
-
-    % Tbl
-
-    % pres = strfind(pressData.RECORDID, num2str(audioData.record(aud)))
-    % pressData.RECORDID(pres)
-
-
-    %make all track data into one table entry called tracks
-
-    %append rows and columns
-    %convert all columns that can be to numbers in both
-    %if #NaN
-    %if a column doesnt exist in one table replace with '' or NaN 
-
-
-
+for i = 1:length(pressData.RECORDID)
+    % try 
+        RECORDID = pressData(i,'RECORDID');
+        RECORDID = pressData.RECORDID(i);
+        num2str(audioData.record); 
+        audioData.record = num2str(audioData.record);
+        % tracks = audioData.record(RECORDID);
+        audioData.record(strcmp(audioData.record, RECORDID), :);
+        RECORDID{1}
+        % audioData.record(RECORDID)
+        rows = find(strcmp(audioData.record, RECORDID{1})==1)
+        disp('worked')
+    % catch 
+        % continue
+    % end
+    % [row,col]=find(ismember(audioData.record,RECORDID))
+    % [row,col]=ismember(num2str(audioData.record),RECORDID);
 end
+
+disp('for loop ended')
+audioData.record;
+audioData.record(10);
+% audioData.record('1')
+for i = 1:length(audioData.record)
+    if strcmp(audioData.record(i),'1')
+        for j = (1:length(audioData.Properties.VariableNames))
+            trackname = audioData.Properties.VariableNames(j)
+            trackname = trackname{1}
+            Tbl(i,trackname) = audioData(i,trackname);
+        end
+
+        for j = (1:length(pressData.Properties.VariableNames))
+            trackname = audioData.Properties.VariableNames(j)
+            trackname = trackname{1}
+            Tbl(i,trackname) = audioData(i,trackname);
+        end
+
+
+    end
+end
+     
+% rows = find(strcmp(audioData.record, '1')==1)
+
+
+
+
+% %for loop appending rows to the new table
+% Tbl  = cell2table(cell(0,length(headers)), 'VariableNames', headers);
+
+% pres = 1;
+% for aud = 1:length(audioData.record)
+%     %matchup by RECORDID and record
+%     % num2str(audioData.record)
+%     if strcmp(pres,audioData.record(aud)) == 0
+%         for pres = 1:length(pressData.RECORDID)
+%             if strcmp(pressData.RECORDID(pres), audioData.record(aud))
+%                 pres = pres;
+%                 break
+%             end
+%         end
+%     end
+%     %now aud should be the row in audio and pres the corresponding row in press 
+
+%     % loop through
+%     for i = (1:length(audioData.Properties.VariableNames))
+%         % aud,i
+%         % audioData.Properties.VariableNames{i}
+%         % audioData.Properties.VariableNames(i)
+%         x = audioData(aud,audioData.Properties.VariableNames{i});
+%         % x = Tbl(audioData.Properties.VariableNames{i},i)
+%         x = Tbl(:,i);
+        
+%         disp('printing')
+%         % Tbl(aud,i) = (audioData(aud,audioData.Properties.VariableNames{i}))
+%         % Tbl = [Tbl; (audioData(aud,audioData.Properties.VariableNames{i}))]
+%     end
+%     % disp('audioData for loop done')
+    
+%     Tbl
+%     disp('pres for loop')
+%     for i = (1:length(pressData.Properties.VariableNames))
+%         i;
+%         % Tbl(aud,i) = pressData(aud, i);%i + length(audioData.Properties.VariableNames));
+%     end
+%     % disp('pressData for loop done')
+%     Tbl = [Tbl; (audioData(aud,audioData.Properties.VariableNames{i}))]
+
+%     % Tbl
+
+%     % pres = strfind(pressData.RECORDID, num2str(audioData.record(aud)))
+%     % pressData.RECORDID(pres)
+
+
+%     %make all track data into one table entry called tracks
+
+%     %append rows and columns
+%     %convert all columns that can be to numbers in both
+%     %if #NaN
+%     %if a column doesnt exist in one table replace with '' or NaN 
+
+
+
+% end
 
 
 
