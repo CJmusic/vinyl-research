@@ -1,8 +1,11 @@
 
 addpath('E:\audio_files\A0000B0000\')
+addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/') 
+% audioFile = ('E:\audio_files\A0000B0000\A0000B0000.csv')
+% pressFile = ('E:\audio_files\A0000B0000\oct10A0000B0000.csv')
 
-audioFile = ('E:\audio_files\A0000B0000\A0000B0000.csv')
-pressFile = ('E:\audio_files\A0000B0000\oct10A0000B0000.csv')
+audioFile = ('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/A0000B0000.csv')
+pressFile = ('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/oct10A0000B0000.csv')
 
 % opts = detectImportOptions(audioFile)
 % opts = setvartype(opts, 'char')
@@ -26,42 +29,49 @@ for i = 1:length(pressData.RECORDID)
     % try 
         RECORDID = pressData(i,'RECORDID');
         RECORDID = pressData.RECORDID(i);
-        num2str(audioData.record); 
-        audioData.record = num2str(audioData.record);
-        % tracks = audioData.record(RECORDID);
-        audioData.record(strcmp(audioData.record, RECORDID), :);
-        RECORDID{1}
-        % audioData.record(RECORDID)
-        rows = find(strcmp(audioData.record, RECORDID{1})==1)
-        disp('worked')
-    % catch 
-        % continue
-    % end
-    % [row,col]=find(ismember(audioData.record,RECORDID))
-    % [row,col]=ismember(num2str(audioData.record),RECORDID);
+        recordid = num2str(audioData.record(j));
+        for j = 1:length(audioData.record)
+            % if strcmp(strtrim(RECORDID{1}), strtrim(num2str(audioData.record(j))))
+            if strcmp(RECORDID, recordid)
+                % disp('TRUE')
+                for k = 1:length(headers)
+                    if ismember(headers(k), audioData.Properties.VariableNames)
+                        disp('audio headers')
+                    elseif ismember(headers(k), pressData.Properties.VariableNames)
+                        disp('press headers')
+                    else
+                        disp('didnt work')
+                    end
+                end
+            end
+        end
 end
 
 disp('for loop ended')
-audioData.record;
-audioData.record(10);
-% audioData.record('1')
-for i = 1:length(audioData.record)
-    if strcmp(audioData.record(i),'1')
-        for j = (1:length(audioData.Properties.VariableNames))
-            trackname = audioData.Properties.VariableNames(j)
-            trackname = trackname{1}
-            Tbl(i,trackname) = audioData(i,trackname);
-        end
+% audioData.record
+% Tbl
+% audioData.record;
+% audioData.record(10);
+% % audioData.record('1')
+% for k = 1:length(pressData.RECORDID)
+%     for i = 1:length(audioData.record)
+%         if strcmp(audioData.record(i),num2str(k))
+%             for j = (1:length(audioData.Properties.VariableNames))
+%                 trackname = audioData.Properties.VariableNames(j);
+%                 trackname = trackname{1};
+%                 Tbl(i,trackname) = audioData(i,trackname);
+%             end
 
-        for j = (1:length(pressData.Properties.VariableNames))
-            trackname = audioData.Properties.VariableNames(j)
-            trackname = trackname{1}
-            Tbl(i,trackname) = audioData(i,trackname);
-        end
+%             for j = (1:length(pressData.Properties.VariableNames))
+%                 trackname = audioData.Properties.VariableNames(j);
+%                 trackname = trackname{1};
+%                 Tbl(i,trackname) = audioData(i,trackname);
+%             end
+%         end
+%     end
+% end
 
-
-    end
-end
+% Tbl
      
 % rows = find(strcmp(audioData.record, '1')==1)
 
