@@ -7,6 +7,7 @@ Tbl = readtable(dataFile);
 for i = (1:length(Tbl.Properties.VariableNames))
     disp(Tbl.Properties.VariableNames(i))
 end
+Tbl
 
 figure(1); hold on; grid on;
 scatter(getData(Tbl,'transition', 'PressForce_Ton'), getData(Tbl,'transition', 'clicks_L'))
