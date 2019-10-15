@@ -1,11 +1,12 @@
 
 addpath('E:\audio_files\A0000B0000\')
 addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/') 
-% audioFile = ('E:\audio_files\A0000B0000\A0000B0000.csv')
-% pressFile = ('E:\audio_files\A0000B0000\oct10A0000B0000.csv')
-folder = ('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/')
-audioFile = ('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/A0000B0000.csv')
-pressFile = ('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/oct10A0000B0000.csv')
+folder = ('E:\audio_files\A0000B0000\')
+audioFile = ('E:\audio_files\A0000B0000\A0000B0000.csv')
+pressFile = ('E:\audio_files\A0000B0000\oct10A0000B0000.csv')
+% folder = ('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/')
+% audioFile = ('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/A0000B0000.csv')
+% pressFile = ('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/oct10A0000B0000.csv')
 
 % opts = detectImportOptions(audioFile)
 % opts = setvartype(opts, 'char')
