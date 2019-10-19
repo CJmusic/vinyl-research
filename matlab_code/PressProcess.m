@@ -1,11 +1,11 @@
 
 addpath('E:\audio_files\A0000B0000\')
-addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/') 
 folder = ('D:\OneDrive - University of Waterloo\Vinyl_Project\data\121918_A0000B0000\')
 
-% folder = ('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/')
-% rawFile = ('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/A0000B0000.csv')
-% timeFile = ('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/oct10A0000B0000.csv')
+addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/') 
+folder = ('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/data/
+121918_A0000B0000/')
+
 
 
 % read in the press file and the time file 
@@ -56,8 +56,9 @@ ADAPT = readtable(strcat(folder,'121918_CZA0000B0000_ADAPT_DATA.xlsx'));
 %#####_TimeStamps
 % Recorded by hand timestamps
 TimeStamps = readtable(strcat(folder,'2012-12-20_TimeStamps.xlsx'));
-SensorValues.RecordTimeStamp = datetime(SensorValues.RecordTimeStamp, 'InputFormat', 'yyyy-MM-dd HH:mm')
-TimeStamps.TimeStamp = datetime(TimeStamps.TimeStamp, 'InputFormat', 'MMMM d, yyyy hh:mm:ss')
+SensorValues.RecordTimeStamp = datetime(SensorValues.RecordTimeStamp, 'InputFormat', 'yyyy-MM-dd HH:mm');6
+
+TimeStamps.TimeStamp = datetime(TimeStamps.TimeStamp, 'InputFormat', 'MMMM d, yyyy hh:mm:ss');
 
 for i = (1:length(TimeStamps.TimeStamp))
     [closestTimeStamp,closestIndex] = min(abs(SensorValues.RecordTimeStamp-TimeStamps.TimeStamp(i)));
@@ -65,6 +66,13 @@ for i = (1:length(TimeStamps.TimeStamp))
         continue
     end
     
+    if SensorValues.PressForce_Ton(closestIndex) > 500; 
+        disp('Press closed')
+
+    else
+        disp('Press open')
+    end
+
     closestIndex
 
 end

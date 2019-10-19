@@ -10,7 +10,8 @@ end
 Tbl
 
 figure(1); hold on; grid on;
-scatter(getData(Tbl,'transition', 'PressForce_Ton'), getData(Tbl,'transition', 'clicks_L'))
+% scatter(getData(Tbl,'transition', 'PressForce_Ton'), getData(Tbl,'transition', 'clicks_L'))
+scatter(getData(Tbl,'transition', 'record'), getData(Tbl,'transition', 'RMS_L'))
 
 
 
