@@ -64,8 +64,17 @@ for i = (1:length(TimeStamps.TimeStamp))
     if isnan(closestTimeStamp)
         continue
     end
+
+    % TimeStamps.TimeStamp(i)
+    % SensorValues.RecordTimeStamp(closestIndex)
+    % SensorValues.PressPosition_Inches(closestIndex)
+    SensorValues.PressForce_Ton(closestIndex)
+
     
-    closestIndex
+    if 
+
+    % find the max or min PressForce in a nearby area, 
+    %write needed values to table  
 
 end
 

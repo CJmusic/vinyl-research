@@ -137,9 +137,9 @@ for i = (1:length(files))
         num_str = num2str(numbers);
         num_cell = mat2cell(num_str, ones(10, 1), 1);
 
-        T = [ T ; cell2table(csvdata(end,:),'VariableNames',csvdata(1,:)) ];
-
-        writetable(T,strcat(folder, pressingID,'.csv'));
+        % T = [ T ; cell2table(csvdata(end,:),'VariableNames',csvdata(1,:)) ];
+        dlmwrite(strcat(folder, pressingID,'.csv'),cell2table(csvdata(end,:),'delimiter',',','-append'));
+        % writetable(T,strcat(folder, pressingID,'.csv'));
     end
 
 end
