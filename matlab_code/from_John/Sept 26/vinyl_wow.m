@@ -35,8 +35,22 @@ filename='wow3150oscillator.wav';ts=10;tf=60;
 % filename='r27wow180deg.wav';ts=10.0;tf=60.0;
 % filename='r27wow270deg.wav';ts=20.0;tf=70.0;
 % filename='r27wowinner270deg.wav';ts=10.0;tf=60.0;
+addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/at_Viryl')
 
-[rev4_1,fs]=audioread(filename);
+folder = ('Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/at_Viryl/')
+% filename = 'virylableton28a(48kHz).wav'; ts=200,tf=245; %outer wow track
+% filename = 'virylableton28a(48kHz).wav'; ts=717,tf=764; %inner wow track
+% filename = 'viryltechnics-lacquer1st.wav'; ts=200,tf=245;
+% filename = 'abletonlacquer1.wav'; ts=230,tf=280;
+% filename = 'abletonlacquer2.wav'; ts=220,tf=270;
+addpath('Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/')
+folder = ('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/');
+% filename = '03141_A0000B0000r28a.wav';ts=202; tf=251;  %outer wow track
+filename = '03141_A0000B0000r28a.wav';ts=720;tf=768;  %inner wow track
+
+
+strcat(folder, filename)
+[rev4_1,fs]=audioread(strcat(folder, filename));
 lr=1; %1=left, 2=right
 disp(['lr: ' num2str(lr)])
 Nt=length(rev4_1);
@@ -84,6 +98,9 @@ for k=1:nseg
     Prev=abs(fft(rev)).^2;% power in each bin
     P(k)=0;Pw(k)=0;%initialize power and weighted power sums
     for p=-n_sum:n_sum
+        % k
+        % p 
+        % nref
         P(k)=P(k)+Prev(nref+p);
         Pw(k)=Pw(k)+Prev(nref+p)*(nref-1+p)*fs/nfft;
     end

@@ -9,12 +9,12 @@ folder = '';
     % files = dir('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/click_testing/*.wav')
 % end
 
-% addpath('/Volumes/AUDIOBANK/audio_files/A0000B0000/')
-% folder = ('/Volumes/AUDIOBANK/audio_files/A0000B0000/')
+addpath('/Volumes/AUDIOBANK/audio_files/A0000B0000/')
+folder = ('/Volumes/AUDIOBANK/audio_files/A0000B0000/')
 % files = dir(strcat(folder,'*.wav'))
 
-addpath('E:\audio_files\A0000B0000\')
-folder = ('E:\audio_files\A0000B0000\')
+% addpath('E:\audio_files\A0000B0000\')
+% folder = ('E:\audio_files\A0000B0000\')
 disp(['loading folder...:', folder])
 
 files = dir(strcat(folder,'*.wav'));
@@ -63,6 +63,7 @@ for i = (1:length(files))
     
     %STRIP RELEVANT INFO FROM NAME 
     date_recorded = (filename(1:6));
+    % date_recorded = date_recorded{1};
     record = str2num(filename(19:21));
 
     top_stamper = filename(8);
@@ -82,9 +83,11 @@ for i = (1:length(files))
     disp([strcat('...side:', side)])
 
     try 
-        output = recordProcess(file);
-    catch
+        output = RecordProcess(file);
+    catch e
         disp(strcat('**CRASHED** recordProcess(''',file,''')'))
+        fprintf(1,'The identifier was:\n%s',e.identifier);
+        fprintf(1,'There was an error! The message was:\n%s',e.message);
         break
     end
         numrec = size(output);
@@ -131,11 +134,22 @@ for i = (1:length(files))
         disp(['wow_L...:', num2str(wow_L)])
         disp(['wow_R...:', num2str(wow_R)])
         disp(['stereo_bleed...:', num2str(stereo_bleed)])
-        csvdata(end+1,:) = {date_recorded, pressing, top_stamper, top_hits, bottom_stamper, bottom_hits, record, side, track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R, wow_L, wow_R, stereo_bleed};
+        csvdata(end+1,:) = {date_recorded, pressing, top_stamper, top_hits, bottom_stamper, bottom_hits, record, side, track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R, wow_L, wow_R, stereo_bleed}
 
-        numbers = randi(9, 10, 1);
-        num_str = num2str(numbers);
-        num_cell = mat2cell(num_str, ones(10, 1), 1);
+        % numbers = randi(9, 10, 1);
+        % num_str = num2str(numbers);
+        % num_cell = mat2cell(num_str, ones(10, 1), 1);
+
+        csvdata(1)
+        for k = (1:length(csvdata(end,:)))
+            if iscell(csvdata(end,k))
+                class(csvdata(end,k))
+                tempcsv = csvdata(end,k)
+                T.date_recorded(end)
+                % csvdata(end,k) = tempcsv{1};
+            end
+        end
+        out=cellfun(@num2str,csvdata, 'UniformOutput', false)
 
         % T = [ T ; cell2table(csvdata(end,:),'VariableNames',csvdata(1,:)) ];
         dlmwrite(strcat(folder, pressingID,'.csv'),cell2table(csvdata(end,:),'delimiter',',','-append'));
