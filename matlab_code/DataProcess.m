@@ -1,8 +1,8 @@
 close all
 
 
-% dataFile = ('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/A0000B0000-data.csv')
-dataFile = ('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000\A0000B0000-data.csv')
+dataFile = ('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/A0000B0000-data.csv')
+% dataFile = ('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000\A0000B0000-data.csv')
 
 
 byN = readtable(dataFile);
@@ -21,9 +21,20 @@ ylabel('RMS level [dB]')
 legend(['Left', 'Right'])
 
 figure(2); hold on; grid on;
-hist(getData(byN,'transition','RMS_L'))
-hist(getData(byN,'transition','RMS_R'))
+hist(getData(byN,'transition','RMS_L'),20)
+hist(getData(byN,'transition','RMS_R'),20)
+title('RMS level Histogram')
+xlabel('num records')
+title('RMS level [dB]')
 
+figure(4); hold on; grid on;
+% scatter(getData(byN,'transition', 'PressForce_Ton'), getData(byN,'transition', 'clicks_L'))
+scatter(getData(byN,'transition', 'record'), getData(byN,'transition', 'RMS_L'))
+scatter(getData(byN,'transition', 'record'), getData(byN,'transition', 'RMS_R'))
+title('RMS levels in transition track')
+xlabel('record #')
+ylabel('RMS level [dB]')
+legend(['Left', 'Right'])
 
 %% find the 10 records with the min and max noise levels
 
