@@ -1,9 +1,9 @@
 
-addpath('E:\audio_files\A0000B0000\')
-folder = ('D:\OneDrive - University of Waterloo\Vinyl_Project\data\121918_A0000B0000\')
+% addpath('E:\audio_files\A0000B0000\')
+% folder = ('D:\OneDrive - University of Waterloo\Vinyl_Project\data\121918_A0000B0000\')
 
-% addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/') 
-% folder = ('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/data/121918_A0000B0000/')
+addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/') 
+folder = ('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/data/121918_A0000B0000/')
 
 
 
@@ -81,12 +81,15 @@ for i = (1:length(TimeStamps.TimeStamp))
 
     % find the max or min PressForce in a nearby area, 
     %write needed values to table  
-    if str2num(SensorValues.PressPosition_Inches(closestIndex)) > 1 
-        % disp('Press closed')
+    % SensorValues.PressPosition_Inches(closestIndex)
+    if str2double(SensorValues.PressPosition_Inches(closestIndex)) > 1 
+        disp('Press closed')
         SensorValues.PressPosition_Inches(closestIndex);
     else
-        % disp('Press open') 
+        disp('Press open') 
         SensorValues.PressPosition_Inches(closestIndex);
+
+        % if press is open then find the first value where the press is closed
         for k = (1:10)
             pl = str2double(SensorValues.PressPosition_Inches(closestIndex - k));
             pr = str2double(SensorValues.PressPosition_Inches(closestIndex + k));
@@ -104,26 +107,28 @@ for i = (1:length(TimeStamps.TimeStamp))
         end
     end 
 
-    j = closestIndex
-    while SensorValues.PressPosition_Inches(j) > 1
-        j = j - 1
+    j = closestIndex;
+    closestIndex
+    while str2double(SensorValues.PressPosition_Inches(j)) > 1
+        j = j - 1;
     end
-    press_open = j; 
-    while SensorValues.PressPosition_Inches(1) < 1
-        j = j - 1
+
+    press_open = j
+    while str2double(SensorValues.PressPosition_Inches(j)) < 1
+        j = j - 1;
     end
-    upper_bound = j;
+    lower_bound = j
 
 
     j = closestIndex
-    while SensorValues.PressPosition_Inches(j) > 1
-        j = j + 1
+    while str2double(SensorValues.PressPosition_Inches(j)) > 1
+        j = j + 1;
     end
     press_open = j; 
-    while SensorValues.PressPosition_Inches(1) < 1
-        j = j + 1
+    while str2double(SensorValues.PressPosition_Inches(j)) < 1
+        j = j + 1;
     end
-    upper_bound = j;
+    upper_bound = j
 
 end
 
