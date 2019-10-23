@@ -1,65 +1,77 @@
 
-% addpath('E:\audio_files\A0000B0000\')
-% folder = ('D:\OneDrive - University of Waterloo\Vinyl_Project\data\121918_A0000B0000\')
+addpath('E:\audio_files\A0000B0000\')
+folder = ('D:\OneDrive - University of Waterloo\Vinyl_Project\data\121918_A0000B0000\');
 
-addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/') 
-folder = ('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/data/121918_A0000B0000/')
-
-
-
-% read in the press file and the time file 
-% join the two arrays 
-
-date_tag = '2012-12-19'
+% addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/') 
+% folder = ('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/data/121918_A0000B0000/')
 
 
-% find the cycle of the press 
 
-%#####_SensorValues
-% tracks the data from the sensors in the press via timestamps
-selectedColumns ={'id',
-'RecordTimeStamp',
-'PressPosition_Inches',
-'PressForce_Ton',
-'MouldSteamIn_PSI',
-'MouldSteamIn_F',
-'MouldSteamOutTop_F',
-'MouldSteamOutBottom_F',
-'ExtruderFeedthroatTemp_F',
-'ExtruderBarrelZone1Temp_F',
-'ExtruderBarrelZone2Temp_F',
-'ExtruderBarrelZone3Temp_F',
-'ExtruderDieZoneTemp_F',
-'ExtruderPremouldTemp_F',
-'ExtruderMeltTemp_F',}
+date_tags = {'121918', '122018'};
 
-opts = detectImportOptions(strcat(folder,date_tag,'_SensorValues.csv'));
-getvaropts(opts,selectedColumns);
-opts = setvartype(opts,selectedColumns,'string');
-opts.SelectedVariableNames = selectedColumns;
 
-SensorValues = readtable(strcat(folder,date_tag,'_SensorValues.csv'),opts);
-SensorValues = [SensorValues; readtable(strcat(folder,'2012-12-20_SensorValues.csv'),opts)];
+for i=(1:length(date_tags))
+    %#####_SensorValues
+    % tracks the data from the sensors in the press via timestamps
+    selectedColumns ={'id',
+    'RecordTimeStamp',
+    'PressPosition_Inches',
+    'PressForce_Ton',
+    'MouldSteamIn_PSI',
+    'MouldSteamIn_F',
+    'MouldSteamOutTop_F',
+    'MouldSteamOutBottom_F',
+    'ExtruderFeedthroatTemp_F',
+    'ExtruderBarrelZone1Temp_F',
+    'ExtruderBarrelZone2Temp_F',
+    'ExtruderBarrelZone3Temp_F',
+    'ExtruderDieZoneTemp_F',
+    'ExtruderPremouldTemp_F',
+    'ExtruderMeltTemp_F'};
+
+    opts = detectImportOptions(strcat(folder,date_tags{i},'_SensorValues.csv'));
+    getvaropts(opts,selectedColumns);
+    opts = setvartype(opts,selectedColumns,'string');
+    opts.SelectedVariableNames = selectedColumns;
+    
+    % SensorValues = readtable(strcat(folder,date_tags{i},'_SensorValues.csv'),opts);
+    SensorValues = [SensorValues; readtable(strcat(folder,date_tags{1},'_SensorValues.csv'),opts)];
+
 
 %#####_JobDetailsCurrent
 % tracks cycle times
 
 
+    % JobDetails = readtable(strcat(folder,date_tags{i},'_JobDetailsCurrent.csv'));
+    JobDetails = [JobDetails; readtable(strcat(folder, date_tags{i},'_JobDetailsCurrent.csv'))];
 
-JobDetails = readtable(strcat(folder,date_tag,'_JobDetailsCurrent.csv'));
-JobDetails = [JobDetails; readtable(strcat(folder,'2012-12-20_JobDetailsCurrent.csv'))];
 
+    %#####_ADAPT_DATA
+    % tracks the press options changes via timestamps
+    % ADAPT = readtable(strcat(folder, date_tags{i}, '_CZA0000B0000_ADAPT_DATA.xlsx'));
+    ADAPT = [ADAPT; readtable(strcat(folder,date_tags{i},'_CZA0000B0000_ADAPT_DATA.xlsx'))];
 
-%#####_ADAPT_DATA
-% tracks the press options changes via timestamps
-ADAPT = readtable(strcat(folder,'121918_CZA0000B0000_ADAPT_DATA.xlsx'));
-ADAPT = [ADAPT; readtable(strcat(folder,'122018_CZA0000B0000_ADAPT_DATA.xlsx'))];
+    %#####_TimeStamps
+    % Recorded by hand timestamps
 
-%#####_TimeStamps
-% Recorded by hand timestamps
-TimeStamps = readtable(strcat(folder,'2012-12-20_TimeStamps.xlsx'));
+end
+
+SensorValues.PressPosition_Inches = str2double(SensorValues.PressPosition_Inches);
+SensorValues.PressForce_Ton = str2double(SensorValues.PressForce_Ton);
+SensorValues.MouldSteamIn_F = str2double(SensorValues.MouldSteamIn_F);
+SensorValues.MouldSteamOutTop_F = str2double(SensorValues.MouldSteamOutTop_F);
+SensorValues.MouldSteamOutBottom_F = str2double(SensorValues.MouldSteamOutBottom_F);
+SensorValues.ExtruderFeedthroatTemp_F = str2double(SensorValues.ExtruderFeedthroatTemp_F);
+SensorValues.ExtruderBarrelZone1Temp_F = str2double(SensorValues.ExtruderBarrelZone1Temp_F);
+SensorValues.ExtruderBarrelZone2Temp_F = str2double(SensorValues.ExtruderBarrelZone2Temp_F);
+SensorValues.ExtruderBarrelZone3Temp_F = str2double(SensorValues.ExtruderBarrelZone3Temp_F);
+SensorValues.ExtruderDieZoneTemp_F = str2double(SensorValues.ExtruderDieZoneTemp_F);
+% SensorValues.ExtruderFeedthroatTemp_F = str2double(SensorValues.ExtruderFeedthroatTemp_F);
+SensorValues.ExtruderPremouldTemp_F = str2double(SensorValues.ExtruderPremouldTemp_F);
+SensorValues.ExtruderMeltTemp_F = str2double(SensorValues.ExtruderMeltTemp_F);
+
+TimeStamps = readtable(strcat(folder,'121918_TimeStamps.xlsx'));
 SensorValues.RecordTimeStamp = datetime(SensorValues.RecordTimeStamp, 'InputFormat', 'yyyy-MM-dd HH:mm');6
-
 TimeStamps.TimeStamp = datetime(TimeStamps.TimeStamp, 'InputFormat', 'MMMM d, yyyy hh:mm:ss');
 
 for i = (1:length(TimeStamps.TimeStamp))
@@ -68,11 +80,13 @@ for i = (1:length(TimeStamps.TimeStamp))
     %     continue
     % end
     % disp('FOUND MATCH')
+
+    %% convert all the necessary columns to numbers
     [closestTimeStamp,closestIndex] = min(abs(SensorValues.RecordTimeStamp-TimeStamps.TimeStamp(i)));
     if isnan(closestTimeStamp)
         continue
     end
-    disp(strcat(string(SensorValues.RecordTimeStamp(closestIndex)),'.....',string(TimeStamps.TimeStamp(i))))
+    % disp(strcat(string(SensorValues.RecordTimeStamp(closestIndex)),'.....',string(TimeStamps.TimeStamp(i))))
 
     
     % SensorValues.RecordTimeStamp(closestIndex)
@@ -83,10 +97,10 @@ for i = (1:length(TimeStamps.TimeStamp))
     %write needed values to table  
     % SensorValues.PressPosition_Inches(closestIndex)
     if str2double(SensorValues.PressPosition_Inches(closestIndex)) > 1 
-        disp('Press closed')
+        % disp('Press closed')
         SensorValues.PressPosition_Inches(closestIndex);
     else
-        disp('Press open') 
+        % disp('Press open') 
         SensorValues.PressPosition_Inches(closestIndex);
 
         % if press is open then find the first value where the press is closed
@@ -107,34 +121,43 @@ for i = (1:length(TimeStamps.TimeStamp))
         end
     end 
 
+
+    % look backwards in time to find the last time the press closed
     j = closestIndex;
-    closestIndex
-    while str2double(SensorValues.PressPosition_Inches(j)) > 1
+    while str2double(SensorValues.PressPosition_Inches(j)) > 1 && j > (closestIndex - 10) % && j < closestIndex 
         j = j - 1;
     end
 
-    press_open = j
-    while str2double(SensorValues.PressPosition_Inches(j)) < 1
+    press_open = j;
+    while str2double(SensorValues.PressPosition_Inches(j)) < 1 && j < closestIndex - 10
         j = j - 1;
     end
-    lower_bound = j
+    lower_bound = j + 1;
 
-
-    j = closestIndex
-    while str2double(SensorValues.PressPosition_Inches(j)) > 1
+    % look forwards in time to find the next time the press closes
+    j = closestIndex;
+    while str2double(SensorValues.PressPosition_Inches(j)) > 1 && j < closestIndex + 10
         j = j + 1;
     end
-    press_open = j; 
-    while str2double(SensorValues.PressPosition_Inches(j)) < 1
-        j = j + 1;
+    press_open = j;
+    try  
+        while str2double(SensorValues.PressPosition_Inches(j)) < 1 && j < closestIndex + 10
+            j = j + 1;
+        end
+    catch 
+        disp('END OF FILE')
     end
-    upper_bound = j
+    
+    upper_bound = j - 1;
+
+
+    % pull the necessary adapt settings
+
+    % perform all the needed measurements 
+    % SensorValues.PressPosition_Inches(lower_bound:upper_bound)
 
 end
-
-
-SensorValues.Properties.VariableNames;
-
+TimeStamps
 % get the hand recorded timestamp
 % identify a pressing cycle by press position (one open and close)
 % -> need to keep in mind times when parameter's changed 
