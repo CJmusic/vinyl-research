@@ -1,9 +1,9 @@
 
-addpath('E:\audio_files\A0000B0000\')
-folder = ('D:\OneDrive - University of Waterloo\Vinyl_Project\data\121918_A0000B0000\');
+% addpath('E:\audio_files\A0000B0000\')
+% folder = ('D:\OneDrive - University of Waterloo\Vinyl_Project\data\121918_A0000B0000\');
 
-% addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/') 
-% folder = ('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/data/121918_A0000B0000/')
+addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/') 
+folder = ('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/data/121918_A0000B0000/')
 
 
 
@@ -34,25 +34,29 @@ for i=(1:length(date_tags))
     opts = setvartype(opts,selectedColumns,'string');
     opts.SelectedVariableNames = selectedColumns;
     
-    % SensorValues = readtable(strcat(folder,date_tags{i},'_SensorValues.csv'),opts);
-    SensorValues = [SensorValues; readtable(strcat(folder,date_tags{1},'_SensorValues.csv'),opts)];
-
+    if i == 1
+        SensorValues = readtable(strcat(folder,date_tags{i},'_SensorValues.csv'),opts);
+    else
+        SensorValues = [SensorValues; readtable(strcat(folder,date_tags{1},'_SensorValues.csv'),opts)];
+    end
 
 %#####_JobDetailsCurrent
 % tracks cycle times
 
-
-    % JobDetails = readtable(strcat(folder,date_tags{i},'_JobDetailsCurrent.csv'));
-    JobDetails = [JobDetails; readtable(strcat(folder, date_tags{i},'_JobDetailsCurrent.csv'))];
-
+    if i == 1
+        JobDetails = readtable(strcat(folder,date_tags{i},'_JobDetailsCurrent.csv'));
+    else
+        JobDetails = [JobDetails; readtable(strcat(folder, date_tags{i},'_JobDetailsCurrent.csv'))];
+    end
 
     %#####_ADAPT_DATA
     % tracks the press options changes via timestamps
-    % ADAPT = readtable(strcat(folder, date_tags{i}, '_CZA0000B0000_ADAPT_DATA.xlsx'));
-    ADAPT = [ADAPT; readtable(strcat(folder,date_tags{i},'_CZA0000B0000_ADAPT_DATA.xlsx'))];
+    if i == 1
+        ADAPT = readtable(strcat(folder, date_tags{i}, '_CZA0000B0000_ADAPT_DATA.xlsx'));
+    else
+        ADAPT = [ADAPT; readtable(strcat(folder,date_tags{i},'_CZA0000B0000_ADAPT_DATA.xlsx'))];
+    end
 
-    %#####_TimeStamps
-    % Recorded by hand timestamps
 
 end
 
@@ -69,6 +73,10 @@ SensorValues.ExtruderDieZoneTemp_F = str2double(SensorValues.ExtruderDieZoneTemp
 % SensorValues.ExtruderFeedthroatTemp_F = str2double(SensorValues.ExtruderFeedthroatTemp_F);
 SensorValues.ExtruderPremouldTemp_F = str2double(SensorValues.ExtruderPremouldTemp_F);
 SensorValues.ExtruderMeltTemp_F = str2double(SensorValues.ExtruderMeltTemp_F);
+
+
+%#####_TimeStamps
+% Recorded by hand timestamps
 
 TimeStamps = readtable(strcat(folder,'121918_TimeStamps.xlsx'));
 SensorValues.RecordTimeStamp = datetime(SensorValues.RecordTimeStamp, 'InputFormat', 'yyyy-MM-dd HH:mm');6
