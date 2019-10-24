@@ -9,6 +9,7 @@ folder = ('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/data/121918
 
 date_tags = {'121918', '122018'};
 
+AggTable = [];
 
 for i=(1:length(date_tags))
     %#####_SensorValues
@@ -79,7 +80,7 @@ SensorValues.ExtruderMeltTemp_F = str2double(SensorValues.ExtruderMeltTemp_F);
 % Recorded by hand timestamps
 
 TimeStamps = readtable(strcat(folder,'121918_TimeStamps.xlsx'));
-SensorValues.RecordTimeStamp = datetime(SensorValues.RecordTimeStamp, 'InputFormat', 'yyyy-MM-dd HH:mm');6
+SensorValues.RecordTimeStamp = datetime(SensorValues.RecordTimeStamp, 'InputFormat', 'yyyy-MM-dd HH:mm');
 TimeStamps.TimeStamp = datetime(TimeStamps.TimeStamp, 'InputFormat', 'MMMM d, yyyy hh:mm:ss');
 
 for i = (1:length(TimeStamps.TimeStamp))
@@ -129,25 +130,30 @@ for i = (1:length(TimeStamps.TimeStamp))
         end
     end 
 
+    %% closestIndex points to a position where the press was closed 
 
-    % look backwards in time to find the last time the press closed
+    % look backwards in time to find when the press was last open
     j = closestIndex;
     while str2double(SensorValues.PressPosition_Inches(j)) > 1 && j > (closestIndex - 10) % && j < closestIndex 
         j = j - 1;
     end
+    press_closed = j + 1; %this represents the table index when the press was closed
 
-    press_open = j;
+    %look backwards to find when the press 
     while str2double(SensorValues.PressPosition_Inches(j)) < 1 && j < closestIndex - 10
         j = j - 1;
     end
-    lower_bound = j + 1;
+    lower_bound = j + 1; %
 
     % look forwards in time to find the next time the press closes
     j = closestIndex;
+    
     while str2double(SensorValues.PressPosition_Inches(j)) > 1 && j < closestIndex + 10
         j = j + 1;
     end
-    press_open = j;
+    
+    press_open = j - 1; 
+
     try  
         while str2double(SensorValues.PressPosition_Inches(j)) < 1 && j < closestIndex + 10
             j = j + 1;
@@ -162,10 +168,20 @@ for i = (1:length(TimeStamps.TimeStamp))
     % pull the necessary adapt settings
 
     % perform all the needed measurements 
-    % SensorValues.PressPosition_Inches(lower_bound:upper_bound)
+    % SensorValues(lower_bound:upper_bound)
+
+    %% record number and record ID will be different because of Junk records 
+    % determine from the time stamps when the nearest record 
+
+    % TimeStamps.TimeStamp(i)
+    % TimeStamps.RECORDID{i}
+    lower_bound
+    upper_bound
+    SensorValues.PressPosition_Inches(lower_bound:upper_bound)
+
 
 end
-TimeStamps
+size(SensorValues)
 % get the hand recorded timestamp
 % identify a pressing cycle by press position (one open and close)
 % -> need to keep in mind times when parameter's changed 
