@@ -1,9 +1,9 @@
 
-% addpath('E:\audio_files\A0000B0000\')
-% folder = ('D:\OneDrive - University of Waterloo\Vinyl_Project\data\121918_A0000B0000\');
+addpath('E:\audio_files\A0000B0000\')
+folder = ('D:\OneDrive - University of Waterloo\Vinyl_Project\data\121918_A0000B0000\');
 
-addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/') 
-folder = ('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/data/121918_A0000B0000/')
+% addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/') 
+% folder = ('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/data/121918_A0000B0000/')
 
 
 
@@ -38,17 +38,19 @@ for i=(1:length(date_tags))
     if i == 1
         SensorValues = readtable(strcat(folder,date_tags{i},'_SensorValues.csv'),opts);
     else
-        SensorValues = [SensorValues; readtable(strcat(folder,date_tags{1},'_SensorValues.csv'),opts)];
+        SensorValues = [SensorValues; readtable(strcat(folder,date_tags{i},'_SensorValues.csv'),opts)];
     end
+    % disp(strcat('SensorValues',num2str(height(SensorValues))))
 
-%#####_JobDetailsCurrent
-% tracks cycle times
+    %#####_JobDetailsCurrent
+    % tracks cycle times
 
     if i == 1
         JobDetails = readtable(strcat(folder,date_tags{i},'_JobDetailsCurrent.csv'));
     else
         JobDetails = [JobDetails; readtable(strcat(folder, date_tags{i},'_JobDetailsCurrent.csv'))];
     end
+    % disp(strcat('JobDetails',num2str(height(JobDetails))))
 
     %#####_ADAPT_DATA
     % tracks the press options changes via timestamps
@@ -57,6 +59,7 @@ for i=(1:length(date_tags))
     else
         ADAPT = [ADAPT; readtable(strcat(folder,date_tags{i},'_CZA0000B0000_ADAPT_DATA.xlsx'))];
     end
+    % disp(strcat('ADAPT',num2str(height(ADAPT))))
 
 
 end
@@ -95,7 +98,7 @@ for i = (1:length(TimeStamps.TimeStamp))
     if isnan(closestTimeStamp)
         continue
     end
-    % disp(strcat(string(SensorValues.RecordTimeStamp(closestIndex)),'.....',string(TimeStamps.TimeStamp(i))))
+    disp(strcat('****',string(SensorValues.RecordTimeStamp(closestIndex)),'.....',string(TimeStamps.TimeStamp(i)),'****'))
 
     
     % SensorValues.RecordTimeStamp(closestIndex)
@@ -104,43 +107,56 @@ for i = (1:length(TimeStamps.TimeStamp))
 
     % find the max or min PressForce in a nearby area, 
     %write needed values to table  
-    % SensorValues.PressPosition_Inches(closestIndex)
-    if str2double(SensorValues.PressPosition_Inches(closestIndex)) > 1 
-        % disp('Press closed')
-        SensorValues.PressPosition_Inches(closestIndex);
-    else
-        % disp('Press open') 
-        SensorValues.PressPosition_Inches(closestIndex);
+    disp(strcat('pre closestIndex:    ', num2str(closestIndex)))
+    disp(strcat('pre position:  ', num2str(SensorValues.PressPosition_Inches(closestIndex))))
+
+    if SensorValues.PressPosition_Inches(closestIndex) < 1 
+        % SensorValues.PressPosition_Inches(closestIndex);
+        disp('Press open') 
+        % SensorValues.PressPosition_Inches(closestIndex)
 
         % if press is open then find the first value where the press is closed
         for k = (1:10)
-            pl = str2double(SensorValues.PressPosition_Inches(closestIndex - k));
-            pr = str2double(SensorValues.PressPosition_Inches(closestIndex + k));
+            pl = SensorValues.PressPosition_Inches(closestIndex - k);
+            pr = SensorValues.PressPosition_Inches(closestIndex + k);
             
             if pl > 1
                 closestIndex = closestIndex - k;
-                % SensorValues.PressPosition_Inches(closestIndex) 
+                % disp('index fixed') 
+                % closestIndex
+                % SensorValues.PressPosition_Inches(closestIndex)
+                disp(strcat('post closestIndex:    ', num2str(closestIndex)))
+                disp(strcat('post position:  ', num2str(SensorValues.PressPosition_Inches(closestIndex))))
+            
                 break
             end
             if pr > 1
                 closestIndex = closestIndex + k;
+                % disp('index fixed') 
+                % closestIndex
                 % SensorValues.PressPosition_Inches(closestIndex)
+                disp(strcat('post closestIndex:    ', num2str(closestIndex)))
+                disp(strcat('post position:  ', num2str(SensorValues.PressPosition_Inches(closestIndex))))
+            
                 break
             end
         end
     end 
 
-    %% closestIndex points to a position where the press was closed 
+    %~~closestIndex points to a position where the press was closed~~%
 
     % look backwards in time to find when the press was last open
+    
+
     j = closestIndex;
-    while str2double(SensorValues.PressPosition_Inches(j)) > 1 && j > (closestIndex - 10) % && j < closestIndex 
+    while str2double(SensorValues.PressPosition_Inches(j)) > 1 && j > (closestIndex - 10) 
+        disp('while loop')
         j = j - 1;
     end
     press_closed = j + 1; %this represents the table index when the press was closed
 
     %look backwards to find when the press 
-    while str2double(SensorValues.PressPosition_Inches(j)) < 1 && j < closestIndex - 10
+    while str2double(SensorValues.PressPosition_Inches(j)) < 1 && j > closestIndex - 10
         j = j - 1;
     end
     lower_bound = j + 1; %
@@ -175,13 +191,16 @@ for i = (1:length(TimeStamps.TimeStamp))
 
     % TimeStamps.TimeStamp(i)
     % TimeStamps.RECORDID{i}
-    lower_bound
-    upper_bound
-    SensorValues.PressPosition_Inches(lower_bound:upper_bound)
+    % lower_bound
+    % upper_bound
+    % SensorValues.PressPosition_Inches(lower_bound:upper_bound)
 
 
 end
-size(SensorValues)
+% ADAPT
+% JobDetails
+% TimeStamps
+% SensorValues
 % get the hand recorded timestamp
 % identify a pressing cycle by press position (one open and close)
 % -> need to keep in mind times when parameter's changed 
