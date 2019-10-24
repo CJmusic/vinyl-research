@@ -169,7 +169,7 @@ for i = (1:length(TimeStamps.TimeStamp) - 141)
         % SensorValues.PressPosition_Inches(closestIndex - j)
         if SensorValues.PressPosition_Inches(j) < 1
             disp('found press open')
-            press_open =j;
+            press_open =j - 1;
             disp(strcat('index:    ', num2str(press_open),'   position:  ', num2str(SensorValues.PressPosition_Inches(press_open))))
             break 
         end
