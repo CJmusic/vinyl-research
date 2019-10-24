@@ -154,7 +154,7 @@ for i = (1:length(TimeStamps.TimeStamp) - 141)
 
     for j = (closestIndex:-1:closestIndex - 10)
         if SensorValues.PressPosition_Inches(j) < 1
-            disp('found press closed')
+            disp('found press close')
             press_close = j + 1;
             disp(strcat('index:    ', num2str(press_close),'   position:  ', num2str(SensorValues.PressPosition_Inches(press_close))))
             break 
@@ -174,6 +174,26 @@ for i = (1:length(TimeStamps.TimeStamp) - 141)
             break 
         end
     end
+
+    for j = (press_close-1:-1:press_close - 11)
+        if SensorValues.PressPosition_Inches(j) > 1
+            disp('found lower bound')
+            lower_bound = j;
+            disp(strcat('index:    ', num2str(lower_bound),'   position:  ', num2str(SensorValues.PressPosition_Inches(lower_bound))))
+            break 
+        end
+    end
+
+    for j = (press_open:press_open + 10)
+        if SensorValues.PressPosition_Inches(j) < 1
+            disp('found = upper bound')
+            upper_bound = j + 1;
+            disp(strcat('index:    ', num2str(upper_bound),'   position:  ', num2str(SensorValues.PressPosition_Inches(upper_bound))))
+            break 
+        end
+    end
+
+
 
 
     % while str2double(SensorValues.PressPosition_Inches(j)) > 1 && j > (closestIndex + 10) 
@@ -219,7 +239,7 @@ for i = (1:length(TimeStamps.TimeStamp) - 141)
     % determine from the time stamps when the nearest record 
     % lower_bound
     % upper_bound
-    % SensorValues.PressPosition_Inches(lower_bound:upper_bound)
+    SensorValues.PressPosition_Inches(lower_bound:upper_bound)
     % SensorValues.PressPosition_Inches(press_close:press_open)
 end
 % ADAPT
