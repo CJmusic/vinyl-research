@@ -10,7 +10,7 @@ clc
 date_tags = {'121918', '122018'};
 
 AggTable = [];
-
+recordTable = [];
 for i=(1:length(date_tags))
     %#####_SensorValues
     % tracks the data from the sensors in the press via timestamps
@@ -88,27 +88,20 @@ TimeStamps.TimeStamp = datetime(TimeStamps.TimeStamp, 'InputFormat', 'MMMM d, yy
 
 for i = (1:length(TimeStamps.TimeStamp))
     %% convert all the necessary columns to numbers
-    [closestTimeStamp,closestIndex] = min(abs(SensorValues.RecordTimeStamp-TimeStamps.TimeStamp(i)));
+    [closestTimeStamp,closestIndex] = min(abs(SensorValues.RecordTimeStamp(i:length(SensorValues.RecordTimeStamp))-TimeStamps.TimeStamp(i)));
     if isnan(closestTimeStamp)
         continue
     end
     disp(strcat('****',string(SensorValues.RecordTimeStamp(closestIndex)),'.....',string(TimeStamps.TimeStamp(i)),'****'))
 
-    
-    % SensorValues.RecordTimeStamp(closestIndex)
-    % SensorValues.PressPosition_Inches(closestIndex)
-    % SensorValues.PressForce_Ton(closestIndex)
-
-    % find the max or min PressForce in a nearby area, 
+        % find the max or min PressForce in a nearby area, 
     %write needed values to table  
+    preclosestIndex = closestIndex;
     disp(strcat('pre closestIndex:    ', num2str(closestIndex)))
     disp(strcat('pre position:  ', num2str(SensorValues.PressPosition_Inches(closestIndex))))
 
-    if SensorValues.PressPosition_Inches(closestIndex) < 1 
-        % SensorValues.PressPosition_Inches(closestIndex);
+    if SensorValues.PressPosition_Inches(closestIndex) < 1
         % disp('Press open') 
-        % SensorValues.PressPosition_Inches(closestIndex)
-
         % if press is open then find the first value where the press is closed
         for k = (1:10)
             pl = SensorValues.PressPosition_Inches(closestIndex - k);
@@ -136,8 +129,8 @@ for i = (1:length(TimeStamps.TimeStamp))
             end
         end
     end 
-
     %~~closestIndex points to a position where the press was closed~~%
+    disp(strcat('post closestIndex:    ', num2str(closestIndex)))
     disp(strcat('post position:  ', num2str(SensorValues.PressPosition_Inches(closestIndex))))
 
     open = false;
@@ -274,6 +267,15 @@ for i = (1:length(TimeStamps.TimeStamp))
         end
     end
 
+
+    length(recordTable)
+    if length(recordTable) > 1 && press_close == recordTable( length(recordTable)-1 , 2 ); 
+        disp('DUPLICATE FOUND')
+        continue
+        % [closestTimeStamp,closestIndex] = min(abs(SensorValues.RecordTimeStamp-TimeStamps.TimeStamp(i)));
+    end
+
+
     % disp(strcat('lower bound:    ', num2str(lower_bound)))
     % disp(strcat('press close:    ', num2str(press_close)))
     % disp(strcat('press open:    ', num2str(press_open)))
@@ -325,26 +327,31 @@ for i = (1:length(TimeStamps.TimeStamp))
     % lower_bound
     % upper_bound
     % upper_bound - lower_bound
-    for k = (lower_bound:upper_bound)
-        if k == lower_bound
-            disp('lower_bound')
-        end
-        if k == press_close
-            disp('press_close')
-        end
-        if k == press_open
-            disp('press_open')
-        end
-        if k == upper_bound
-            disp('upper_bound')
-        end
-        if k == closestIndex
-            disp('closestIndex')
-        end
-        disp(num2str(SensorValues.PressPosition_Inches(k)))
-        end
+
+    % for k = (lower_bound:upper_bound)
+    %     if k == lower_bound
+    %         disp('lower_bound')
+    %     end
+    %     if k == press_close
+    %         disp('press_close')
+    %     end
+    %     if k == press_open
+    %         disp('press_open')
+    %     end
+    %     if k == upper_bound
+    %         disp('upper_bound')
+    %     end
+    %     if k == closestIndex
+    %         disp('closestIndex')
+    %     end
+    %     disp(num2str(SensorValues.PressPosition_Inches(k)))
+    %     end
+
     % SensorValues.PressPosition_Inches(press_close:press_open)
+    recordTable = [recordTable; lower_bound, press_close, press_open, upper_bound];
 end
+recordTable
+length(recordTable)
 % ADAPT
 % JobDetails
 % TimeStamps
