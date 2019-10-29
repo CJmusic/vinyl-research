@@ -1,9 +1,9 @@
 
-% addpath('E:\audio_files\A0000B0000\')
-% folder = ('D:\OneDrive - University of Waterloo\Vinyl_Project\data\121918_A0000B0000\');
+addpath('E:\audio_files\A0000B0000\')
+folder = ('D:\OneDrive - University of Waterloo\Vinyl_Project\data\121918_A0000B0000\');
 
-addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/') 
-folder = ('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/data/121918_A0000B0000/')
+% addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/') 
+% folder = ('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/data/121918_A0000B0000/')
 
 clc
 
