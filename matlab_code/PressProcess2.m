@@ -11,8 +11,6 @@
 
     date_tags = {'121918', '122018'};
 
-    AggTable = [];
-    recordTable = [];
     for i=(1:length(date_tags))
         %#####_SensorValues
         % tracks the data from the sensors in the press via timestamps
@@ -95,7 +93,8 @@ press_close = 1;
 press_open = 1;
 lower_bound = 1;
 upper_bound = 1;
-recordNumber = 1;
+record_number = 1;
+recordNumbers = [];
 recordArray = [];
 height(SensorValues)
 while i < height(SensorValues)
@@ -135,7 +134,7 @@ while i < height(SensorValues)
             while SensorValues.PressPosition_Inches(upper_bound) < 1 
                 upper_bound = upper_bound + 1;
                 if upper_bound > height(SensorValues)
-                    recordArray = [recordArray; [recordNumber,lower_bound, press_close, press_open, upper_bound]];
+                    recordArray = [recordArray; [record_number,lower_bound, press_close, press_open, height(SensorValues)]];
                     disp('BREAKING')
                     break
                 end
@@ -144,30 +143,21 @@ while i < height(SensorValues)
 
         end 
         i = upper_bound;
-        recordNumber = recordNumber + 1;
-        recordArray = [recordArray; [recordNumber,lower_bound, press_close, press_open, upper_bound]];
+        record_number = record_number + 1;
+        recordArray = [recordArray; [record_number, lower_bound, press_close, press_open, upper_bound]];
         
         
     end    
 
-% SensorValues = [SensorValues; ];
 
-% vTbl = table(recordNumber, 'VariableNames',{'recordNumber'});              
-% vTbl = table(recordTable)
-recordArray
-% recordTable = [, 'VariableNames', {'recordNumber'}  recordTable];    
-
-
-for i = (1:length(recordTable))
-    irecordNumber =  SensorValues.recordNumber(1,i);
-    ilower_bound  =  SensorValues.recordNumber(2,i);
-    ipress_close  =  SensorValues.recordNumber(3,i);
-    ipress_open   =  SensorValues.recordNumber(4,i);
-    iupper_bound  =  SensorValues.recordNumber(5,i);
-
-    SensorValues('recordNumber',ilower_bound:iupper_bound) = irecordNumber;
+for i = (1:length(recordArray))
+    recordTable('recordNumber',recordArray(2,i):recordArray(5,i)) = recordArray(1,i) 
 end
 recordTable
-length(recordTable)
+% recordTable = table(record,'VariableNames', {'recordNumber'});
 
 
+recordTable = {recordTable; SensorValues};
+recordTable
+
+% recordNumbers
