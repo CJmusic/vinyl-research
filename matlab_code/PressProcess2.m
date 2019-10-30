@@ -1,11 +1,11 @@
 
 
 %~~~~~~~~~ LOADING TABLES~~~~~~~~~~~%
-    addpath('E:\audio_files\A0000B0000\')
-    folder = ('D:\OneDrive - University of Waterloo\Vinyl_Project\data\121918_A0000B0000\');
+    % addpath('E:\audio_files\A0000B0000\')
+    % folder = ('D:\OneDrive - University of Waterloo\Vinyl_Project\data\121918_A0000B0000\');
 
-    % addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/') 
-    % folder = ('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/data/121918_A0000B0000/')
+    addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/') 
+    folder = ('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/data/121918_A0000B0000/')
 
     clc
 
@@ -134,7 +134,7 @@ while i < height(SensorValues)
             while SensorValues.PressPosition_Inches(upper_bound) < 1 
                 upper_bound = upper_bound + 1;
                 if upper_bound > height(SensorValues)
-                    recordArray = [recordArray; [record_number,lower_bound, press_close, press_open, height(SensorValues)]];
+                    recordArray = [recordArray; [record_number,lower_bound, press_close, press_open, height(SensorValues)-1]];
                     disp('BREAKING')
                     break
                 end
@@ -149,15 +149,35 @@ while i < height(SensorValues)
         
     end    
 
+% recordArray
+% disp('going into 4 loop')
+% recordTable = table('VariableNames', {'recordNumber'})
+recordTable  = array2table(zeros(height(SensorValues),1), 'VariableNames', {'recordNumber'});
+% optionsChange = array2table(zeros(0,9), 'VariableNames',{...});
+% recordTable
+disp('HEIGHT RECORD')
+height(recordTable)
+recordArray(length(recordArray),5) = recordArray(length(recordArray),5) - 1
+length(recordArray)
 
 for i = (1:length(recordArray))
-    recordTable('recordNumber',recordArray(2,i):recordArray(5,i)) = recordArray(1,i) 
+    % recordArray(1,1)
+    % recordArray(1,2)
+    % recordArray(1,3)
+    % recordArray(1,4)
+    % recordArray(1,5)
+    for j = (recordArray(i,2):recordArray(i,5))
+        % recordTable(j,'recordNumber')
+        % recordArray(i,1) 
+        recordTable(j,'recordNumber') = num2cell(recordArray(i,1));
+    end
 end
-recordTable
+% recordTable
 % recordTable = table(record,'VariableNames', {'recordNumber'});
+height(recordTable)
+height(SensorValues)
 
-
-recordTable = {recordTable; SensorValues};
+recordTable = [recordTable SensorValues];
 recordTable
-
+writetable(recordTable, 'recordTable.csv')
 % recordNumbers
