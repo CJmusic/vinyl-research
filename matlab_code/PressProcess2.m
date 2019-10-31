@@ -178,6 +178,5 @@ height(recordTable)
 height(SensorValues)
 
 recordTable = [recordTable SensorValues];
-recordTable
-writetable(recordTable, 'recordTable.csv')
+writetable(recordTable, 'recordTable.csv');
 % recordNumbers
