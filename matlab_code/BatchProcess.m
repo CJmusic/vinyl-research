@@ -9,12 +9,12 @@ folder = '';
     % files = dir('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/click_testing/*.wav')
 % end
 
-% addpath('/Volumes/AUDIOBANK/audio_files/A0000B0000/')
-% folder = ('/Volumes/AUDIOBANK/audio_files/A0000B0000/')
+addpath('/Volumes/AUDIOBANK/audio_files/A0000B0000/')
+folder = ('/Volumes/AUDIOBANK/audio_files/A0000B0000/')
 % files = dir(strcat(folder,'*.wav'))
 
-addpath('E:\audio_files\A0000B0000\')
-folder = ('E:\audio_files\A0000B0000\')
+% addpath('E:\audio_files\A0000B0000\')
+% folder = ('E:\audio_files\A0000B0000\')
 disp(['loading folder...:', folder])
 
 files = dir(strcat(folder,'*.wav'));
