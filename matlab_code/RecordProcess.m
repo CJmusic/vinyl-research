@@ -1,12 +1,20 @@
 % close all; clear all; clc;
-% function [lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R, wow, stereo_bleed] = recordProcess(file)
+
+
+% disp('~~~~~~~~~~~~TESTING RECORDPROCESS~~~~~~~~~~~~')
+
+% addpath('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\A0000B0000\')
+% addpath('D:\Code\vinyl-research\matlab_code\audio_functions')
+% file = 'D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\A0000B0000\03141_A0000B0000r030b.wav'
+
+% recordProcess(file)
+
 function output = recordProcess(file)
     %~~~~~~~~~~~~~~~~~ LOAD REFERENCE ~~~~~~~~~~~~~~~~~%
         try 
-            [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/031418_A0000B0000r27a.wav');
-
+            [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/03141_A0000B0000r28a.wav');
         catch
-            [ref, fs] = audioread('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000\031418_A0000B0000r27a.wav');
+            [ref, fs] = audioread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\03141_A0000B0000r28a.wav');
         end 
     %~~~~~~~~~~~~~~~~~~ Reference info ~~~~~~~~~~~~~~~~%
 
@@ -164,16 +172,35 @@ function output = recordProcess(file)
             if t == 1
                 sig = data(1 : floor(timestamps(1,1)*fs) - lagdiff,:);
                 sigtime = timedata(1 : floor(timestamps(1,1)*fs) - lagdiff);  
+
+                refT = ref(1 : floor(timestamps(1,1)*fs) - lagdiff,:);
             elseif t == length(signal_names)
                 sig = data(floor(timestamps(end,2)*fs) - lagdiff : length(data),:);
                 sigtime = timedata(floor(timestamps(end,2)*fs) - lagdiff : length(data));  
+
+                refT = ref(floor(timestamps(end,2)*fs) - lagdiff : length(ref),:);
             else
                 sig = data(floor(timestamps(t-1,1)*fs) - lagdiff : floor(timestamps(t-1,2)*fs) - lagdiff,:);
                 sigtime = timedata(floor(timestamps(t-1,1)*fs) - lagdiff :floor(timestamps(t-1,2)*fs) - lagdiff);  
+
+                % floor(timestamps(t-1,1)*fs) - lagdiff
+                % floor(timestamps(t-1,2)*fs) - lagdiff
+
+                refT = ref(floor(timestamps(t-1,1)*fs) - lagdiff : floor(timestamps(t-1,2)*fs) - lagdiff,:);
             end
             
             [csig(:,1), CLICKS_L] = ClickDetect(sig(:,1));
             [csig(:,2), CLICKS_R] = ClickDetect(sig(:,2));
+           
+            [~, REFS_L] = ClickDetect(ref(:,1));
+            [~, REFS_R] = ClickDetect(ref(:,2));
+
+            % need to do the reference here by track 
+            [diff_arrayL, ~] = audio_clickmatrix(CLICKS_L, REFS_L);
+            [diff_arrayR, ~] = audio_clickmatrix(CLICKS_R, REFS_R);
+
+            commonclicks_L = length(diff_arrayL);
+            commonclicks_R = length(diff_arrayL);
             
             clicks_L = length(CLICKS_L);
             clicks_R = length(CLICKS_R);
@@ -225,7 +252,7 @@ function output = recordProcess(file)
             wow_R =num2str(wow_R);
             stereo_bleed = num2str(stereo_bleed);
 
-            output = [track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R, wow_L, wow_R, stereo_bleed];
+            output = [track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, clicks_L, clicks_R, commonclicks_L, commonclicks_R  THD_L, THD_R, wow_L, wow_R, stereo_bleed];
             % class(output)
             % disp('END RECORD PROCESS')
 

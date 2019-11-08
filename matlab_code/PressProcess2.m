@@ -1,14 +1,16 @@
 
 
 %~~~~~~~~~ LOADING TABLES~~~~~~~~~~~%
-    % addpath('E:\audio_files\A0000B0000\')
-    % folder = ('D:\OneDrive - University of Waterloo\Vinyl_Project\data\121918_A0000B0000\');
+    addpath('E:\audio_files\A0000B0000\')
+    addpath('D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\');
 
-    addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/') 
-    folder = ('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/data/121918_A0000B0000/')
+    folder = ('D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\121918_A0000B0000\');
+
+    % addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/') 
+    % folder = ('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/data/121918_A0000B0000/')
 
     clc
-
+    disp('~~~~~~~~~~~~~~~~PRESS PROCESS 2~~~~~~~~~~~~~~~~~~')
     date_tags = {'121918', '122018'};
 
     for i=(1:length(date_tags))
@@ -34,7 +36,6 @@
         getvaropts(opts,selectedColumns);
         opts = setvartype(opts,selectedColumns,'string');
         opts.SelectedVariableNames = selectedColumns;
-        
         if i == 1
             SensorValues = readtable(strcat(folder,date_tags{i},'_SensorValues.csv'),opts);
         else

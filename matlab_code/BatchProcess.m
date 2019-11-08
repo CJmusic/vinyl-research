@@ -1,16 +1,19 @@
 close all; %clear all; %clc;
 
-folder = '';
 % try 
-    % addpath('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\')
-    % files = dir('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\click_testing\*.wav')
+addpath('D:\Code\vinyl-research\matlab_code\audio_functions\')
+
+addpath('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\A0000B0000\')
+folder = 'D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\A0000B0000\';
+
+% files = dir('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\*.wav')
 % catch
     % addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/')
     % files = dir('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/click_testing/*.wav')
 % end
 
-addpath('/Volumes/AUDIOBANK/audio_files/A0000B0000/')
-folder = ('/Volumes/AUDIOBANK/audio_files/A0000B0000/')
+% addpath('/Volumes/AUDIOBANK/audio_files/A0000B0000/')
+% folder = ('/Volumes/AUDIOBANK/audio_files/A0000B0000/')
 % files = dir(strcat(folder,'*.wav'))
 
 % addpath('E:\audio_files\A0000B0000\')
@@ -19,7 +22,9 @@ disp(['loading folder...:', folder])
 
 files = dir(strcat(folder,'*.wav'));
 
-csvdata = {'date_recorded', 'pressing', 'top_stamper', 'top_hits', 'bottom_stamper', 'bottom_hits', 'record', 'side', 'track', 'lagdiff', 'normalization_L', 'normalization_R','RMS_L', 'RMS_R', 'clicks_L', 'clicks_R', 'THD_L', 'THD_R', 'wow_L', 'wow_R', 'stereo_bleed'};
+files
+
+csvdata = {'date_recorded', 'pressing', 'top_stamper', 'top_hits', 'bottom_stamper', 'bottom_hits', 'record', 'side', 'track', 'lagdiff', 'normalization_L', 'normalization_R','RMS_L', 'RMS_R', 'clicks_L', 'clicks_R', 'commonclicks_L', 'commonclicks_R', 'THD_L', 'THD_R', 'wow_L', 'wow_R', 'stereo_bleed'};
 
 
 
@@ -111,13 +116,15 @@ for i = (1:length(files))
         RMS_R = output(i,6);
         clicks_L = output(i,7);
         clicks_R = output(i,8);
-        THD_L = output(i,9);
-        THD_R = output(i,10);
-        wow_L = output(i,11);
-        wow_R = output(i,12);
-        stereo_bleed = output(i,13);
+        commonclicks_L = output(i,9);  
+        commonclicks_R = output(i,10);
+        THD_L = output(i,11);
+        THD_R = output(i,12);
+        wow_L = output(i,13);
+        wow_R = output(i,14);
+        stereo_bleed = output(i,15);
       
- 
+        [track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, clicks_L, clicks_R, commonclicks_L, commonclicks_R  THD_L, THD_R, wow_L, wow_R, stereo_bleed];
         
 
         % lagdiff = lagdiff{1,1};
@@ -146,7 +153,7 @@ for i = (1:length(files))
         % disp(['wow_R...:', num2str(wow_R)])
         % disp(['stereo_bleed...:', num2str(stereo_bleed)])
         % csvdata(end+1,:) = [date_recorded, pressing, top_stamper, top_hits, bottom_stamper, bottom_hits, record, side, track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R, wow_L, wow_R, stereo_bleed];
-        csv_towrite = [date_recorded, pressing, top_stamper, top_hits, bottom_stamper, bottom_hits, record, side, track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, clicks_L, clicks_R, THD_L, THD_R, wow_L, wow_R, stereo_bleed];
+        csv_towrite = [date_recorded, pressing, top_stamper, top_hits, bottom_stamper, bottom_hits, record, side, track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, clicks_L, clicks_R, commonclicks_L, commonclicks_R, THD_L, THD_R, wow_L, wow_R, stereo_bleed];
         
         % numbers = randi(9, 10, 1);
         % num_str = num2str(numbers);
@@ -202,8 +209,7 @@ for i = (1:length(files))
         % csv_towrite = cell2mat(csv_towrite)
         % dlmwrite(strcat(folder, pressingID,'.csv'),csv_towrite.','-append');
         % % cell2csv('A0000B0000.csv',csv_towrite,',')
-        writetable(T,strcat(folder, pressingID,'.csv'));
-    end
+     end
 
 end
 
