@@ -3,7 +3,6 @@
 % need to test various values of threshold and width and produce a plot of 
 % number of clicks vs. those two values and look for a plateau
 
-
 clc; close all;
 addpath('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\click_testing\')
 addpath('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\click_testing\declicked')

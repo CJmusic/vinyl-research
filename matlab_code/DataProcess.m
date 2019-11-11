@@ -1,8 +1,13 @@
+%% DataProcess.m 
+% inputs: AudioData, SensorValues 
+% outputs: StatsTable
+
 close all
 
 addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/')
 
 dataFile = ('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/A0000B0000-data.csv')
+dataFolder = 'D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\A0000B0000\'
 
 % dataFile = ('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000\A0000B0000-data.csv')
 
@@ -66,7 +71,7 @@ for i = (1:length(measurements))
 end
 statsTable
 
-writetable(statsTable,strcat('statsTable.csv'));
+writetable(statsTable,strcat(dataFolder,'statsTable.csv'));
 
 
 %DO TOTAL CLICKS 

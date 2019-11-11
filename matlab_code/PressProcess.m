@@ -4,7 +4,8 @@
     addpath('E:\audio_files\A0000B0000\')
     addpath('D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\');
 
-    folder = ('D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\121918_A0000B0000\');
+    folder = ('D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\A0000B0000\');
+    dataFolder = 'D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\A0000B0000\'
 
     % addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/') 
     % folder = ('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/data/121918_A0000B0000/')
@@ -179,5 +180,5 @@ height(recordTable)
 height(SensorValues)
 
 recordTable = [recordTable SensorValues];
-writetable(recordTable, 'recordTable.csv');
+writetable(recordTable, strcat(dataFolder,'recordTable.csv'));
 % recordNumbers
