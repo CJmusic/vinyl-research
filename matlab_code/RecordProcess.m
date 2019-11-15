@@ -192,7 +192,7 @@ function output = recordProcess(file)
             commonclicks_R = length(diff_arrayL);
             
             clicks_L = length(CLICKS_L);
-            clicks_R = length(CLICKS_R);
+            clicks_R = length(CLICKS_R); 
 
             RMS_L = 20.0*log10(rms(csig(:,1)));
             RMS_R = 20.0*log10(rms(csig(:,2)));

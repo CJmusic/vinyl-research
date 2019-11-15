@@ -6,7 +6,7 @@ close all
 
 addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/')
 
-dataFile = ('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/A0000B0000-data.csv')
+dataFile = ('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/SensorValues.csv')
 dataFolder = 'D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\A0000B0000\'
 
 % dataFile = ('D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000\A0000B0000-data.csv')
@@ -82,55 +82,6 @@ data_return
 % end
 
 % datastats(getData(byN, signal_names{j}, measurements{i}));
-
-
-
-%~~~~~ OLD CODE ~~~~~%
-% figure(1); hold on; grid on;
-% % scatter(getData(byN,'transition', 'PressForce_Ton'), getData(byN,'transition', 'clicks_L'))
-% scatter(getData(byN,'transition', 'record'), getData(byN,'transition', 'RMS_L'))
-% scatter(getData(byN,'transition', 'record'), getData(byN,'transition', 'RMS_R'))
-% title('RMS levels in transition track')
-% xlabel('record #')
-% ylabel('RMS level [dB]')
-% legend(['Left', 'Right'])
-
-% figure(2); hold on; grid on;
-% hist(getData(byN,'transition','RMS_L'),20)
-% hist(getData(byN,'transition','RMS_R'),20)
-% title('RMS level Histogram')
-% xlabel('num records')
-% title('RMS level [dB]')
-
-% figure(4); hold on; grid on;
-% % scatter(getData(byN,'transition', 'PressForce_Ton'), getData(byN,'transition', 'clicks_L'))
-% scatter(getData(byN,'transition', 'record'), getData(byN,'transition', 'RMS_L'))
-% scatter(getData(byN,'transition', 'record'), getData(byN,'transition', 'RMS_R'))
-% title('RMS levels in transition track')
-% xlabel('record #')
-% ylabel('RMS level [dB]')
-% legend(['Left', 'Right'])
-
-% %% find the 10 records with the min and max noise levels
-
-% byRMS = sortrows(byN);
-% disp('Highest RMS_L')
-% mins = getData(byRMS,'transition','record');
-% maxs = getData(byRMS,'transition','record');
-
-% mins(1:10)
-% maxs(end-10:end)
-
-% stats_RMS_L = datastats(getData(byRMS,'transition','RMS_L'))
-% stats_RMS_R = datastats(getData(byRMS,'transition','RMS_R'))
-% stats_clicks_R = datastats(getData(byRMS,'transition','clicks_R'))
-% stats_clicks_L = datastats(getData(byRMS,'transition','clicks_L'))
-
-% disp('standard errors')
-% stats_RMS_R.std/sqrt(height(byN))
-% stats_RMS_L.std/sqrt(height(byN))
-%~~~~~ OLD CODE ENDS ~~~~~% 
-
 
 
 
