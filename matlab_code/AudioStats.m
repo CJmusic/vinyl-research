@@ -1,14 +1,25 @@
 %% DataProcess.m 
 % inputs: AudioData, SensorValues 
-% outputs: StatsTable
+% outputs: AudioStats
 
 close all
 
 addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/')
+
+AudioFile = ('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/A0000B0000-data.csv')
 SensorFile = ('')
 
-%make a table with columns : 
-% track , measurement , mean , median .... , std
+% dataFolder = 'D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\A0000B0000\'
+
+% AudioFile = ('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\A0000B0000-data.csv')
+
+
+audio_byN = readtable(AudioFile);
+for i = (1:length(audio_byN.Properties.VariableNames))
+    disp(audio_byN.Properties.VariableNames(i))
+end
+audio_byN
+
 sensor_names = {'recordNumber',	
 'id',	
 'RecordTimeStamp',
@@ -87,10 +98,13 @@ end
 
 
 
+%make a table with columns : 
+% track , measurement , mean , median .... , std
+
 col_names = {'track','measurement','max', 'min', 'mean', 'median', 'range', 'std'};
-% statsTable = table('VariableNames', col_names)
-statsTable  = cell2table(cell(0,8), 'VariableNames', col_names);
-statsTable
+% AudioStats = table('VariableNames', col_names)
+AudioStats  = cell2table(cell(0,8), 'VariableNames', col_names);
+AudioStats
 % each row is the table filtered by track and then written to a new table as measurements 
 
 measurements = {'normalization_L', 'normalization_R', 'RMS_L', 'RMS_R', 'clicks_L', 'clicks_R', 'THD_L', 'THD_R', 'wow_L', 'wow_R', 'stereo_bleed'};
@@ -123,6 +137,7 @@ signal_names = {'leadin',    % 1
 'sweepV2',   % 26
 'leadout'    % 27
 };
+% datastats([1,2,3,1,2,6])
 
 for i = (1:length(measurements))
     for j = (1:length(signal_names))
@@ -132,25 +147,17 @@ for i = (1:length(measurements))
         intTable = cell2table({signal_names{j}, measurements{i},int_stats.max,int_stats.min,int_stats.mean,int_stats.median,int_stats.range,int_stats.std},'VariableNames', col_names);
 
         % intTable
-        statsTable = [statsTable ; intTable];
+        AudioStats = [AudioStats ; intTable];
     end
 end
-statsTable
+AudioStats
 
-writetable(statsTable,strcat(dataFolder,'statsTable.csv'));
-
-
-%DO TOTAL CLICKS 
-data_return = (table2array(byN(:,'clicks_L')));
-data_return
-% if strcmp(class(data_return),'cell')
-    % data_return = str2double(data_return);
-% end
-
-% datastats(getData(byN, signal_names{j}, measurements{i}));
+writetable(AudioStats,strcat(dataFolder,'AudioStats.csv'));
 
 
-
+% %DO TOTAL CLICKS 
+% data_return = (table2array(byN(:,'clicks_L')));
+% data_return
 
 
 function data_return = getData(Tbl, track, param) 
