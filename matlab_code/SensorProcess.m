@@ -187,5 +187,5 @@ height(recordTable)
 height(SensorValues)
 
 recordTable = [recordTable SensorValues];
-writetable(recordTable, strcat(dataFolder,'A0000B0000_SensorTable.csv'));
+writetable(recordTable, strcat(dataFolder,'A0000B0000_PressTable.csv'));
 % recordNumbers
