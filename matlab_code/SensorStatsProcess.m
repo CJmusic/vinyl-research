@@ -118,9 +118,6 @@ SensorStats  = cell2table(cell(0,7), 'VariableNames', col_names);
 SensorStats
 
 for i = (1:width(sensor_table))
-        i
-        % intTable = byN(strcmp(byN(:,9),sensor_variables{j}),:);
-        sensor_table(:,i)
         int_stats = datastats(table2array(sensor_table(:,i)));
 
         intTable = cell2table({sensor_variables(i),int_stats.max,int_stats.min,int_stats.mean,int_stats.median,int_stats.range,int_stats.std},'VariableNames', col_names);
