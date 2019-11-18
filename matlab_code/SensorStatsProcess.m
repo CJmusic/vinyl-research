@@ -109,7 +109,7 @@ for i = (1:max(sensor_raw.recordNumber))
 end 
 
 sensor_table
-writetable(sensor_table,strcat(dataFolder,'A0000B000_SensorTable.csv'));
+writetable(sensor_table,strcat(dataFolder,'A0000B0000_SensorTable.csv'));
 
 
 col_names = {'sensor_measurement','max', 'min', 'mean', 'median', 'range', 'std'};
@@ -128,7 +128,7 @@ for i = (1:width(sensor_table))
 
 SensorStats
 
-writetable(SensorStats,strcat(dataFolder,'SensorStats.csv'));
+writetable(SensorStats,strcat(dataFolder,'A0000B0000_SensorStats.csv'));
 
 
 %DO TOTAL CLICKS 

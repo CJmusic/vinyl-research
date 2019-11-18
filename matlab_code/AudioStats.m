@@ -152,7 +152,7 @@ for i = (1:length(measurements))
 end
 AudioStats
 
-writetable(AudioStats,strcat(dataFolder,'AudioStats.csv'));
+writetable(AudioStats,strcat(dataFolder,'A0000B0000_AudioStats.csv'));
 
 
 % %DO TOTAL CLICKS 
