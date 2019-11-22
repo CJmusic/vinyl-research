@@ -1,9 +1,9 @@
-%% DataProcess.m 
-% inputs: AudioData, SensorValues 
-% outputs: StatsTable
+%% SensorStats.m 
+% inputs: SensorData
+% outputs: SensorStats
 
 close all
-
+  
 addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/')
 SensorFile = ('')
 

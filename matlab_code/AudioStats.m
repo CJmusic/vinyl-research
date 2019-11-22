@@ -1,5 +1,5 @@
-%% DataProcess.m 
-% inputs: AudioData, SensorValues 
+%% AudioStats.m 
+% inputs: AudioData
 % outputs: AudioStats
 
 close all
@@ -7,7 +7,6 @@ close all
 addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/')
 
 AudioFile = ('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/A0000B0000-data.csv')
-SensorFile = ('')
 
 % dataFolder = 'D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\A0000B0000\'
 
@@ -19,82 +18,6 @@ for i = (1:length(audio_byN.Properties.VariableNames))
     disp(audio_byN.Properties.VariableNames(i))
 end
 audio_byN
-
-sensor_names = {'recordNumber',	
-'id',	
-'RecordTimeStamp',
-'PressPosition_Inches',
-'PressForce_Ton',
-'MouldSteamIn_PSI',
-'MouldSteamIn_F',
-'MouldSteamOutTop_F',
-'MouldSteamOutBottom_F',
-'ExtruderFeedthroatTemp_F',
-'ExtruderBarrelZone1Temp_F',	
-'ExtruderBarrelZone2Temp_F',
-'ExtruderBarrelZone3Temp_F',
-'ExtruderDieZoneTemp_F',
-'ExtruderPremouldTemp_F',
-'ExtruderMeltTemp_F'};
-
-sensor_variables = {'RecordNumber',
-'maxPressForce_Ton',
-'minPressForce_Ton',
-'maxMouldSteamIn_PSI',
-'minMouldSteamIn_PSI',
-'maxMouldSteamIn_F',
-'minMouldSteamIn_F',
-'maxMouldSteamOutTop_F',
-'minMouldSteamOutTop_F',
-'maxMouldSteamOutBottom_F',
-'minMouldSteamOutBottom_F',
-'maxExtruderFeedthroatTemp_F',
-'minExtruderFeedthroatTemp_F',
-'maxExtruderBarrelZone1Temp_F',
-'minExtruderBarrelZone1Temp_F',
-'maxExtruderBarrelZone2Temp_F',
-'minExtruderBarrelZone2Temp_F',
-'maxExtruderBarrelZone3Temp_F',
-'minExtruderBarrelZone3Temp_F',
-'maxExtruderDieZoneTemp_F',
-'minExtruderDieZoneTemp_F',
-'maxExtruderPremouldTemp_F',
-'minExtruderPremouldTemp_F',
-'maxExtruderMeltTemp_F',
-'minExtruderMeltTemp_F'};
-
-
-%now gotta do the sensor values 
-sensor_raw = readtable(SensorFile)
-for i = (1:max(sensor_raw.RecordNumber))
-    sensor_table.RecordNumber(i) = sensor_raw.RecordNumber;
-    sensor_table.maxPressForce_Ton(i) = max(sensor_raw.PressForce_Ton);
-    sensor_table.minPressForce_Ton(i) = min(sensor_raw.PressForce_Ton);
-    sensor_table.maxMouldSteamIn_PSI(i) = max(sensor_raw.MouldSteamIn_PSI);
-    sensor_table.minMouldSteamIn_PSI(i) = min(sensor_raw.MouldSteamIn_PSI);
-    sensor_table.maxMouldSteamIn_F(i) = max(sensor_raw.MouldSteamIn_F);
-    sensor_table.minMouldSteamIn_F(i) = min(sensor_raw.MouldSteamIn_F);
-    sensor_table.maxMouldSteamOutTop_F(i) = max(sensor_raw.MouldSteamOutTop_F);
-    sensor_table.minMouldSteamOutTop_F(i) = min(sensor_raw.MouldSteamOutTop_F);
-    sensor_table.maxMouldSteamOutBottom_F(i) = max(sensor_raw.MouldSteamOutBottom_F);
-    sensor_table.minMouldSteamOutBottom_F(i) = min(sensor_raw.MouldSteamOutBottom_F);
-    sensor_table.maxExtruderFeedthroatTemp_F(i) = max(sensor_raw.ExtruderFeedthroatTemp_F);
-    sensor_table.minExtruderFeedthroatTemp_F(i) = min(sensor_raw.ExtruderFeedthroatTemp_F);
-    sensor_table.maxExtruderBarrelZone1Temp_F(i) = max(sensor_raw.ExtruderBarrelZone1Temp_F);
-    sensor_table.minExtruderBarrelZone1Temp_F(i) = min(sensor_raw.ExtruderBarrelZone1Temp_F);
-    sensor_table.maxExtruderBarrelZone2Temp_F(i) = max(sensor_raw.ExtruderBarrelZone2Temp_F);
-    sensor_table.minExtruderBarrelZone2Temp_F(i) = min(sensor_raw.ExtruderBarrelZone2Temp_F);
-    sensor_table.maxExtruderBarrelZone3Temp_F(i) = max(sensor_raw.ExtruderBarrelZone3Temp_F);
-    sensor_table.minExtruderBarrelZone3Temp_F(i) = min(sensor_raw.ExtruderBarrelZone3Temp_F);
-    sensor_table.maxExtruderDieZoneTemp_F(i) = max(sensor_raw.ExtruderDieZoneTemp_F);
-    sensor_table.minExtruderDieZoneTemp_F(i) = min(sensor_raw.ExtruderDieZoneTemp_F);
-    sensor_table.maxExtruderPremouldTemp_F(i) = max(sensor_raw.ExtruderPremouldTemp_F);
-    sensor_table.minExtruderPremouldTemp_F(i) = min(sensor_raw.ExtruderPremouldTemp_F);
-    sensor_table.maxExtruderMeltTemp_F(i) = max(sensor_raw.ExtruderMeltTemp_F);
-    sensor_table.minExtruderMeltTemp_F(i) = min(sensor_raw.ExtruderMeltTemp_F);
-    
-end 
-
 
 
 
