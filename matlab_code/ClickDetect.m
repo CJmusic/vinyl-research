@@ -1,5 +1,6 @@
 % function [csig, clicks] = ClickDetectTest(sig)
-function [csig, clicks] = ClickDetect(sig)
+% function [csig, clicks] = ClickDetect(sig)
+function [csig, clicks] = ClickDetect(sig, threshold, clickwidth)
     csig = sig;
 
     sep = 2048;
@@ -27,8 +28,8 @@ function [csig, clicks] = ClickDetect(sig)
 
 
     
-    threshold = 200; %in audacity runs from 200-900
-    clickwidth = 20; %in audacity runs from 20-40
+    % threshold = 200; %in audacity runs from 200-900
+    % clickwidth = 20; %in audacity runs from 20-40
     
     clicks = [];
     left = 0;
