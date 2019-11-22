@@ -6,7 +6,8 @@ close all
 
 addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/')
 
-AudioFile = ('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/A0000B0000-data.csv')
+AudioFile = ('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/A0000B0000_AudioTable.csv')
+SensorFile = ('')
 
 % dataFolder = 'D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\A0000B0000\'
 
@@ -75,7 +76,7 @@ for i = (1:length(measurements))
 end
 AudioStats
 
-writetable(AudioStats,strcat(dataFolder,'AudioStats.csv'));
+writetable(AudioStats,strcat(dataFolder,'A0000B0000_AudioStats.csv'));
 
 
 % %DO TOTAL CLICKS 

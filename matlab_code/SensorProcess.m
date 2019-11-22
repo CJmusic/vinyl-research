@@ -4,14 +4,15 @@
     addpath('E:\audio_files\A0000B0000\')
     addpath('D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\');
 
-    folder = ('D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\A0000B0000\');
-    dataFolder = 'D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\A0000B0000\'
+    % folder = ('D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\A0000B0000\rawpress_data\');
+    % dataFolder = 'D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\A0000B0000\'
 
-    % addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/') 
-    % folder = ('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/data/121918_A0000B0000/')
+    addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/') 
+    folder = ('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/rawpress_data/')
+    dataFolder = ('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/')
 
     clc
-    disp('~~~~~~~~~~~~~~~~PRESS PROCESS 2~~~~~~~~~~~~~~~~~~')
+    disp('~~~~~~~~~~~~~~~~SENSOR PROCESS~~~~~~~~~~~~~~~~~~')
     date_tags = {'121918', '122018'};
 
     for i=(1:length(date_tags))
@@ -95,7 +96,7 @@ press_close = 1;
 press_open = 1;
 lower_bound = 1;
 upper_bound = 1;
-record_number = 1;
+record_number = 0;
 recordNumbers = [];
 recordArray = [];
 height(SensorValues)
@@ -116,12 +117,18 @@ while i < height(SensorValues)
             end 
             % disp('press_close set')
 
-            lower_bound = press_open;
-            
-            while SensorValues.PressPosition_Inches(lower_bound) < 1 
-                lower_bound = lower_bound + 1;
-            end
+            lower_bound = press_open - 1;
 
+
+            while SensorValues.PressPosition_Inches(lower_bound) < 1 
+                lower_bound = lower_bound - 1;
+
+                if lower_bound < 1
+                    lower_bound = 1;
+                    break
+                end
+            end
+            lower_bound = lower_bound + 1;
             % disp('lower_bound set')
 
 
@@ -168,7 +175,7 @@ for i = (1:length(recordArray))
     % recordArray(1,3)
     % recordArray(1,4)
     % recordArray(1,5)
-    for j = (recordArray(i,2):recordArray(i,5))
+    for j = (recordArray(i,2):recordArray(i,4))
         % recordTable(j,'recordNumber')
         % recordArray(i,1) 
         recordTable(j,'recordNumber') = num2cell(recordArray(i,1));
@@ -180,5 +187,5 @@ height(recordTable)
 height(SensorValues)
 
 recordTable = [recordTable SensorValues];
-writetable(recordTable, strcat(dataFolder,'recordTable.csv'));
+writetable(recordTable, strcat(dataFolder,'A0000B0000_PressTable.csv'));
 % recordNumbers
