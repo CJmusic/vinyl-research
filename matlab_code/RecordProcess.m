@@ -2,8 +2,12 @@ function output = recordProcess(file)
     %~~~~~~~~~~~~~~~~~ LOAD REFERENCE ~~~~~~~~~~~~~~~~~%
         try 
             [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/03141_A0000B0000r28a.wav');
+            %load clicks too
         catch
             [ref, fs] = audioread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\03141_A0000B0000r28a.wav');
+            REFS_L = csvread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\03141_A0000B0000r28a-REFS_L.txt');
+            REFS_R = csvread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\03141_A0000B0000r28a-REFS_R.txt');
+
         end 
     %~~~~~~~~~~~~~~~~~~ Reference info ~~~~~~~~~~~~~~~~%
 
@@ -181,8 +185,8 @@ function output = recordProcess(file)
             [csig(:,1), CLICKS_L] = ClickDetect(sig(:,1),200,20);
             [csig(:,2), CLICKS_R] = ClickDetect(sig(:,2),200,20);
            
-            [~, REFS_L] = ClickDetect(ref(:,1),200,20);
-            [~, REFS_R] = ClickDetect(ref(:,2),200,20);
+            % [~, REFS_L] = ClickDetect(ref(:,1),200,20);
+            % [~, REFS_R] = ClickDetect(ref(:,2),200,20);
 
             % need to do the reference here by track 
             [diff_arrayL, ~] = audio_clickmatrix(CLICKS_L, REFS_L);
