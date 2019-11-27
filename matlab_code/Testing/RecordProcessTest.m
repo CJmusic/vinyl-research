@@ -29,6 +29,8 @@ AudioTableHeaders = {'date_recorded', 'pressing', 'top_stamper', 'top_hits', 'bo
 
 % check if there is already a csv file to append to 
 try
+    disp('trying...')
+    strcat(folder,'A0000B0000-AudioTable.csv')
     AudioTable = readtable(strcat(folder,pressingID,'-AudioTable.csv'));
 catch
     disp('csv file not found, creating one...')
@@ -90,15 +92,21 @@ for i = (1:length(files)) %%loop through records
     disp([strcat('...side:', side)])
 
     infoCell = {date_recorded, pressing, top_stamper, top_hits, bottom_stamper, bottom_hits, record, side}; 
-    
-    AudioOutput = RecordProcess(file);
+    disp('PROCESSING OUTPUT')
+    AudioOutput = RecordProcess(file)
+    size(AudioOutput)
+    for j = (1:length(AudioOutput))
+        disp('looping through audio output')
+        j
+        AudioOutput(j,1)
+        AudioTable = [AudioTable; cell2table([infoCell, AudioOutput(j,:)], 'VariableNames', AudioTableHeaders)]
+    end
     %append audio output to info cell array
-    infoCell
-    AudioOutput
-    [infoCell, AudioOutput]
-    AudioTableHeaders
-    AudioTable = [AudioTable; cell2table([infoCell, AudioOutput], 'VariableNames', AudioTableHeaders)]
-    writetable(AudioTable, strcat(folder, 'AudioTable.csv'));
+    % infoCell
+    % AudioOutput
+    % AudioTableHeaders
+    % AudioTable = [AudioTable; cell2table([infoCell, AudioOutput], 'VariableNames', AudioTableHeaders)]
+    writetable(AudioTable, strcat(folder,pressingID,'-AudioTable.csv'));
 
     
 end

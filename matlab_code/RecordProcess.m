@@ -259,7 +259,7 @@ function output = recordProcess(file)
             wow_R =num2str(wow_R);
             stereo_bleed = num2str(stereo_bleed);
 
-            output = [track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, clicks_L, clicks_R, commonclicks_L, commonclicks_R  THD_L, THD_R, wow_L, wow_R, stereo_bleed];
+            output = [output; track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, clicks_L, clicks_R, commonclicks_L, commonclicks_R  THD_L, THD_R, wow_L, wow_R, stereo_bleed];
             % class(output)
             % disp('END RECORD PROCESS')
 
