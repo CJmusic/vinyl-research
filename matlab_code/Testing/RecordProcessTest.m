@@ -1,3 +1,4 @@
+
 close all; clear all; clc;
 
 
@@ -45,14 +46,51 @@ for i = (1:length(files)) %%loop through records
 
     disp(['opening file...:', filename])
     % filename(19:21)
-    % AudioTable.record
-    filename(19:21)
-    num2str(AudioTable.record)
-    ismember(filename(19:20), num2str(AudioTable.record))
-    if ismember(str2num(filename(19:20)), (AudioTable.record))
-        disp('record already processed...')
-        continue
+    % % AudioTable.record
+    % filename(19:20)
+    % num2str(AudioTable.record)
+    ismem = ismember(filename(19:20), num2str(AudioTable.record))
+    % % if ismember(str2num(filename(19:20)), (AudioTable.record))
+    % ismem
+    % AudioTable.side(ismem(2))
+    % AudioTable.side(ismem(2)+27)
+    % loc
+    % disp('strcmps')
+    % disp('side a')
+    % strcmp(AudioTable.side(ismem(2)+1),filename(21)) 
+    % disp('side b')
+    % strcmp(AudioTable.side(ismem(2)+27),filename(21)) 
+    % AudioTable.side(loc)
+    % if ismem(1) == 1
+    %     disp('IF ISMEM')
+    %     if strcmp(AudioTable.side(ismem(2)),filename(21)) == 1
+    %         disp('IF A SIDE')
+    %         AudioTable.side(ismem(2))
+    %         filename(21)
+    %         strcmp(AudioTable.side(ismem(2)),filename(21))
+    %         disp('side A already processed...')
+    %         continue
+    %     elseif strcmp(AudioTable.side(ismem(2)+27),filename(21)) == 1 
+    %         disp('IF B SIDE ')
+    %         AudioTable.side(ismem(2)+27)
+    %         filename(21)
+    %         strcmp(AudioTable.side(ismem(2)+27),filename(21))
+    %         disp('record already processed...')
+    %         continue
+    %     end
+    % end
+    disp('FINDING')
+    % find(ismember(str2num(filename(19:21)), AudioTable.record), 1)
+    % find(AudioTable.record == str2num(filename(19:21)),8,'last')
+
+    % FinalTable = alldata(strcmp(alldata.HOMETOWNS, 'London') & strcmp(alldata.CLASSES', 'Class B2'), :);
+
+    % FINALTABLE = AudioTable(ismember(str2num(filename(19:21)),AudioTable.record) & strcmp(AudioTable.side, filename(22)))
+    FINALTABLE = AudioTable(ismember(str2num(filename(19:21)),AudioTable.record))
+    if find(ismember(AudioTable.record,str2num(filename(19:21))), 1, 'last')
+        disp('...file already processed')
     end
+
     file = strcat(files(i).folder,'/',files(i).name);
 
     date_recorded = 0;
