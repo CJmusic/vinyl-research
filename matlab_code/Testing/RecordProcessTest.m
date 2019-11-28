@@ -31,21 +31,21 @@ AudioTableHeaders = {'date_recorded', 'pressing', 'top_stamper', 'top_hits', 'bo
 try
     disp('trying...')
     strcat(folder,'A0000B0000-AudioTable.csv')
-    AudioTable = readtable(strcat(folder,pressingID,'-AudioTable.csv'));
+    AudioTable = readtable(strcat(folder,'A0000B0000-AudioTable.csv'));
 catch
     disp('csv file not found, creating one...')
     AudioTable  = cell2table(cell(0,length(AudioTableHeaders)), 'VariableNames', AudioTableHeaders);
 end
 
 for i = (1:length(files)) %%loop through records
-    AudioTable
-    AudioTable.record
-    i
+    % AudioTable
+    % AudioTable.record
+    % i
     filename = files(i).name
 
     disp(['opening file...:', filename])
-    filename(19:21)
-    AudioTable.record
+    % filename(19:21)
+    % AudioTable.record
     if ismember(filename(19:21), AudioTable.record)
         disp('record already processed...')
         continue
@@ -62,17 +62,17 @@ for i = (1:length(files)) %%loop through records
     side  = 0;
     track  = 0;
     
-    %STRIP RELEVANT INFO FROM NAME 
-    '031418_A0000B0000r27a.wav'
-     123456789012345678901
+    % %STRIP RELEVANT INFO FROM NAME 
+    % '031418_A0000B0000r27a.wav'
+    %  123456789012345678901
 
-    date_recorded = (filename(1:6))
+    date_recorded = (filename(1:6));
     % date_recorded = date_recorded{1};
-    record = filename(19:20)
-    record = str2num(filename(19:20))
+    % record = filename(19:20)
+    record = str2num(filename(19:20));
 
-    top_stamper = filename(8)
-    pressing = filename(8:17)
+    top_stamper = filename(8);
+    pressing = filename(8:17);
     top_hits = str2num(filename(9:12)) + record;
     bottom_stamper = filename(13);
     bottom_hits = str2num(filename(14:17)) + record;
@@ -92,13 +92,8 @@ for i = (1:length(files)) %%loop through records
     disp([strcat('...side:', side)])
 
     infoCell = {date_recorded, pressing, top_stamper, top_hits, bottom_stamper, bottom_hits, record, side}; 
-    disp('PROCESSING OUTPUT')
-    AudioOutput = RecordProcess(file)
-    size(AudioOutput)
+    AudioOutput = RecordProcess(file);
     for j = (1:length(AudioOutput))
-        disp('looping through audio output')
-        j
-        AudioOutput(j,1)
         AudioTable = [AudioTable; cell2table([infoCell, AudioOutput(j,:)], 'VariableNames', AudioTableHeaders)]
     end
     %append audio output to info cell array
