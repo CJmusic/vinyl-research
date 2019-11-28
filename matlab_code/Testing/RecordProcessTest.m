@@ -18,7 +18,7 @@ file = '/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_b
 
 folder = '/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/';
 
-
+pressingID = 'A0000B0000'
 
 
 disp(['loading folder...:', folder])
@@ -28,14 +28,14 @@ AudioTableHeaders = {'date_recorded', 'pressing', 'top_stamper', 'top_hits', 'bo
 
 
 % check if there is already a csv file to append to 
-try
+% try
     disp('trying...')
     strcat(folder,'A0000B0000-AudioTable.csv')
-    AudioTable = readtable(strcat(folder,'A0000B0000-AudioTable.csv'));
-catch
-    disp('csv file not found, creating one...')
-    AudioTable  = cell2table(cell(0,length(AudioTableHeaders)), 'VariableNames', AudioTableHeaders);
-end
+    AudioTable = readtable(strcat(folder,'A0000B0000-AudioTable.csv'))
+% catch
+%     disp('csv file not found, creating one...')
+%     AudioTable  = cell2table(cell(0,length(AudioTableHeaders)), 'VariableNames', AudioTableHeaders);
+% end
 
 for i = (1:length(files)) %%loop through records
     % AudioTable
@@ -46,7 +46,10 @@ for i = (1:length(files)) %%loop through records
     disp(['opening file...:', filename])
     % filename(19:21)
     % AudioTable.record
-    if ismember(filename(19:21), AudioTable.record)
+    filename(19:21)
+    num2str(AudioTable.record)
+    ismember(filename(19:20), num2str(AudioTable.record))
+    if ismember(str2num(filename(19:20)), (AudioTable.record))
         disp('record already processed...')
         continue
     end
@@ -91,8 +94,17 @@ for i = (1:length(files)) %%loop through records
     disp([strcat('...bottom_hits:', bottom_hits)])
     disp([strcat('...side:', side)])
 
-    infoCell = {date_recorded, pressing, top_stamper, top_hits, bottom_stamper, bottom_hits, record, side}; 
+    infoCell = {str2num(date_recorded), pressing, top_stamper, str2num(top_hits), bottom_stamper, str2num(bottom_hits), str2num(record), side}; 
     AudioOutput = RecordProcess(file);
+
+    disp('PRINTING TABLES')
+    disp('AUDIOTABLE')
+    AudioTable
+    disp('AUDIOOUTPUT')
+    AudioOutput
+
+    cell2table([infoCell, AudioOutput(1,:)], 'VariableNames', AudioTableHeaders)
+
     for j = (1:length(AudioOutput))
         AudioTable = [AudioTable; cell2table([infoCell, AudioOutput(j,:)], 'VariableNames', AudioTableHeaders)]
     end

@@ -246,18 +246,19 @@ function output = recordProcess(file)
             % plot(csig(:,1))
             % plot(csig(:,2))
             track = signal_names(t);
-            lagdiff =num2str(lagdiff);
-            normalization_L =num2str(normalization_L);
-            normalization_R =num2str(normalization_R);
-            RMS_L =num2str(RMS_L);
-            RMS_R =num2str(RMS_R);
-            clicks_L =num2str(clicks_L);
-            clicks_R =num2str(clicks_R);
-            THD_L =num2str(THD_L);
-            THD_R =num2str(THD_R);
-            wow_L =num2str(wow_L);
-            wow_R =num2str(wow_R);
-            stereo_bleed = num2str(stereo_bleed);
+            % lagdiff =num2str(lagdiff);
+            % normalization_L =num2str(normalization_L);
+            % normalization_R =num2str(normalization_R);
+            % RMS_L =num2str(RMS_L);
+            % RMS_R =num2str(RMS_R);
+            % clicks_L =num2str(clicks_L);
+            % clicks_R =num2str(clicks_R);
+            % THD_L =num2str(THD_L);
+            % THD_R =num2str(THD_R);
+            % wow_L =num2str(wow_L);
+            % wow_R =num2str(wow_R);
+            % stereo_bleed = num2str(stereo_bleed);
+
 
             output = [output; track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, clicks_L, clicks_R, commonclicks_L, commonclicks_R  THD_L, THD_R, wow_L, wow_R, stereo_bleed];
             % class(output)
