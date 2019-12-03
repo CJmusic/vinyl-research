@@ -8,7 +8,7 @@ disp('~~~~~~~~~~~~TESTING RECORDPROCESS~~~~~~~~~~~~')
 addpath('D:\Code\vinyl-research\matlab_code\')
 addpath('D:\Code\vinyl-research\matlab_code\audio_functions')
 addpath('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\')
-addpath('E:\audio_files\A0000B0000\')
+% addpath('E:\audio_files\A0000B0000\')
 
 % file = 'D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\A0000B0000\03141_A0000B0000r030b.wav'
 % folder = 'E:\audio_files\A0000B0000\';
