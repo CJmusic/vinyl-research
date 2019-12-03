@@ -7,14 +7,14 @@ disp('~~~~~~~~~~~~TESTING RECORDPROCESS~~~~~~~~~~~~')
 % ~~~~ WINDOWS ~~~~ %
 addpath('D:\Code\vinyl-research\matlab_code\')
 addpath('D:\Code\vinyl-research\matlab_code\audio_functions')
-addpath('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\A0000B0000\')
+addpath('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\')
 addpath('E:\audio_files\A0000B0000\')
 
 % file = 'D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\A0000B0000\03141_A0000B0000r030b.wav'
 % folder = 'E:\audio_files\A0000B0000\';
 
 %~~~~~ TESTING ~~~~~%
-foler = 'D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\A0000B0000\03141_A0000B0000r030b.wav'
+folder = 'D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\';
 %~~~ TESTING ENDS ~~~%
 
 % ~~~~ MAC ~~~~ %
@@ -58,7 +58,10 @@ for i = (1:length(files)) %%loop through records
     % filename(19:21)
     % num2str(AudioTable.record)
     % ismember(filename(19:21), num2str(AudioTable.record))
-    if ismember(str2num(filename(19:21)), (AudioTable.record))
+    % disp('ismember')
+    % ismember(str2num(filename(19:21)), (AudioTable.record))
+    % ismember(str2num(filename(22)), (AudioTable.side))
+    if ismember(str2num(filename(19:21)), (AudioTable.record)) && ismember(filename(22), AudioTable.side)
         disp('record already processed...')
         continue
     end
