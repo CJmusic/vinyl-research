@@ -1,3 +1,4 @@
+
 close all; clear all; clc;
 
 
@@ -61,6 +62,7 @@ for i = (1:length(files)) %%loop through records
         disp('record already processed...')
         continue
     end
+
     file = strcat(files(i).folder,'/',files(i).name);
 
     date_recorded = 0;
