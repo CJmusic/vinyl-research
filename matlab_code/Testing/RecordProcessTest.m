@@ -4,19 +4,27 @@ close all; clear all; clc;
 disp('~~~~~~~~~~~~TESTING RECORDPROCESS~~~~~~~~~~~~')
 
 % ~~~~ WINDOWS ~~~~ %
-% addpath('D:\Code\vinyl-research\matlab_code\')
-% addpath('D:\Code\vinyl-research\matlab_code\audio_functions')
-% addpath('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\A0000B0000\')
+addpath('D:\Code\vinyl-research\matlab_code\')
+addpath('D:\Code\vinyl-research\matlab_code\audio_functions')
+addpath('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\A0000B0000\')
+addpath('E:\audio_files\A0000B0000\')
+
 % file = 'D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\A0000B0000\03141_A0000B0000r030b.wav'
-% folder = 'D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\A0000B0000\';
+% folder = 'E:\audio_files\A0000B0000\';
+
+%~~~~~ TESTING ~~~~~%
+foler = 'D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\A0000B0000\03141_A0000B0000r030b.wav'
+%~~~ TESTING ENDS ~~~%
 
 % ~~~~ MAC ~~~~ %
-addpath('/Users/cz/Code/vinyl-research/matlab_code')
-addpath('/Users/cz/Code/vinyl-research/matlab_code/audio_functions')
-addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/')
-file = '/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/003141_A0000B0000r30a.wav'
+% addpath('/Users/cz/Code/vinyl-research/matlab_code')
+% addpath('/Users/cz/Code/vinyl-research/matlab_code/audio_functions')
+% addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/')
+% file = '/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/003141_A0000B0000r30a.wav'
 
-folder = '/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/';
+% folder = '/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/';
+%
+% ~~~~ MAC ENDS ~~~~ %
 
 pressingID = 'A0000B0000'
 
@@ -24,32 +32,32 @@ pressingID = 'A0000B0000'
 disp(['loading folder...:', folder])
 files = dir(strcat(folder,'*.wav'))
 
-AudioTableHeaders = {'date_recorded', 'pressing', 'top_stamper', 'top_hits', 'bottom_stamper', 'bottom_hits', 'record', 'side', 'track', 'lagdiff', 'normalization_L', 'normalization_R','RMS_L', 'RMS_R', 'clicks_L', 'clicks_R', 'commonclicks_L', 'commonclicks_R', 'THD_L', 'THD_R', 'wow_L', 'wow_R', 'stereo_bleed'};
+AudioTableHeaders = {'date_recorded', 'pressing', 'top_stamper', 'top_hits', 'bottom_stamper', 'bottom_hits', 'record', 'side', 'track', 'lagdiff', 'normalization_L', 'normalization_R','RMS_L', 'RMS_R', 'A_L', 'A_R', 'CCIR_L', 'CCIR_R','clicks_L', 'clicks_R', 'commonclicks_L', 'commonclicks_R', 'THD_L', 'THD_R', 'wow_L', 'wow_R', 'stereo_bleed'};
 
 
 % check if there is already a csv file to append to 
-% try
+try
     disp('trying...')
     strcat(folder,'A0000B0000-AudioTable.csv')
     AudioTable = readtable(strcat(folder,'A0000B0000-AudioTable.csv'))
-% catch
-%     disp('csv file not found, creating one...')
-%     AudioTable  = cell2table(cell(0,length(AudioTableHeaders)), 'VariableNames', AudioTableHeaders);
-% end
+catch
+    disp('csv file not found, creating one...')
+    AudioTable  = cell2table(cell(0,length(AudioTableHeaders)), 'VariableNames', AudioTableHeaders);
+end
 
 for i = (1:length(files)) %%loop through records
     % AudioTable
     % AudioTable.record
     % i
-    filename = files(i).name
+    filename = files(i).name;
 
     disp(['opening file...:', filename])
     % filename(19:21)
     % AudioTable.record
-    filename(19:21)
-    num2str(AudioTable.record)
-    ismember(filename(19:20), num2str(AudioTable.record))
-    if ismember(str2num(filename(19:20)), (AudioTable.record))
+    % filename(19:21)
+    % num2str(AudioTable.record)
+    % ismember(filename(19:21), num2str(AudioTable.record))
+    if ismember(str2num(filename(19:21)), (AudioTable.record))
         disp('record already processed...')
         continue
     end
@@ -72,14 +80,14 @@ for i = (1:length(files)) %%loop through records
     date_recorded = (filename(1:6));
     % date_recorded = date_recorded{1};
     % record = filename(19:20)
-    record = str2num(filename(19:20));
+    record = str2num(filename(19:21));
 
     top_stamper = filename(8);
     pressing = filename(8:17);
     top_hits = str2num(filename(9:12)) + record;
     bottom_stamper = filename(13);
     bottom_hits = str2num(filename(14:17)) + record;
-    side = filename(21);
+    side = filename(22);
 
     top_hits = num2str(top_hits);
     bottom_hits = num2str(bottom_hits);
@@ -97,16 +105,16 @@ for i = (1:length(files)) %%loop through records
     infoCell = {str2num(date_recorded), pressing, top_stamper, str2num(top_hits), bottom_stamper, str2num(bottom_hits), str2num(record), side}; 
     AudioOutput = RecordProcess(file);
 
-    disp('PRINTING TABLES')
-    disp('AUDIOTABLE')
-    AudioTable
-    disp('AUDIOOUTPUT')
-    AudioOutput
+    % disp('PRINTING TABLES')
+    % disp('AUDIOTABLE')
+    % AudioTable
+    % disp('AUDIOOUTPUT')
+    % AudioOutput
 
-    cell2table([infoCell, AudioOutput(1,:)], 'VariableNames', AudioTableHeaders)
+    % cell2table([infoCell, AudioOutput(1,:)], 'VariableNames', AudioTableHeaders)
 
     for j = (1:length(AudioOutput))
-        AudioTable = [AudioTable; cell2table([infoCell, AudioOutput(j,:)], 'VariableNames', AudioTableHeaders)]
+        AudioTable = [AudioTable; cell2table([infoCell, AudioOutput(j,:)], 'VariableNames', AudioTableHeaders)];
     end
     %append audio output to info cell array
     % infoCell

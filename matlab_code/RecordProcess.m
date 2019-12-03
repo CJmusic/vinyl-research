@@ -1,28 +1,25 @@
 function output = recordProcess(file)
     %~~~~~~~~~~~~~~~~~ LOAD REFERENCE ~~~~~~~~~~~~~~~~~%
         % try 
-        addpath('/Users/cz/Code/vinyl-research/matlab_code/audio_functions')
+        % addpath('/Users/cz/Code/vinyl-research/matlab_code/audio_functions')
 
 
-        [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r28a.wav');
-        %load clicks too
+        % [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r28a.wav');
+        % %load clicks too
 
-        if exist('REFS_L') == 0 && exist('REFS_R') == 0
-            REFS_L = csvread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r28a-REFS_L.txt');
-            REFS_R = csvread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r28a-REFS_R.txt');
-        end
+        % if exist('REFS_L') == 0 && exist('REFS_R') == 0
+        %     REFS_L = csvread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r28a-REFS_L.txt');
+        %     REFS_R = csvread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r28a-REFS_R.txt');
+        % end
 
         % catch
-        %     [ref, fs] = audioread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\03141_A0000B0000r28a.wav');
+        [ref, fs] = audioread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r28a.wav');
 
-        %     if exist(REFS_L) == 0
-        %         REFS_L = csvread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\03141_A0000B0000r28a-REFS_L.txt');
-        %     end
-        %     if exist(REFS_R) == 0
-        %         REFS_R = csvread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\03141_A0000B0000r28a-REFS_R.txt');
-        %     end
+        if exist('REFS_L') == 0 && exist('REFS_R') == 0
+            REFS_L = csvread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r28a-REFS_L.txt');
+            REFS_R = csvread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r28a-REFS_R.txt');
+        end
 
-        % end 
     %~~~~~~~~~~~~~~~~~~ Reference info ~~~~~~~~~~~~~~~~%
 
         timestamps_ref = [0, 60, 90, 122, 158, 180, 246, 266, 304, 324, 362, 382, 417.5];
@@ -215,6 +212,12 @@ function output = recordProcess(file)
             RMS_L = 20.0*log10(rms(csig(:,1)));
             RMS_R = 20.0*log10(rms(csig(:,2)));
 
+            A_L = 20.0*log10(rms(Aweighting(csig(:,1))));
+            A_R = 20.0*log10(rms(Aweighting(csig(:,2))));
+
+            CCIR_L = 20.0*log10(CCIRweighting(rms(csig(:,1))));
+            CCIR_R = 20.0*log10(CCIRweighting(rms(csig(:,2))));
+
             %***    DEBUG    ***%
             % figure(t); grid on;
             % plot(csig)
@@ -260,7 +263,7 @@ function output = recordProcess(file)
             % stereo_bleed = num2str(stereo_bleed);
 
 
-            output = [output; track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, clicks_L, clicks_R, commonclicks_L, commonclicks_R  THD_L, THD_R, wow_L, wow_R, stereo_bleed];
+            output = [output; track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, A_L, A_R, CCIR_L, CCIR_R, clicks_L, clicks_R, commonclicks_L, commonclicks_R  THD_L, THD_R, wow_L, wow_R, stereo_bleed];
             % class(output)
             % disp('END RECORD PROCESS')
 
