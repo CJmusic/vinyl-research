@@ -5,15 +5,15 @@
 
 clc; close all;
 
-addpath('D:\Code\vinyl-research\matlab_code\')
-file = ('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\A0000B0000\040318_A0000B0000r001b.wav')
+% addpath('D:\Code\vinyl-research\matlab_code\')
+% file = ('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\A0000B0000\040318_A0000B0000r001b.wav')
 
 %~~~~ MAC FILES ~~~~%
 
-% addpath('/Users/cz/Code/vinyl-research/matlab_code')
-% addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/click_testing/')
-% addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/click_testing/declicked')
-% file = ('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031418_A0000B0000r27a.wav')
+addpath('/Users/cz/Code/vinyl-research/matlab_code')
+addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/click_testing/')
+addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/click_testing/declicked')
+file = ('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r027a.wav')
 
 %~~~~ MAC FILES END ~~~~%
 
@@ -64,7 +64,7 @@ thresholdArr = [];
 
 
 
-for threshold = (200:400:900);
+for threshold = (0:50:1000);
     threshold
     thresholdArr = [thresholdArr, threshold];
     [~, clicks] = ClickDetect(sig, threshold, 30);
@@ -75,7 +75,7 @@ end
 
 figure(1); grid on; 
 plot(thresholdArr, clickArr)
-set(gca,'XTick',1:150:1500);
+% set(gca,'XTick',1:100:1500);
 title('Threshold varying between 200-900, width = 30')
 xlabel('threshold')
 ylabel('num of clicks')
@@ -83,7 +83,7 @@ grid on;
 
 clickArr = [];
 widthArr = [];
-for clickwidth = (1:100:1000);
+for clickwidth = (1:50:200);
     clickwidth
     [~, clicks] = ClickDetect(sig, 550, clickwidth);
     clickArr = [clickArr, length(clicks)];
@@ -94,8 +94,8 @@ end
 
 figure(2); 
 plot(widthArr, clickArr)
-set(gca,'XTick',20:1:40);
-title('clickwidth varying between 20-40, threshold = 550')
+% set(gca,'XTick',20:1:40);
+title('clickwidth varying between 0-200, threshold = 550')
 xlabel('clickwidth')
 ylabel('num of clicks')
 grid on; 

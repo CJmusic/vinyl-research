@@ -10,9 +10,12 @@ addpath('D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\');
 % dataFolder = 'D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\A0000B0000\'
 
 addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/') 
-folder = ('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/rawpress_data/')
-dataFolder = ('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/')
+% folder = ('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/rawpress_data/')
+% dataFolder = ('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/')
+% SensorTable = strcat(dataFolder, 'A0000B0000_PressTable.csv')
 
+folder = ('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0137B0137/rawpress_data/')
+dataFolder = ('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0137B0137/')
 SensorTable = strcat(dataFolder, 'A0000B0000_PressTable.csv')
 
 clc
