@@ -164,12 +164,12 @@ function output = recordProcess(file)
         sigtime = timedata(floor(timestamps(t,1)*fs):floor(timestamps(t,2)*fs));
         sig = data(floor(timestamps(t,1)*fs): floor(timestamps(t,2)*fs),:);
 
-        figure(t)
-        plot(sigtime,sig)
+        % figure(t)
+        % plot(sigtime,sig)
 
 
-        floor(timestamps(t,1)*fs) - lagdiff 
-        floor(timestamps(t,2)*fs) - lagdiff
+        % floor(timestamps(t,1)*fs) - lagdiff 
+        % floor(timestamps(t,2)*fs) - lagdiff
 
         sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
         sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
