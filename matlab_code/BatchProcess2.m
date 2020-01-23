@@ -13,10 +13,29 @@ data_folder = 'D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\A0
     % addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/')
     % files = dir('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/click_testing/*.wav')
 % end
+% % ~~~~ WINDOWS ~~~~ %
+addpath('D:\Code\vinyl-research\matlab_code\')
+addpath('D:\Code\vinyl-research\matlab_code\audio_functions')
+addpath('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\')
+addpath('E:\audio_files\A0000B0000\')
 
-addpath('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
-folder = ('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
+
+%~~~~~ TESTING ~~~~~%
+folder = 'D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\';
+%~~ TESTING ENDS ~~~%
+
+folder = 'D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\A0137B0137\';
+% addpath('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
+% folder = ('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
+
+
+% % ~~~~ WINDOWS ENDS ~~~~ %
+% % ~~~~ MAC  ~~~~ %
+
+% addpath('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
+% folder = ('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
 files = dir(strcat(folder,'*.wav'))
+% % ~~~~ MAC ENDS ~~~~ %
 
 % addpath('E:\audio_files\A0000B0000\')
 % folder = ('E:\audio_files\A0000B0000\')
@@ -86,7 +105,7 @@ for i = (1:length(files))
     % top_hits = str2num(filename(9:12)) + record;
     % bottom_stamper = filename(13);
     % bottom_hits = str2num(filename(14:17)) + record;
-    side = filename(end-5);
+    side = filename(end-4);
 
     top_hits = num2str(top_hits);
     bottom_hits = num2str(bottom_hits);

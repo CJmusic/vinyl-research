@@ -1,27 +1,38 @@
+
+%~~~~~~~   TESTING   ~~~~~~~%
+        
+% file = 'D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\A0137B0137\maxoverlap3a.wav';
+% recordProcessTest(file)
+%~~~~~~~ TESTING ENDS ~~~~~~~%
+
+
+
+
 function output = recordProcess(file)
+% function output = recordProcessTest(file)
     %~~~~~~~~~~~~~~~~~ LOAD REFERENCE ~~~~~~~~~~~~~~~~~%
         % try 
         addpath('/Users/cz/Code/vinyl-research/matlab_code/audio_functions')
 
         %~~~~ MAC ~~~~%
-        [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav');
-        %load clicks too
+        % [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav');
+        % %load clicks too
 
-        if exist('REFS_L') == 0 && exist('REFS_R') == 0
-            REFS_L = csvread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r28a-REFS_L.txt');
-            REFS_R = csvread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r28a-REFS_R.txt');
-        end
+        % if exist('REFS_L') == 0 && exist('REFS_R') == 0
+        %     REFS_L = csvread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r28a-REFS_L.txt');
+        %     REFS_R = csvread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r28a-REFS_R.txt');
+        % end
         %~~~~ MAC ENDS ~~~~%
 
 
         %~~~~ WINDOWS ~~~~%
-        % [ref, fs] = audioread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r028a.wav');
+        [ref, fs] = audioread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r028a.wav');
 
-        % if exist('REFS_L') == 0 && exist('REFS_R') == 0
-        %     REFS_L = csvread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r28a-REFS_L.txt');
-        %     REFS_R = csvread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r28a-REFS_R.txt');
+        if exist('REFS_L') == 0 && exist('REFS_R') == 0
+            REFS_L = csvread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r28a-REFS_L.txt');
+            REFS_R = csvread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r28a-REFS_R.txt');
+        end
         %~~~~ WINDOWS END ~~~~%
-
 
     %~~~~~~~~~~~~~~~~~~ Reference info ~~~~~~~~~~~~~~~~%
 
@@ -112,13 +123,18 @@ function output = recordProcess(file)
     %~~~~~~~~~~~~~~~~~~~~~ LINE UP ~~~~~~~~~~~~~~~~~~~~~~~~% 
 
         lockout = 950; 
-        refLockout = ref(floor(lockout*fs):end,:);
+        refLockout = ref(floor(lockout*96000):end,:);
         %% lineup audio with reference 
         dataLockout = data(floor(950*fs):end,:);
         disp(strcat('time diff to ref... ', num2str (length(data)/fs - length(ref)/fs)))
         disp(strcat('size dataLockout... ', num2str(size(dataLockout))))
         disp(strcat('size refLockout...  ', num2str(size(refLockout))))
-
+        fs
+        % figure(2);
+        % plot(refLockout);
+        % hold on;
+        % plot(dataLockout);
+        % nblahblkah
         %% lining up audio 
         [acor_L,lags_L] = xcorr(refLockout(:,1),dataLockout(:,1));
         [M_L,I_L] = max(abs(acor_L));
@@ -141,10 +157,20 @@ function output = recordProcess(file)
         % plot(timedata,dataLockout)
         % title(track_name)
         %***   DEBUG ENDS  ***%
-
+       
 
     %~~~~~~~~~~~~~~~~~~~~ NORMALIZATION ~~~~~~~~~~~~~~~~~~~~%
         t = 1;
+        sigtime = timedata(floor(timestamps(t,1)*fs):floor(timestamps(t,2)*fs));
+        sig = data(floor(timestamps(t,1)*fs): floor(timestamps(t,2)*fs),:);
+
+        figure(t)
+        plot(sigtime,sig)
+
+
+        floor(timestamps(t,1)*fs) - lagdiff 
+        floor(timestamps(t,2)*fs) - lagdiff
+
         sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
         sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
         sigRMS=rms(sig);
