@@ -16,7 +16,7 @@ addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/')
 
 folder = ('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0137B0137/rawpress_data/')
 dataFolder = ('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0137B0137/')
-SensorTable = strcat(dataFolder, 'A0000B0000_PressTable.csv')
+SensorTable = strcat(dataFolder, 'A0137B0137_PressTable.csv')
 
 clc
 disp('~~~~~~~~~~~~~~~~SENSOR PROCESS~~~~~~~~~~~~~~~~~~')

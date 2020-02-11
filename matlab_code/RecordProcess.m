@@ -15,23 +15,23 @@ function output = recordProcess(file)
         addpath('/Users/cz/Code/vinyl-research/matlab_code/audio_functions')
 
         %~~~~ MAC ~~~~%
-        % [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav');
-        % %load clicks too
+        [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav');
+        %load clicks too
 
-        % if exist('REFS_L') == 0 && exist('REFS_R') == 0
-        %     REFS_L = csvread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r28a-REFS_L.txt');
-        %     REFS_R = csvread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r28a-REFS_R.txt');
-        % end
+        if exist('REFS_L') == 0 && exist('REFS_R') == 0
+            REFS_L = csvread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r28a-REFS_L.txt');
+            REFS_R = csvread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r28a-REFS_R.txt');
+        end
         %~~~~ MAC ENDS ~~~~%
 
 
         %~~~~ WINDOWS ~~~~%
-        [ref, fs] = audioread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r028a.wav');
+        % [ref, fs] = audioread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r028a.wav');
 
-        if exist('REFS_L') == 0 && exist('REFS_R') == 0
-            REFS_L = csvread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r28a-REFS_L.txt');
-            REFS_R = csvread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r28a-REFS_R.txt');
-        end
+        % if exist('REFS_L') == 0 && exist('REFS_R') == 0
+        %     REFS_L = csvread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r28a-REFS_L.txt');
+        %     REFS_R = csvread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r28a-REFS_R.txt');
+        % end
         %~~~~ WINDOWS END ~~~~%
 
     %~~~~~~~~~~~~~~~~~~ Reference info ~~~~~~~~~~~~~~~~%

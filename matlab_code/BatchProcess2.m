@@ -6,7 +6,7 @@ close all; %clear all; %clc;
 % addpath('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\A0000B0000\')
 % folder = 'D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\A0000B0000\';
 
-data_folder = 'D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\A0000B0000\'
+% data_folder = 'D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\A0000B0000\'
 
 % files = dir('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\*.wav')
 % catch
@@ -14,17 +14,17 @@ data_folder = 'D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\A0
     % files = dir('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/click_testing/*.wav')
 % end
 % % ~~~~ WINDOWS ~~~~ %
-addpath('D:\Code\vinyl-research\matlab_code\')
-addpath('D:\Code\vinyl-research\matlab_code\audio_functions')
-addpath('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\')
-addpath('E:\audio_files\A0000B0000\')
+% addpath('D:\Code\vinyl-research\matlab_code\')
+% addpath('D:\Code\vinyl-research\matlab_code\audio_functions')
+% addpath('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\')
+% addpath('E:\audio_files\A0000B0000\')
 
 
 %~~~~~ TESTING ~~~~~%
-folder = 'D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\';
+% folder = 'D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\';
 %~~ TESTING ENDS ~~~%
 
-folder = 'D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\A0137B0137\';
+% folder = 'D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\A0137B0137\';
 % addpath('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
 % folder = ('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
 
@@ -32,8 +32,8 @@ folder = 'D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\
 % % ~~~~ WINDOWS ENDS ~~~~ %
 % % ~~~~ MAC  ~~~~ %
 
-% addpath('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
-% folder = ('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
+addpath('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
+folder = ('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
 files = dir(strcat(folder,'*.wav'))
 % % ~~~~ MAC ENDS ~~~~ %
 
