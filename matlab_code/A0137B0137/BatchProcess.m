@@ -5,33 +5,30 @@ close all; clear all; clc;
 disp('~~~~~~~~~~~~TESTING RECORDPROCESS~~~~~~~~~~~~')
 
 % % ~~~~ WINDOWS ~~~~ %
-addpath('D:\Code\vinyl-research\matlab_code\')
-addpath('D:\Code\vinyl-research\matlab_code\audio_functions')
-addpath('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\')
-addpath('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000')
-addpath('E:\audio_files\A0000B0000\')
+% addpath('D:\Code\vinyl-research\matlab_code\')
+% addpath('D:\Code\vinyl-research\matlab_code\audio_functions')
+% addpath('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\')
+% addpath('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000')
+% addpath('E:\audio_files\A0000B0000\')
 
 
-% %~~~~~ TESTING ~~~~~%
 % folder = 'D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\A0137B0137\';
-% %~~~ TESTING ENDS ~~~%
-
 % folder = 'E:\audio_files\A0000B0000\';
-folder = ('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\macvsacer\')
+% folder = ('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\macvsacer\')
 
 % % ~~~~ WINDOWS ENDS ~~~~ %
 
 
 
 % ~~~~ MAC ~~~~ %
-% addpath('/Users/cz/Code/vinyl-research/matlab_code')
-% addpath('/Users/cz/Code/vinyl-research/matlab_code/audio_functions')
-% addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/')
-% % file = '/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/003141_A0000B0000r30a.wav'
+addpath('/Users/cz/Code/vinyl-research/matlab_code')
+addpath('/Users/cz/Code/vinyl-research/matlab_code/audio_functions')
+addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/')
+% file = '/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/003141_A0000B0000r30a.wav'
 
-% % folder = '/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/';
-% addpath('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
-% folder = ('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
+% folder = '/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/';
+addpath('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
+folder = ('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
 
 
 % ~~~~ MAC ENDS ~~~~ %
@@ -62,6 +59,7 @@ for i = (1:length(files)) %%loop through records
     % AudioTable.record
     % i
     filename = files(i).name;
+    files(i)
     % filename = filename(3:end);
     disp(['opening file...:', filename])
     % filename(19:21)
@@ -73,13 +71,13 @@ for i = (1:length(files)) %%loop through records
     % ismember(str2num(filename(19:21)), (AudioTable.record))
     % ismember(str2num(filename(22)), (AudioTable.side))
     
-    % if ismember(str2num(filename(19:21)), (AudioTable.record)) && ismember(filename(22), AudioTable.side)
-    %     disp('record already processed...')
-    %     continue
-    % end
+    if ismember(filename, AudioTable.record)
+        disp('record already processed...')
+        continue
+    end
     
-    % file = strcat(files(i).folder,'/',filename)
-    file = strcat(files(i).folder,'\',filename)
+    file = strcat(files(i).folder,'/',filename)
+    % file = strcat(files(i).folder,'\',filename)
 
     date_recorded = 0;
     pressing = 0;
