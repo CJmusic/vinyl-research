@@ -9,7 +9,7 @@ function data_CCIR = audio_CCIRweighting(data)
    fr=[31.5 63 100 200 400 800 1000 2000 3150 4000 5000 6300 7100 8000 9000 10000 12500 14000 16000 20000];
    CCIR=[-35.5 -29.5 -25.4 -19.4 -13.4 -7.5 -5.6 0.0 3.4 4.9 6.1 6.6 6.4 5.8 4.5 2.5 -5.6 -10.9 -17.3 -27.8];
    %------------------this 44.1kHz fit needs optimization---------------------
-   fs=44100;
+   fs=96000;
    time=([1:N]'-1)/fs; % make time positive column vector starting at zero
    signal=zeros(N,1);
    impulse=zeros(N,1);
