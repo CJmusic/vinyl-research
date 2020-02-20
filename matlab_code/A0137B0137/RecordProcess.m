@@ -18,10 +18,10 @@ function output = recordProcess(file)
             [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav');
             %load clicks too
     
-            if exist('REFS_L') == 0 && exist('REFS_R') == 0
-                REFS_L = csvread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r28a-REFS_L.txt');
-                REFS_R = csvread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r28a-REFS_R.txt');
-            end
+            % if exist('REFS_L') == 0 && exist('REFS_R') == 0
+            %     REFS_L = csvread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r28a-REFS_L.txt');
+            %     REFS_R = csvread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r28a-REFS_R.txt');
+            % end
             %~~~~ MAC ENDS ~~~~%
     
     
@@ -224,16 +224,17 @@ function output = recordProcess(file)
                 
                 [csig(:,1), CLICKS_L] = ClickDetect(sig(:,1),200,20);
                 [csig(:,2), CLICKS_R] = ClickDetect(sig(:,2),200,20);
+
+
+
                
-                % [~, REFS_L] = ClickDetect(ref(:,1),200,20);
-                % [~, REFS_R] = ClickDetect(ref(:,2),200,20);
+                [~, REFS_L] = ClickDetect(ref(:,1),200,20);
+                [~, REFS_R] = ClickDetect(ref(:,2),200,20);
     
                 % need to do the reference here by track 
-                [diff_arrayL, ~] = audio_clickmatrix(CLICKS_L, REFS_L);
-                [diff_arrayR, ~] = audio_clickmatrix(CLICKS_R, REFS_R);
+                commonclicks_L = CommonClicks(CLICKS_L, REFS_L,lagdiff);
+                commonclicks_R = CommonClicks(CLICKS_R, REFS_R,lagdiff);
     
-                commonclicks_L = length(diff_arrayL);
-                commonclicks_R = length(diff_arrayL);
                 
                 clicks_L = length(CLICKS_L);
                 clicks_R = length(CLICKS_R); 
