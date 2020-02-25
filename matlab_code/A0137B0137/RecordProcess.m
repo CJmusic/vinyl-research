@@ -13,27 +13,50 @@ function output = recordProcess(file)
         %~~~~~~~~~~~~~~~~~ LOAD REFERENCE ~~~~~~~~~~~~~~~~~%
             % try 
             % addpath('/Users/cz/Code/vinyl-research/matlab_code/audio_functions')
-    
-            % %~~~~ MAC ~~~~%
-            [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav');
-            %load clicks too
-    
-            % if exist('REFS_L') == 0 && exist('REFS_R') == 0
-            %     REFS_L = csvread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r28a-REFS_L.txt');
-            %     REFS_R = csvread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r28a-REFS_R.txt');
-            % end
-            %~~~~ MAC ENDS ~~~~%
-    
-    
-            %~~~~ WINDOWS ~~~~%
-            % [ref, fs] = audioread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r028a.wav');
-    
-            % if exist('REFS_L') == 0 && exist('REFS_R') == 0
-            %     REFS_L = csvread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r28a-REFS_L.txt');
-            %     REFS_R = csvread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r28a-REFS_R.txt');
-            % end
-            %~~~~ WINDOWS END ~~~~%
-    
+            if ismac() == true
+                % %~~~~ MAC ~~~~%
+                if file(length(file)-4) == 'a'
+                    [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); 
+                    %% Reference 02072019_A0000B000r27a.wav 
+                    offset = 10.625; 
+                 
+ 
+                elseif file(length(file)-4) == 'b'
+                    [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028b.wav'); 
+                    %% Reference 02072019_A0000B000r27b.wav 
+                    offset = 13.8073; 
+                end
+
+                %load clicks too
+        
+                % if exist('REFS_L') == 0 && exist('REFS_R') == 0
+                %     REFS_L = csvread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r28a-REFS_L.txt');
+                %     REFS_R = csvread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r28a-REFS_R.txt');
+                % end
+                %~~~~ MAC ENDS ~~~~%
+            end 
+            if ispc() == true
+                %~~~~ WINDOWS ~~~~%
+                if file(length(file)-4) == 'a'
+                    [ref, fs] = audioread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r028a.wav');
+                    %% Reference 02072019_A0000B000r27a.wav 
+                    offset = 10.625; 
+            
+                    % 031418_A0000B0000r27a.wav as reference timestamps
+     
+ 
+                elseif file(length(file)-4) == 'b'
+                    [ref, fs] = audioread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r028b.wav');
+                    %% Reference 02072019_A0000B000r27b.wav 
+                    offset = 13.8073; 
+                end
+        
+                % if exist('REFS_L') == 0 && exist('REFS_R') == 0
+                %     REFS_L = csvread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r28a-REFS_L.txt');
+                %     REFS_R = csvread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r28a-REFS_R.txt');
+                % end
+                %~~~~ WINDOWS END ~~~~%
+            end
         %~~~~~~~~~~~~~~~~~~ Reference info ~~~~~~~~~~~~~~~~%
     
             timestamps_ref = [0, 60, 90, 122, 158, 180, 246, 266, 304, 324, 362, 382, 417.5];
@@ -67,14 +90,6 @@ function output = recordProcess(file)
                             'sweepV2',   % 26
                             'leadout'    % 27
             };
-            %% Reference 02072019_A0000B000r27a.wav 
-            offset = 10.625; 
-            transition = 517.375; 
-            % lockoutClipped = 953.746;
-            % lagdiff = []
-    
-            % 031418_A0000B0000r27a.wav as reference timestamps
-            offset = 10.625; 
             timestamps =       [[0, 61],    % 1. 1 kHz
                                 [61,91],    % 2. 10 kHz
                                 [91,121],   % 3. 100 Hz
