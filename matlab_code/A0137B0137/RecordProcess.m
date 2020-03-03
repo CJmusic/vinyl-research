@@ -13,8 +13,11 @@ function output = recordProcess(file)
         %~~~~~~~~~~~~~~~~~ LOAD REFERENCE ~~~~~~~~~~~~~~~~~%
             % try 
             % addpath('/Users/cz/Code/vinyl-research/matlab_code/audio_functions')
+            disp('SIDE')
+            file(length(file)-4)
             if ismac() == true
                 % %~~~~ MAC ~~~~%
+                disp('MAC')
                 if file(length(file)-4) == 'a'
                     [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); 
                     %% Reference 02072019_A0000B000r27a.wav 
@@ -22,6 +25,7 @@ function output = recordProcess(file)
                  
  
                 elseif file(length(file)-4) == 'b'
+                    disp('PC')
                     [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028b.wav'); 
                     %% Reference 02072019_A0000B000r27b.wav 
                     offset = 13.8073; 

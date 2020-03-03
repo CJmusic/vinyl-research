@@ -27,10 +27,10 @@ addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_
 % file = '/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/003141_A0000B0000r30a.wav'
 
 % folder = '/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/';
-% addpath('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
-% folder = ('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
-addpath('/Volumes/AUDIOBANK/audio_files/duplicaterecordingtest/')
-folder = ('/Volumes/AUDIOBANK/audio_files/duplicaterecordingtest/')
+addpath('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
+folder = ('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
+% addpath('/Volumes/AUDIOBANK/audio_files/duplicaterecordingtest/')
+% folder = ('/Volumes/AUDIOBANK/audio_files/duplicaterecordingtest/')
 
 
 % ~~~~ MAC ENDS ~~~~ %
