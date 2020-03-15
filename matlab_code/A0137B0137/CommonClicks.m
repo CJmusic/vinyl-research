@@ -1,8 +1,9 @@
 
 function num_comclicks = num_comclicks(clicks, clicks_ref, lag_diff);
-   for i = (1:length(clicks_ref))
+%    for i = (1:length(clicks_ref))
+%         if 
    
-   
+   num_comclicks = 0;
    
     % disp('INSIDE COMMON CLICKS')    
     % num_comclicks = 0;

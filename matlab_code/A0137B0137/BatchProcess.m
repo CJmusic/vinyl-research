@@ -81,6 +81,7 @@ for i = (1:length(files)) %%loop through records
     file = strcat(files(i).folder,'/',filename)
     % file = strcat(files(i).folder,'\',filename)
 
+    pressid = 0;
     date_recorded = 0;
     pressing = 0;
     top_stamper = 0;
@@ -101,8 +102,9 @@ for i = (1:length(files)) %%loop through records
     % record = str2num(filename(19:21));
 
     record = filename;
-    % side = filename(end-4);
-    side = 'a';
+    pressid = filename(start:end-6); % verify these 2 lines MAR 13 2020 
+    side = filename(end-4);
+    % side = 'a';
 
 
     % top_stamper = filename(8);
