@@ -53,13 +53,14 @@ for i = (1:height(AudioTable))
     AudioTable.RecordNumber(i) = sscanf(string(AudioTable.record(i)),'%*[^0123456789]%d');
 
 end 
-RecordTable.RecordNumber = string(RecordTable.RecordNumber)
-AudioTable.RecordNumber = string(AudioTable.RecordNumber)
+RecordTable.RecordNumber = string(RecordTable.RecordNumber);
+AudioTable.RecordNumber = string(AudioTable.RecordNumber);
 
-AudioTable;
-SensorTable
-PressingTable = innerjoin(RecordTable, AudioTable);%;, SensorTable)
-PressingTable = innerjoin(PressingTable, SensorTable)%;, SensorTable)
+RecordTable
+AudioTable
+% SensorTable
+PressingTable = innerjoin(RecordTable, AudioTable)%,'VariableNames', 'RecordNumber')%;, SensorTable)
+PressingTable = innerjoin(PressingTable, SensorTable);%, 'VariableNames', 'RecordNumber')%;, SensorTable)
 
 % string(AudioTable.record)
 % AudioTable.RecordNumber = varfun(sscanf,AudioTable.record)
