@@ -12,11 +12,14 @@ addpath('/Users/cz/Code/vinyl-research/matlab_code/from_John/Sept 26')
 
 % folder = '/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/';
 % addpath('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
-% folder = ('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
+folder = ('/Volumes/AUDIOBANK/audio_files/')
 % addpath('/Volumes/AUDIOBANK/audio_files/duplicaterecordingtest/')
 % folder = ('/Volumes/AUDIOBANK/audio_files/duplicaterecordingtest/')
-addpath('/Volumes/AUDIOBANK/audio_files/duplicatefiletest/')
-folder = ('/Volumes/AUDIOBANK/audio_files/multiplerecordstest/')
+% addpath('/Volumes/AUDIOBANK/audio_files/duplicatefiletest/')
+% folder = ('/Volumes/AUDIOBANK/audio_files/multiplerecordstest/')
+% folder = ('/Volumes/AUDIOBANK/audio_files/multiplerecordstest/')
+folder = ('/Volumes/AUDIOBANK/audio_files/A01B01test/')
+
 
 
 % ~~~~ MAC ENDS ~~~~ %

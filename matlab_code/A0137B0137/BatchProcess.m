@@ -102,7 +102,7 @@ for i = (1:length(files)) %%loop through records
     % record = str2num(filename(19:21));
 
     record = filename;
-    pressid = filename(start:end-6); % verify these 2 lines MAR 13 2020 
+    pressid = filename(1:end-6); % verify these 2 lines MAR 13 2020 
     side = filename(end-4);
     % side = 'a';
 

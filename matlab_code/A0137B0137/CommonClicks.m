@@ -1,9 +1,29 @@
 
 function num_comclicks = num_comclicks(clicks, clicks_ref, lag_diff);
-%    for i = (1:length(clicks_ref))
-%         if 
-   
-   num_comclicks = 0;
+    %loop through clicks 
+    %look for other clicks in
+    disp('INSIDE COMMON CLICKS')    
+    clicks
+    clicks_ref
+    
+    size(clicks)
+    size(clicks_ref)
+
+
+
+    % find(clicks_ref(i) - relaxation < clicks < clicks_ref(i) + relaxation)
+    num_comclicks = 0;
+    relaxation = 100;
+    for i = (1:length(clicks_ref))
+
+        comclicks = (clicks_ref(i) - relaxation < clicks < clicks_ref(i) + relaxation);
+        % if find(clicks_ref(i) - relaxation < clicks < clicks_ref(i) + relaxation) ~= 0
+
+        % num_comclicks = num_comclicks + 1;
+        num_comclicks = length(comclicks);
+        % end 
+        % num_comclicks
+    end
    
     % disp('INSIDE COMMON CLICKS')    
     % num_comclicks = 0;
@@ -17,9 +37,11 @@ function num_comclicks = num_comclicks(clicks, clicks_ref, lag_diff);
     %     diff_array(xi,:) = [clicks - clicks_ref(xi)];
     % end
     % lag_diff
-    % lagDiff = mode(diff_array(:)) % the time difference between the two signals is the most common distance between clicks
+    % lagDiff = mode(diff_array(:)) % the time difference 
+    % diff_array
+    % between the two signals is the most common distance between clicks
     % relaxation = floor(0.05*96000);
-    % % lag_diff
+    % lag_diff
 
     % for i = size(diff_array,1)
     %     for j = size(diff_array,2)
