@@ -24,23 +24,23 @@ tracks = unique(AudioTable.track);
 
 % AudioStats = struct(pressruns)
 
-StatNames2 = {'pressrun', 'track', 'AvgRMS_L','StdRMS_L', 'AvgRMS_R', 'StdRMS_R','AvgClicks_L', 'StdevClicks_L', 'AvgClicks_R', 'StdevClicks_R', 'AvgWow_L', 'StdWow_L', 'AvgStereobleed', 'StdevStereobleed'};
+StatNames2 = {'pressing', 'track', 'AvgRMS_L','StdRMS_L', 'AvgRMS_R', 'StdRMS_R','AvgClicks_L', 'StdevClicks_L', 'AvgClicks_R', 'StdevClicks_R', 'AvgWow_L', 'StdWow_L', 'AvgStereobleed', 'StdevStereobleed'};
 SensorStats = cell(0,14);
 
 % AudioStats = {cell2table(cell(0,14)), 'VariableNames', {'pressrun', 'track', 'AvgRMS_L','StdRMS_L', 'AvgRMS_R', 'StdRMS_R','AvgClicks_L', 'StdevClicks_L', 'AvgClicks_R', 'StdevClicks_R', 'AvgWow_L', 'StdWow_L', 'AvgStereobleed', 'StdevStereobleed'}}
 % AudioStats = [pressruns{1}, 'RMS_L', struct2table(datastats(AudioTable.RMS_L(strcmp(AudioTable.pressing,pressruns{1}),:)))]
 RecordTable;
-for i = (1:height(RecordTable))
+% for i = (1:height(RecordTable))
     %find the record number and pressing
-    RecordNumber = RecordTable.RecordNumber(i);
-    PressingNumber = RecordTable.PressingNumber(i);
+    % RecordTable.RecordNumber = RecordTable.RecordNumber(i);
+    % RecordTable.PressingNumber = RecordTable.PressingNumber(i);
     %match up the pressing and record number to RecordTable
     %isolate the number in the filename
     % num = regexp(str, '\d+', 'match')
     
     %match up the pressing number to SensorTable
 
-end
+% end
 % teststr = 'this is a 1000 test'
 % sscanf(teststr, '%*[^0123456789]%d')
 % disp('INTO FOR LOOP')
@@ -56,11 +56,11 @@ end
 RecordTable.RecordNumber = string(RecordTable.RecordNumber);
 AudioTable.RecordNumber = string(AudioTable.RecordNumber);
 
-RecordTable
-AudioTable
+% RecordTable
+% AudioTable
 % SensorTable
-PressingTable = innerjoin(RecordTable, AudioTable)%,'VariableNames', 'RecordNumber')%;, SensorTable)
-PressingTable = innerjoin(PressingTable, SensorTable);%, 'VariableNames', 'RecordNumber')%;, SensorTable)
+% PressingTable = innerjoin(RecordTable, AudioTable);%,'VariableNames', 'RecordNumber')%;, SensorTable)
+% PressingTable = innerjoin(PressingTable, SensorTable);%, 'VariableNames', 'RecordNumber')%;, SensorTable)
 
 % string(AudioTable.record)
 % AudioTable.RecordNumber = varfun(sscanf,AudioTable.record)
@@ -87,7 +87,7 @@ PressingTable = innerjoin(PressingTable, SensorTable);%, 'VariableNames', 'Recor
 %% sensor stats part
 % AudioStats = {cell2table(cell(0,14)), 'VariableNames', {'pressrun', 'track', 'AvgRMS_L','StdRMS_L', 'AvgRMS_R', 'StdRMS_R','AvgClicks_L', 'StdevClicks_L', 'AvgClicks_R', 'StdevClicks_R', 'AvgWow_L', 'StdWow_L', 'AvgStereobleed', 'StdevStereobleed'}}
 % AudioStats = [pressruns{1}, 'RMS_L', struct2table(datastats(AudioTable.RMS_L(strcmp(AudioTable.pressing,pressruns{1}),:)))]
-StatNames = {'pressrun', 'track', 'AvgRMS_L','StdRMS_L', 'AvgRMS_R', 'StdRMS_R','AvgClicks_L', 'StdevClicks_L', 'AvgClicks_R', 'StdevClicks_R', 'AvgWow_L', 'StdWow_L', 'AvgStereobleed', 'StdevStereobleed'};
+StatNames = {'pressing', 'track', 'AvgRMS_L','StdRMS_L', 'AvgRMS_R', 'StdRMS_R','AvgClicks_L', 'StdevClicks_L', 'AvgClicks_R', 'StdevClicks_R', 'AvgWow_L', 'StdWow_L', 'AvgStereobleed', 'StdevStereobleed'};
 AudioStats = cell(0,14);
 
 
@@ -133,9 +133,45 @@ AudioStats.Properties.VariableNames{'Var13'}='AvgStereobleed';
 AudioStats.Properties.VariableNames{'Var14'}='StdevStereobleed';
 
 % AudioStats
+Tbl = outerjoin(RecordTable, SensorTable);%,'VariableNames', 'RecordNumber')%;, SensorTable)
+% Tbl
+writetable(Tbl,'Tbl.csv')
+Tbl.Properties.VariableNames([1]) = {'PressingNumber'};
 
+Tbl = outerjoin(Tbl, AudioTable);%, 'VariableNames', 'RecordNumber')%;, SensorTable)
+% Tbl
+Tbl.Properties.VariableNames([1]) = {'PressingNumber'};
+
+Tbl = outerjoin(Tbl, AudioStats);
+writetable(Tbl,'Tbl.csv')
+
+Tbl.Properties.VariableNames([1]) = {'PressingNumber'};
+Tbl.Properties.VariableNames([33]) = {'track'};
+
+
+for i = (1:length(Tbl.Properties.VariableNames))
+    disp(string(Tbl.Properties.VariableNames(i)))
+end
 
 plotnum = 0;
+
+
+plotnum = plotnum + 1;
+figure(plotnum); grid on; hold on;
+statnames = categorical(StatNames);
+statnames = reordercats(statnames,StatNames);
+
+
+% AudioStats.AvgRMS_L(strcmp(AudioStats.track,'quiet'),:)
+bar(categorical(pressruns),AudioStats.AvgRMS_L(strcmp(AudioStats.track,'quiet'),:))
+bar(categorical(pressruns),AudioStats.AvgRMS_R(strcmp(AudioStats.track,'quiet'),:))
+legend('RMS Left Channel', 'RMS Right Channel')
+xlabel('number of records')
+ylabel('RMS level [dB]')
+title('RMS noise in quiet track')
+% xlim([-50,-30])
+saveas(figure(plotnum),'RMSquiet.png')
+
 plotnum = plotnum + 1;
 figure(plotnum); grid on; hold on;
 statnames = categorical(StatNames);
@@ -143,15 +179,25 @@ statnames = reordercats(statnames,StatNames);
 % Y = [10 21 33 52];
 % bar(X,Y)
 
-AudioStats.AvgRMS_L(strcmp(AudioStats.track,'quiet'),:)
-bar(categorical(pressruns),AudioStats.AvgRMS_L(strcmp(AudioStats.track,'quiet'),:))
-bar(categorical(pressruns),AudioStats.AvgRMS_R(strcmp(AudioStats.track,'quiet'),:))
+% AudioStats.AvgRMS_L(strcmp(AudioStats.track,'quiet'),:)
+bar(categorical(pressruns),Tbl.AvgRMS_L(strcmp(AudioStats.track,'quiet'),:))
+bar(categorical(pressruns),Tbl.AvgRMS_R(strcmp(AudioStats.track,'quiet'),:))
 legend('RMS Left Channel', 'RMS Right Channel')
-ylabel('number of records')
-xlabel('RMS level [dB]')
+xlabel('number of records')
+ylabel('RMS level [dB]')
 title('RMS noise in quiet track')
-% xlim([-50,-30])
-saveas(figure(plotnum),'RMSquiet.png')
+
+plotnum = plotnum + 1;
+figure(plotnum); grid on; hold on;
+plot(Tbl.maxMouldSteamIn_F(strcmp(Tbl.track,'quiet')),Tbl.AvgRMS_L(strcmp(Tbl.track,'quiet'),:),'ko')
+
+plotnum = plotnum + 1;
+figure(plotnum); grid on; hold on;
+plot(SensorTable.PressingNumber,SensorTable.maxMouldSteamIn_F,'ro')
+
+% plotnum = plotnum + 1;
+figure(plotnum); grid on; hold on;
+plot(Tbl.PressingNumber,Tbl.maxMouldSteamIn_F,'b.')
 
 % plotnum = plotnum + 1;
 % figure(plotnum); grid on; hold on;
