@@ -44,7 +44,7 @@ files = dir(fullfile(folder,'*.wav'))
 
 
 % AudioTableHeaders = {'date_recorded', 'pressing', 'top_stamper', 'top_hits', 'bottom_stamper', 'bottom_hits', 'record', 'side', 'track', 'lagdiff', 'normalization_L', 'normalization_R','RMS_L', 'RMS_R', 'A_L', 'A_R', 'CCIR_L', 'CCIR_R','clicks_L', 'clicks_R', 'commonclicks_L', 'commonclicks_R', 'THD_L', 'THD_R', 'wow_L', 'wow_R', 'stereo_bleed'};
-AudioTableHeaders = {'record', 'side','track', 'lagdiff', 'normalization_L', 'normalization_R','RMS_L', 'RMS_R', 'A_L', 'A_R', 'CCIR_L', 'CCIR_R','clicks_L', 'clicks_R', 'commonclicks_L', 'commonclicks_R', 'THD_L', 'THD_R', 'wow_L', 'wow_R', 'stereo_bleed'};
+AudioTableHeaders = {'pressing','record', 'side','track', 'lagdiff', 'normalization_L', 'normalization_R','RMS_L', 'RMS_R', 'A_L', 'A_R', 'CCIR_L', 'CCIR_R','clicks_L', 'clicks_R', 'commonclicks_L', 'commonclicks_R', 'THD_L', 'THD_R', 'wow_L', 'wow_R', 'stereo_bleed'};
 
 
 % check if there is already a csv file to append to 
@@ -104,6 +104,8 @@ for i = (1:length(files)) %%loop through records
     record = filename;
     pressid = filename(1:end-6); % verify these 2 lines MAR 13 2020 
     side = filename(end-4);
+    pressing = filename(1:strfind(filename,string(sscanf(string(filename),'%*[^0123456789]%d')))-1)
+
     % side = 'a';
 
 
@@ -128,9 +130,11 @@ for i = (1:length(files)) %%loop through records
     % disp([strcat('...side:', side)])
 
     % infoCell = {str2num(date_recorded), pressing, top_stamper, str2num(top_hits), bottom_stamper, str2num(bottom_hits), str2num(record), side}; 
-    infoCell = {record, side};
+    infoCell = {pressing,record, side};
     AudioOutput = RecordProcess(file);
-
+    disp('AUDIOTABLE')
+    AudioTable
+    % cell2table([infoCell, AudioOutput], 'VariableNames', AudioTableHeaders)
     for j = (1:length(AudioOutput))
         AudioTable = [AudioTable; cell2table([infoCell, AudioOutput(j,:)], 'VariableNames', AudioTableHeaders)];
     end

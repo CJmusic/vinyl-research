@@ -87,8 +87,8 @@ AudioTable.RecordNumber = string(AudioTable.RecordNumber);
 %% sensor stats part
 % AudioStats = {cell2table(cell(0,14)), 'VariableNames', {'pressrun', 'track', 'AvgRMS_L','StdRMS_L', 'AvgRMS_R', 'StdRMS_R','AvgClicks_L', 'StdevClicks_L', 'AvgClicks_R', 'StdevClicks_R', 'AvgWow_L', 'StdWow_L', 'AvgStereobleed', 'StdevStereobleed'}}
 % AudioStats = [pressruns{1}, 'RMS_L', struct2table(datastats(AudioTable.RMS_L(strcmp(AudioTable.pressing,pressruns{1}),:)))]
-StatNames = {'pressing', 'track', 'AvgRMS_L','StdRMS_L', 'AvgRMS_R', 'StdRMS_R','AvgClicks_L', 'StdevClicks_L', 'AvgClicks_R', 'StdevClicks_R', 'AvgWow_L', 'StdWow_L', 'AvgStereobleed', 'StdevStereobleed'};
-AudioStats = cell(0,14);
+StatNames = {'pressing', 'track', 'AvgRMS_L','StdRMS_L', 'AvgRMS_R', 'StdRMS_R','AvgClicks_L', 'StdevClicks_L', 'AvgClicks_R', 'StdevClicks_R', 'AvgWow_L', 'StdWow_L', 'AvgWow_R', 'StdWow_R', 'AvgStereobleed', 'StdevStereobleed'};
+AudioStats = cell(0,16);
 
 
 for j = (1:length(tracks))
@@ -105,7 +105,7 @@ for j = (1:length(tracks))
 
         
 
-        AudioStats = [AudioStats ; cell2table({pressruns{i}, tracks{j}, RMS_L.mean, RMS_L.std, RMS_R.mean, RMS_R.std,clicks_L.mean, clicks_L.std, clicks_R.mean, clicks_R.std, wow_L.mean, wow_L.std, stereo_bleed.mean, stereo_bleed.std})];
+        AudioStats = [AudioStats ; cell2table({pressruns{i}, tracks{j}, RMS_L.mean, RMS_L.std, RMS_R.mean, RMS_R.std,clicks_L.mean, clicks_L.std, clicks_R.mean, clicks_R.std, wow_L.mean, wow_L.std, wow_R.mean, wow_R.std, stereo_bleed.mean, stereo_bleed.std})];
         % AudioStats = datastats(AudioTable.RMS_L(strcmp(AudioTable(AudioTable.pressing,pressruns{i}))))
         % AudioStats(pressruns{i}) = struct(pressruns{i},datastats(AudioTable.RMS_L(strcmp(AudioTable.pressing,pressruns{i}),:)))
         %  = [pressruns{i}, 'RMS_L',  struct2table(datastats(AudioTable.RMS_L(strcmp(AudioTable.pressing,pressruns{i}),:)))]
@@ -129,8 +129,10 @@ AudioStats.Properties.VariableNames{'Var9'}='AvgClicks_R';
 AudioStats.Properties.VariableNames{'Var10'}='StdevClicks_R';
 AudioStats.Properties.VariableNames{'Var11'}='AvgWow_L';
 AudioStats.Properties.VariableNames{'Var12'}='StdWow_L';
-AudioStats.Properties.VariableNames{'Var13'}='AvgStereobleed';
-AudioStats.Properties.VariableNames{'Var14'}='StdevStereobleed';
+AudioStats.Properties.VariableNames{'Var13'}='AvgWow_R';
+AudioStats.Properties.VariableNames{'Var14'}='StdWow_R';
+AudioStats.Properties.VariableNames{'Var15'}='AvgStereobleed';
+AudioStats.Properties.VariableNames{'Var16'}='StdevStereobleed';
 
 % AudioStats
 Tbl = outerjoin(RecordTable, SensorTable);%,'VariableNames', 'RecordNumber')%;, SensorTable)
@@ -164,6 +166,7 @@ statnames = reordercats(statnames,StatNames);
 
 % AudioStats.AvgRMS_L(strcmp(AudioStats.track,'quiet'),:)
 bar(categorical(pressruns),AudioStats.AvgRMS_L(strcmp(AudioStats.track,'quiet'),:))
+grid on; hold on;
 bar(categorical(pressruns),AudioStats.AvgRMS_R(strcmp(AudioStats.track,'quiet'),:))
 legend('RMS Left Channel', 'RMS Right Channel')
 xlabel('number of records')
@@ -176,28 +179,70 @@ plotnum = plotnum + 1;
 figure(plotnum); grid on; hold on;
 statnames = categorical(StatNames);
 statnames = reordercats(statnames,StatNames);
-% Y = [10 21 33 52];
-% bar(X,Y)
-
-% AudioStats.AvgRMS_L(strcmp(AudioStats.track,'quiet'),:)
 bar(categorical(pressruns),Tbl.AvgRMS_L(strcmp(AudioStats.track,'quiet'),:))
+grid on; hold on;
 bar(categorical(pressruns),Tbl.AvgRMS_R(strcmp(AudioStats.track,'quiet'),:))
 legend('RMS Left Channel', 'RMS Right Channel')
 xlabel('number of records')
 ylabel('RMS level [dB]')
 title('RMS noise in quiet track')
 
-plotnum = plotnum + 1;
-figure(plotnum); grid on; hold on;
-plot(Tbl.maxMouldSteamIn_F(strcmp(Tbl.track,'quiet')),Tbl.AvgRMS_L(strcmp(Tbl.track,'quiet'),:),'ko')
 
 plotnum = plotnum + 1;
 figure(plotnum); grid on; hold on;
-plot(SensorTable.PressingNumber,SensorTable.maxMouldSteamIn_F,'ro')
+statnames = categorical(StatNames);
+statnames = reordercats(statnames,StatNames);
+bar(categorical(pressruns),Tbl.StdWow_L(strcmp(AudioStats.track,'3150Hz'),:))
+grid on; hold on;
+bar(categorical(pressruns),Tbl.StdWow_R(strcmp(AudioStats.track,'3150Hz'),:))
+legend('Wow Left Channel', 'Wow Right Channel')
+xlabel('number of records')
+ylabel('Wow [Hz]')
+title('Wow in 3150 Hz track')
+
+plotnum = plotnum + 1;
+figure(plotnum); grid on; hold on;
+statnames = categorical(StatNames);
+statnames = reordercats(statnames,StatNames);
+bar(categorical(pressruns),Tbl.AvgStereobleed(strcmp(AudioStats.track,'1kHz2'),:))
+grid on; hold on;
+xlabel('number of records')
+ylabel('stereo bleed [dB]')
+title('Stereo bleed in  1HzL track')
+
+
+plotnum = plotnum + 1;
+figure(plotnum);  
+scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet')),Tbl.RMS_L(strcmp(Tbl.track,'quiet'),:),'ko')
+grid on; hold on;
+scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet')),Tbl.RMS_R(strcmp(Tbl.track,'quiet'),:),'bo')
+title('minMouldSteamOutBottom_F vs RMS_L')
+
+plotnum = plotnum + 1;
+figure(plotnum); 
+scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'3150Hz')),Tbl.wow_L(strcmp(Tbl.track,'3150Hz'),:),'ko')
+grid on; hold on;
+scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'3150Hz')),Tbl.wow_R(strcmp(Tbl.track,'3150Hz'),:),'bo')
+title('minMouldSteamOutBottom_F vs Wow_L')
+
+
+plotnum = plotnum + 1;
+figure(plotnum); 
+scatter(Tbl.maxPressForce_Ton(strcmp(Tbl.track,'1kHzL')),Tbl.stereo_bleed(strcmp(Tbl.track,'1kHzL'),:),'ko')
+grid on; hold on;
+title('maxPressForce_Ton vs stereo_bleed')
+
 
 % plotnum = plotnum + 1;
-figure(plotnum); grid on; hold on;
-plot(Tbl.PressingNumber,Tbl.maxMouldSteamIn_F,'b.')
+% figure(plotnum); grid on; hold on;
+% plot(SensorTable.PressingNumber,SensorTable.minMouldSteamOutBottom_F,'ro')
+
+% % plotnum = plotnum + 1;
+% figure(plotnum); grid on; hold on;
+% plot(Tbl.PressingNumber,Tbl.minMouldSteamOutBottom_F,'b.')
+
+
+grid on; hold on;
 
 % plotnum = plotnum + 1;
 % figure(plotnum); grid on; hold on;
