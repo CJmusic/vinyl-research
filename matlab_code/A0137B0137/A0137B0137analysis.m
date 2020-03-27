@@ -186,8 +186,6 @@ legend('RMS Left Channel', 'RMS Right Channel')
 xlabel('number of records')
 ylabel('RMS level [dB]')
 title('RMS noise in quiet track')
-
-
 plotnum = plotnum + 1;
 figure(plotnum); grid on; hold on;
 statnames = categorical(StatNames);
@@ -243,7 +241,6 @@ title('maxPressForce_Ton vs stereo_bleed')
 
 
 grid on; hold on;
-
 % plotnum = plotnum + 1;
 % figure(plotnum); grid on; hold on;
 % histogram(AudioTable.clicks_L(strcmp(AudioTable.track,'quiet'),:),50,'BinLimits',[0,500])
