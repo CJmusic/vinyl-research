@@ -46,7 +46,8 @@ for i=(1:length(date_tags))
     opts.SelectedVariableNames = selectedColumns;
     if i == 1
         disp('i EQUALED 1')
-        SensorValues = readtable(strcat(folder,date_tags{i},'_SensorValues.csv'),opts)
+        SensorValues = readtable(strcat(folder,date_tags{i},'_SensorValues.csv'),opts);
+        SensorValues = rmmissing(SensorValues)
     else
         SensorValues = [SensorValues; readtable(strcat(folder,date_tags{i},'_SensorValues.csv'),opts)];
     end

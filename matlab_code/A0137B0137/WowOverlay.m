@@ -19,6 +19,7 @@ folder = ('/Volumes/AUDIOBANK/audio_files/')
 % folder = ('/Volumes/AUDIOBANK/audio_files/multiplerecordstest/')
 % folder = ('/Volumes/AUDIOBANK/audio_files/multiplerecordstest/')
 folder = ('/Volumes/AUDIOBANK/audio_files/A01B01test/')
+folder = ('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/A0000B0000_misc/wow/')
 
 
 
@@ -33,10 +34,16 @@ files = dir(fullfile(folder,'*.wav'))
 
 
 for i = (1:length(files)) %%loop through records
+    % filename = files(i).name
+    % file= strcat(files(i).folder,'/',filename)
+    % tracks=SeperateTracks(file);
+    % rev4_1 = tracks('3150Hz');
+
     filename = files(i).name
     file= strcat(files(i).folder,'/',filename)
-    tracks=SeperateTracks(file);
-    rev4_1 = tracks('3150Hz');
+    [rev4_1, fs] = audioread(file);
+    rev4_1 = rev4_1(30*fs:45*fs,:);
+
     fs = 96000;
     ts = length(rev4_1)*(1/4)/fs;
     tf = length(rev4_1)*(3/4)/fs;
@@ -116,6 +123,16 @@ for i = (1:length(files)) %%loop through records
     xlabel('Time[sec]')
     ylabel('Freq[Hz]')
     title('zoom freq(t)')
+
+    figure(100)
+    subplot(2,2,i)
+    plot(tseg,freq)
+    grid on; hold on;
+    axis([0 5 ylim])
+    xlabel('Time[sec]')
+    ylabel('Freq[Hz]')
+    title('zoom freq(t)')
+
     %% -------------------------WF-wtg table-----------------------------------
     % fr=[0.1 0.19 0.43 0.77 1.0 2.0 5.0 10.0 20.0 50.0 165 1000];
     % dBWFtable=[-57 -40 -20 -10 -7.25 -1.52 0 -1 -4 -10 -20 -36];
@@ -152,6 +169,8 @@ for i = (1:length(files)) %%loop through records
     ylabel('Freq[Hz]')
     title('zoom freq(no DC)')
     
+
+
     %--------------apply W&F weighting---------------
     WFfreq=filter(b,a,freq);
     % WFfreq=freq;% no WF filter
@@ -175,6 +194,7 @@ for i = (1:length(files)) %%loop through records
     disp(['rms weighted W&F: ' num2str(WF_weighted)])
     disp('-------------------finished--------------------') 
     
+
 
     %OLD CODE BELOW
 % disp('--------------WOW AND FLUTTER--------------')

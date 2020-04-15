@@ -7,6 +7,7 @@ close all
 addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/')
 
 AudioFile = ('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/A0000B0000_AudioTable.csv')
+dataFolder = ('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/')
 SensorFile = ('')
 
 % dataFolder = 'D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\A0000B0000\'
@@ -66,7 +67,7 @@ signal_names = {'leadin',    % 1
 for i = (1:length(measurements))
     for j = (1:length(signal_names))
         % intTable = byN(strcmp(byN(:,9),signal_names{j}),:);
-        int_stats = datastats(getData(byN, signal_names{j}, measurements{i}));
+        int_stats = datastats(getData(audio_byN, signal_names{j}, measurements{i}));
 
         intTable = cell2table({signal_names{j}, measurements{i},int_stats.max,int_stats.min,int_stats.mean,int_stats.median,int_stats.range,int_stats.std},'VariableNames', col_names);
 
