@@ -42,7 +42,7 @@ for i = (1:length(files)) %%loop through records
     filename = files(i).name
     file= strcat(files(i).folder,'/',filename)
     [rev4_1, fs] = audioread(file);
-    rev4_1 = rev4_1(30*fs:45*fs,:);
+    % rev4_1 = rev4_1(30*fs:45*fs,:);
 
     fs = 96000;
     ts = length(rev4_1)*(1/4)/fs;
