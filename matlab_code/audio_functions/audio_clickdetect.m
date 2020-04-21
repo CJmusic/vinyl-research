@@ -90,7 +90,7 @@ for i = (1:length(files))
     end
     clicksL
     clicksR
-    PLOT INDIVIDUAL CLICKS
+    % PLOT INDIVIDUAL CLICKS
     figure(10+xi); 
     plot(time(clicks(xi)-lenClick/2:clicks(xi)+lenClick/2),data(clicks(xi)-lenClick/2:clicks(xi)+lenClick/2,:));
     grid on;

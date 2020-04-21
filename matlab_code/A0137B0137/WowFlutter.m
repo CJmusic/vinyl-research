@@ -69,14 +69,13 @@ function wow = WowFlutter(rev4_1);
     end
     freq(1)=freq(3);freq(2)=freq(3);%%%%%% 2i2 seems to need this %%%%%%%%%%
     tseg=[0:nseg-1]*(nfft/2)/fs;
-    % figure(40)
-    % plot(tseg,freq)
-    % grid on;
-    % xlabel('Time[sec]')
-    % ylabel('Freq[Hz]')
-    % axis([xlim 3149.9932 3149.9938])
-    % axis([xlim ylim])
-    % title([filename ' ref:' num2str(freq_ref) ' nsum:' num2str(n_sum)])
+    figure(40)
+    plot(tseg,freq)
+    grid on;
+    xlabel('Time[sec]')
+    ylabel('Freq[Hz]')
+    axis([xlim ylim])
+    title([filename ' ref:' num2str(freq_ref) ' nsum:' num2str(n_sum)])
     % ---------- ---closeup plot--------
     % figure(50)
     % plot(tseg,freq)

@@ -1,31 +1,148 @@
+clear all;close all;clc
+set(0,'DefaultLineLineWidth',1.5);
+set(0,'DefaultAxesFontSize',12);
+set(0,'DefaultAxesFontWeight','bold')
+set(0,'DefaultAxesLineWidth',1.5)
 
-function num_comclicks = num_comclicks(clicks, clicks_ref, lag_diff);
+
+addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/')
+
+
+record1 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/testing/maxsteam1a.wav');
+record2 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/testing/maxbarrelzones3a.wav');
+
+figure(1)
+plot(record1('transition'))
+hold on; grid on;
+plot(record2('transition'))
+
+[~, clicks1] = ClickDetect(record1('transition'),200,20);
+[~, clicks2] = ClickDetect(record2('transition'),200,20);
+num_comclicks(clicks1, clicks2)
+
+
+function num_comclicks = num_comclicks(clicks, clicks_ref);
     %loop through clicks 
     %look for other clicks in
     disp('INSIDE COMMON CLICKS')    
     % clicks;
     % clicks_ref;
     
-    % size(clicks)
-    % size(clicks_ref)
+    size(clicks)
+    size(clicks_ref)
 
 
+    
+    % PLOT CLICKS
+    % for xi = 1:length(clicks)
+    %     x1 = (clicks(xi));
+    %     figure(1); hold on;
+    %     line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
+    % end
 
-    % find(clicks_ref(i) - relaxation < clicks < clicks_ref(i) + relaxation)
-    num_comclicks = 0;
-    relaxation = 100;
+    % % saveas(figure(1),strcat(files(i).folder,i,'.png'))
+
+    % for xi = 1:length(clicks_ref)
+    %     x1 = (clicks_ref(xi));
+    %     figure(1); hold on;
+    %     line([x1 x1], get(gca, 'ylim'),'Color', 'red','LineStyle', '--');
+    % end
+
+    % num_comclicks = 0;
+    % relaxation = 240;
+    % comclicks = [];
+    % for i = (1:length(clicks_ref))
+    %     index = find(clicks < clicks_ref(i) + relaxation & clicks > clicks_ref(i) - relaxation)
+    %     if index > 0 
+    %         comclicks = [comclicks, clicks_ref(i)];
+    %     end
+    % end
+
+
+    % below seems to work
+    clicks
+    clicks_ref
+    relaxation = 96000;
+    comclicks = [];
     for i = (1:length(clicks_ref))
+        % i
+        upper_bound = clicks < clicks_ref(i) + relaxation;
+        
+        size(upper_bound)
+        lower_bound  = clicks(upper_bound) > clicks_ref(i) - relaxation;
+        % size(lower_bound)
+        size(lower_bound)
+        if sum(lower_bound) > 0;
+            disp('COMMON CLICK')
+            comclicks = [comclicks, clicks_ref(i)];
+            continue
+        end
 
-        comclicks = clicks > clicks_ref(i) - relaxation;
-        comclicks = comclicks < clicks_ref(i) + relaxation;
+        disp('Upper Bound')
+        upper_bound
+        size(upper_bound)
+        disp('Lower Bound')
+        lower_bound
+        size(lower_bound)
+
+        size(comclicks)
+    end
+
+        
+        %%% below seems to work, but is very slow
+    % comclicks = [];
+    % relaxation = 9600;
+    % for i = (1:length(clicks_ref))
+    %     for k = (1:length(clicks))
+    %         if clicks(k) >= clicks_ref(i) - relaxation & clicks(k) < clicks_ref(i) + relaxation;
+    %             comclicks = [comclicks, clicks_ref(i)];
+    %             disp('COMMON CLICK')
+    %         end
+    %     end
+    % end
+
+
+        % i
+        % clicks_ref(i)
+        % clicks(i)
+
+        % clicks_ref(i) - relaxation
+        % clicks_ref(i) + relaxation
+        % clicks_ref(i) - relaxation
+        % clicks_ref(i) + relaxation
+        % try
+        %     [ind,~] = find(clicks >= clicks_ref(i,1) - relaxation & clicks < clicks_ref(i,1) + relaxation)
+        %     [ind,~] = find(clicks >= clicks_ref(i,2) - relaxation & clicks < clicks_ref(i,2) + relaxation)
+        %     if ind != 
+        % catch
+        %     continue
+        % end
         % if find(clicks_ref(i) - relaxation < clicks < clicks_ref(i) + relaxation) ~= 0
 
         % num_comclicks = num_comclicks + 1;
-        num_comclicks = sum(comclicks);
         % end 
         % num_comclicks
+    % end
+
+    num_comclicks = length(comclicks)
+
+    for xi = 1:length(clicks)
+        x1 = (clicks(xi));
+        figure(1); hold on;
+        line([x1 x1], get(gca, 'ylim'),'Color', 'red','LineStyle', '--');
     end
-    num_comclicks
+    for xi = 1:length(clicks_ref)
+        x1 = (clicks_ref(xi));
+        figure(1); hold on;
+        line([x1 x1], get(gca, 'ylim'),'Color', 'blue','LineStyle', '--');
+    end
+
+    for xi = 1:length(comclicks)
+        x1 = (comclicks(xi));
+        figure(1); hold on;
+        line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
+    end
+
    
     % disp('INSIDE COMMON CLICKS')    
     % num_comclicks = 0;

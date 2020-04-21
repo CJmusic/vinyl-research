@@ -67,7 +67,7 @@ for i = (1:length(files)) %%loop through records
     title('untrimmed file data')
     %----------select useful portion------------
     ns=round(ts*fs)+1;nf=round(tf*fs);
-    rev4_1=rev4_1(ns:nf,lr);% after this the lr dimension is gone
+    rev4_1=rev4_1(ns:nf,lr);% after this the lr dimension is gone ~~~~~~~~~ THIS THE TRIMMING LINE ~~~~~~~~~~~~
     Nt=length(rev4_1);
     disp(['N_analyze: ' num2str(Nt) '  duration: ' num2str(Nt/fs)])
     %-----------------plots------------

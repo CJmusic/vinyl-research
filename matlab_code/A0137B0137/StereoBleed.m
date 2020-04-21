@@ -33,9 +33,9 @@ function stereo_bleed = StereoBleed(sig, chan)
 
     
     if chan == 1;
-        stereo_bleed = 20*log10(peakR/peakL);
+        stereo_bleed = 20*log10(peakR) - 20*log10(peakL);
     elseif chan == 2;
-        stereo_bleed = 20*log10(peakL/peakR);
+        stereo_bleed = 20*log10(peakL) - 20*log10(peakR);
     end
     % title(stereo_bleed)
 
