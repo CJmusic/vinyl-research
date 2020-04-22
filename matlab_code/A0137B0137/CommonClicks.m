@@ -1,36 +1,37 @@
-clear all;close all;clc
-set(0,'DefaultLineLineWidth',1.5);
-set(0,'DefaultAxesFontSize',12);
-set(0,'DefaultAxesFontWeight','bold')
-set(0,'DefaultAxesLineWidth',1.5)
+% clear all;close all;clc
+% set(0,'DefaultLineLineWidth',1.5);
+% set(0,'DefaultAxesFontSize',12);
+% set(0,'DefaultAxesFontWeight','bold')
+% set(0,'DefaultAxesLineWidth',1.5)
 
 
-addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/')
+% addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/')
 
 
-record1 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/testing/maxsteam1a.wav');
-record2 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/testing/maxbarrelzones3a.wav');
-record2 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/testing/mincool5b.wav');
+% record1 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/testing/maxsteam1a.wav');
+% % record2 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/testing/maxbarrelzones3b.wav');
+% record2 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/testing/maxbarrelzones3a.wav');
+% % record2 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/testing/mincool5b.wav');
 
-figure(1)
-plot(record1('transition'))
-hold on; grid on;
-plot(record2('transition'))
+% figure(1)
+% plot(record1('transition'))
+% hold on; grid on;
+% plot(record2('transition'))
 
-[~, clicks1] = ClickDetect(record1('transition'),200,20);
-[~, clicks2] = ClickDetect(record2('transition'),200,20);
-num_comclicks(clicks1, clicks2)
+% [~, clicks1] = ClickDetect(record1('transition'));
+% [~, clicks2] = ClickDetect(record2('transition'));
+% num_comclicks(clicks1, clicks2)
 
 
 function num_comclicks = num_comclicks(clicks, clicks_ref);
     %loop through clicks 
     %look for other clicks in
-    disp('INSIDE COMMON CLICKS')    
+    % disp('INSIDE COMMON CLICKS')    
     % clicks;
     % clicks_ref;
     
-    size(clicks)
-    size(clicks_ref)
+    % size(clicks)
+    % size(clicks_ref)
 
 
     
@@ -61,9 +62,9 @@ function num_comclicks = num_comclicks(clicks, clicks_ref);
 
 
     % below seems to work
-    clicks
-    clicks_ref
-    relaxation = 96000;
+    % clicks
+    % clicks_ref
+    relaxation = 750;
     comclicks = [];
     for i = (1:length(clicks_ref))
         % i
@@ -79,14 +80,14 @@ function num_comclicks = num_comclicks(clicks, clicks_ref);
             continue
         end
 
-        disp('Upper Bound')
-        upper_bound
-        size(upper_bound)
-        disp('Lower Bound')
-        lower_bound
-        size(lower_bound)
+        % disp('Upper Bound')
+        % upper_bound
+        % size(upper_bound)
+        % disp('Lower Bound')
+        % lower_bound
+        % size(lower_bound)
 
-        size(comclicks)
+        % size(comclicks)
     end
 
         
@@ -125,6 +126,7 @@ function num_comclicks = num_comclicks(clicks, clicks_ref);
         % num_comclicks
     % end
 
+    comclicks
     num_comclicks = length(comclicks)
 
     for xi = 1:length(clicks)

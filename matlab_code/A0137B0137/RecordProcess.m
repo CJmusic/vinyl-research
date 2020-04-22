@@ -241,8 +241,8 @@ function output = recordProcess(file)
                     refT = ref(floor(timestamps(t-1,1)*fs) - lagdiff : floor(timestamps(t-1,2)*fs) - lagdiff,:);
                 end
                 
-                [csig(:,1), CLICKS_L] = ClickDetect(sig(:,1),200,20);
-                [csig(:,2), CLICKS_R] = ClickDetect(sig(:,2),200,20);
+                [csig(:,1), CLICKS_L] = ClickDetect(sig(:,1));
+                [csig(:,2), CLICKS_R] = ClickDetect(sig(:,2));
 
 
 

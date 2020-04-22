@@ -1,6 +1,8 @@
 % function [csig, clicks] = ClickDetectTest(sig)
 % function [csig, clicks] = ClickDetect(sig)
-function [csig, clicks] = ClickDetect(sig, threshold, clickwidth)
+function [csig, clicks] = ClickDetect(sig)
+    threshold = 500;
+    clickwidth = 30;
     csig = sig;
 
     sep = 2048;
