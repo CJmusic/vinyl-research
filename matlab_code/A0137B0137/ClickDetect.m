@@ -50,6 +50,7 @@ function [csig, clicks] = ClickDetect(sig)
             end
             msw = msw/ww;
             if  msw >= threshold*ms_seq(i)/10
+                clickdetected = 0;
                 if left == 0
                     left = i + s2;
                     % clicks = [clicks, i + s2]; %%??
@@ -61,7 +62,10 @@ function [csig, clicks] = ClickDetect(sig)
                     for j = (left:i+ww+s2)
                         % disp('REMOVING CLICK')
                         %%detected click?
-                        clicks = [clicks, j];
+                        if clickdetected == 0;
+                            clicks = [clicks, j];
+                            clickdetected = 1;
+                        end
                         csig(j) = (rv*(j-left) + lv*(i+ww+s2-j))/(i+ww+s2-left);
                         %% perhaps I should have a cb2??
                         b2(j) = csig(j).^2;
