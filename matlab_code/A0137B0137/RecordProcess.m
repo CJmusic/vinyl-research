@@ -247,12 +247,12 @@ function output = recordProcess(file)
 
 
                
-                [~, REFS_L] = ClickDetect(refT(:,1),200,20);
-                [~, REFS_R] = ClickDetect(refT(:,2),200,20);
+                [~, REFS_L] = ClickDetect(refT(:,1));
+                [~, REFS_R] = ClickDetect(refT(:,2));
     
                 % need to do the reference here by track 
-                commonclicks_L = CommonClicks(CLICKS_L, REFS_L,lagdiff);
-                commonclicks_R = CommonClicks(CLICKS_R, REFS_R,lagdiff);
+                commonclicks_L = CommonClicks(CLICKS_L, REFS_L);
+                commonclicks_R = CommonClicks(CLICKS_R, REFS_R);
     
                 
                 clicks_L = length(CLICKS_L);
