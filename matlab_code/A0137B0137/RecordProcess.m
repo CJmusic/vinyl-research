@@ -31,35 +31,27 @@ function output = recordProcess(file)
                     offset = 13.8073; 
                 end
 
-                %load clicks too
-        
-                % if exist('REFS_L') == 0 && exist('REFS_R') == 0
-                %     REFS_L = csvread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r28a-REFS_L.txt');
-                %     REFS_R = csvread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r28a-REFS_R.txt');
-                % end
-                %~~~~ MAC ENDS ~~~~%
+         
             end 
             if ispc() == true
                 %~~~~ WINDOWS ~~~~%
                 if file(length(file)-4) == 'a'
                     [ref, fs] = audioread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r028a.wav');
-                    %% Reference 02072019_A0000B000r27a.wav 
-                    offset = 10.625; 
-            
-                    % 031418_A0000B0000r27a.wav as reference timestamps
-     
- 
-                elseif file(length(file)-4) == 'b'
-                    [ref, fs] = audioread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r028b.wav');
-                    %% Reference 02072019_A0000B000r27b.wav 
-                    offset = 13.8073; 
+                    offseta = 10.625; 
+                    [refa, fs] = audioread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r028a.wav');
+                    offseta = 10.625; 
+                    [refb, fs] = audioread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r028b.wav');
+                    offsetb = 13.8073; 
                 end
-        
-                % if exist('REFS_L') == 0 && exist('REFS_R') == 0
-                %     REFS_L = csvread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r28a-REFS_L.txt');
-                %     REFS_R = csvread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r28a-REFS_R.txt');
-                % end
-                %~~~~ WINDOWS END ~~~~%
+                if file(length(file)-4) == 'b'
+                    [ref, fs] = audioread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r028b.wav');
+                    offsetb = 13.8073; 
+                    [refa, fs] = audioread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r028a.wav');
+                    offseta = 10.625; 
+                    [refb, fs] = audioread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r028b.wav');
+                    offsetb = 13.8073; 
+                end
+
             end
         %~~~~~~~~~~~~~~~~~~ Reference info ~~~~~~~~~~~~~~~~%
     
@@ -121,8 +113,9 @@ function output = recordProcess(file)
                                 [900, 938]];% 25. sweep vertical  
                                 % [938, 950]];               
                                 %% dont forget lead in and leadout
+            timestampsa = timestamps + offseta;
+            timestampsb = timestamps + offsetb;
             timestamps = timestamps + offset;
-    
     
     
     
@@ -145,16 +138,12 @@ function output = recordProcess(file)
             refLockout = ref(floor(lockout*96000):end,:);
             %% lineup audio with reference 
             dataLockout = data(floor(950*fs):end,:);
-            disp(strcat('time diff to ref... ', num2str (length(data)/fs - length(ref)/fs)))
+            disp(strcat('time diff to refa... ', num2str (length(data)/fs - length(ref)/fs)))
             disp(strcat('size dataLockout... ', num2str(size(dataLockout))))
             disp(strcat('size refLockout...  ', num2str(size(refLockout))))
             fs
-            % figure(2);
-            % plot(refLockout);
-            % hold on;
-            % plot(dataLockout);
-            % nblahblkah
-            %% lining up audio 
+
+
             [acor_L,lags_L] = xcorr(refLockout(:,1),dataLockout(:,1));
             [M_L,I_L] = max(abs(acor_L));
             lagdiff_L = lags_L(I_L);
@@ -247,12 +236,16 @@ function output = recordProcess(file)
 
 
                
-                [~, REFS_L] = ClickDetect(refT(:,1));
-                [~, REFS_R] = ClickDetect(refT(:,2));
+                [~, REFSa_L] = ClickDetect(refT(:,1));
+                [~, REFSa_R] = ClickDetect(refT(:,2));
+                [~, REFSb_L] = ClickDetect(refT(:,1));
+                [~, REFSb_R] = ClickDetect(refT(:,2));
     
                 % need to do the reference here by track 
-                commonclicks_L = CommonClicks(CLICKS_L, REFS_L);
-                commonclicks_R = CommonClicks(CLICKS_R, REFS_R);
+                commonclicksa_L = CommonClicks(CLICKS_L, REFSa_L);
+                commonclicksa_R = CommonClicks(CLICKS_R, REFSa_R);
+                commonclicksb_L = CommonClicks(CLICKS_L, REFSb_L);
+                commonclicksb_R = CommonClicks(CLICKS_R, REFSb_R);
     
                 
                 clicks_L = length(CLICKS_L);
@@ -315,7 +308,7 @@ function output = recordProcess(file)
                 % stereo_bleed = num2str(stereo_bleed);
     
     
-                output = [output; track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, A_L, A_R, CCIR_L, CCIR_R, clicks_L, clicks_R, commonclicks_L, commonclicks_R  THD_L, THD_R, wow_L, wow_R, stereo_bleed];
+                output = [output; track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, A_L, A_R, CCIR_L, CCIR_R, clicks_L, clicks_R, commonclicksa_L, commonclicksa_R ,commonclicksb_L, commonclicksb_R, THD_L, THD_R, wow_L, wow_R, stereo_bleed];
                 % class(output)
                 % disp('END RECORD PROCESS')
     
