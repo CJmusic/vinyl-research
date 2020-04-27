@@ -37,7 +37,7 @@ function output = recordProcess(file)
                 %~~~~ WINDOWS ~~~~%
                 if file(length(file)-4) == 'a'
                     [ref, fs] = audioread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r028a.wav');
-                    offseta = 10.625; 
+                    offset = 10.625; 
                     [refa, fs] = audioread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r028a.wav');
                     offseta = 10.625; 
                     [refb, fs] = audioread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r028b.wav');
@@ -45,7 +45,7 @@ function output = recordProcess(file)
                 end
                 if file(length(file)-4) == 'b'
                     [ref, fs] = audioread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r028b.wav');
-                    offsetb = 13.8073; 
+                    offset = 13.8073; 
                     [refa, fs] = audioread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r028a.wav');
                     offseta = 10.625; 
                     [refb, fs] = audioread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r028b.wav');

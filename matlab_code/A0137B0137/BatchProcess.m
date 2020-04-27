@@ -105,7 +105,7 @@ for i = (1:length(files)) %%loop through records
     record = filename;
     pressid = filename(1:end-6); % verify these 2 lines MAR 13 2020 
     side = filename(end-4);
-    pressing = filename(1:strfind(filename,string(sscanf(string(filename),'%*[^0123456789]%d')))-1)
+    pressing = 
 
     % side = 'a';
 
