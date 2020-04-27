@@ -19,6 +19,7 @@ disp('~~~~~~~~~~~~TESTING RECORDPROCESS~~~~~~~~~~~~')
 % % ~~~~ WINDOWS ENDS ~~~~ %
 
 
+<<<<<<< HEAD
 
 % ~~~~ MAC ~~~~ %
 addpath('/Users/cz/Code/vinyl-research/matlab_code')
@@ -32,9 +33,24 @@ addpath('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
 folder = ('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
 % addpath('/Volumes/AUDIOBANK/audio_files/duplicaterecordingtest/')
 % folder = ('/Volumes/AUDIOBANK/audio_files/duplicaterecordingtest/')
+=======
+if ismac() == true
+    addpath('/Users/cz/Code/vinyl-research/matlab_code')
+    addpath('/Users/cz/Code/vinyl-research/matlab_code/audio_functions')
+    addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/')    
+    addpath('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
+    folder = ('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
+end 
+if ispc() == true
+    addpath('D:\Code\vinyl-research\matlab_code')
+    addpath('D:\Code\vinyl-research\matlab_code\audio_functions')
+    addpath('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin')    
+    addpath('E:\audio_files\A0137B0137')
+    folder = ('E:\audio_files\A0137B0137')
+end
+>>>>>>> c8a099e08159e5c3d8aa38fd2530f894932356e6
 
 
-% ~~~~ MAC ENDS ~~~~ %
 
 pressingID = 'A0137B0137'
 
@@ -45,8 +61,14 @@ files = dir(fullfile(folder,'*.wav'))
 
 
 % AudioTableHeaders = {'date_recorded', 'pressing', 'top_stamper', 'top_hits', 'bottom_stamper', 'bottom_hits', 'record', 'side', 'track', 'lagdiff', 'normalization_L', 'normalization_R','RMS_L', 'RMS_R', 'A_L', 'A_R', 'CCIR_L', 'CCIR_R','clicks_L', 'clicks_R', 'commonclicks_L', 'commonclicks_R', 'THD_L', 'THD_R', 'wow_L', 'wow_R', 'stereo_bleed'};
+<<<<<<< HEAD
 AudioTableHeaders = {'pressing','record', 'side','track', 'lagdiff', 'normalization_L', 'normalization_R','RMS_L', 'RMS_R', 'A_L', 'A_R', 'CCIR_L', 'CCIR_R','clicks_L', 'clicks_R', 'commonclicks_L', 'commonclicks_R', 'THD_L', 'THD_R', 'wow_L', 'wow_R', 'stereo_bleed'};
 RecordNumbers = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0137B0137/A0137B0137_RecordNumbers.csv')
+=======
+AudioTableHeaders = {'pressing','record', 'side','track', 'lagdiff', 'normalization_L', 'normalization_R','RMS_L', 'RMS_R', 'A_L', 'A_R', 'CCIR_L', 'CCIR_R','clicks_L', 'clicks_R', 'commonclicksa_L', 'commonclicksa_R','commonclicksb_L', 'commonclicksb_R', 'THD_L', 'THD_R', 'wow_L', 'wow_R', 'stereo_bleed'};
+
+
+>>>>>>> c8a099e08159e5c3d8aa38fd2530f894932356e6
 % check if there is already a csv file to append to 
 try
     disp('trying...')
