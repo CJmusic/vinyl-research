@@ -24,6 +24,7 @@ disp('~~~~~~~~~~~~TESTING RECORDPROCESS~~~~~~~~~~~~')
 addpath('/Users/cz/Code/vinyl-research/matlab_code')
 addpath('/Users/cz/Code/vinyl-research/matlab_code/audio_functions')
 addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/')
+addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/Vinyl_Project/data/A0137B0137')
 % file = '/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/003141_A0000B0000r30a.wav'
 
 % folder = '/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/';
@@ -45,8 +46,7 @@ files = dir(fullfile(folder,'*.wav'))
 
 % AudioTableHeaders = {'date_recorded', 'pressing', 'top_stamper', 'top_hits', 'bottom_stamper', 'bottom_hits', 'record', 'side', 'track', 'lagdiff', 'normalization_L', 'normalization_R','RMS_L', 'RMS_R', 'A_L', 'A_R', 'CCIR_L', 'CCIR_R','clicks_L', 'clicks_R', 'commonclicks_L', 'commonclicks_R', 'THD_L', 'THD_R', 'wow_L', 'wow_R', 'stereo_bleed'};
 AudioTableHeaders = {'pressing','record', 'side','track', 'lagdiff', 'normalization_L', 'normalization_R','RMS_L', 'RMS_R', 'A_L', 'A_R', 'CCIR_L', 'CCIR_R','clicks_L', 'clicks_R', 'commonclicks_L', 'commonclicks_R', 'THD_L', 'THD_R', 'wow_L', 'wow_R', 'stereo_bleed'};
-
-
+RecordNumbers = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0137B0137/A0137B0137_RecordNumbers.csv')
 % check if there is already a csv file to append to 
 try
     disp('trying...')
@@ -81,7 +81,7 @@ for i = (1:length(files)) %%loop through records
     file = strcat(files(i).folder,'/',filename)
     % file = strcat(files(i).folder,'\',filename)
 
-    pressid = 0;
+    % pressid = 0; 
     date_recorded = 0;
     pressing = 0;
     top_stamper = 0;
@@ -92,21 +92,22 @@ for i = (1:length(files)) %%loop through records
     side  = 0;
     track  = 0;
     
-    % %STRIP RELEVANT INFO FROM NAME 
-    % '031418_A0000B0000r27a.wav'
-    %  123456789012345678901
+    % PressingNumber 
+    % RecordID 
+    % pressing 
+    % RecordNumber 
 
-    % date_recorded = (filename(1:6));
-    % date_recorded = date_recorded{1};
-    % record = filename(19:20)
-    % record = str2num(filename(19:21));
+    recordid = str2num(filename(1:3));
+
+    % pressid = RecordNumbers.pressing(strcmp(RecordNumbers.RecordID,recordid),:)
+    pressing = RecordNumbers(RecordNumbers.RecordID == recordid, :)
+    pressing = pressing.pressing{1}
 
     record = filename;
-    pressid = filename(1:end-6); % verify these 2 lines MAR 13 2020 
+    % pressid = filename(1:end-6); % verify these 2 lines MAR 13 2020 
     side = filename(end-4);
-    pressing = filename(1:strfind(filename,string(sscanf(string(filename),'%*[^0123456789]%d')))-1)
+    % pressing = filename(1:strfind(filename,string(sscanf(string(filename),'%*[^0123456789]%d')))-1)
 
-    % side = 'a';
 
 
     % top_stamper = filename(8);
