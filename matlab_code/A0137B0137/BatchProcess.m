@@ -25,6 +25,8 @@ if ismac() == true
     addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/')    
     addpath('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
     folder = ('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
+    RecordNumbers = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0137B0137/A0137B0137_RecordNumbers.csv')
+
 end 
 if ispc() == true
     addpath('D:\Code\vinyl-research\matlab_code')
@@ -32,6 +34,8 @@ if ispc() == true
     addpath('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin')    
     addpath('E:\audio_files\A0137B0137')
     folder = ('E:\audio_files\A0137B0137')
+    RecordNumbers = readtable('D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\A0137B0137\A0137B0137_RecordNumbers.csv')
+
 end
 
 
@@ -82,7 +86,7 @@ for i = (1:length(files)) %%loop through records
     file = strcat(files(i).folder,'/',filename)
     % file = strcat(files(i).folder,'\',filename)
 
-    pressid = 0;
+    % pressid = 0; 
     date_recorded = 0;
     pressing = 0;
     top_stamper = 0;
@@ -93,21 +97,22 @@ for i = (1:length(files)) %%loop through records
     side  = 0;
     track  = 0;
     
-    % %STRIP RELEVANT INFO FROM NAME 
-    % '031418_A0000B0000r27a.wav'
-    %  123456789012345678901
+    % PressingNumber 
+    % RecordID 
+    % pressing 
+    % RecordNumber 
 
-    % date_recorded = (filename(1:6));
-    % date_recorded = date_recorded{1};
-    % record = filename(19:20)
-    % record = str2num(filename(19:21));
+    recordid = str2num(filename(1:3));
+
+    % pressid = RecordNumbers.pressing(strcmp(RecordNumbers.RecordID,recordid),:)
+    pressing = RecordNumbers(RecordNumbers.RecordID == recordid, :)
+    pressing = pressing.pressing{1}
 
     record = filename;
-    pressid = filename(1:end-6); % verify these 2 lines MAR 13 2020 
+    % pressid = filename(1:end-6); % verify these 2 lines MAR 13 2020 
     side = filename(end-4);
-    pressing = 
+    % pressing = filename(1:strfind(filename,string(sscanf(string(filename),'%*[^0123456789]%d')))-1)
 
-    % side = 'a';
 
 
     % top_stamper = filename(8);
