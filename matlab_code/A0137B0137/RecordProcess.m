@@ -13,8 +13,8 @@ function output = recordProcess(file)
         %~~~~~~~~~~~~~~~~~ LOAD REFERENCE ~~~~~~~~~~~~~~~~~%
             % try 
             % addpath('/Users/cz/Code/vinyl-research/matlab_code/audio_functions')
-            disp('SIDE')
-            file(length(file)-4)
+            disp('SIDE');
+            file(length(file)-4);
             if ismac() == true
                 % %~~~~ MAC ~~~~%
                 disp('MAC')
@@ -121,13 +121,6 @@ function output = recordProcess(file)
     
     
         %~~~~~~~~~~~~~~~~~    LOAD FILE    ~~~~~~~~~~~~~~~~%
-            % try
-            %     addpath(/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000) %MAC
-            %     [data, fs] = audioread(/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/03141_A0000B0000r30a.wav);
-            % catch 
-            %     addpath(D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000) %WINDOWS 
-            %     [data, fs] = audioread(D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000\03141_A0000B0000r29a.wav);
-            % end
     
             [data, fs] = audioread(file);
             output = {};
@@ -138,7 +131,7 @@ function output = recordProcess(file)
             refLockout = ref(floor(lockout*96000):end,:);
             %% lineup audio with reference 
             dataLockout = data(floor(950*fs):end,:);
-            disp(strcat('time diff to refa... ', num2str (length(data)/fs - length(ref)/fs)))
+            disp(strcat('time diff to ref... ', num2str (length(data)/fs - length(ref)/fs)))
             disp(strcat('size dataLockout... ', num2str(size(dataLockout))))
             disp(strcat('size refLockout...  ', num2str(size(refLockout))))
             fs
@@ -188,6 +181,9 @@ function output = recordProcess(file)
             normalization_L = normalization(1);
             normalization_R = normalization(2);
     
+            disp(strcat('normalization_L... ', num2str(size(normalization_L))))
+            disp(strcat('normalization_R... ', num2str(size(normalization_R))))
+            
             for t = 1:length(signal_names)
                 % for each track we need: 
                 %  - RMS level

@@ -40,7 +40,7 @@ end
 
 
 
-pressingID = 'A0137B0137'
+pressingID = 'A0137B0137';
 
 
 disp(['loading folder...:', folder])
@@ -66,7 +66,7 @@ for i = (1:length(files)) %%loop through records
     % AudioTable.record
     % i
     filename = files(i).name;
-    files(i)
+    files(i);
     % filename = filename(3:end);
     disp(['opening file...:', filename])
     % filename(19:21)
@@ -83,7 +83,7 @@ for i = (1:length(files)) %%loop through records
         continue
     end
     
-    file = strcat(files(i).folder,'/',filename)
+    file = strcat(files(i).folder,'/',filename);
     % file = strcat(files(i).folder,'\',filename)
 
     % pressid = 0; 
@@ -102,52 +102,26 @@ for i = (1:length(files)) %%loop through records
     % pressing 
     % RecordNumber 
 
-    recordid = str2num(filename(1:end - 5))
+    recordid = str2num(filename(1:end - 5));
 
     % pressid = RecordNumbers.pressing(strcmp(RecordNumbers.RecordID,recordid),:)
     pressing = RecordNumbers(RecordNumbers.RecordID == recordid, :);
-    pressing = pressing.pressing{1}
+    pressing = pressing.pressing{1};
 
     record = filename;
-    % pressid = filename(1:end-6); % verify these 2 lines MAR 13 2020 
     side = filename(end-4);
-    % pressing = filename(1:strfind(filename,string(sscanf(string(filename),'%*[^0123456789]%d')))-1)
 
+    disp([strcat('...pressing:', pressing)])
+    disp([strcat('...recordid:', recordid)])
+    disp([strcat('...record:', record)])
+    disp([strcat('...side:', side)])
 
-
-    % top_stamper = filename(8);
-    % pressing = filename(8:17);
-    % top_hits = str2num(filename(9:12)) + record;
-    % bottom_stamper = filename(13);
-    % bottom_hits = str2num(filename(14:17)) + record;
-    % side = filename(22);
-
-    % top_hits = num2str(top_hits);
-    % bottom_hits = num2str(bottom_hits);
-    % record = num2str(record);
-
-    % disp([strcat('...date_recorded:', date_recorded)])
-    % disp([strcat('...pressing:', pressing)])
-    % disp([strcat('...record:', record)])
-    % disp([strcat('...top_stamper:', top_stamper)])
-    % disp([strcat('...top_hits:', top_hits)])
-    % disp([strcat('...bottom_stamper:', bottom_stamper)])
-    % disp([strcat('...bottom_hits:', bottom_hits)])
-    % disp([strcat('...side:', side)])
-
-    % infoCell = {str2num(date_recorded), pressing, top_stamper, str2num(top_hits), bottom_stamper, str2num(bottom_hits), str2num(record), side}; 
-    infoCell = {pressing, record, side}
-    AudioOutput = RecordProcess(file)
-    disp('AUDIOTABLE')
-    pressing
-    AudioTable
-    AudioTable.pressing
+    infoCell = {pressing, record, side};
+    AudioOutput = RecordProcess(file);
 
     infoCell
     % cell2table([infoCell, AudioOutput], 'VariableNames', AudioTableHeaders)
     for j = (1:length(AudioOutput))
-        infoCell
-        cell2table([infoCell, AudioOutput(j,:)], 'VariableNames', AudioTableHeaders)
         AudioTable = [AudioTable; cell2table([infoCell, AudioOutput(j,:)], 'VariableNames', AudioTableHeaders)]
     end
     %append audio output to info cell array
