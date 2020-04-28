@@ -12,7 +12,8 @@ if ismac()
     ('/Volumes/AUDIOBANK/audio_files/A0137B0137/A0137B0137-AudioTable.csv');
     data_folder = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/data/A0137B0137/';
     % AudioTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/A0000B0000-AudioTable.csv') 
-    AudioTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0137B0137/A0137B0137-AudioTableApr14.csv');
+    % AudioTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0137B0137/A0137B0137-AudioTableApr14.csv');
+    AudioTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0137B0137/A0137B0137-AudioTableApr28.csv');
 
 
     SensorTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0137B0137/A0137B0137_SensorTable.csv');
@@ -51,17 +52,19 @@ RecordTable;
 % teststr = 'this is a 1000 test'
 % sscanf(teststr, '%*[^0123456789]%d')
 % disp('INTO FOR LOOP')
-for i = (1:height(AudioTable))
-    % string(AudioTable.record(i));
-    % sscanf(string(AudioTable.record(i)),'%*[^0123456789]%d');
-    % sscanf(string(AudioTable.record(i)),'%da.wav')
-    % sscanf(string(AudioTable.record(i)),'%db.wav')
+% for i = (1:height(AudioTable))
+%     % string(AudioTable.record(i));
+%     % sscanf(string(AudioTable.record(i)),'%*[^0123456789]%d');
+%     % sscanf(string(AudioTable.record(i)),'%da.wav')
+%     % sscanf(string(AudioTable.record(i)),'%db.wav')
+%     str = AudioTable.record(i)
+%     AudioTable.RecordNumber(i)
+%     str = str{1}
+%     AudioTable.RecordNumber(i) = str(1:end-5);%sscanf(string(AudioTable.record(i)),'%*[^0123456789]%d');
 
-    AudioTable.RecordNumber(i) = sscanf(string(AudioTable.record(i)),'%*[^0123456789]%d');
-
-end 
-RecordTable.RecordNumber = string(RecordTable.RecordNumber);
-AudioTable.RecordNumber = string(AudioTable.RecordNumber);
+% end 
+% RecordTable.RecordNumber = string(RecordTable.RecordNumber);
+% AudioTable.RecordNumber = string(AudioTable.RecordNumber);
 
 % RecordTable
 % AudioTable
@@ -508,6 +511,16 @@ grid on; hold on;
 scatter(Tbl.maxExtruderBarrelZone3Temp_F(strcmp(Tbl.track,'quiet')),Tbl.A_R(strcmp(Tbl.track,'quiet'),:),'kx')
 title('RMS vs maxExtruderBarrelZone3Temp')
 saveas(figure(plotnum),'maxExtruderBarrelZone3Temp_Fvs RMS.png')
+
+
+plotnum = plotnum + 1;
+figure(plotnum);  
+scatter(Tbl.PressingNumber(strcmp(Tbl.track,'3150Hz')),Tbl.wow_L(strcmp(Tbl.track,'3150Hz'),:),'ko')
+grid on; hold on;
+scatter(Tbl.PressingNumber(strcmp(Tbl.track,'3150Hz')),Tbl.wow_R(strcmp(Tbl.track,'3150Hz'),:),'kx')
+legend('left channel', 'right channel')
+title('Wow vs Pressing number')
+saveas(figure(plotnum),'Pressing number vs Wow.png')
 
 % function plot_scatter()
 % end
