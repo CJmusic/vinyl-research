@@ -33,7 +33,7 @@ if ispc() == true
     addpath('D:\Code\vinyl-research\matlab_code\audio_functions')
     addpath('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin')    
     addpath('E:\audio_files\A0137B0137')
-    folder = ('E:\audio_files\A0137B0137')
+    folder = ('E:\audio_files\A0137B0137\')
     RecordNumbers = readtable('D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\A0137B0137\A0137B0137_RecordNumbers.csv')
 
 end
@@ -102,10 +102,10 @@ for i = (1:length(files)) %%loop through records
     % pressing 
     % RecordNumber 
 
-    recordid = str2num(filename(1:3));
+    recordid = str2num(filename(1:end - 5))
 
     % pressid = RecordNumbers.pressing(strcmp(RecordNumbers.RecordID,recordid),:)
-    pressing = RecordNumbers(RecordNumbers.RecordID == recordid, :)
+    pressing = RecordNumbers(RecordNumbers.RecordID == recordid, :);
     pressing = pressing.pressing{1}
 
     record = filename;
@@ -136,13 +136,19 @@ for i = (1:length(files)) %%loop through records
     % disp([strcat('...side:', side)])
 
     % infoCell = {str2num(date_recorded), pressing, top_stamper, str2num(top_hits), bottom_stamper, str2num(bottom_hits), str2num(record), side}; 
-    infoCell = {pressing,record, side};
-    AudioOutput = RecordProcess(file);
+    infoCell = {pressing, record, side}
+    AudioOutput = RecordProcess(file)
     disp('AUDIOTABLE')
+    pressing
     AudioTable
+    AudioTable.pressing
+
+    infoCell
     % cell2table([infoCell, AudioOutput], 'VariableNames', AudioTableHeaders)
     for j = (1:length(AudioOutput))
-        AudioTable = [AudioTable; cell2table([infoCell, AudioOutput(j,:)], 'VariableNames', AudioTableHeaders)];
+        infoCell
+        cell2table([infoCell, AudioOutput(j,:)], 'VariableNames', AudioTableHeaders)
+        AudioTable = [AudioTable; cell2table([infoCell, AudioOutput(j,:)], 'VariableNames', AudioTableHeaders)]
     end
     %append audio output to info cell array
     disp('SAVING CSV')
