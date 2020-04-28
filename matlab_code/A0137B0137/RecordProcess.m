@@ -253,11 +253,11 @@ function output = recordProcess(file)
                 Aw = audio_Aweighting(csig(:,1));
                 CCIRw = audio_CCIRweighting(csig(:,1));
     
-                A_L = 20.0*log10(rms(Aw(1,:)));
-                A_R = 20.0*log10(rms(Aw(2,:)));
+                A_L = 20.0*log10(rms_response(Aw(1,:)));
+                A_R = 20.0*log10(rms_response(Aw(2,:)));
     
-                CCIR_L = 20.0*log10(rms(CCIRw(1,:)));
-                CCIR_R = 20.0*log10(rms(CCIRw(2,:)));
+                CCIR_L = 20.0*log10(avg_response(CCIRw(1,:)));
+                CCIR_R = 20.0*log10(avg_response(CCIRw(2,:)));
     
                 %***    DEBUG    ***%
                 % figure(t); grid on;
