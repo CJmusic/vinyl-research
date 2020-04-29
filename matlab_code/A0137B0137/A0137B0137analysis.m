@@ -35,68 +35,6 @@ tracks = unique(AudioTable.track);
 StatNames2 = {'pressing', 'track', 'AvgRMS_L','StdRMS_L', 'AvgRMS_R', 'StdRMS_R','AvgClicks_L', 'StdevClicks_L', 'AvgClicks_R', 'StdevClicks_R', 'AvgWow_L', 'StdWow_L', 'AvgStereobleed', 'StdevStereobleed'};
 SensorStats = cell(0,14);
 
-% AudioStats = {cell2table(cell(0,14)), 'VariableNames', {'pressrun', 'track', 'AvgRMS_L','StdRMS_L', 'AvgRMS_R', 'StdRMS_R','AvgClicks_L', 'StdevClicks_L', 'AvgClicks_R', 'StdevClicks_R', 'AvgWow_L', 'StdWow_L', 'AvgStereobleed', 'StdevStereobleed'}}
-% AudioStats = [pressruns{1}, 'RMS_L', struct2table(datastats(AudioTable.RMS_L(strcmp(AudioTable.pressing,pressruns{1}),:)))]
-RecordTable;
-% for i = (1:height(RecordTable))
-    %find the record number and pressing
-    % RecordTable.RecordNumber = RecordTable.RecordNumber(i);
-    % RecordTable.PressingNumber = RecordTable.PressingNumber(i);
-    %match up the pressing and record number to RecordTable
-    %isolate the number in the filename
-    % num = regexp(str, '\d+', 'match')
-    
-    %match up the pressing number to SensorTable
-
-% end
-% teststr = 'this is a 1000 test'
-% sscanf(teststr, '%*[^0123456789]%d')
-% disp('INTO FOR LOOP')
-% for i = (1:height(AudioTable))
-%     % string(AudioTable.record(i));
-%     % sscanf(string(AudioTable.record(i)),'%*[^0123456789]%d');
-%     % sscanf(string(AudioTable.record(i)),'%da.wav')
-%     % sscanf(string(AudioTable.record(i)),'%db.wav')
-%     str = AudioTable.record(i)
-%     AudioTable.RecordNumber(i)
-%     str = str{1}
-%     AudioTable.RecordNumber(i) = str(1:end-5);%sscanf(string(AudioTable.record(i)),'%*[^0123456789]%d');
-
-% end 
-% RecordTable.RecordNumber = string(RecordTable.RecordNumber);
-% AudioTable.RecordNumber = string(AudioTable.RecordNumber);
-
-% RecordTable
-% AudioTable
-% SensorTable
-% PressingTable = innerjoin(RecordTable, AudioTable);%,'VariableNames', 'RecordNumber')%;, SensorTable)
-% PressingTable = innerjoin(PressingTable, SensorTable);%, 'VariableNames', 'RecordNumber')%;, SensorTable)
-
-% string(AudioTable.record)
-% AudioTable.RecordNumber = varfun(sscanf,AudioTable.record)
-
-
-% AudioTable
-
-% AudioStats.Properties.VariableNames{'Var1'}='pressrun';
-% AudioStats.Properties.VariableNames{'Var2'}='track';
-% AudioStats.Properties.VariableNames{'Var3'}='AvgRMS_L';
-% AudioStats.Properties.VariableNames{'Var4'}='StdRMS_L';
-% AudioStats.Properties.VariableNames{'Var5'}='AvgRMS_R';
-% AudioStats.Properties.VariableNames{'Var6'}='StdRMS_R';
-% AudioStats.Properties.VariableNames{'Var7'}='AvgClicks_L';
-% AudioStats.Properties.VariableNames{'Var8'}='StdevClicks_L';
-% AudioStats.Properties.VariableNames{'Var9'}='AvgClicks_R';
-% AudioStats.Properties.VariableNames{'Var10'}='StdevClicks_R';
-% AudioStats.Properties.VariableNames{'Var11'}='AvgWow_L';
-% AudioStats.Properties.VariableNames{'Var12'}='StdWow_L';
-% AudioStats.Properties.VariableNames{'Var13'}='AvgStereobleed';
-% AudioStats.Properties.VariableNames{'Var14'}='StdevStereobleed';
-
-
-%% sensor stats part
-% AudioStats = {cell2table(cell(0,14)), 'VariableNames', {'pressrun', 'track', 'AvgRMS_L','StdRMS_L', 'AvgRMS_R', 'StdRMS_R','AvgClicks_L', 'StdevClicks_L', 'AvgClicks_R', 'StdevClicks_R', 'AvgWow_L', 'StdWow_L', 'AvgStereobleed', 'StdevStereobleed'}}
-% AudioStats = [pressruns{1}, 'RMS_L', struct2table(datastats(AudioTable.RMS_L(strcmp(AudioTable.pressing,pressruns{1}),:)))]
 StatNames = {'pressing', 'track', 'AvgRMS_L','StdRMS_L', 'AvgRMS_R', 'StdRMS_R', 'AvgA_L', 'StdA_L', 'AvgA_R', 'StdA_R','AvgClicks_L', 'StdevClicks_L', 'AvgClicks_R', 'StdevClicks_R', 'AvgWow_L', 'StdWow_L', 'AvgWow_R', 'StdWow_R', 'AvgStereobleed', 'StdevStereobleed'};
 AudioStats = cell(0,20);
 
@@ -117,14 +55,7 @@ for j = (1:length(tracks))
         
 
         AudioStats = [AudioStats ; cell2table({pressruns{i}, tracks{j}, RMS_L.mean, RMS_L.std, RMS_R.mean, RMS_R.std,A_L.mean, A_L.std, A_R.mean, A_R.std,clicks_L.mean, clicks_L.std, clicks_R.mean, clicks_R.std, wow_L.mean, wow_L.std, wow_R.mean, wow_R.std, stereo_bleed.mean, stereo_bleed.std})];
-        % AudioStats = datastats(AudioTable.RMS_L(strcmp(AudioTable(AudioTable.pressing,pressruns{i}))))
-        % AudioStats(pressruns{i}) = struct(pressruns{i},datastats(AudioTable.RMS_L(strcmp(AudioTable.pressing,pressruns{i}),:)))
-        %  = [pressruns{i}, 'RMS_L',  struct2table(datastats(AudioTable.RMS_L(strcmp(AudioTable.pressing,pressruns{i}),:)))]
-        % AudioStats = [AudioStats; struct2table(datastats(AudioTable.RMS_L(strcmp(AudioTable.pressing,pressruns{i}),:)))]
-        % RMS_R = [AudioStats, datastats(AudioTable.RMS_R(strcmp(AudioTable.pressing,pressruns{i}),:))]
-        % RMS_L = [AudioStats, datastats(AudioTable.RMS_L(strcmp(AudioTable.pressing,pressruns{i}),:))]
-        % RMS_L = [AudioStats, datastats(AudioTable.RMS_L(strcmp(AudioTable.pressing,pressruns{i}),:))]
-        % AudioStats = (AudioStats, AudioStat)
+      
     end
 end
 
@@ -170,7 +101,7 @@ writetable(Tbl,'Tbl.csv')
 
 
 for i = (1:length(Tbl.Properties.VariableNames))
-    disp(string(Tbl.Properties.VariableNames(i)))
+    disp(string(Tbl.Properties.VariableNames(i)));
 end
 
 AudioError.ste = AudioError.std/sqrt(5);
