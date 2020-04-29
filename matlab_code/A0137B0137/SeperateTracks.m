@@ -18,7 +18,12 @@ function output = SeperateTracks(file)
             % addpath('/Users/cz/Code/vinyl-research/matlab_code/audio_functions')
     
             % %~~~~ MAC ~~~~%
-            [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav');
+            if ismac() == true
+                [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav');
+            end
+            if ispc() == true
+                [ref, fs] = audioread(' d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav');
+            end
             %load clicks too
     
             % if exist('REFS_L') == 0 && exist('REFS_R') == 0
