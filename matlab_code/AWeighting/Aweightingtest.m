@@ -1,5 +1,5 @@
 clear all;close all;clc
-set(0,'DefaultLineLineWidth',1.5);
+set(0,'DefaultLineLineWidth',1.0);
 set(0,'DefaultAxesFontSize',12);
 set(0,'DefaultAxesFontWeight','bold')
 set(0,'DefaultAxesLineWidth',1.5)
@@ -27,10 +27,10 @@ CCIRw = audio_CCIRweighting(csig(:,1));
 size(freq)
 size(data_fft)
 
-plot(freq, 20.0*log10(data_fft))
+plot(freq, 20.0*log10(data_fft),'k--')
 hold on; grid on;
-plot(freq, 20.0*log10(data_ffta))  
-plot(freq, 20.0*log10(data_fftccir))  
+plot(freq, 20.0*log10(data_ffta),'k-.')  
+plot(freq, 20.0*log10(data_fftccir),'k-')  
 set(gca, 'XScale', 'log');
 xlabel('Frequency (Hz)')
 ylabel('Level (dB)')  
