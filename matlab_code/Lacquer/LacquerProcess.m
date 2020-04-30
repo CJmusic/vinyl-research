@@ -123,10 +123,104 @@
 %     writetable(AudioTable, strcat(folder,pressingID,'-AudioTable.csv'));
 % end
 
-file = 'd:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/lacquer_recordings/Dec 20 - Test A Part one .wav'
-offset = 12.6;
 
-lacquerprocess(file, offset)
+
+
+if ismac() == true
+    addpath('/Users/cz/Code/vinyl-research/matlab_code')
+    addpath('/Users/cz/Code/vinyl-research/matlab_code/audio_functions')
+    addpath('/Users/cz/Code/vinyl-research/matlab_code/A0137B0137')
+    addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/')    
+    addpath('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
+end 
+if ispc() == true
+    addpath('D:\Code\vinyl-research\matlab_code')
+    addpath('D:\Code\vinyl-research\matlab_code\audio_functions')
+    addpath('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin')    
+    addpath('E:\audio_files\A0137B0137')
+end
+
+% file = 'd:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/lacquer_recordings/Dec 20 - Test A Part one .wav'
+% file = '/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/lacquer_recordings/lacquerpartone.wav'
+% offset = 12.6;
+
+% lacquerprocess(file, offset)
+
+folder = '/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/lacquer_recordings/';
+
+pressingID = 'lacquer';
+
+
+disp(['loading folder...:', folder])
+% files = dir(strcat(folder,'*.wav'))
+files = dir(fullfile(folder,'*.wav'))
+
+
+% AudioTableHeaders = {'date_recorded', 'pressing', 'top_stamper', 'top_hits', 'bottom_stamper', 'bottom_hits', 'record', 'side', 'track', 'lagdiff', 'normalization_L', 'normalization_R','RMS_L', 'RMS_R', 'A_L', 'A_R', 'CCIR_L', 'CCIR_R','clicks_L', 'clicks_R', 'commonclicks_L', 'commonclicks_R', 'THD_L', 'THD_R', 'wow_L', 'wow_R', 'stereo_bleed'};
+AudioTableHeaders = {'pressing','record', 'side','track', 'lagdiff', 'normalization_L', 'normalization_R','RMS_L', 'RMS_R', 'A_L', 'A_R', 'CCIR_L', 'CCIR_R','clicks_L', 'clicks_R', 'commonclicksa_L', 'commonclicksa_R','commonclicksb_L', 'commonclicksb_R', 'THD_L', 'THD_R', 'wow_L', 'wow_R', 'stereo_bleed'};
+
+
+% check if there is already a csv file to append to 
+try
+    disp('trying...')
+    strcat(folder,strcat(pressingID,'-AudioTable.csv'))
+    AudioTable = readtable(strcat(folder,strcat(pressingID,'-AudioTable.csv')))
+catch
+    disp('csv file not found, creating one...')
+    AudioTable  = cell2table(cell(0,length(AudioTableHeaders)), 'VariableNames', AudioTableHeaders);
+end
+for i = (1:length(files)) %%loop through records
+    filename = files(i).name;
+    files(i);
+    disp(['opening file...:', filename])
+
+    
+    if ismember(filename, AudioTable.record)
+        disp('record already processed...')
+        continue
+    end
+    
+    file = strcat(files(i).folder,'/',filename);
+    date_recorded = 0;
+    pressing = 0;
+    top_stamper = 0;
+    top_hits = 0;
+    bottom_stamper = 0;
+    bottom_hits = 0;
+    record = 0;
+    side  = 0;
+    track  = 0;
+    
+    recordid = 0;
+    record = filename;
+    pressing = 'lacquer'
+
+    disp([strcat('...pressing:', pressing)])
+    disp([strcat('...recordid:', recordid)])
+    disp([strcat('...record:', record)])
+    disp([strcat('...side:', side)])
+
+    infoCell = {pressing, record, side};
+    if i == 1;
+        AudioOutput = lacquerprocess(file, 12.6);
+    end
+    if i == 2; 
+        AudioOutput = lacquerprocess(file, 1);
+    end
+
+    AudioOutput
+    infoCell
+    length(AudioOutput)
+    sz = size(AudioOutput)
+    loop = sz(1)
+    % cell2table([infoCell, AudioOutput], 'VariableNames', AudioTableHeaders)
+    for j = (1:loop)
+        AudioTable = [AudioTable; cell2table([infoCell, AudioOutput(j,:)], 'VariableNames', AudioTableHeaders)];
+    end
+    %append audio output to info cell array
+    disp('SAVING CSV')
+    writetable(AudioTable, strcat(folder,pressingID,'-AudioTable.csv'));
+end
 
 
 function output = lacquerprocess(file, offset)
@@ -200,9 +294,11 @@ function output = lacquerprocess(file, offset)
     
         %~~~~~~~~~~~~~~~~~~~~~ LINE UP ~~~~~~~~~~~~~~~~~~~~~~~~% 
     
-            lagdiff = offset*fs;
+            lagdiff = -offset*fs;
             timedata = (0:length(data)-1)/fs  + lagdiff/fs;
-    
+            lagdiff
+            length(timedata)
+            size(timestamps)
            
     
         %~~~~~~~~~~~~~~~~~~~~ NORMALIZATION ~~~~~~~~~~~~~~~~~~~~%
@@ -255,12 +351,12 @@ function output = lacquerprocess(file, offset)
                     sig = data(1 : floor(timestamps(1,1)*fs) - lagdiff,:);
                     sigtime = timedata(1 : floor(timestamps(1,1)*fs) - lagdiff);  
     
-                    refT = ref(1 : floor(timestamps(1,1)*fs) - lagdiff,:);
+                    % refT = ref(1 : floor(timestamps(1,1)*fs) - lagdiff,:);
                 elseif t == length(signal_names)
                     sig = data(floor(timestamps(end,2)*fs) - lagdiff : length(data),:);
                     sigtime = timedata(floor(timestamps(end,2)*fs) - lagdiff : length(data));  
     
-                    refT = ref(floor(timestamps(end,2)*fs) - lagdiff : length(ref),:);
+                    % refT = ref(floor(timestamps(end,2)*fs) - lagdiff : length(ref),:);
                 else
                     sig = data(floor(timestamps(t-1,1)*fs) - lagdiff : floor(timestamps(t-1,2)*fs) - lagdiff,:);
                     sigtime = timedata(floor(timestamps(t-1,1)*fs) - lagdiff :floor(timestamps(t-1,2)*fs) - lagdiff);  
@@ -268,7 +364,7 @@ function output = lacquerprocess(file, offset)
                     % floor(timestamps(t-1,1)*fs) - lagdiff
                     % floor(timestamps(t-1,2)*fs) - lagdiff
     
-                    refT = ref(floor(timestamps(t-1,1)*fs) - lagdiff : floor(timestamps(t-1,2)*fs) - lagdiff,:);
+                    % refT = ref(floor(timestamps(t-1,1)*fs) - lagdiff : floor(timestamps(t-1,2)*fs) - lagdiff,:);
                 end
                 
                 [csig(:,1), CLICKS_L] = ClickDetect(sig(:,1));
@@ -277,16 +373,21 @@ function output = lacquerprocess(file, offset)
 
 
                
-                [~, REFSa_L] = ClickDetect(refT(:,1));
-                [~, REFSa_R] = ClickDetect(refT(:,2));
-                [~, REFSb_L] = ClickDetect(refT(:,1));
-                [~, REFSb_R] = ClickDetect(refT(:,2));
+                % [~, REFSa_L] = ClickDetect(refT(:,1));
+                % [~, REFSa_R] = ClickDetect(refT(:,2));
+                % [~, REFSb_L] = ClickDetect(refT(:,1));
+                % [~, REFSb_R] = ClickDetect(refT(:,2));
     
-                % need to do the reference here by track 
-                commonclicksa_L = CommonClicks(CLICKS_L, REFSa_L);
-                commonclicksa_R = CommonClicks(CLICKS_R, REFSa_R);
-                commonclicksb_L = CommonClicks(CLICKS_L, REFSb_L);
-                commonclicksb_R = CommonClicks(CLICKS_R, REFSb_R);
+                % % need to do the reference here by track 
+                % commonclicksa_L = CommonClicks(CLICKS_L, REFSa_L);
+                % commonclicksa_R = CommonClicks(CLICKS_R, REFSa_R);
+                % commonclicksb_L = CommonClicks(CLICKS_L, REFSb_L);
+                % commonclicksb_R = CommonClicks(CLICKS_R, REFSb_R);
+
+                commonclicksa_L = 0;
+                commonclicksa_R = 0;    
+                commonclicksb_L = 0;
+                commonclicksb_R = 0;
     
                 
                 clicks_L = length(CLICKS_L);
