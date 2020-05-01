@@ -26,6 +26,8 @@ end
 
 
 csig = record1('sweep');
+% csig = csig(0.1*96000:30.5*96000,:);
+figure(2)
 plot(csig);
 
 Aw = audio_Aweighting(csig(:,1));
@@ -38,6 +40,7 @@ CCIRw = audio_CCIRweighting(csig(:,1));
 size(freq)
 size(data_fft)
 
+figure(1)
 plot(freq, 20.0*log10(data_fft))
 hold on; grid on;
 plot(freq, 20.0*log10(data_ffta))  

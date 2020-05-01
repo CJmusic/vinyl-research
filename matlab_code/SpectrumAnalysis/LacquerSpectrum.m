@@ -12,14 +12,18 @@ if ismac() == true
     addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/')    
     addpath('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
     addpath('/Users/cz/Code/vinyl-research/matlab_code/Lacquer')
+    file = '/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/lacquer_recordings/lacquerpartone-offset126.wav';
+
 end 
 if ispc() == true
     addpath('D:\Code\vinyl-research\matlab_code')
     addpath('D:\Code\vinyl-research\matlab_code\audio_functions')
     addpath('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin')    
     addpath('E:\audio_files\A0137B0137')
+    addpath('D:\Code\vinyl-research\matlab_code\Lacquer')
+    file = 'd:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/lacquer_recordings/lacquerpartone-offset126.wav';
+
 end
-file = '/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/lacquer_recordings/lacquerpartone-offset126.wav';
 record1 = SeperateLacquer(file, 12.6);
 % record2 = SeperateLacquer('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/testing/maxbarrelzones3a.wav');
 
