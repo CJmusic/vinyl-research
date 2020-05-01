@@ -24,23 +24,7 @@ function output = SeperateTracks(file)
             if ispc() == true
                 [ref, fs] = audioread(' d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav');
             end
-            %load clicks too
-    
-            % if exist('REFS_L') == 0 && exist('REFS_R') == 0
-            %     REFS_L = csvread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r28a-REFS_L.txt');
-            %     REFS_R = csvread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r28a-REFS_R.txt');
-            % end
-            %~~~~ MAC ENDS ~~~~%
-    
-    
-            %~~~~ WINDOWS ~~~~%
-            % [ref, fs] = audioread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r028a.wav');
-    
-            % if exist('REFS_L') == 0 && exist('REFS_R') == 0
-            %     REFS_L = csvread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r28a-REFS_L.txt');
-            %     REFS_R = csvread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r28a-REFS_R.txt');
-            % end
-            %~~~~ WINDOWS END ~~~~%
+            
     
         %~~~~~~~~~~~~~~~~~~ Reference info ~~~~~~~~~~~~~~~~%
     
