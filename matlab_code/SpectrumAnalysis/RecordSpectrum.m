@@ -25,16 +25,16 @@ end
 
 
 
-csig = record1('transition');
+csig = record1('sweep');
 plot(csig);
 
 Aw = audio_Aweighting(csig(:,1));
 CCIRw = audio_CCIRweighting(csig(:,1));
 
 
-[data_fft, freq] = audio_spectrum(csig, 96000, 5*96000, 2^16);
-[data_ffta, freq] = audio_spectrum(Aw, 96000, 5*96000, 2^16);
-[data_fftccir, freq] = audio_spectrum(CCIRw, 96000, 5*96000, 2^16);
+[data_fft, freq] = audio_spectrum(csig, 96000, 1, length(csig)-1);
+[data_ffta, freq] = audio_spectrum(Aw, 96000, 1, length(csig)-1);
+[data_fftccir, freq] = audio_spectrum(CCIRw, 96000, 1, length(csig)-1);
 size(freq)
 size(data_fft)
 
