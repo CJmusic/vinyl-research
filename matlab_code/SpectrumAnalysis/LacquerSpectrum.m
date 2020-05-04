@@ -39,12 +39,13 @@ size(data_fft)
 
 plot(freq, 20.0*log10(data_fft))
 hold on; grid on;
-plot(freq, 20.0*log10(data_ffta))  
-plot(freq, 20.0*log10(data_fftccir))  
+% plot(freq, 20.0*log10(data_ffta))  
+% plot(freq, 20.0*log10(data_fftccir))
+% legend('non-weighted','A-weighted','CCIR-weighted')
 set(gca, 'XScale', 'log');
+title('Lacquer Frequency Response Sweep')
 xlabel('Frequency (Hz)')
 ylabel('Level (dB)')  
-legend('non-weighted','A-weighted','CCIR-weighted')
 
 
 A_L = 20.0*log10(rms_response(Aw(1,:)));

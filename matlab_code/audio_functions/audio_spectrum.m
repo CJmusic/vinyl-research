@@ -1,5 +1,6 @@
 
 function [data_fft, freq_fft] = audio_spectrum(data, fs, start_sam, n_sam);
+    data = hanning(length(data)).*data;
     disp('inside audio_spectrum')
     freq_fft = fs*(0:(n_sam/2-2))/n_sam;
     data_fft = fft(data(start_sam:start_sam+n_sam, :))/n_sam;

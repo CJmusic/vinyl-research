@@ -116,13 +116,38 @@ function output = SeperateLacquer(file, offset)
         
                 sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
                 sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
-                sigRMS=rms(sig);
+                % sigRMS=rms(sig);
+                % normalization=sqrt(2)*sigRMS*40/7; %digital value of peak level
+                % data(:,1)=data(:,1)/normalization(1);% now normalized to 40cm/s peak    
+                % data(:,2)=data(:,2)/normalization(2);% now normalized to 40cm/s peak 
+                % normalization_L = normalization(1);
+                % normalization_R = normalization(2);
+    
+                L = 2^16;
+        
+                seg = sig(floor(length(sig)/2) - L/2:floor(length(sig)/2) + L/2 - 1,:);
+            
+                [b,a]=butter(2,2*100/fs,'high');% not really necessary with fft filter
+                seg(:,1) = filter(b,a,seg(:,1));
+                seg(:,2) = filter(b,a,seg(:,2));
+            
+                win = flattopwin(L);
+                seg = seg.*win;
+                fftsigL = fft(seg(:,1))/L;
+                fftsigL = fftsigL(1:L/2+1);
+                fftsigR = fft(seg(:,2))/L;
+                fftsigR = fftsigR(1:L/2+1);
+                fftfreq = fs*(0:(L/2))/L;
+                
+                peak_L = max(real(fftsigL));
+                peak_R = max(real(fftsigR))
+    
+                sigRMS= [peak_L, peak_R]
                 normalization=sqrt(2)*sigRMS*40/7; %digital value of peak level
                 data(:,1)=data(:,1)/normalization(1);% now normalized to 40cm/s peak    
                 data(:,2)=data(:,2)/normalization(2);% now normalized to 40cm/s peak 
                 normalization_L = normalization(1);
                 normalization_R = normalization(2);
-    
                 signals = cell(length(signal_names),1);
                 for t = (1:length(signal_names))
                     track_name = signal_names{t};

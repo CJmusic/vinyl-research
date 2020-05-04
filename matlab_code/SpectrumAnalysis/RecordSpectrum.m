@@ -25,7 +25,7 @@ end
 
 
 
-csig = record1('sweep');
+csig = record1('1kHz');
 plot(csig);
 
 Aw = audio_Aweighting(csig(:,1));
@@ -41,11 +41,12 @@ size(data_fft)
 plot(freq, 20.0*log10(data_fft))
 hold on; grid on;
 plot(freq, 20.0*log10(data_ffta))  
-plot(freq, 20.0*log10(data_fftccir))  
+plot(freq, 20.0*log10(data_fftccir)) 
+legend('non-weighted','A-weighted','CCIR-weighted')
+title('Record Frequency Response 1 kHz')
 set(gca, 'XScale', 'log');
 xlabel('Frequency (Hz)')
 ylabel('Level (dB)')  
-legend('non-weighted','A-weighted','CCIR-weighted')
 
 
 A_L = 20.0*log10(rms_response(Aw(1,:)));
