@@ -11,7 +11,8 @@ if ismac() == true
     addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/')    
     addpath('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
     addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/')
-    reference = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/03141_A0000B0000r28a.wav');
+    reference = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav');
+    [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav');
 
 
 end 
@@ -29,12 +30,54 @@ track_names = keys(reference) ;
 tracks = values(reference) ;
 for i = 1:length(reference)
     figure(i)
+    time = (1:length(tracks{i}))/96000;
+    plot(time, tracks{i})
     grid on
-    plot(tracks{i})
     title(track_names{i})
 
 
 end
+offset = 15; 
+timestamps =       [[0, 61],    % 1. 1 kHz
+                    [61,91],    % 2. 10 kHz
+                    [91,121],   % 3. 100 Hz
+                    [121,159],  % 4. sweep
+                    [159,180],  % 5. quiet
+                    [180,245],  % 6. 3150 Hz
+                    [245,267],  % 7. 1 kHz left
+                    [267, 302], % 8. sweep left
+                    [302, 325], % 9. 1 kHz right
+                    [325, 361], % 10. sweep right
+                    [361, 383], % 11. 1 kHz vertical
+                    [383, 418], % 12. sweep vertical
+                    [418, 515], % 13. transition
+                    [515, 578], % 14. 1 kHz
+                    [578, 608], % 15. 10 kHz
+                    [608, 639], % 16. 100 Hz
+                    [639, 676], % 17. sweep
+                    [676, 698], % 18. quiet
+                    [698, 760], % 19. 3150 Hz
+                    [760, 785], % 20. 1 kHz left
+                    [785, 820], % 21. sweep left
+                    [820, 842], % 22. 1 kHz right
+                    [842, 878], % 23. sweep right
+                    [878, 900], % 24. 1 kHz vertical
+                    [900, 938]];% 25. sweep vertical  
+                    % [938, 950]];               
+                    %% dont forget lead in and leadout
+timestamps = timestamps + offset;
+
+figure(100)
+time_ref = (1:length(ref))/fs;
+plot(time_ref, ref)
+for xi = 1:length(timestamps)
+        x1 = (timestamps(xi));
+        figure(100); hold on; 
+        line([x1 x1], get(gca, 'ylim'),'Color', 'red','LineStyle', '--');
+        grid on;
+end
+
+
 
 
 

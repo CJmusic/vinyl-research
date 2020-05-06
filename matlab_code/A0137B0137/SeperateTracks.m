@@ -59,14 +59,10 @@ function output = SeperateTracks(file)
                             'sweepV2',   % 26
                             'leadout'    % 27
             };
-            %% Reference 02072019_A0000B000r27a.wav 
             offset = 10.625; 
             transition = 517.375; 
-            % lockoutClipped = 953.746;
-            % lagdiff = []
     
-            % 031418_A0000B0000r27a.wav as reference timestamps
-            offset = 10.625; 
+            offset = 15; 
             timestamps =       [[0, 61],    % 1. 1 kHz
                                 [61,91],    % 2. 10 kHz
                                 [91,121],   % 3. 100 Hz
