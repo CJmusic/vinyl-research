@@ -21,14 +21,13 @@ function output = recordProcess(file)
                 if file(length(file)-4) == 'a'
                     [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); 
                     %% Reference 02072019_A0000B000r27a.wav 
-                    offset = 10.625; 
+                    offset = 15; 
                  
  
                 elseif file(length(file)-4) == 'b'
-                    disp('PC')
                     [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028b.wav'); 
                     %% Reference 02072019_A0000B000r27b.wav 
-                    offset = 13.8073; 
+                    offset = 13.1; 
                 end
 
          
@@ -36,18 +35,18 @@ function output = recordProcess(file)
             if ispc() == true
                 %~~~~ WINDOWS ~~~~%
                 if file(length(file)-4) == 'a'
-                    [ref, fs] = audioread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r028a.wav');
-                    offset = 10.625; 
+                    % [ref, fs] = audioread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r028a.wav');
+                    % offset = 10.625; 
                     [refa, fs] = audioread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r028a.wav');
-                    offseta = 10.625; 
+                    offseta = 15; 
                     [refb, fs] = audioread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r028b.wav');
                     offsetb = 13.8073; 
                 end
                 if file(length(file)-4) == 'b'
-                    [ref, fs] = audioread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r028b.wav');
-                    offset = 13.8073; 
+                    % [ref, fs] = audioread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r028b.wav');
+                    % offset = 13.8073; 
                     [refa, fs] = audioread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r028a.wav');
-                    offseta = 10.625; 
+                    offseta = 15; 
                     [refb, fs] = audioread('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r028b.wav');
                     offsetb = 13.8073; 
                 end
@@ -185,7 +184,7 @@ function output = recordProcess(file)
             disp(strcat('normalization_R... ', num2str(size(normalization_R))))
             
 
-            SeperateTracks
+            % SeperateTracks
 
             for t = 1:length(signal_names)
                 % for each track we need: 

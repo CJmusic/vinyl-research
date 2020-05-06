@@ -11,8 +11,8 @@ if ismac() == true
     addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/')    
     addpath('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
     addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/')
-    reference = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav');
-    [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav');
+    reference = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r027a.wav');
+    [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r027a.wav');
 
 
 end 
@@ -20,7 +20,7 @@ if ispc() == true
     addpath('D:\Code\vinyl-research\matlab_code\A0137B0137')
     addpath('D:\Code\vinyl-research\matlab_code\')
     addpath('D:\Code\vinyl-research\matlab_code\audio_functions\')
-    reference = SeperateTracks('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r028a.wav');
+    reference = SeperateTracks('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin\A0000B0000\031419_A0000B0000r027b.wav');
 
 end
 
@@ -37,7 +37,8 @@ for i = 1:length(reference)
 
 
 end
-offset = 15; 
+% offset = 15; %28a
+offset = 13.1; %28b
 timestamps =       [[0, 61],    % 1. 1 kHz
                     [61,91],    % 2. 10 kHz
                     [91,121],   % 3. 100 Hz

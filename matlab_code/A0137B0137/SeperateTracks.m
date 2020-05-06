@@ -19,10 +19,18 @@ function output = SeperateTracks(file)
     
             % %~~~~ MAC ~~~~%
             if ismac() == true
-                [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav');
-            end
+                if file(length(file)-4) == 'a'
+                    [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); 
+                    %% Reference 02072019_A0000B000r27a.wav 
+                    offset = 15; 
+                elseif file(length(file)-4) == 'b'
+                    disp('PC')
+                    [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028b.wav'); 
+                    %% Reference 02072019_A0000B000r27b.wav 
+                    offset = 13.1;
+                end
             if ispc() == true
-                [ref, fs] = audioread(' d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav');
+                [ref, fs] = audioread('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav');
             end
             
     
@@ -59,10 +67,11 @@ function output = SeperateTracks(file)
                             'sweepV2',   % 26
                             'leadout'    % 27
             };
-            offset = 10.625; 
-            transition = 517.375; 
+            % offset = 10.625; 
+            % transition = 517.375; 
     
-            offset = 15; 
+            % offset = 15; %28a
+            % % offset = 13.5; %28b
             timestamps =       [[0, 61],    % 1. 1 kHz
                                 [61,91],    % 2. 10 kHz
                                 [91,121],   % 3. 100 Hz
