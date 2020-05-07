@@ -8,6 +8,9 @@ addpath('/Users/cz/Code/vinyl-research/matlab_code')
 addpath('/Users/cz/Code/vinyl-research/matlab_code/audio_functions')
 addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/')
 addpath('/Users/cz/Code/vinyl-research/matlab_code/from_John/Sept 26')
+addpath('/Users/cz/Code/vinyl-research/matlab_code/Lacquer')
+addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/lacquer_recordings/')
+addpath('/Users/cz/Code/vinyl-research/matlab_code/A0137B0137')
 % file = '/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/003141_A0000B0000r30a.wav'
 
 % folder = '/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/';
@@ -18,8 +21,9 @@ folder = ('/Volumes/AUDIOBANK/audio_files/')
 % addpath('/Volumes/AUDIOBANK/audio_files/duplicatefiletest/')
 % folder = ('/Volumes/AUDIOBANK/audio_files/multiplerecordstest/')
 % folder = ('/Volumes/AUDIOBANK/audio_files/multiplerecordstest/')
-folder = ('/Volumes/AUDIOBANK/audio_files/A01B01test/')
-folder = ('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/A0000B0000_misc/wow/')
+% folder = ('/Volumes/AUDIOBANK/audio_files/A01B01test/')
+% folder = ('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/A0000B0000_misc/wow/')
+folder = '/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/lacquer_recordings/lacquerwow/';
 
 
 
@@ -39,10 +43,22 @@ for i = (1:length(files)) %%loop through records
     % tracks=SeperateTracks(file);
     % rev4_1 = tracks('3150Hz');
 
+
     filename = files(i).name
     file= strcat(files(i).folder,'/',filename)
     [rev4_1, fs] = audioread(file);
-    % rev4_1 = rev4_1(30*fs:45*fs,:);
+    rev4_1 = rev4_1(30*fs:45*fs,:);
+
+    % if contains(filename,'lacquerpartone-offset126.wav');
+    %     lacquer = LacquerProcess(filename, 12.6);
+    %     rev4_1 = lacquer{'3150Hz'};
+    % end
+
+    % if contains(filename, 'lacquerpartthree-offset000.wav');
+    %     lacquer = LacquerProcess(filename, 0);
+    %     rev4_1 = lacquer{'3150Hz'}  ;  
+    % end
+
 
     fs = 96000;
     ts = length(rev4_1)*(1/4)/fs;
@@ -182,6 +198,15 @@ for i = (1:length(files)) %%loop through records
     xlabel('Time[sec]')
     ylabel('Freq[Hz]')
     title('zoom weighted WFfreq')
+
+    figure(90 + i)
+    plot(tseg,WFfreq,'k')
+    grid on; hold on;
+    axis([0 5 ylim])
+    xlabel('Time[sec]')
+    ylabel('Freq[Hz]')
+    % title('zoom weighted WFfreq')
+
     %----------------characterize W&F result-----------------
     freqrms=rms_response(freq);
     disp(['rms unweighted freq variation: ' num2str(freqrms)])
