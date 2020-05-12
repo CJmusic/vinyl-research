@@ -13,7 +13,8 @@ if ismac()
     data_folder = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/data/A0137B0137/';
     % AudioTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/A0000B0000-AudioTable.csv') 
     % AudioTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0137B0137/A0137B0137-AudioTableApr14.csv');
-    AudioTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0137B0137/A0137B0137-AudioTableApr28.csv');
+    % AudioTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0137B0137/A0137B0137-AudioTableApr28.csv');
+    AudioTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0137B0137/A0137B0137-AudioTableMay12.csv');
 
 
     SensorTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0137B0137/A0137B0137_SensorTable.csv');
@@ -129,28 +130,25 @@ figure(plotnum); grid on; hold on;
 tb1 = AudioError(strcmp(AudioError.track,'quiet'),:)
 tb1 = AudioError(strcmp(tb1.measurement,'RMS_L'),:)
 tb1.ste
-
-%% PLOT BAR GRAPH WITH COLORS 
-H = bar([Tbl.AvgA_L(strcmp(AudioStats.track,'quiet'),:), Tbl.AvgA_R(strcmp(AudioStats.track,'quiet'),:)], 'LineWidth', 2)
-AudioStats
-% H = bar([mean(AudioStats{:,2:end},2), mean(AudioStats{:,2:end},2)], 'LineWidth', 2)
-
+figure(plotnum); grid on; hold on;
+H = bar([Tbl.A_L(strcmp(AudioStats.track,'quiet'),:), Tbl.AvgA_R(strcmp(AudioStats.track,'quiet'),:)], 'LineWidth', 2)
 H(1).FaceColor = [0.6 0.6 0.6];
 H(2).FaceColor = [.9 .9 .9];
 
 %% TWO SETS OF ERROR BARS FOR L AND R CHANNELS
 numcats = (height(AudioStats(strcmp(AudioStats.track,'quiet'),:)))
-% avg(AudioStats.AvgRMS_L(strcmp(AudioStats.track,'quiet'),:),AudioStats.AvgRMS_L(strcmp(AudioStats.track,'quiet2'),:),AudioStats.AvgRMS_L(strcmp(AudioStats.track,'quiet'),:))
-
 er = errorbar(double(categorical(pressruns)),AudioStats.AvgA_L(strcmp(AudioStats.track,'quiet'),:), ones(numcats,1)*tb1.ste, ones(numcats,1)*tb1.ste,'k','LineWidth', 2);   
 er.LineStyle = 'none';
 numcats = (height(AudioStats(strcmp(AudioStats.track,'quiet'),:)))
 er = errorbar(double(categorical(pressruns)),AudioStats.AvgA_R(strcmp(AudioStats.track,'quiet'),:), ones(numcats,1)*tb1.ste, ones(numcats,1)*tb1.ste,'k','LineWidth', 2);   
 er.LineStyle = 'none';
 
-%% SET X VALUES
-xticklabels(pressruns)
+set(gca,'xticklabel',pressruns)
+ax=gca;
+ax.FontSize=8;
+ax.XTick = (1:length(pressruns))   %THIS WAY, YOU SET HOW MANY XTICKS YOU WANT FOR YOUR XTICKLABELS
 xtickangle(45)
+
 
 legend('RMS Left Channel', 'RMS Right Channel')
 xlabel('number of records')
@@ -175,10 +173,12 @@ numcats = (height(AudioStats(strcmp(AudioStats.track,'3150Hz'),:)))
 er = errorbar(double(categorical(pressruns)),AudioStats.AvgWow_R(strcmp(AudioStats.track,'3150Hz'),:), ones(numcats,1)*tb1.ste, ones(numcats,1)*tb1.ste,'k','LineWidth', 2);   
 er.LineStyle = 'none';
 
-%% SET X VALUES
-xticklabels(pressruns)
+set(gca,'xticklabel',pressruns)
+ax=gca;
+ax.FontSize=8;
+ax.XTick = (1:length(pressruns))   %THIS WAY, YOU SET HOW MANY XTICKS YOU WANT FOR YOUR XTICKLABELS
 xtickangle(45)
-er.LineStyle = 'none';
+
 
 legend('Wow Left Channel', 'Wow Right Channel')
 xlabel('number of records')
@@ -202,9 +202,16 @@ er = errorbar(double(categorical(pressruns)),AudioStats.StdWow_R(strcmp(AudioSta
 er.LineStyle = 'none';
 
 %% SET X VALUES
-xticklabels(pressruns)
+% xticklabels(pressruns)
+% xtickangle(45)
+% er.LineStyle = 'none';
+
+set(gca,'xticklabel',pressruns)
+ax=gca;
+ax.FontSize=8;
+ax.XTick = (1:length(pressruns))   %THIS WAY, YOU SET HOW MANY XTICKS YOU WANT FOR YOUR XTICKLABELS
 xtickangle(45)
-er.LineStyle = 'none';
+
 
 legend('Wow Left Channel', 'Wow Right Channel')
 xlabel('number of records')
@@ -238,9 +245,15 @@ er = errorbar(double(categorical(pressruns)),AudioStats.AvgStereobleed(strcmp(Au
 er.LineStyle = 'none';
 
 %% SET X VALUES
-xticklabels(pressruns)
+% xticklabels(pressruns)
+% xtickangle(45)
+% er.LineStyle = 'none';
+
+set(gca,'xticklabel',pressruns)
+ax=gca;
+ax.FontSize=8;
+ax.XTick = (1:length(pressruns))   %THIS WAY, YOU SET HOW MANY XTICKS YOU WANT FOR YOUR XTICKLABELS
 xtickangle(45)
-er.LineStyle = 'none';
 
 xlabel('number of records')
 ylabel('stereo bleed [dB]')
@@ -266,6 +279,13 @@ er.LineStyle = 'none';
 xticklabels(pressruns)
 xtickangle(45)
 er.LineStyle = 'none';
+
+% set(gca,'xticklabel',pressruns)
+set(gca,'xticklabel',pressruns)
+ax=gca;
+ax.FontSize=8;
+ax.XTick = (1:length(pressruns))   %THIS WAY, YOU SET HOW MANY XTICKS YOU WANT FOR YOUR XTICKLABELS
+xtickangle(45)
 
 xlabel('number of records')
 ylabel('number of clicks')
