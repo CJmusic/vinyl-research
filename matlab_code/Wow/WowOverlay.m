@@ -47,6 +47,7 @@ for i = (1:length(files)) %%loop through records
     filename = files(i).name
     file= strcat(files(i).folder,'/',filename)
     [rev4_1, fs] = audioread(file);
+    rev4_1 = Aweighting()
     rev4_1 = rev4_1(30*fs:45*fs,:);
 
     % if contains(filename,'lacquerpartone-offset126.wav');

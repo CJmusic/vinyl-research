@@ -1,4 +1,5 @@
-%A-weighting digital filter
+
+\%A-weighting digital filter
 clear all;close all;clc
 set(0,'DefaultLineLineWidth',1.5);
 set(0,'DefaultAxesFontSize',12);
