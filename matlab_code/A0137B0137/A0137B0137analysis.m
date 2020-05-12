@@ -25,7 +25,8 @@ if ispc()
     addpath('D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\A0000B0000\')
     addpath('D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\')
     data_folder = 'D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\A0137B0137\';
-    AudioTable = readtable('D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\A0137B0137\A0137B0137-AudioTableApr28.csv');
+    % AudioTable = readtable('D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\A0137B0137\A0137B0137-AudioTableApr28.csv');
+    AudioTable = readtable('E:\audio_files\A0137B0137\A0137B0137-AudioTable.csv');
 
 
     SensorTable = readtable('D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\A0137B0137\A0137B0137_SensorTable.csv');

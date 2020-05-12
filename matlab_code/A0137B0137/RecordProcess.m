@@ -114,8 +114,16 @@ function output = recordProcess(file)
                                 %% dont forget lead in and leadout
             timestampsa = timestamps + offseta;
             timestampsb = timestamps + offsetb;
-            timestamps = timestamps + offset;
-    
+            % timestamps = timestamps + offset;
+            if file(length(file)-4) == 'a'
+                timestamps = timestampsa;
+                ref = refa;
+            end
+            if file(length(file)-4) == 'b'
+                timestamps = timestampsa;
+                ref = refb;
+            end
+
     
     
     
