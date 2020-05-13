@@ -434,59 +434,87 @@ title(' Wow vs minMouldSteamOutBottom')
 saveas(figure(plotnum),'minMouldSteamOutBottom vs Wow.png')
 
 plotnum = plotnum + 1;
-figure(plotnum); 
-scatter(Tbl.minMouldSteamOutBottom_F(strcmp(Tbl.track,'1kHzL')),Tbl.stereo_bleed(strcmp(Tbl.track,'1kHzL'),:),'ko')
-grid on; hold on;
-title('stereo bleed vs minMouldSteamOutBottom')
-saveas(figure(plotnum),'minMouldSteamOutBottom vs stereo bleed.png')
+plot_scatter(plotnum, Tbl.minMouldSteamOutBottom_F(strcmp(Tbl.track,'1kHzL')),Tbl.stereo_bleed(strcmp(Tbl.track,'1kHzL'),:),'minMouldSteamOutBottom vs stereo bleed')
+
+% figure(plotnum); 
+% scatter(Tbl.minMouldSteamOutBottom_F(strcmp(Tbl.track,'1kHzL')),Tbl.stereo_bleed(strcmp(Tbl.track,'1kHzL'),:),'ko')
+% grid on; hold on;
+% title('stereo bleed vs minMouldSteamOutBottom')
+% saveas(figure(plotnum),'minMouldSteamOutBottom vs stereo bleed.png')
 
 
 plotnum = plotnum + 1;
-figure(plotnum);  
-scatter(Tbl.PressingNumber(strcmp(Tbl.track,'quiet')),Tbl.A_L(strcmp(Tbl.track,'quiet'),:),'ko')
-grid on; hold on;
-scatter(Tbl.PressingNumber(strcmp(Tbl.track,'quiet')),Tbl.A_R(strcmp(Tbl.track,'quiet'),:),'kx')
-title('RMS vs Pressing number')
-saveas(figure(plotnum),'Pressing number vs RMS.png')
+plot_scatter2(plotnum,Tbl.PressingNumber(strcmp(Tbl.track,'quiet')),Tbl.A_L(strcmp(Tbl.track,'quiet'),:),Tbl.PressingNumber(strcmp(Tbl.track,'quiet')),Tbl.A_R(strcmp(Tbl.track,'quiet'),:),'RMS vs Pressing number')
+
+% figure(plotnum);  
+% scatter(Tbl.PressingNumber(strcmp(Tbl.track,'quiet')),Tbl.A_L(strcmp(Tbl.track,'quiet'),:),'ko')
+% grid on; hold on;
+% scatter(Tbl.PressingNumber(strcmp(Tbl.track,'quiet')),Tbl.A_R(strcmp(Tbl.track,'quiet'),:),'kx')
+% title('RMS vs Pressing number')
+% saveas(figure(plotnum),'Pressing number vs RMS.png')
+
+plotnum = plotnum + 1;
+plot_scatter2(plotnum,Tbl.PressingNumber(strcmp(Tbl.track,'quiet')),Tbl.clicks_L(strcmp(Tbl.track,'quiet')), Tbl.PressingNumber(strcmp(Tbl.track,'quiet')),Tbl.clicks_R(strcmp(Tbl.track,'quiet'),:),'Clicks vs Pressing number')
+
+% figure(plotnum);  
+% scatter(Tbl.PressingNumber(strcmp(Tbl.track,'quiet')),Tbl.clicks_L(strcmp(Tbl.track,'quiet'),:),'ko')
+% grid on; hold on;
+% scatter(Tbl.PressingNumber(strcmp(Tbl.track,'quiet')),Tbl.clicks_R(strcmp(Tbl.track,'quiet'),:),'kx')
+% legend('left channel', 'right channel')
+% title('Clicks vs Pressing number')
+% saveas(figure(plotnum),'Pressing number vs Clicks.png')
 
 plotnum = plotnum + 1;
 figure(plotnum);  
-scatter(Tbl.PressingNumber(strcmp(Tbl.track,'quiet')),Tbl.clicks_L(strcmp(Tbl.track,'quiet'),:),'ko')
-grid on; hold on;
-scatter(Tbl.PressingNumber(strcmp(Tbl.track,'quiet')),Tbl.clicks_R(strcmp(Tbl.track,'quiet'),:),'kx')
-legend('left channel', 'right channel')
-title('Clicks vs Pressing number')
-saveas(figure(plotnum),'Pressing number vs Clicks.png')
+plot_scatter2(plotnum,Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet')),Tbl.clicks_L(strcmp(Tbl.track,'quiet'),:),Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet')),Tbl.clicks_R(strcmp(Tbl.track,'quiet'),:),'clicks vs minMouldSteamIn')
+
+% scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet')),Tbl.clicks_L(strcmp(Tbl.track,'quiet'),:),'ko')
+% grid on; hold on;
+% scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet')),Tbl.clicks_R(strcmp(Tbl.track,'quiet'),:),'kx')
+% legend('left channel', 'right channel')
+% title('clicks vs minMouldSteamIn')
+% saveas(figure(plotnum),'minMouldSteamIn_F vs Clicks.png')
 
 plotnum = plotnum + 1;
-figure(plotnum);  
-scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet')),Tbl.clicks_L(strcmp(Tbl.track,'quiet'),:),'ko')
-grid on; hold on;
-scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet')),Tbl.clicks_R(strcmp(Tbl.track,'quiet'),:),'kx')
-legend('left channel', 'right channel')
-title('clicks vs minMouldSteamIn')
-saveas(figure(plotnum),'minMouldSteamIn_F vs Clicks.png')
+plot_scatter2(plotnum,Tbl.PressingNumber(Tbl.maxExtruderBarrelZone3Temp_F(strcmp(Tbl.track,'quiet'))),Tbl.A_L(strcmp(Tbl.track)),Tbl.maxExtruderBarrelZone3Temp_F(strcmp(Tbl.track,'quiet')),Tbl.A_R(strcmp(Tbl.track,'quiet'),:),'RMS vs maxExtruderBarrelZone3Temp')
 
-plotnum = plotnum + 1;
-figure(plotnum);  
-scatter(Tbl.maxExtruderBarrelZone3Temp_F(strcmp(Tbl.track,'quiet')),Tbl.A_L(strcmp(Tbl.track,'quiet'),:),'ko')
-grid on; hold on;
-scatter(Tbl.maxExtruderBarrelZone3Temp_F(strcmp(Tbl.track,'quiet')),Tbl.A_R(strcmp(Tbl.track,'quiet'),:),'kx')
-title('RMS vs maxExtruderBarrelZone3Temp')
-saveas(figure(plotnum),'maxExtruderBarrelZone3Temp_Fvs RMS.png')
+% figure(plotnum);  
+% scatter(Tbl.maxExtruderBarrelZone3Temp_F(strcmp(Tbl.track,'quiet')),Tbl.A_L(strcmp(Tbl.track,'quiet'),:),'ko')
+% grid on; hold on;
+% scatter(Tbl.maxExtruderBarrelZone3Temp_F(strcmp(Tbl.track,'quiet')),Tbl.A_R(strcmp(Tbl.track,'quiet'),:),'kx')
+% title('RMS vs maxExtruderBarrelZone3Temp')
+% saveas(figure(plotnum),'maxExtruderBarrelZone3Temp_Fvs RMS.png')
 
 
 plotnum = plotnum + 1;
-figure(plotnum);  
-scatter(Tbl.PressingNumber(strcmp(Tbl.track,'3150Hz')),Tbl.wow_L(strcmp(Tbl.track,'3150Hz'),:),'ko')
-grid on; hold on;
-scatter(Tbl.PressingNumber(strcmp(Tbl.track,'3150Hz')),Tbl.wow_R(strcmp(Tbl.track,'3150Hz'),:),'kx')
-legend('left channel', 'right channel')
-title('Wow vs Pressing number')
-saveas(figure(plotnum),'Pressing number vs Wow.png')
+plot_scatter2(plotnum,Tbl.PressingNumber(strcmp(Tbl.track,'3150Hz')),Tbl.wow_L(strcmp(Tbl.track,'3150Hz'),:), Tbl.PressingNumber(strcmp(Tbl.track,'3150Hz')),Tbl.wow_R(strcmp(Tbl.track,'3150Hz'),:),'Wow vs PressingNumber')
+% figure(plotnum);  
+% scatter(Tbl.PressingNumber(strcmp(Tbl.track,'3150Hz')),Tbl.wow_L(strcmp(Tbl.track,'3150Hz'),:),'ko')
+% grid on; hold on;
+% scatter(Tbl.PressingNumber(strcmp(Tbl.track,'3150Hz')),Tbl.wow_R(strcmp(Tbl.track,'3150Hz'),:),'kx')
+% legend('left channel', 'right channel')
+% title('Wow vs Pressing number')
+% saveas(figure(plotnum),'Pressing number vs Wow.png')
 
-% function plot_scatter()
-% end
+function plot_scatter2(plotnum, x1, y1, x2, y2, titlestring)
+    figure(plotnum);  
+    scatter(x1,y1,'ko')
+    grid on; hold on;
+    scatter(x2,y2,'kx')
+    legend('left channel', 'right channel')
+    title(titlestring)
+    saveas(figure(plotnum), titlestring)
+end
+
+function plot_scatter(plotnum, x1, y1, titlestring)
+    figure(plotnum);  
+    scatter(x1,y1,'ko')
+    grid on; hold on;
+    legend('left channel', 'right channel')
+    title(titlestring)
+    saveas(figure(plotnum), titlestring)
+end
+
 
 % function plot_histogram(Tbl,plotnum,track,measurement)
 
