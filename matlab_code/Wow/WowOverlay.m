@@ -47,7 +47,7 @@ for i = (1:length(files)) %%loop through records
     filename = files(i).name
     file= strcat(files(i).folder,'/',filename)
     [rev4_1, fs] = audioread(file);
-    rev4_1 = Aweighting()
+    % rev4_1 = Aweighting()
     rev4_1 = rev4_1(30*fs:45*fs,:);
 
     % if contains(filename,'lacquerpartone-offset126.wav');
@@ -207,6 +207,16 @@ for i = (1:length(files)) %%loop through records
     xlabel('Time[sec]')
     ylabel('Freq[Hz]')
     % title('zoom weighted WFfreq')
+
+    figure(1000)
+    size(WFfreq)
+    nfft = pow2(floor(log2(length(WFfreq))))
+
+    [data_fft, freq_fft] = audio_spectrum(WFfreq, fsn, 1, nfft);
+    size(data_fft)
+    audio_plotspectrum(freq_fft, data_fft, '') 
+    xlabel('Time[sec]')
+    ylabel('Freq[Hz]')
 
     %----------------characterize W&F result-----------------
     freqrms=rms_response(freq);

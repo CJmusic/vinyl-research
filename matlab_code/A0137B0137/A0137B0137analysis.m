@@ -91,14 +91,17 @@ AudioStats.Properties.VariableNames{'Var20'}='StdevStereobleed';
 
 % AudioStats
 Tbl = outerjoin(RecordTable, SensorTable);%,'VariableNames', 'RecordNumber')%;, SensorTable)
+% Tbl = innerjoin(RecordTable, SensorTable);%,'VariableNames', 'RecordNumber')%;, SensorTable)
 % Tbl
 Tbl.Properties.VariableNames([1]) = {'PressingNumber'};
 
 Tbl = outerjoin(Tbl, AudioTable);%, 'VariableNames', 'RecordNumber')%;, SensorTable)
+% Tbl = innerjoin(Tbl, AudioTable);%, 'VariableNames', 'RecordNumber')%;, SensorTable)
 % Tbl
 Tbl.Properties.VariableNames([1]) = {'PressingNumber'};
 
 Tbl = outerjoin(Tbl, AudioStats);
+% Tbl = innerjoin(Tbl, AudioStats);
 % writetable(Tbl,'Tbl.csv')
 
 Tbl.Properties.VariableNames([1]) = {'PressingNumber'};
@@ -127,20 +130,20 @@ plotnum = plotnum + 1;
 figure(plotnum); grid on; hold on;
 
 %% PULL ERROR VALUE
-tb1 = AudioError(strcmp(AudioError.track,'quiet'),:)
+tb1 = AudioError(strcmp(AudioError.track,'quiet2'),:)
 tb1 = AudioError(strcmp(tb1.measurement,'RMS_L'),:)
-tb1.ste
+% tb1.ste
 figure(plotnum); grid on; hold on;
-H = bar([Tbl.A_L(strcmp(AudioStats.track,'quiet'),:), Tbl.AvgA_R(strcmp(AudioStats.track,'quiet'),:)], 'LineWidth', 2)
+H = bar([Tbl.AvgRMS_L(strcmp(AudioStats.track,'quiet2'),:), Tbl.AvgRMS_R(strcmp(AudioStats.track,'quiet2'),:)], 'LineWidth', 2)
 H(1).FaceColor = [0.6 0.6 0.6];
 H(2).FaceColor = [.9 .9 .9];
 
 %% TWO SETS OF ERROR BARS FOR L AND R CHANNELS
-numcats = (height(AudioStats(strcmp(AudioStats.track,'quiet'),:)))
-er = errorbar(double(categorical(pressruns)),AudioStats.AvgA_L(strcmp(AudioStats.track,'quiet'),:), ones(numcats,1)*tb1.ste, ones(numcats,1)*tb1.ste,'k','LineWidth', 2);   
+numcats = (height(AudioStats(strcmp(AudioStats.track,'quiet2'),:)))
+er = errorbar(double(categorical(pressruns)),AudioStats.AvgRMS_L(strcmp(AudioStats.track,'quiet2'),:), ones(numcats,1)*tb1.ste, ones(numcats,1)*tb1.ste,'k','LineWidth', 2);   
 er.LineStyle = 'none';
-numcats = (height(AudioStats(strcmp(AudioStats.track,'quiet'),:)))
-er = errorbar(double(categorical(pressruns)),AudioStats.AvgA_R(strcmp(AudioStats.track,'quiet'),:), ones(numcats,1)*tb1.ste, ones(numcats,1)*tb1.ste,'k','LineWidth', 2);   
+numcats = (height(AudioStats(strcmp(AudioStats.track,'quiet2'),:)))
+er = errorbar(double(categorical(pressruns)),AudioStats.AvgRMS_R(strcmp(AudioStats.track,'quiet2'),:), ones(numcats,1)*tb1.ste, ones(numcats,1)*tb1.ste,'k','LineWidth', 2);   
 er.LineStyle = 'none';
 
 set(gca,'xticklabel',pressruns)
@@ -293,12 +296,13 @@ title('Number of clicks in quiet tracks')
 saveas(figure(plotnum),'clicksquiet.png')
 
 
-Tbl.A_L
+% Tbl.A_L
+% Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet'))
 plotnum = plotnum + 1;
 figure(plotnum);  
-scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet')),Tbl.A_L(strcmp(Tbl.track,'quiet'),:),'ko')
+plot(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet')),Tbl.A_L(strcmp(Tbl.track,'quiet'),:),'ko')
 grid on; hold on;
-scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet')),Tbl.A_R(strcmp(Tbl.track,'quiet'),:),'kx')
+plot(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet')),Tbl.A_R(strcmp(Tbl.track,'quiet'),:),'kx')
 title('RMS vs minMouldSteamIn')
 saveas(figure(plotnum),'minMouldSteamIn vs RMS.png')
 
