@@ -32,8 +32,10 @@ close all; %clear all; %clc;
 % % ~~~~ WINDOWS ENDS ~~~~ %
 % % ~~~~ MAC  ~~~~ %
 
-addpath('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
-folder = ('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
+% addpath('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
+% folder = ('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
+addpath('E:\audio_files\A0000B0000\')
+folder = ('E:\audio_files\A0000B0000\')
 files = dir(strcat(folder,'*.wav'))
 % % ~~~~ MAC ENDS ~~~~ %
 
