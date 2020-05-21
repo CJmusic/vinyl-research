@@ -18,7 +18,7 @@ if ismac()
 
 
     SensorTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0137B0137/A0137B0137_SensorTable.csv');
-    RecordTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0137B0137/A0137B0137_RecordTable.csv');
+    RecordTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0137B0137/A0137B0137_RecordNumbers.csv');
     AudioError = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/A0000B0000_AudioStats.csv')
     SensorError = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/A0000B0000_SensorStats.csv')
 end
@@ -38,6 +38,14 @@ end
 
 pressruns = unique(AudioTable.pressing);
 tracks = unique(AudioTable.track);
+
+% head(AudioTable)
+AudioTable.RecordID = erase(AudioTable.record,'.wav');
+AudioTable.RecordID = erase(AudioTable.RecordID,'a');
+AudioTable.RecordID = erase(AudioTable.RecordID,'b');
+AudioTable.RecordID =  cellfun(@str2num, AudioTable.RecordID);
+
+% AudioTable.RecordID = cell(AudioTable.RecordID);
 
 % AudioStats = struct(pressruns)
 
@@ -89,28 +97,37 @@ AudioStats.Properties.VariableNames{'Var18'}='StdWow_R';
 AudioStats.Properties.VariableNames{'Var19'}='AvgStereobleed';
 AudioStats.Properties.VariableNames{'Var20'}='StdevStereobleed';
 
+
+
 % AudioStats
 Tbl = outerjoin(RecordTable, SensorTable);%,'VariableNames', 'RecordNumber')%;, SensorTable)
 % Tbl = innerjoin(RecordTable, SensorTable);%,'VariableNames', 'RecordNumber')%;, SensorTable)
 % Tbl
 Tbl.Properties.VariableNames([1]) = {'PressingNumber'};
+writetable(Tbl,'Tbl1.csv')
+
+head(Tbl)
+head(AudioTable)
 
 Tbl = outerjoin(Tbl, AudioTable);%, 'VariableNames', 'RecordNumber')%;, SensorTable)
 % Tbl = innerjoin(Tbl, AudioTable);%, 'VariableNames', 'RecordNumber')%;, SensorTable)
 % Tbl
 Tbl.Properties.VariableNames([1]) = {'PressingNumber'};
+writetable(Tbl,'Tbl2.csv')
 
 Tbl = outerjoin(Tbl, AudioStats);
 % Tbl = innerjoin(Tbl, AudioStats);
 % writetable(Tbl,'Tbl.csv')
+writetable(Tbl,'Tbl3.csv')
 
 Tbl.Properties.VariableNames([1]) = {'PressingNumber'};
 Tbl.Properties.VariableNames([33]) = {'track'};
 
 
-Tbl = Tbl(strcmp(Tbl.side,'a'),:);
-writetable(Tbl,'Tbl.csv')
+% Tbl = Tbl(strcmp(Tbl.side,'a'),:);
+writetable(Tbl,'Tbl4.csv')
 
+Tbl = Tbl(strcmp(Tbl.side,'a'),:);
 
 for i = (1:length(Tbl.Properties.VariableNames))
     disp(string(Tbl.Properties.VariableNames(i)));
@@ -300,6 +317,40 @@ saveas(figure(plotnum),'clicksquiet.png')
 % Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet'))
 plotnum = plotnum + 1;
 figure(plotnum);  
+plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet')), Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet')),'ko')
+grid on; hold on;
+plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet')), Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet')),'kx')
+title('PressingNumber vs minMouldSteamIn')
+saveas(figure(plotnum),'PressingNumber vs minMouldSteamIn.png')
+
+plotnum = plotnum + 1;
+figure(plotnum);  
+plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet')), Tbl.RMS_L(strcmp(Tbl.track,'quiet')),'ko')
+grid on; hold on;
+plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet')), Tbl.RMS_R(strcmp(Tbl.track,'quiet')),'kx')
+title('PressingNumber vs RMS')
+saveas(figure(plotnum),'PressingNumber vs RMS.png')
+
+
+plotnum = plotnum + 1;
+figure(plotnum);  
+plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet')), Tbl.A_L(strcmp(Tbl.track,'quiet')),'ko')
+grid on; hold on;
+plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet')), Tbl.A_R(strcmp(Tbl.track,'quiet')),'kx')
+title('PressingNumber vs ARMS')
+saveas(figure(plotnum),'PressingNumber vs ARMS.png')
+
+plotnum = plotnum + 1;
+figure(plotnum);  
+plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet')), Tbl.clicks_L(strcmp(Tbl.track,'quiet')),'ko')
+grid on; hold on;
+plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet')), Tbl.clicks_R(strcmp(Tbl.track,'quiet')),'kx')
+title('PressingNumber vs Clicks')
+saveas(figure(plotnum),'PressingNumber vs Clicks.png')
+
+
+plotnum = plotnum + 1;
+figure(plotnum);  
 plot(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet')),Tbl.A_L(strcmp(Tbl.track,'quiet'),:),'ko')
 grid on; hold on;
 plot(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet')),Tbl.A_R(strcmp(Tbl.track,'quiet'),:),'kx')
@@ -476,7 +527,7 @@ plot_scatter2(plotnum,Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet')),Tbl.click
 % saveas(figure(plotnum),'minMouldSteamIn_F vs Clicks.png')
 
 plotnum = plotnum + 1;
-plot_scatter2(plotnum,Tbl.PressingNumber(Tbl.maxExtruderBarrelZone3Temp_F(strcmp(Tbl.track,'quiet'))),Tbl.A_L(strcmp(Tbl.track)),Tbl.maxExtruderBarrelZone3Temp_F(strcmp(Tbl.track,'quiet')),Tbl.A_R(strcmp(Tbl.track,'quiet'),:),'RMS vs maxExtruderBarrelZone3Temp')
+plot_scatter2(plotnum,Tbl.maxExtruderBarrelZone3Temp_F(strcmp(Tbl.track,'quiet')),Tbl.A_L(strcmp(Tbl.track,'quiet')),Tbl.maxExtruderBarrelZone3Temp_F(strcmp(Tbl.track,'quiet')),Tbl.A_R(strcmp(Tbl.track,'quiet'),:),'maxExtruderBarrelZone3Temp_Fvs RMS.png')
 
 % figure(plotnum);  
 % scatter(Tbl.maxExtruderBarrelZone3Temp_F(strcmp(Tbl.track,'quiet')),Tbl.A_L(strcmp(Tbl.track,'quiet'),:),'ko')

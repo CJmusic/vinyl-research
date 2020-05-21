@@ -56,7 +56,7 @@ function output = SeperateTracks(file)
                             '1kHz2',     % 15
                             '10kHz2',    % 16
                             '100Hz2',    % 17
-                            'freqsweep2',% 18
+                            'sweep2',% 18
                             'quiet2',    % 19
                             '3150Hz2',   % 20
                             '1kHzL2',    % 21
@@ -196,7 +196,8 @@ function output = SeperateTracks(file)
             peak_R = max(real(fftsigR))
 
             sigRMS= [peak_L, peak_R]
-            normalization=sqrt(2)*sigRMS*40/7; %digital value of peak level
+            % normalization=sqrt(2)*sigRMS*40/7; %digital value of peak level
+            normalization= sigRMS; %digital value of peak level
             data(:,1)=data(:,1)/normalization(1);% now normalized to 40cm/s peak    
             data(:,2)=data(:,2)/normalization(2);% now normalized to 40cm/s peak 
             normalization_L = normalization(1);

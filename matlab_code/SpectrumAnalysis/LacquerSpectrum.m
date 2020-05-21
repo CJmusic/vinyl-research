@@ -12,6 +12,8 @@ if ismac() == true
     addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/')    
     addpath('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
     addpath('/Users/cz/Code/vinyl-research/matlab_code/Lacquer')
+    addpath('/Users/cz/Code/vinyl-research/matlab_code/from_John')
+
     file = '/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/lacquer_recordings/lacquerpartone-offset126.wav';
 
 end 
@@ -36,12 +38,13 @@ CCIRw = audio_CCIRweighting(csig(:,1));
 
 
 [data_fft, freq] = audio_spectrum(csig, 96000, 1, length(csig)-1);
-[data_ffta, freq] = audio_spectrum(Aw, 96000, 1, length(csig)-1);
-[data_fftccir, freq] = audio_spectrum(CCIRw, 96000, 1, length(csig)-1);
+% [data_ffta, freq] = audio_spectrum(Aw, 96000, 1, length(csig)-1);
+% [data_fftccir, freq] = audio_spectrum(CCIRw, 96000, 1, length(csig)-1);
 size(freq)
 size(data_fft)
+data_fft = pwroctsmooth(data_fft,0.33);
 
-plot(freq, 20.0*log10(data_fft))
+plot(freq, 20.0*log10(data_fft),'k')
 hold on; grid on;
 % plot(freq, 20.0*log10(data_ffta))  
 % plot(freq, 20.0*log10(data_fftccir))

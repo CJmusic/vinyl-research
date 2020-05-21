@@ -1,4 +1,4 @@
-function[smoothed_tf]=pwroctsmooth(freq_tf,octave_width)
+function [smoothed_tf]=pwroctsmooth(freq_tf,octave_width)
 % function[smoothed_tf]=pwroctsmooth(freq_tf,octave_width)
 % fractional-octave pwr preserving smoothing. Max width<2.0_
 % freq_tf is complex double sided spectrum, length N, conjugate even
@@ -32,4 +32,5 @@ smoothed_tf(floor(N/2)+2:N)=conj(smoothed_tf(ceil(N/2):-1:2));% ensure conjugate
 if N/2==floor(N/2) % even N
   smoothed_tf(N/2+1)=abs(smoothed_tf(N/2+1));% Nyquist should be real
 end
+
 % smoothed_tf=complex(smoothed_tf);
