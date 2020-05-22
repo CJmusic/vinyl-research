@@ -10,8 +10,6 @@ c = gray(20);
 if ismac()
     addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0137B0137/')
     ('/Volumes/AUDIOBANK/audio_files/A0137B0137/A0137B0137-AudioTable.csv');
-    addpath('/Users/cz/Code/vinyl-research/matlab_code/Common')
-
     data_folder = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/data/A0137B0137/';
     % AudioTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/A0000B0000-AudioTable.csv') 
     % AudioTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0137B0137/A0137B0137-AudioTableApr14.csv');
@@ -27,8 +25,6 @@ end
 if ispc()
     addpath('D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\A0000B0000\')
     addpath('D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\')
-    addpath('D:\Code\vinyl-research\matlab_code\Common')
-
     data_folder = 'D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\A0137B0137\';
     % AudioTable = readtable('D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\A0137B0137\A0137B0137-AudioTableApr28.csv');
     AudioTable = readtable('E:\audio_files\A0137B0137\A0137B0137-AudioTable.csv');

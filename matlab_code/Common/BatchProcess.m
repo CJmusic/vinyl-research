@@ -21,7 +21,6 @@ disp('~~~~~~~~~~~~TESTING RECORDPROCESS~~~~~~~~~~~~')
 
 if ismac() == true
     addpath('/Users/cz/Code/vinyl-research/matlab_code')
-    addpath('/Users/cz/Code/vinyl-research/matlab_code/Common')
     addpath('/Users/cz/Code/vinyl-research/matlab_code/audio_functions')
     addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/')    
     addpath('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
@@ -31,7 +30,6 @@ if ismac() == true
 end 
 if ispc() == true
     addpath('D:\Code\vinyl-research\matlab_code')
-    addpath('D:\Code\vinyl-research\matlab_code\Common')
     addpath('D:\Code\vinyl-research\matlab_code\audio_functions')
     addpath('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin')    
     addpath('E:\audio_files\A0137B0137')

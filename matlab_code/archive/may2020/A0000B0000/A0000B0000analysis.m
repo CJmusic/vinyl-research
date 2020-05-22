@@ -10,14 +10,12 @@ set(0,'DefaultAxesLineWidth',1.5)
 
 if ismac()
     addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/')
-    addpath('/Users/cz/Code/vinyl-research/matlab_code/Common')
     data_folder = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/data/A0000B0000/'
     AudioTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/A0000B0000_AudioTable.csv') 
     AudioStats = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/A0000B0000_AudioStats.csv')
     SensorTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/A0000B0000_SensorTable.csv')
 end
 if ispc()
-    addpath('D:\Code\vinyl-research\matlab_code\Common')
     addpath('D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\A0000B0000\')
     data_folder = 'D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\A0000B0000\'
     AudioTable = readtable('D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\A0000B0000\A0000B0000-AudioTable.csv');

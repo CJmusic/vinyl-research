@@ -32,29 +32,9 @@ close all; %clear all; %clc;
 % % ~~~~ WINDOWS ENDS ~~~~ %
 % % ~~~~ MAC  ~~~~ %
 
-
-if ismac() == true
-    addpath('/Users/cz/Code/vinyl-research/matlab_code')
-    addpath('/Users/cz/Code/vinyl-research/matlab_code/Common')
-    addpath('/Users/cz/Code/vinyl-research/matlab_code/Wow')
-    addpath('/Users/cz/Code/vinyl-research/matlab_code/audio_functions')
-    addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/')    
-    addpath('/Volumes/AUDIOBANK/audio_files/A0000B0000/')
-    folder = ('/Volumes/AUDIOBANK/audio_files/A0000B0000/')
-
-
-end 
-if ispc() == true
-    addpath('D:\Code\vinyl-research\matlab_code')
-    addpath('D:\Code\vinyl-research\matlab_code\Common')
-
-    addpath('D:\Code\vinyl-research\matlab_code\audio_functions')
-    addpath('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin')    
-    addpath('E:\audio_files\A0000B0000')
-    folder = ('E:\audio_files\A0000B0000\')
-
-end
-files = dir(strcat(folder,'*.wav'));
+addpath('/Volumes/AUDIOBANK/audio_files/A0000B0000/')
+folder = ('/Volumes/AUDIOBANK/audio_files/A0000B0000/')
+files = dir(strcat(folder,'*.wav'))
 % % ~~~~ MAC ENDS ~~~~ %
 
 % addpath('E:\audio_files\A0000B0000\')
@@ -116,15 +96,15 @@ for i = (1:length(files))
     track  = 0;
     
     %STRIP RELEVANT INFO FROM NAME 
-    date_recorded = (filename(1:6));
+    % date_recorded = (filename(1:6));
     % date_recorded = date_recorded{1};
-    record = str2num(filename(19:21));
-    % record = filename;
-    top_stamper = filename(8);
-    pressing = filename(8:16);
-    top_hits = str2num(filename(9:12)) + record;
-    bottom_stamper = filename(13);
-    bottom_hits = str2num(filename(14:17)) + record;
+    % record = str2num(filename(19:21));
+    record = filename;
+    % top_stamper = filename(8);
+    % pressing = filename(8:16);
+    % top_hits = str2num(filename(9:12)) + record;
+    % bottom_stamper = filename(13);
+    % bottom_hits = str2num(filename(14:17)) + record;
     side = filename(end-4);
 
     top_hits = num2str(top_hits);
