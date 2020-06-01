@@ -23,6 +23,7 @@ if ismac()
     RecordTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0137B0137/A0137B0137_RecordNumbers.csv');
     AudioError = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/A0000B0000_AudioStats.csv')
     SensorError = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/A0000B0000_SensorStats.csv')
+    SettingsTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0137B0137/A0137B0137_SettingsTable.csv')
 end
 if ispc()
     addpath('D:\OneDrive - University of Waterloo\School\Vinyl_Project\data\A0000B0000\')
@@ -123,13 +124,20 @@ Tbl = outerjoin(Tbl, AudioStats);
 % Tbl = innerjoin(Tbl, AudioStats);
 % writetable(Tbl,'Tbl.csv')
 writetable(Tbl,'Tbl3.csv')
+Tbl.Properties.VariableNames([3]) = {'pressing'};
+
+
+Tbl = outerjoin(Tbl, SettingsTable);
+% Tbl = innerjoin(Tbl, AudioStats);
+% writetable(Tbl,'Tbl.csv')
+writetable(Tbl,'Tbl4.csv')
+
 
 Tbl.Properties.VariableNames([1]) = {'PressingNumber'};
 Tbl.Properties.VariableNames([33]) = {'track'};
 
 
 % Tbl = Tbl(strcmp(Tbl.side,'a'),:);
-writetable(Tbl,'Tbl4.csv')
 
 Tbl = Tbl(strcmp(Tbl.side,'a'),:);
 
