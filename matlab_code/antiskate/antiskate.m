@@ -31,7 +31,7 @@ for i = (1:length(files))
     [data, fs] = audioread(file); 
     data(:,1)=data(:,1)/normalization(1);% now normalized to 40cm/s peak    
     data(:,2)=data(:,2)/normalization(2);% now normalized to 40cm/s peak 
-
+    data = data((1/3)*fs:(2/3)*fs,:);
     data = audio_Aweighting(data);
 
     % data = data(5*fs:15*fs);
@@ -49,17 +49,19 @@ for i = (1:length(files))
     f=[0:Nt/2]*fs/Nt;
 
     
-    figure(1); hold on
-    length(f)
-    floor(length(Rev4)/2 + 1)
-    length(Rev4(1:length(Rev4)/2+1))
-    audio_plotspectrum(f,Rev4(1:length(Rev4)/2+1),'Spectrum')
-    grid on;
-    figure(100)
-    subplot(2,2,i)
-    audio_plotspectrum(f,Rev4(1:length(Rev4)/2+1),num2str(as))
-    xlim([1,22000])
-    grid on;
+    % figure(1); hold on
+    % length(f)
+    % floor(length(Rev4)/2 + 1)
+    % length(Rev4(1:length(Rev4)/2+1))
+    % audio_plotspectrum(f,Rev4(1:length(Rev4)/2+1),'Spectrum')
+    % grid on;
+    % figure(100)
+    % subplot(2,2,i)
+    % audio_plotspectrum(f,Rev4(1:length(Rev4)/2+1),num2str(as))
+    % xlim([1,22000])
+    % grid on;
+
+
     % plot(tseg,freq)
     % grid on; hold on;
     % axis([0 5 ylim])
@@ -68,15 +70,41 @@ for i = (1:length(files))
     % title('zoom freq(t)')
 
 end
+RMS_L = audio_Aweighting(RMS_L)
+RMS_R = audio_Aweighting(RMS_R)
+
 RMS_L = 20*log10(RMS_L)
 RMS_R = 20*log10(RMS_R)
 
 RMS = [RMS_L; RMS_R];
 RMS = RMS.';
 
-RMS
-AS
 
+
+RMS2_L = [];
+RMS2_R = [];
+AS2 = [];
+for i = (1:2:length(AS)-1);
+    i
+    AS2 = [AS2, AS(i+1)];
+end
+AS = AS2
+
+for i = (1:2:length(RMS)-1);
+    i
+    RMS2_L = [RMS2_L, (RMS_L(i) + RMS_L(i+1))/2];
+    RMS2_R = [RMS2_R, (RMS_R(i) + RMS_R(i+1))/2];
+    % RMS2(:,2) = [RMS2, (RMS(i,2) + RMS(i+1,2))/2];
+end
+RMS_L = RMS2_L
+RMS_R = RMS2_R
+RMS = [RMS2_L; RMS_R]
+Tbl = table(AS.',RMS_L.',RMS_R.')
+% figure(100)
+% plot(aS)
+figure(1)
+H = plot(AS, RMS,'o')
+grid on;
 
 figure(2)
 H = bar(AS, RMS, 'LineWidth', 2)
