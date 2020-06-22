@@ -88,7 +88,7 @@ for i = (1:2:length(AS)-1);
     i
     AS2 = [AS2, AS(i+1)];
 end
-AS = AS2
+% AS = AS2
 
 for i = (1:2:length(RMS)-1);
     i
@@ -96,10 +96,10 @@ for i = (1:2:length(RMS)-1);
     RMS2_R = [RMS2_R, (RMS_R(i) + RMS_R(i+1))/2];
     % RMS2(:,2) = [RMS2, (RMS(i,2) + RMS(i+1,2))/2];
 end
-RMS_L = RMS2_L
-RMS_R = RMS2_R
-RMS = [RMS2_L; RMS_R]
-Tbl = table(AS.',RMS_L.',RMS_R.')
+% RMS_L = RMS2_L
+% RMS_R = RMS2_R
+RMS = [RMS2_L; RMS2_R]
+Tbl = table(AS2.',RMS2_L.',RMS2_R.')
 % figure(100)
 % plot(aS)
 figure(1)
