@@ -52,7 +52,7 @@ end
 if ispc() == true
     addpath('D:\Code\vinyl-research\matlab_code')
     addpath('D:\Code\vinyl-research\matlab_code\Common')
-
+    addpath('D:\Code\vinyl-research\matlab_code\Wow')
     addpath('D:\Code\vinyl-research\matlab_code\audio_functions')
     addpath('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin')    
     addpath('E:\audio_files\A0000B0000')
@@ -60,7 +60,8 @@ if ispc() == true
 
 end
 
-pressingID = 'A0137B0137';
+% pressingID = 'A0137B0137';
+pressingID = 'A0000B0000';
 
 
 disp(['loading folder...:', folder])
