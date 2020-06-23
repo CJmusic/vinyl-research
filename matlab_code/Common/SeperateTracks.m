@@ -30,7 +30,16 @@ function output = SeperateTracks(file)
                     offset = 13.1;
                 end
             if ispc() == true
-                [ref, fs] = audioread('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav');
+                if file(length(file)-4) == 'a'
+                    [ref, fs] = audioread('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); 
+                    %% Reference 02072019_A0000B000r27a.wav 
+                    offset = 15; 
+                elseif file(length(file)-4) == 'b'
+                    disp('PC')
+                    [ref, fs] = audioread('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028b.wav'); 
+                    %% Reference 02072019_A0000B000r27b.wav 
+                    offset = 13.1;
+                end
             end
             
     

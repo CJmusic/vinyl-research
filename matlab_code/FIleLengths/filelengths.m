@@ -28,9 +28,12 @@ end
 if ispc() == true
     addpath('D:\Code\vinyl-research\matlab_code\A0137B0137')
     addpath('D:\Code\vinyl-research\matlab_code\')
+    addpath('D:\Code\vinyl-research\matlab_code\Common')
     addpath('D:\Code\vinyl-research\matlab_code\audio_functions\')
-    record1 = SeperateTracks('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/testing/maxsteam1a.wav');
-    record2 = SeperateTracks('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/testing/maxbarrelzones3a.wav');    
+    addpath('')
+
+    record1 = SeperateTracks('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/A0137B0137/003a.wav');
+    record2 = SeperateTracks('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/A0137B0137/000a.wav');    
 end
 data1 = record1('1kHz');
 data1 = data1(:,1);
