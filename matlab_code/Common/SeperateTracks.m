@@ -18,6 +18,7 @@ function output = SeperateTracks(file)
             % addpath('/Users/cz/Code/vinyl-research/matlab_code/audio_functions')
     
             % %~~~~ MAC ~~~~%
+            disp('SEPERATE TRACKS CALLED')
             if ismac() == true
                 if file(length(file)-4) == 'a'
                     [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); 
@@ -29,7 +30,9 @@ function output = SeperateTracks(file)
                     %% Reference 02072019_A0000B000r27b.wav 
                     offset = 13.1;
                 end
+            end
             if ispc() == true
+                disp('IS PC')
                 if file(length(file)-4) == 'a'
                     [ref, fs] = audioread('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); 
                     %% Reference 02072019_A0000B000r27a.wav 
@@ -249,6 +252,7 @@ function output = SeperateTracks(file)
                 signals{t} = sig;
             end
 
+            disp('ASSIGNING OUTPUT')
             output = containers.Map(signal_names, signals)
-
+            disp('EXITING SEPERATE TRACKS')
         end
