@@ -4,30 +4,43 @@ set(0,'DefaultLineLineWidth',1.5);
 set(0,'DefaultAxesFontSize',12);
 set(0,'DefaultAxesFontWeight','bold')
 set(0,'DefaultAxesLineWidth',1.5)
-addpath('/Users/cz/Code/vinyl-research/matlab_code')
-addpath('/Users/cz/Code/vinyl-research/matlab_code/audio_functions')
-addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/')
-addpath('/Users/cz/Code/vinyl-research/matlab_code/from_John/Sept 26')
-addpath('/Users/cz/Code/vinyl-research/matlab_code/Lacquer')
-addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/lacquer_recordings/')
-addpath('/Users/cz/Code/vinyl-research/matlab_code/A0137B0137')
-% file = '/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/003141_A0000B0000r30a.wav'
-
-% folder = '/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/';
-% addpath('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
-folder = ('/Volumes/AUDIOBANK/audio_files/')
-% addpath('/Volumes/AUDIOBANK/audio_files/duplicaterecordingtest/')
-% folder = ('/Volumes/AUDIOBANK/audio_files/duplicaterecordingtest/')
-% addpath('/Volumes/AUDIOBANK/audio_files/duplicatefiletest/')
-% folder = ('/Volumes/AUDIOBANK/audio_files/multiplerecordstest/')
-% folder = ('/Volumes/AUDIOBANK/audio_files/multiplerecordstest/')
-% folder = ('/Volumes/AUDIOBANK/audio_files/A01B01test/')
-% folder = ('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/A0000B0000_misc/wow/')
-folder = '/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/lacquer_recordings/lacquerwow/';
 
 
 
+if ismac() == true
+    addpath('/Users/cz/Code/vinyl-research/matlab_code')
+    addpath('/Users/cz/Code/vinyl-research/matlab_code/audio_functions')
+    addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/')
+    addpath('/Users/cz/Code/vinyl-research/matlab_code/from_John/Sept 26')
+    addpath('/Users/cz/Code/vinyl-research/matlab_code/Lacquer')
+    addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/lacquer_recordings/')
+    addpath('/Users/cz/Code/vinyl-research/matlab_code/A0137B0137')
+    % file = '/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/003141_A0000B0000r30a.wav'
+
+    % folder = '/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/';
+    % addpath('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
+    folder = ('/Volumes/AUDIOBANK/audio_files/')
+    % addpath('/Volumes/AUDIOBANK/audio_files/duplicaterecordingtest/')
+    % folder = ('/Volumes/AUDIOBANK/audio_files/duplicaterecordingtest/')
+    % addpath('/Volumes/AUDIOBANK/audio_files/duplicatefiletest/')
+    % folder = ('/Volumes/AUDIOBANK/audio_files/multiplerecordstest/')
+    % folder = ('/Volumes/AUDIOBANK/audio_files/multiplerecordstest/')
+    % folder = ('/Volumes/AUDIOBANK/audio_files/A01B01test/')
+    % folder = ('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/A0000B0000_misc/wow/')
+    folder = '/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/lacquer_recordings/lacquerwow/';
 % ~~~~ MAC ENDS ~~~~ %
+end
+if ispc() == true
+    addpath('D:\Code\vinyl-research\matlab_code')
+    addpath('D:\Code\vinyl-research\matlab_code\audio_functions')
+    addpath('D:\Code\vinyl-research\matlab_code\from_John\Sept 26\')
+
+    addpath('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin')
+    addpath('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\lacquer_recordings')
+    folder = 'D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\lacquer_recordings\lacquerwow';
+
+
+end
 
 pressingID = 'A0137B0137'
 

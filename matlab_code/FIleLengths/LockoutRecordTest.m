@@ -24,8 +24,8 @@ n_start=0;% start sample of revolution decomposition
 
 %filename='lockout-groove10b.wav';offset=-19;
 
-%filename='lockout2.wav';offset=-9;
-filename='lockout1.wav';offset=-9;
+%filename='D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\lockoutgroove\lockout2.wav';offset=-9;
+filename='D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\lockoutgroove\lockout1.wav';offset=-9;
 
 [sig,fs]=audioread(filename);
 
