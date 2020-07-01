@@ -10,7 +10,7 @@
 % hold on;
 % plot(reference('1kHz'))
 
-function output = SeperateTracks(file)
+function [output, info_array] = SeperateTracks(file)
 % function output = SeperateTracksTest(file)
     % function output = recordProcessTest(file)
         %~~~~~~~~~~~~~~~~~ LOAD REFERENCE ~~~~~~~~~~~~~~~~~%
@@ -29,6 +29,11 @@ function output = SeperateTracks(file)
                     [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028b.wav'); 
                     %% Reference 02072019_A0000B000r27b.wav 
                     offset = 13.1;
+                else 
+                    disp('NO SIDE FOUND, USING SIDE A REFERENCE')
+                    [ref, fs] = audioread('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); 
+                    %% Reference 02072019_A0000B000r27a.wav 
+                    offset = 15; 
                 end
             end
             if ispc() == true
@@ -42,7 +47,13 @@ function output = SeperateTracks(file)
                     [ref, fs] = audioread('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028b.wav'); 
                     %% Reference 02072019_A0000B000r27b.wav 
                     offset = 13.1;
+                else 
+                    disp('NO SIDE FOUND, USING SIDE A REFERENCE')
+                    [ref, fs] = audioread('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); 
+                    %% Reference 02072019_A0000B000r27a.wav 
+                    offset = 15; 
                 end
+
             end
             
     
@@ -182,6 +193,11 @@ function output = SeperateTracks(file)
             sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
             sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
             sigMAX=max(sig);
+            
+            %% THIS NORMALIZATION IS ALL WRONG, NEED TO TAKE THE FFT WITH FLATTOP WINDOWS AND FIND THE MAX PEAK 
+
+
+
             % normalization=sqrt(2)*sigRMS*40/7; %digital value of peak level
             data(:,1)=data(:,1)/sigMAX(1);% now normalized to 40cm/s peak    
             data(:,2)=data(:,2)/sigMAX(2);% now normalized to 40cm/s peak 
@@ -216,6 +232,7 @@ function output = SeperateTracks(file)
             normalization_R = normalization(2);
 
             signals = cell(length(signal_names),1);
+            signal_times = cell(length(signal_names),1);
             for t = (1:length(signal_names))
                 track_name = signal_names{t};
                 disp(strcat('track  ...',track_name))
@@ -250,9 +267,11 @@ function output = SeperateTracks(file)
                 end
                 % tracks(signal_names(i)) = sig;
                 signals{t} = sig;
+                signal_times{t} = sigtime; % not currently assigned to output
             end
 
             disp('ASSIGNING OUTPUT')
             output = containers.Map(signal_names, signals)
+            info_array = [lagdiff, normalization_L, normalization_R]
             disp('EXITING SEPERATE TRACKS')
         end

@@ -33,6 +33,7 @@ if ispc() == true
     addpath('')
 
     record1 = SeperateTracks('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/A0137B0137/003a.wav');
+    folder = '/Volumes/AUDIOBANK/audio_files/A0137B0137/'
     % record2 = SeperateTracks('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/A0137B0137/000a.wav');    
 end
 data1 = record1('1kHz');
@@ -42,7 +43,7 @@ time = (1:length(data1))/96000;
 folder = '/Volumes/AUDIOBANK/audio_files/A0137B0137/'
 files = dir(fullfile(folder,'*.wav'))
 
-for i = (1:length(files)) %%loop through records
+for i = (1:2)%length(files)) %%loop through records
     filename = files(i).name;
     record2 = SeperateTracks(strcat(folder,filename))
 
@@ -57,8 +58,8 @@ for i = (1:length(files)) %%loop through records
     size(data2)
     plot(time, data2);
     name = string(filename(2:4))
-    saveas(fig, strcat(name, '.png'))
-    clf()
+    % saveas(fig, strcat(name, '.png'))
+    % clf()
 end
 % plot(data2)
 
