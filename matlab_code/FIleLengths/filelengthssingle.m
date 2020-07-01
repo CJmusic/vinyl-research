@@ -42,12 +42,15 @@ data1 = record1('1kHz');
 data1 = data1(1:length(data1)-1,1);
 time = (1:length(data1))/96000;
 
-% plot(time, data1);
+data1 = data1/max(data1)
+plot(time, data1);
+
 % plot(data1)
 hold on; grid on;
 data2 = record2('1kHz');
 time = (1:length(data1))/96000;
 data2 = data2(1:length(data1),1);
+data2 = data2/max(data2)
 size(data1)
 size(data2)
 plot(time, data2);
@@ -83,3 +86,19 @@ data4 = record2('sweepV2');
 data4 = data4(:,1);
 time = (1:length(data4))/96000;
 plot(time,data4)
+
+fs = 96000;
+datastart = 58*fs;
+dataend = 60*fs;
+data1 = data1(datastart:dataend);
+
+figure(4)
+[b,a]=butter(2,[700*2/fs 1400*2/fs]);
+data1=filtfilt(b,a,data1);
+signal = hilbert(data1);
+time = (1:length(data1))/96000;
+plot(time,abs(signal))
+N = length(data1)
+startsum=round(0.01*N);stopsum=round(0.25*N);
+amplitde=sum(abs(signal(startsum:stopsum)))/(stopsum-startsum+1)
+

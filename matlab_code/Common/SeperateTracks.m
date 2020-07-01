@@ -181,10 +181,10 @@ function output = SeperateTracks(file)
     
             sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
             sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
-            % sigRMS=max(sig);
+            sigMAX=max(sig);
             % normalization=sqrt(2)*sigRMS*40/7; %digital value of peak level
-            % data(:,1)=data(:,1)/normalization(1);% now normalized to 40cm/s peak    
-            % data(:,2)=data(:,2)/normalization(2);% now normalized to 40cm/s peak 
+            data(:,1)=data(:,1)/sigMAX(1);% now normalized to 40cm/s peak    
+            data(:,2)=data(:,2)/sigMAX(2);% now normalized to 40cm/s peak 
             % normalization_L = normalization(1);
             % normalization_R = normalization(2);
 
