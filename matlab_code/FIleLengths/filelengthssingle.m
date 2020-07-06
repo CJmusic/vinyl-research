@@ -42,7 +42,7 @@ data1 = record1('1kHz');
 data1 = data1(1:length(data1)-1,1);
 time = (1:length(data1))/96000;
 
-data1 = data1/max(data1)
+data1 = data1/max(data1);
 plot(time, data1);
 
 % plot(data1)
@@ -50,7 +50,7 @@ hold on; grid on;
 data2 = record2('1kHz');
 time = (1:length(data1))/96000;
 data2 = data2(1:length(data1),1);
-data2 = data2/max(data2)
+data2 = data2/max(data2);
 size(data1)
 size(data2)
 plot(time, data2);

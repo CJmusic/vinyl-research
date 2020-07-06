@@ -9,7 +9,7 @@
 
 
 function output = recordProcess(file)
-    
+
     % % function output = recordProcessTest(file)
     %     %~~~~~~~~~~~~~~~~~ LOAD REFERENCE ~~~~~~~~~~~~~~~~~%
     %         % try 
@@ -349,7 +349,7 @@ function output = recordProcess(file)
                 end
               
                 track = signal_names(t);
-          ;
+          
     
     
                 output = [output; track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, A_L, A_R, CCIR_L, CCIR_R, clicks_L, clicks_R, commonclicksa_L, commonclicksa_R ,commonclicksb_L, commonclicksb_R, THD_L, THD_R, wow_L, wow_R, stereo_bleed];

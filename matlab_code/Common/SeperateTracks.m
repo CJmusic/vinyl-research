@@ -199,8 +199,8 @@ function [output, info_array] = SeperateTracks(file)
 
 
             % normalization=sqrt(2)*sigRMS*40/7; %digital value of peak level
-            data(:,1)=data(:,1)/sigMAX(1);% now normalized to 40cm/s peak    
-            data(:,2)=data(:,2)/sigMAX(2);% now normalized to 40cm/s peak 
+            % data(:,1)=data(:,1)/sigMAX(1);% now normalized to 40cm/s peak    
+            % data(:,2)=data(:,2)/sigMAX(2);% now normalized to 40cm/s peak 
             % normalization_L = normalization(1);
             % normalization_R = normalization(2);
 
@@ -226,11 +226,26 @@ function [output, info_array] = SeperateTracks(file)
             sigRMS= [peak_L, peak_R]
             % normalization=sqrt(2)*sigRMS*40/7; %digital value of peak level
             normalization= sigRMS; %digital value of peak level
+
+            %flattop window
+
+
+
+            %fft 
+
+            %peak of fft
+
+            figure(1001)
+            plot(data)
+
             data(:,1)=data(:,1)/normalization(1);% now normalized to 40cm/s peak    
             data(:,2)=data(:,2)/normalization(2);% now normalized to 40cm/s peak 
             normalization_L = normalization(1);
             normalization_R = normalization(2);
 
+            figure(1001)
+            plot(data)
+            
             signals = cell(length(signal_names),1);
             signal_times = cell(length(signal_names),1);
             for t = (1:length(signal_names))
