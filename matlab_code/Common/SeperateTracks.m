@@ -235,7 +235,7 @@ function [output, info_array] = SeperateTracks(file)
 
             %peak of fft
 
-            figure(1001)
+            figure(1000)
             plot(data)
 
             data(:,1)=data(:,1)/normalization(1);% now normalized to 40cm/s peak    
@@ -277,7 +277,7 @@ function [output, info_array] = SeperateTracks(file)
     
                     % floor(timestamps(t-1,1)*fs) - lagdiff
                     % floor(timestamps(t-1,2)*fs) - lagdiff
-    
+100    
                     refT = ref(floor(timestamps(t-1,1)*fs) - lagdiff : floor(timestamps(t-1,2)*fs) - lagdiff,:);
                 end
                 % tracks(signal_names(i)) = sig;
