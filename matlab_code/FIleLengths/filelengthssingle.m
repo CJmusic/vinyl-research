@@ -103,3 +103,9 @@ N = length(data1)
 startsum=round(0.01*N);stopsum=round(0.25*N);
 amplitde=sum(abs(signal(startsum:stopsum)))/(stopsum-startsum+1)
 
+figure(5)
+[acor_L,lags_L] = xcorr(data3,data4);
+[M_L,I_L] = max(abs(acor_L));
+lagdiff_L = lags_L(I_L);
+lagdiff = lagdiff_L;
+plot(lags_L, acor_L)

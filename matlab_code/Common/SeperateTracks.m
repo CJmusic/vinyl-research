@@ -145,7 +145,7 @@ function [output, info_array] = SeperateTracks(file)
             refLockout = ref(floor(lockout*96000):end,:);
             %% lineup audio with reference 
             dataLockout = data(floor(950*fs):end,:);
-            disp(strcat('time diff to ref... ', num2str (length(data)/fs - length(ref)/fs)))
+            disp(strcat('time diff to ref... ', num2str(length(data)/fs - length(ref)/fs)))
             disp(strcat('size dataLockout... ', num2str(size(dataLockout))))
             disp(strcat('size refLockout...  ', num2str(size(refLockout))))
             fs
@@ -197,35 +197,46 @@ function [output, info_array] = SeperateTracks(file)
             %% THIS NORMALIZATION IS ALL WRONG, NEED TO TAKE THE FFT WITH FLATTOP WINDOWS AND FIND THE MAX PEAK 
 
 
-
-            % normalization=sqrt(2)*sigRMS*40/7; %digital value of peak level
+            sigRMS = rms(sig);
+            normalization=sqrt(2)*sigRMS; %digital value of peak level
             % data(:,1)=data(:,1)/sigMAX(1);% now normalized to 40cm/s peak    
             % data(:,2)=data(:,2)/sigMAX(2);% now normalized to 40cm/s peak 
-            % normalization_L = normalization(1);
-            % normalization_R = normalization(2);
+            normalization_L = normalization(1);
+            normalization_R = normalization(2);
 
-            L = 2^16;
+            % L = 2^16;
         
-            seg = sig(floor(length(sig)/2) - L/2:floor(length(sig)/2) + L/2 - 1,:);
+            % seg = sig(floor(length(sig)/2) - L/2:floor(length(sig)/2) + L/2 - 1,:);
         
-            [b,a]=butter(2,2*100/fs,'high');% not really necessary with fft filter
-            seg(:,1) = filter(b,a,seg(:,1));
-            seg(:,2) = filter(b,a,seg(:,2));
+            % [b,a]=butter(2,2*100/fs,'high');% not really necessary with fft filter
+            % seg(:,1) = filter(b,a,seg(:,1));
+            % seg(:,2) = filter(b,a,seg(:,2));
         
-            win = flattopwin(L);
-            seg = seg.*win;
-            fftsigL = fft(seg(:,1))/L;
-            fftsigL = fftsigL(1:L/2+1);
-            fftsigR = fft(seg(:,2))/L;
-            fftsigR = fftsigR(1:L/2+1);
-            fftfreq = fs*(0:(L/2))/L;
+            % figure(999)
+            % plot(seg)
+
+            % win = flattopwin(L);
+            % seg = seg.*win;
+            % fftsigL = fft(seg(:,1));
+            % % fftsigL = fft(seg(:,1));
+            % fftsigL = fftsigL(1:L/2+1)/L;
+            % fftsigR = fft(seg(:,2));
+            % % fftsigR = fft(seg(:,2))
+            % fftsigR = fftsigR(1:L/2+1)/L;
+            % fftfreq = fs*(0:(L/2))/L;
             
-            peak_L = max(real(fftsigL));
-            peak_R = max(real(fftsigR))
+            % figure(1002)
+            % audio_plotspectrum(fftfreq, [fftsigL, fftsigR], 'norm')
 
-            sigRMS= [peak_L, peak_R]
-            % normalization=sqrt(2)*sigRMS*40/7; %digital value of peak level
-            normalization= sigRMS; %digital value of peak level
+            % figure(1003)
+            % plot(fftfreq, abs([fftsigL, fftsigR]))
+
+            % peak_L = max(abs(fftsigL));
+            % peak_R = max(abs(fftsigR));
+
+            % % sigRMS= [peak_L, peak_R]
+            % % normalization=sqrt(2)*sigRMS*40/7; %digital value of peak level
+            % normalization = [peak_L, peak_R]; %digital value of peak level
 
             %flattop window
 
@@ -237,11 +248,17 @@ function [output, info_array] = SeperateTracks(file)
 
             figure(1000)
             plot(data)
-
-            data(:,1)=data(:,1)/normalization(1);% now normalized to 40cm/s peak    
+            disp("MESSED UP PART")
+            % size(data)
+            % disp(strcat('sigrms...', num2str(sigRMS)))
+            disp(strcat('normalization...', num2str(normalization)))
+            disp(strcat('max data before...', num2str(max(data))))
+            data(:,1)=data(:,2)/normalization(1);% now normalized to 40cm/s peak    
             data(:,2)=data(:,2)/normalization(2);% now normalized to 40cm/s peak 
             normalization_L = normalization(1);
             normalization_R = normalization(2);
+            % size(data)
+            disp(strcat('max data after...', num2str(max(data))))
 
             figure(1001)
             plot(data)
@@ -277,7 +294,6 @@ function [output, info_array] = SeperateTracks(file)
     
                     % floor(timestamps(t-1,1)*fs) - lagdiff
                     % floor(timestamps(t-1,2)*fs) - lagdiff
-100    
                     refT = ref(floor(timestamps(t-1,1)*fs) - lagdiff : floor(timestamps(t-1,2)*fs) - lagdiff,:);
                 end
                 % tracks(signal_names(i)) = sig;
