@@ -13,6 +13,7 @@ if ismac() == true
     addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/')    
     % addpath('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
     addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/')
+    addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/testing/')
 
     % record1 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/samerecordtest/3.wav');
     % record2 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/samerecordtest/2.wav');
@@ -21,8 +22,8 @@ if ismac() == true
     % record2 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/styluswear/042820_A0000B0000r1a.wav');
     % record1 = SeperateTracks('/AUDIOBANK/audio_files/A0137B0137/003a.wav')
     disp('Calling seperatetracks')
-    record1 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/ableton/r27a-ableton1024a.wav')
-    record2 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/ableton/r28a-ableton1024a.wav')
+    record1 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/testing/maxbarrelzones3a.wav')
+    record2 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/testing/maxbarrelzones3b.wav')
 
     % record2 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/styluswear/040318_A0000B0000r001a.wav');
 
@@ -102,3 +103,9 @@ N = length(data1)
 startsum=round(0.01*N);stopsum=round(0.25*N);
 amplitde=sum(abs(signal(startsum:stopsum)))/(stopsum-startsum+1)
 
+figure(5)
+[acor_L,lags_L] = xcorr(data3,data4);
+[M_L,I_L] = max(abs(acor_L));
+lagdiff_L = lags_L(I_L);
+lagdiff = lagdiff_L;
+plot(lags_L, acor_L)
