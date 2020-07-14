@@ -21,17 +21,17 @@ function [output, info_array] = SeperateTracks(file)
             disp('SEPERATE TRACKS CALLED')
             if ismac() == true
                 if file(length(file)-4) == 'a'
-                    [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); 
+                    [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); 
                     %% Reference 02072019_A0000B000r27a.wav 
                     offset = 15; 
                 elseif file(length(file)-4) == 'b'
                     disp('PC')
-                    [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028b.wav'); 
+                    [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028b.wav'); 
                     %% Reference 02072019_A0000B000r27b.wav 
                     offset = 13.1;
                 else 
                     disp('NO SIDE FOUND, USING SIDE A REFERENCE')
-                    [ref, fs] = audioread('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); 
+                    [ref, ] = audioread('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); 
                     %% Reference 02072019_A0000B000r27a.wav 
                     offset = 15; 
                 end
@@ -39,17 +39,17 @@ function [output, info_array] = SeperateTracks(file)
             if ispc() == true
                 disp('IS PC')
                 if file(length(file)-4) == 'a'
-                    [ref, fs] = audioread('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); 
+                    [ref, ] = audioread('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); 
                     %% Reference 02072019_A0000B000r27a.wav 
                     offset = 15; 
                 elseif file(length(file)-4) == 'b'
                     disp('PC')
-                    [ref, fs] = audioread('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028b.wav'); 
+                    [ref, ] = audioread('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028b.wav'); 
                     %% Reference 02072019_A0000B000r27b.wav 
                     offset = 13.1;
                 else 
                     disp('NO SIDE FOUND, USING SIDE A REFERENCE')
-                    [ref, fs] = audioread('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); 
+                    [ref, ] = audioread('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); 
                     %% Reference 02072019_A0000B000r27a.wav 
                     offset = 15; 
                 end
@@ -131,24 +131,23 @@ function [output, info_array] = SeperateTracks(file)
         %~~~~~~~~~~~~~~~~~    LOAD FILE    ~~~~~~~~~~~~~~~~%
             % try
             %     addpath(/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000) %MAC
-            %     [data, fs] = audioread(/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/03141_A0000B0000r30a.wav);
+            %     [data, ] = audioread(/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/03141_A0000B0000r30a.wav);
             % catch 
             %     addpath(D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000) %WINDOWS 
-            %     [data, fs] = audioread(D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000\03141_A0000B0000r29a.wav);
+            %     [data, ] = audioread(D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000\03141_A0000B0000r29a.wav);
             % end
     
-            [data, fs] = audioread(file);
+            [data, ] = audioread(file);
      
         %~~~~~~~~~~~~~~~~~~~~~ LINE UP ~~~~~~~~~~~~~~~~~~~~~~~~% 
     
             lockout = 950; 
             refLockout = ref(floor(lockout*96000):end,:);
-            %% lineup audio with reference 
-            dataLockout = data(floor(950*fs):end,:);
-            disp(strcat('time diff to ref... ', num2str(length(data)/fs - length(ref)/fs)))
+            %% lineup audio                                                     with reference 
+            dataLockout = data(floor(950 ):end,:);
+            disp(strcat('time diff to ref... ', num2str(length(data)  - length(ref))))
             disp(strcat('size dataLockout... ', num2str(size(dataLockout))))
             disp(strcat('size refLockout...  ', num2str(size(refLockout))))
-            fs
             % figure(2);
             % plot(refLockout);
             % hold on;
@@ -159,11 +158,13 @@ function [output, info_array] = SeperateTracks(file)
             [M_L,I_L] = max(abs(acor_L));
             lagdiff_L = lags_L(I_L);
             lagdiff = lagdiff_L;
-    
+            figure(21)
+            plot(acor_L, lags_L/96000)
+
             disp(strcat('lagdiff ...', num2str(lagdiff)))
     
-            timeref = (0:length(ref)-1)/fs;
-            timedata = (0:length(data)-1)/fs  + lagdiff/fs;
+            timeref = (0:length(ref)-1) ;
+            timedata = (0:length(data)-1)   + lagdiff ;
     
             %***   DEBUG   ***%
             % disp(strcat(num2str(size(timeref)), num2str(size(refLockout))))
@@ -180,18 +181,18 @@ function [output, info_array] = SeperateTracks(file)
     
         %~~~~~~~~~~~~~~~~~~~~ NORMALIZATION ~~~~~~~~~~~~~~~~~~~~%
             t = 1;
-            sigtime = timedata(floor(timestamps(t,1)*fs):floor(timestamps(t,2)*fs));
-            sig = data(floor(timestamps(t,1)*fs): floor(timestamps(t,2)*fs),:);
+            sigtime = timedata(floor(timestamps(t,1) ):floor(timestamps(t,2) ));
+            sig = data(floor(timestamps(t,1) ): floor(timestamps(t,2) ),:);
     
             % figure(t)
             % plot(sigtime,sig)
     
     
-            % floor(timestamps(t,1)*fs) - lagdiff 
-            % floor(timestamps(t,2)*fs) - lagdiff
+            % floor(timestamps(t,1) ) - lagdiff 
+            % floor(timestamps(t,2) ) - lagdiff
     
-            sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
-            sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
+            sigtime = timedata(floor(timestamps(t,1) ) - lagdiff :floor(timestamps(t,2) ) - lagdiff);
+            sig = data(floor(timestamps(t,1) ) - lagdiff : floor(timestamps(t,2) ) - lagdiff,:);
             sigMAX=max(sig);
             
             %% THIS NORMALIZATION IS ALL WRONG, NEED TO TAKE THE FFT WITH FLATTOP WINDOWS AND FIND THE MAX PEAK 
@@ -208,7 +209,7 @@ function [output, info_array] = SeperateTracks(file)
         
             % seg = sig(floor(length(sig)/2) - L/2:floor(length(sig)/2) + L/2 - 1,:);
         
-            % [b,a]=butter(2,2*100/fs,'high');% not really necessary with fft filter
+            % [b,a]=butter(2,2*100 ,'high');% not really necessary with fft filter
             % seg(:,1) = filter(b,a,seg(:,1));
             % seg(:,2) = filter(b,a,seg(:,2));
         
@@ -223,7 +224,7 @@ function [output, info_array] = SeperateTracks(file)
             % fftsigR = fft(seg(:,2));
             % % fftsigR = fft(seg(:,2))
             % fftsigR = fftsigR(1:L/2+1)/L;
-            % fftfreq = fs*(0:(L/2))/L;
+            % fftfreq = *(0:(L/2))/L;
             
             % figure(1002)
             % audio_plotspectrum(fftfreq, [fftsigL, fftsigR], 'norm')
@@ -278,22 +279,22 @@ function [output, info_array] = SeperateTracks(file)
                 THD_R = [];
                 
                 if t == 1
-                    sig = data(1 : floor(timestamps(1,1)*fs) - lagdiff,:);
-                    sigtime = timedata(1 : floor(timestamps(1,1)*fs) - lagdiff);  
+                    sig = data(1 : floor(timestamps(1,1) ) - lagdiff,:);
+                    sigtime = timedata(1 : floor(timestamps(1,1) ) - lagdiff);  
     
-                    refT = ref(1 : floor(timestamps(1,1)*fs) - lagdiff,:);
+                    refT = ref(1 : floor(timestamps(1,1) ) - lagdiff,:);
                 elseif t == length(signal_names)
-                    sig = data(floor(timestamps(end,2)*fs) - lagdiff : length(data),:);
-                    sigtime = timedata(floor(timestamps(end,2)*fs) - lagdiff : length(data));  
+                    sig = data(floor(timestamps(end,2) ) - lagdiff : length(data),:);
+                    sigtime = timedata(floor(timestamps(end,2) ) - lagdiff : length(data));  
     
-                    refT = ref(floor(timestamps(end,2)*fs) - lagdiff : length(ref),:);
+                    refT = ref(floor(timestamps(end,2) ) - lagdiff : length(ref),:);
                 else
-                    sig = data(floor(timestamps(t-1,1)*fs) - lagdiff : floor(timestamps(t-1,2)*fs) - lagdiff,:);
-                    sigtime = timedata(floor(timestamps(t-1,1)*fs) - lagdiff :floor(timestamps(t-1,2)*fs) - lagdiff);  
+                    sig = data(floor(timestamps(t-1,1) ) - lagdiff : floor(timestamps(t-1,2) ) - lagdiff,:);
+                    sigtime = timedata(floor(timestamps(t-1,1) ) - lagdiff :floor(timestamps(t-1,2) ) - lagdiff);  
     
-                    % floor(timestamps(t-1,1)*fs) - lagdiff
-                    % floor(timestamps(t-1,2)*fs) - lagdiff
-                    refT = ref(floor(timestamps(t-1,1)*fs) - lagdiff : floor(timestamps(t-1,2)*fs) - lagdiff,:);
+                    % floor(timestamps(t-1,1) ) - lagdiff
+                    % floor(timestamps(t-1,2) ) - lagdiff
+                    refT = ref(floor(timestamps(t-1,1) ) - lagdiff : floor(timestamps(t-1,2) ) - lagdiff,:);
                 end
                 % tracks(signal_names(i)) = sig;
                 signals{t} = sig;
