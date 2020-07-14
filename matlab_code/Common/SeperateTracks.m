@@ -128,38 +128,24 @@ function [output, info_array] = SeperateTracks(file)
     
     
     
-        %~~~~~~~~~~~~~~~~~    LOAD FILE    ~~~~~~~~~~~~~~~~%
-            % try
-            %     addpath(/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000) %MAC
-            %     [data, ] = audioread(/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/A0000B0000/03141_A0000B0000r30a.wav);
-            % catch 
-            %     addpath(D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000) %WINDOWS 
-            %     [data, ] = audioread(D:\OneDrive - University of Waterloo\Vinyl_Project\audio_bin\A0000B0000\03141_A0000B0000r29a.wav);
-            % end
-    
-            [data, ] = audioread(file);
+            [data, fs] = audioread(file);
      
         %~~~~~~~~~~~~~~~~~~~~~ LINE UP ~~~~~~~~~~~~~~~~~~~~~~~~% 
     
             lockout = 950; 
             refLockout = ref(floor(lockout*96000):end,:);
             %% lineup audio                                                     with reference 
-            dataLockout = data(floor(950 ):end,:);
+            dataLockout = data(floor(950*fs):end,:);
             disp(strcat('time diff to ref... ', num2str(length(data)  - length(ref))))
             disp(strcat('size dataLockout... ', num2str(size(dataLockout))))
             disp(strcat('size refLockout...  ', num2str(size(refLockout))))
-            % figure(2);
-            % plot(refLockout);
-            % hold on;
-            % plot(dataLockout);
-            % nblahblkah
-            %% lining up audio 
+
             [acor_L,lags_L] = xcorr(refLockout(:,1),dataLockout(:,1));
             [M_L,I_L] = max(abs(acor_L));
             lagdiff_L = lags_L(I_L);
             lagdiff = lagdiff_L;
             figure(21)
-            plot(acor_L, lags_L/96000)
+            plot(lags_L/fs, acor_L)
 
             disp(strcat('lagdiff ...', num2str(lagdiff)))
     
