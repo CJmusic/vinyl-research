@@ -143,7 +143,7 @@ function [output, info_array] = SeperateTracks(file)
             [acor_L,lags_L] = xcorr(refLockout(:,1),dataLockout(:,1));
             [M_L,I_L] = max(abs(acor_L));
             lagdiff_L = lags_L(I_L);
-            lagdiff = lagdiff_L;
+            % lagdiff = lagdiff_L;
             figure(21)
             plot(lags_L/fs, acor_L)
 
@@ -151,7 +151,7 @@ function [output, info_array] = SeperateTracks(file)
     
             timeref = (0:length(ref)-1) ;
             timedata = (0:length(data)-1)   + lagdiff ;
-    
+    ~
             %***   DEBUG   ***%
             % disp(strcat(num2str(size(timeref)), num2str(size(refLockout))))
             % disp(strcat(num2str(size(timedata)), num2str(size(dataLockout))))

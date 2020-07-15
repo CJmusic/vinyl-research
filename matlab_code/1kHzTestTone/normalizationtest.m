@@ -41,7 +41,6 @@ figure(10)
 plot(win)
 seg3 = seg2.*win;
 
-
 figure(5)
 [data_fft, freq_fft] = audio_spectrum(seg3, fs, 1, 2^12);
 audio_plotspectrum(freq_fft, data_fft, 'audio_spectrum');

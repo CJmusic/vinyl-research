@@ -23,6 +23,7 @@ if ismac() == true
     % record1 = SeperateTracks('/AUDIOBANK/audio_files/A0137B0137/003a.wav')
     disp('Calling seperatetracks')
     record1 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/testing/maxbarrelzones3a.wav')
+
     record2 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/testing/maxbarrelzones3b.wav')
 
     % record2 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/styluswear/040318_A0000B0000r001a.wav');
@@ -35,9 +36,21 @@ if ispc() == true
     addpath('D:\Code\vinyl-research\matlab_code\audio_functions\')
     addpath('')
 
-    record1 = SeperateTracks('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/A0137B0137/003a.wav');
-    record2 = SeperateTracks('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/A0137B0137/000a.wav');    
+    % record1 = SeperateTracks('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/A0137B0137/003a.wav');
+    record1 = SeperateTracks('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/A0137B0137/017b.wav'); offset1 = 957.35208:
+    % record2 = SeperateTracks('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/A0137B0137/000a.wav');    
+    record2 = SeperateTracks('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/A0137B0137/012b.wav'); offset2 = 957.5021;
 end
+
+[data1, fs]audioread('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/A0137B0137/017b.wav')
+[data2, fs]audioread('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/A0137B0137/012b.wav')
+lagdiff = floor((offset1 - offset2)*fs);
+
+sigtime = timedata(floor(timestamps(t,1) ) - lagdiff :floor(timestamps(t,2) ) - lagdiff);
+sig = data(floor(timestamps(t,1) ) - lagdiff : floor(timestamps(t,2) ) - lagdiff,:);
+sigMAX=max(sig);
+
+
 
 data1 = record1('1kHz');
 data1 = data1(1:length(data1)-1,1);
