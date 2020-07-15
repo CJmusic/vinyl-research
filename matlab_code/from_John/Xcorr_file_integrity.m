@@ -28,7 +28,9 @@ filename='D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\
 %filename='042820_late_test_file_declicked.wav';t1=957.2155;
 %filename='040318_early_test_file.wav';t1=950.7134;% bad file
 
-reffilename='042820_late_test_file.wav';t1ref=957.2155;%*********reference file
+reffilename='D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\styluswear\042820_A0000B0000r1a.wav';t1ref=957.2155;%*********reference file
+% reffilename='042820_late_test_file.wav';t1ref=957.2155;%*********reference file
+
 [sigref,fs]=audioread(reffilename);
 [signal,fs]=audioread(filename);
 
