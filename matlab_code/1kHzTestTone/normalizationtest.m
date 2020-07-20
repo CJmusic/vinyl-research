@@ -4,45 +4,61 @@ set(0,'DefaultAxesFontSize',12);
 set(0,'DefaultAxesFontWeight','bold')
 set(0,'DefaultAxesLineWidth',1.5)
 
+addpath('D:\Code\vinyl-research\matlab_code\audio_functions')
 
-
+%generate test signal
 L = 2^16;
 fs = 96000;
 t = (1:L)/fs;
 seg = [0.5*sin(1000*2*pi*t); 0.5*sin(1000*2*pi*t)];
 seg = seg.';
 
+%plot test signal
 figure(1)
-plot(seg)
+plot(seg); grid on;
+title('test signal')
 
+%take and plot spectrum
 figure(2)
 [data_fft, freq_fft] = audio_spectrum(seg, fs, 1, 2^12);
-% disp(strcat('max(abs(data_fft))... ', num2str(20*log10(max(abs(data_fft))))))
-audio_plotspectrum(freq_fft, data_fft, 'audio_spectrum');
+audio_plotspectrum(freq_fft, data_fft, 'spectrum of test signal');
 
-disp(strcat('before norm... ', num2str(max(abs(data_fft)))))
+% fft normalization
 
-segRMS = rms(seg);
-disp(strcat('segRMS root 2... ', num2str(segRMS*sqrt(2))))
-
-normalization = segRMS*sqrt(2);
+normalization = max(abs(data_fft));
 seg2 = seg/normalization;
 
+disp(strcat('max fft before norm... ', num2str(max(abs(data_fft)))))
+disp(strcat('dB... ', num2str(20*log10(max(abs(data_fft))))))
+
+% rms normalization
+
+% segRMS = rms(seg);
+% normalization = segRMS*sqrt(2);
+% disp(strcat('segRMS * root 2... ', num2str(segRMS*sqrt(2))))
+
 figure(3)
-plot(seg2)
+plot(seg2); grid on; 
+title('test signal after normalization')
 
 figure(4)
 [data_fft, freq_fft] = audio_spectrum(seg2, fs, 1, 2^12);
-audio_plotspectrum(freq_fft, data_fft, 'audio_spectrum');
-disp(strcat('after norm... ', num2str(max(abs(data_fft)))))
+audio_plotspectrum(freq_fft, data_fft, 'spectrum after normalization');
+disp(strcat('max fft after norm... ', num2str(max(abs(data_fft)))))
+disp(strcat('dB... ', num2str(20*log10(max(abs(data_fft))))))
 
-win = flattopwin(L);
 figure(10)
-plot(win)
-seg3 = seg2.*win;
+% win = flattopwin(L);
+win = window(@flattopwin,L,'periodic');
+plot(win); grid on;
+title('flattop window')
+% seg3 = seg2.*win*(length(win)/sum(win));
+seg3 = seg.*win;
 
 figure(5)
 [data_fft, freq_fft] = audio_spectrum(seg3, fs, 1, 2^12);
-audio_plotspectrum(freq_fft, data_fft, 'audio_spectrum');
+audio_plotspectrum(freq_fft, data_fft, 'spectrum after window');
 disp(strcat('after window... ', num2str(max(abs(data_fft)))))
+disp(strcat('dB... ', num2str(20*log10(max(abs(data_fft))))))
+
 

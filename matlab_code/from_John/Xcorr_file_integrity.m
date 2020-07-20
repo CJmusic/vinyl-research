@@ -18,7 +18,7 @@ end
 %filename='r30b-Technics-full.wav';t1=952.7588;
 
 % filename='r31a-Technics-full.wav';t1=955.48471;
-filename='D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\A0000B0000\040318_A0000B0000r031a.wav';t1=955.48471;
+filename='D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\A0000B0000\040318_A0000B0000r031a.wav';t1=954.1865;
 
 %filename='r31b-Technics-full.wav';t1=958.9805;
 %filename='r104b-1-declicked.wav';t1=958.4144;
