@@ -23,6 +23,8 @@ filename='D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\
 %filename='r31b-Technics-full.wav';t1=958.9805;
 %filename='r104b-1-declicked.wav';t1=958.4144;
 %filename='minpucksize1b.wav';t1=957.352;
+filename='D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\A0137B0137\010b.wav';t1=957.352;
+
 %filename='minpucksizem6b.wav';t1=957.5021;
 %filename='042820_late_test_file.wav';t1=957.2155;%*********reference file
 %filename='042820_late_test_file_declicked.wav';t1=957.2155;

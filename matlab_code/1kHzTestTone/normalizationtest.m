@@ -9,13 +9,20 @@ addpath('D:\Code\vinyl-research\matlab_code\audio_functions')
 %generate test signal
 L = 2^16;
 fs = 96000;
-t = (1:L)/fs;
+t = (0:L-1)/fs;
 seg = [0.5*sin(1000*2*pi*t); 0.5*sin(1000*2*pi*t)];
 seg = seg.';
+
+
+lr=1;%%%%%%%%%%%%%%%%% left or right chosen first
+seg = seg(:,lr);%%%%%%%%%%%%%%%%
 
 %plot test signal
 figure(1)
 plot(seg); grid on;
+title('test signal')
+xlabel('Time [s]')
+ylabel('Signal')
 title('test signal')
 
 %take and plot spectrum
@@ -48,12 +55,13 @@ disp(strcat('max fft after norm... ', num2str(max(abs(data_fft)))))
 disp(strcat('dB... ', num2str(20*log10(max(abs(data_fft))))))
 
 figure(10)
-% win = flattopwin(L);
-win = window(@flattopwin,L,'periodic');
+win = flattopwin(L);
+% win = window(@flattopwin,L,'periodic');
 plot(win); grid on;
 title('flattop window')
 % seg3 = seg2.*win*(length(win)/sum(win));
 seg3 = seg.*win;
+seg3 = seg3/0.2156;
 
 figure(5)
 [data_fft, freq_fft] = audio_spectrum(seg3, fs, 1, 2^12);
