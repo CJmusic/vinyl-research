@@ -143,15 +143,15 @@ function [output, info_array] = SeperateTracks(file)
             [acor_L,lags_L] = xcorr(refLockout(:,1),dataLockout(:,1));
             [M_L,I_L] = max(abs(acor_L));
             lagdiff_L = lags_L(I_L);
-            % lagdiff = lagdiff_L;
-            figure(21)
-            plot(lags_L/fs, acor_L)
+            lagdiff = lagdiff_L;
+            % figure(21)
+            % plot(lags_L/fs, acor_L)
 
             disp(strcat('lagdiff ...', num2str(lagdiff)))
     
             timeref = (0:length(ref)-1) ;
             timedata = (0:length(data)-1)   + lagdiff ;
-    ~
+    
             %***   DEBUG   ***%
             % disp(strcat(num2str(size(timeref)), num2str(size(refLockout))))
             % disp(strcat(num2str(size(timedata)), num2str(size(dataLockout))))
@@ -167,18 +167,18 @@ function [output, info_array] = SeperateTracks(file)
     
         %~~~~~~~~~~~~~~~~~~~~ NORMALIZATION ~~~~~~~~~~~~~~~~~~~~%
             t = 1;
-            sigtime = timedata(floor(timestamps(t,1) ):floor(timestamps(t,2) ));
-            sig = data(floor(timestamps(t,1) ): floor(timestamps(t,2) ),:);
+            sigtime = timedata(floor(timestamps(t,1)*fs):floor(timestamps(t,2)*fs));
+            sig = data(floor(timestamps(t,1)*fs): floor(timestamps(t,2)*fs),:);
     
-            % figure(t)
-            % plot(sigtime,sig)
+            figure(t+200)
+            plot(sigtime,sig)
     
     
             % floor(timestamps(t,1) ) - lagdiff 
             % floor(timestamps(t,2) ) - lagdiff
     
-            sigtime = timedata(floor(timestamps(t,1) ) - lagdiff :floor(timestamps(t,2) ) - lagdiff);
-            sig = data(floor(timestamps(t,1) ) - lagdiff : floor(timestamps(t,2) ) - lagdiff,:);
+            sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
+            sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
             sigMAX=max(sig);
             
             %% THIS NORMALIZATION IS ALL WRONG, NEED TO TAKE THE FFT WITH FLATTOP WINDOWS AND FIND THE MAX PEAK 
@@ -234,8 +234,8 @@ function [output, info_array] = SeperateTracks(file)
 
             figure(1000)
             plot(data)
-            disp("MESSED UP PART")
-            % size(data)
+            % disp("MESSED UP PART")
+            % % size(data)
             % disp(strcat('sigrms...', num2str(sigRMS)))
             disp(strcat('normalization...', num2str(normalization)))
             disp(strcat('max data before...', num2str(max(data))))
@@ -265,22 +265,22 @@ function [output, info_array] = SeperateTracks(file)
                 THD_R = [];
                 
                 if t == 1
-                    sig = data(1 : floor(timestamps(1,1) ) - lagdiff,:);
-                    sigtime = timedata(1 : floor(timestamps(1,1) ) - lagdiff);  
+                    sig = data(1 : floor(timestamps(1,1)*fs) - lagdiff,:);
+                    sigtime = timedata(1 : floor(timestamps(1,1)*fs) - lagdiff);  
     
-                    refT = ref(1 : floor(timestamps(1,1) ) - lagdiff,:);
+                    refT = ref(1 : floor(timestamps(1,1)*fs) - lagdiff,:);
                 elseif t == length(signal_names)
-                    sig = data(floor(timestamps(end,2) ) - lagdiff : length(data),:);
-                    sigtime = timedata(floor(timestamps(end,2) ) - lagdiff : length(data));  
+                    sig = data(floor(timestamps(end,2)*fs) - lagdiff : length(data),:);
+                    sigtime = timedata(floor(timestamps(end,2)*fs) - lagdiff : length(data));  
     
-                    refT = ref(floor(timestamps(end,2) ) - lagdiff : length(ref),:);
+                    refT = ref(floor(timestamps(end,2)*fs) - lagdiff : length(ref),:);
                 else
-                    sig = data(floor(timestamps(t-1,1) ) - lagdiff : floor(timestamps(t-1,2) ) - lagdiff,:);
-                    sigtime = timedata(floor(timestamps(t-1,1) ) - lagdiff :floor(timestamps(t-1,2) ) - lagdiff);  
+                    sig = data(floor(timestamps(t-1,1)*fs) - lagdiff : floor(timestamps(t-1,2)*fs) - lagdiff,:);
+                    sigtime = timedata(floor(timestamps(t-1,1)*fs) - lagdiff :floor(timestamps(t-1,2)*fs) - lagdiff);  
     
                     % floor(timestamps(t-1,1) ) - lagdiff
                     % floor(timestamps(t-1,2) ) - lagdiff
-                    refT = ref(floor(timestamps(t-1,1) ) - lagdiff : floor(timestamps(t-1,2) ) - lagdiff,:);
+                    refT = ref(floor(timestamps(t-1,1)*fs) - lagdiff : floor(timestamps(t-1,2)*fs) - lagdiff,:);
                 end
                 % tracks(signal_names(i)) = sig;
                 signals{t} = sig;
@@ -291,4 +291,9 @@ function [output, info_array] = SeperateTracks(file)
             output = containers.Map(signal_names, signals)
             info_array = [lagdiff, normalization_L, normalization_R]
             disp('EXITING SEPERATE TRACKS')
+
+            figure(10000)
+            plot(signals{2})
+            figure(10001)
+            plot(output('1kHz'))
         end
