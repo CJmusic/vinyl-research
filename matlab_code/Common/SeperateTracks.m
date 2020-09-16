@@ -31,7 +31,7 @@ function [output, info_array] = SeperateTracks(file)
                     offset = 13.1;
                 else 
                     disp('NO SIDE FOUND, USING SIDE A REFERENCE')
-                    [ref, ] = audioread('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); 
+                    [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); 
                     %% Reference 02072019_A0000B000r27a.wav 
                     offset = 15; 
                 end
@@ -170,8 +170,8 @@ function [output, info_array] = SeperateTracks(file)
             sigtime = timedata(floor(timestamps(t,1)*fs):floor(timestamps(t,2)*fs));
             sig = data(floor(timestamps(t,1)*fs): floor(timestamps(t,2)*fs),:);
     
-            figure(t+200)
-            plot(sigtime,sig)
+            % figure(t+200)
+            % plot(sigtime,sig)
     
     
             % floor(timestamps(t,1) ) - lagdiff 
@@ -232,8 +232,8 @@ function [output, info_array] = SeperateTracks(file)
 
             %peak of fft
 
-            figure(1000)
-            plot(data)
+            % figure(1000)
+            % plot(data)
             % disp("MESSED UP PART")
             % % size(data)
             % disp(strcat('sigrms...', num2str(sigRMS)))
@@ -246,8 +246,8 @@ function [output, info_array] = SeperateTracks(file)
             % size(data)
             disp(strcat('max data after...', num2str(max(data))))
 
-            figure(1001)
-            plot(data)
+            % figure(1001)
+            % plot(data)
 
             signals = cell(length(signal_names),1);
             signal_times = cell(length(signal_names),1);
@@ -285,6 +285,15 @@ function [output, info_array] = SeperateTracks(file)
                 % tracks(signal_names(i)) = sig;
                 signals{t} = sig;
                 signal_times{t} = sigtime; % not currently assigned to output
+
+                % figure(500+t)
+                % plot(signals{t})
+                % for xi = 1:length(clicks)
+                %     x1 = (clicks(xi));
+                %     figure(1); hold on;
+                %     line([x1 x1], get(gca, 'ylim'),'Color', 'red','LineStyle', '--');
+                % end
+            
             end
 
             disp('ASSIGNING OUTPUT')
@@ -292,8 +301,8 @@ function [output, info_array] = SeperateTracks(file)
             info_array = [lagdiff, normalization_L, normalization_R]
             disp('EXITING SEPERATE TRACKS')
 
-            figure(10000)
-            plot(signals{2})
-            figure(10001)
-            plot(output('1kHz'))
+            % figure(10000)
+            % plot(signals{2})
+            % figure(10001)
+            % plot(output('1kHz'))
         end

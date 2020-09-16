@@ -9,9 +9,9 @@ addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_
 
 
 % record1 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/testing/maxsteam1a.wav');
-record1 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); 
+[record1, ~] = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); 
 
-record2 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/testing/maxbarrelzones3b.wav');  
+% [record2, ~] = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/testing/maxbarrelzones3b.wav');  
 % record2 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/testing/maxbarrelzones3a.wav');
 % record2 = SeperateTracks('/Volumes/AUDIOBANK/audio_files/A0137B0137/-01a.wav');
 % record2 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/testing/mincool5b.wav');
@@ -21,40 +21,64 @@ record2 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vin
 % plot(record1('100Hz'))
 % hold on; grid on;
 % plot(record2('100Hz'))
+signals = record1.values;
+signal_names = record1.keys;
+for t = 1:length(record1.keys)
 
-[~, clicks1] = ClickDetect(record1('1kHz'))
-[~, clicks2] = ClickDetect(record2('1kHz'))
+    sig = signals{t};
 
-figure(1)
-plot(record1('1kHz'))
-figure(2)
-plot(record2('1kHz'))
+    [~, clicks1] = ClickDetect(sig)
+    % [~, clicks2] = ClickDetect(sig)
 
-disp(strcat('common clicks record 1... ', num2str(length(clicks1))))
-disp(strcat('common clicks record 2... ', num2str(length(clicks2))))
+    figure(t)
+    plot(sig)
+    title(signal_names{t})
 
+    for xi = 1:length(clicks1)
+        x1 = (clicks1(xi));
+        figure(t); hold on;
+        line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
+    end
+    
+    % figure(2)
+    % plot(record2('quiet'))
+    % for xi = 1:length(clicks1)
+    %     x1 = (clicks2(xi));
+    %     figure(1); hold on;
+    %     line([x1 x1], get(gca, 'ylim'),'Color', 'red','LineStyle', '--');
+    % end
+    
+    disp(strcat('clicks ' , signal_names{t}, '...', num2str(length(clicks1))))
+    % disp(strcat('clicks record 2... ', num2str(length(clicks2))))
+    
+    
 
-RELAX = [0, 250, 500, 750, 1000, 1250, 1500];
-COM = [];
-for i = 1:length(RELAX); 
-    common = num_comclicks(clicks1, clicks2, RELAX(i))
-    COM = [COM, common];
 end
 
-figure(100)
-plot(RELAX, COM)
-grid on; 
-title('Common clicks vs relaxation')
-xlabel('relaxation')
-ylabel('# of common clicks')
+% figure(1)
+% plot(record1('quiet'))
 
-disp(strcat('clicks 1.....', num2str((length(clicks1)))))
-disp(strcat('clicks 2.....', num2str((length(clicks2)))))
-% disp(strcat('common .....' , num2str
+% RELAX = [0, 250, 500, 750, 1000, 1250, 1500];
+% COM = [];
+% for i = 1:length(RELAX); 
+%     common = num_comclicks(clicks1, clicks2, RELAX(i))
+%     COM = [COM, common];
+% end
+
+% figure(100)
+% plot(RELAX, COM)
+% grid on; 
+% title('Common clicks vs relaxation')
+% xlabel('relaxation')
+% ylabel('# of common clicks')
+
+% disp(strcat('clicks 1.....', num2str((length(clicks1)))))
+% disp(strcat('clicks 2.....', num2str((length(clicks2)))))
+% % disp(strcat('common .....' , num2str
 
 
 
-function num_comclicks = num_comclicks(clicks, clicks_ref, relaxtion);
+function num_comclicks = num_comclicks(clicks, clicks_ref, relaxation);
     % relaxation = 750;
     comclicks = [];
     for i = (1:length(clicks_ref))
@@ -69,21 +93,21 @@ function num_comclicks = num_comclicks(clicks, clicks_ref, relaxtion);
     num_comclicks = length(comclicks);
 
 
-    % for xi = 1:length(clicks)
-    %     x1 = (clicks(xi));
-    %     figure(1); hold on;
-    %     line([x1 x1], get(gca, 'ylim'),'Color', 'red','LineStyle', '--');
-    % end
-    % for xi = 1:length(clicks_ref)
-    %     x1 = (clicks_ref(xi));
-    %     figure(1); hold on;
-    %     line([x1 x1], get(gca, 'ylim'),'Color', 'blue','LineStyle', '--');
-    % end
+    for xi = 1:length(clicks)
+        x1 = (clicks(xi));
+        figure(1); hold on;
+        line([x1 x1], get(gca, 'ylim'),'Color', 'red','LineStyle', '--');
+    end
+    for xi = 1:length(clicks_ref)
+        x1 = (clicks_ref(xi));
+        figure(1); hold on;
+        line([x1 x1], get(gca, 'ylim'),'Color', 'blue','LineStyle', '--');
+    end
 
-    % for xi = 1:length(comclicks)
-    %     x1 = (comclicks(xi))
-    %     figure(1); hold on;
-    %     line([x1 x1], get(gca, 'ylim'),'Color', 'black');
-    % end
+    for xi = 1:length(comclicks)
+        x1 = (comclicks(xi));
+        figure(1); hold on;
+        line([x1 x1], get(gca, 'ylim'),'Color', 'black');
+    end
 
 end

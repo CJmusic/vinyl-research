@@ -19,9 +19,9 @@ if ismac() == true
 
     % record1 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/testing/maxbarrelzones3a.wav');
     % record2 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/styluswear/042820_A0000B0000r1a.wav');
-    % record1 = SeperateTracks('/AUDIOBANK/audio_files/A0137B0137/003a.wav')
-    record1 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/ableton/r27a-ableton1024.wav')
-
+    record1 = SeperateTracks('/AUDIOBANK/audio_files/A0137B0137/003a.wav')
+    % record1 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/ableton/r27a-ableton1024a.wav')
+    folder = '/Volumes/AUDIOBANK/audio_files/A0137B0137/'
     % record2 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/styluswear/040318_A0000B0000r001a.wav');
 
 end 
@@ -33,63 +33,80 @@ if ispc() == true
     addpath('')
 
     record1 = SeperateTracks('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/A0137B0137/003a.wav');
-    folder = '/Volumes/AUDIOBANK/audio_files/A0137B0137/'
     % record2 = SeperateTracks('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/A0137B0137/000a.wav');    
 end
-data1 = record1('1kHz');
-data1 = data1(1:length(data1)-1,1);
-time = (1:length(data1))/96000;
+
+% data1 = record1('1kHz');
+% data1 = data1(1:length(data1)-1,1);
+% time = (1:length(data1))/96000;
 
 folder = '/Volumes/AUDIOBANK/audio_files/A0137B0137/'
 files = dir(fullfile(folder,'*.wav'))
 
-for i = (1:2)%length(files)) %%loop through records
+for i = (1:length(files)) %%loop through records
     filename = files(i).name;
-    record2 = SeperateTracks(strcat(folder,filename))
+    record2 = SeperateTracks(filename);
+    % recordnum = filename(end-7,end-3);
 
-    fig = figure('visible','off');
-    plot(time, data1);
-    % plot(data1)
-    hold on; grid on;
-    data2 = record2('1kHz');
-    time = (1:length(data1))/96000;
-    data2 = data2(1:length(data1),1);
-    size(data1)
-    size(data2)
-    plot(time, data2);
-    name = string(filename(2:4))
-    % saveas(fig, strcat(name, '.png'))
-    % clf()
+    %Plot the two sweeps on top of each other
+    fig = figure(1)
+    data3 = record1('sweepV2');
+    data3 = data3(:,1);
+    time = (1:length(data3))/96000;
+    % plot(time,data3)
+    % hold on; grid on;
+    data4 = record2('sweepV2');
+    data4 = data4(:,1);
+    time = (1:length(data4))/96000;
+    plot(time,data4)
+
+    %-----------------crosscorrelations----------
+    nlags=100000;
+    fs = 96000;
+    [C1,tlag]=xcorr(data3,data4,nlags);
+    % [C2,tlag]=xcorr(dut2,ref2,nlags);
+    %----------plot amplitude------------
+    figure(20)
+    subplot(2,1,1)
+
+    data3 = data3(:,1);
+    time = (1:length(data3))/96000;
+    plot(time,data3)
+    grid on; hold on;
+    data4 = record2('sweepV2');
+    data4 = data4(:,1);
+    time = (1:length(data4))/96000;
+    plot(time,data4)
+    subplot(2,1,2)
+    plot(tlag/fs,C1,'b')
+    grid on; hold on;
+    legend('1st sweep','2nd sweep')
+    xlabel('time [s]')
+    ylabel('crosscorrelation')
+    axis([xlim ylim])
+    title('very coarse comparison')
+    %----------plot amplitude------------
+    % figure(30)
+    % plot(tlag/fs,C1,'b')
+    % grid on;hold on
+    % legend('1st sweep','2nd sweep')
+    % xlabel('time [s]')
+    % ylabel('crosscorrelation')
+    % axis([xlim/10 ylim])
+    % title('positive offset means dut missing samples wrt reference')
+    % %----------plot amplitude------------
+    % figure(40)
+    % plot(tlag/fs,C1,'b')
+    % grid on;hold on
+    % legend('1st sweep','2nd sweep')
+    % xlabel('time [s]')
+    % ylabel('crosscorrelation')
+    % axis([xlim/100 ylim])
+    % title('very fine comparison')
+    % disp('-------------end of test------------------')
+    figname = strcat(folder, filename(2:end-4),'.png')
+    saveas(fig,figname)
+    clf(fig)
 end
-% plot(data2)
 
 
-% figure(2)
-% data3 = record1('leadout');
-% data3 = data3(:,1);
-% time = (1:length(data3))/96000;
-% plot(time,data3)
-% hold on; grid on;
-% data4 = record2('leadout');
-% data4 = data4(:,1);
-% time = (1:length(data4))/96000;
-% plot(time,data4)
-
-% size(data1)
-% size(data2)
-% figure(3)
-% plot((data1 - data2))
-% sum((data1 - data2).^ 2)
-% correlation = sqrt(sum((data1 - data2).^ 2))/length(data1)  % >= R2016b: auto-expand
-% correlation = correlation / max(correlation)  % Normalize to [0, 1]
-
-figure(3)
-data3 = record1('sweepV2');
-data3 = data3(:,1);
-time = (1:length(data3))/96000;
-plot(time,data3)
-hold on; grid on;
-data4 = record2('sweepV2');
-data4 = data4(:,1);
-time = (1:length(data4))/96000;
-plot(time,data4)

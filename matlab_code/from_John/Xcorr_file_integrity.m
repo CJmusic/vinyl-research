@@ -18,19 +18,21 @@ end
 %filename='r30b-Technics-full.wav';t1=952.7588;
 
 % filename='r31a-Technics-full.wav';t1=955.48471;
-filename='D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\A0000B0000\040318_A0000B0000r031a.wav';t1=954.1865;
+% filename='D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\A0000B0000\040318_A0000B0000r031a.wav';t1=954.1865;
 
 %filename='r31b-Technics-full.wav';t1=958.9805;
 %filename='r104b-1-declicked.wav';t1=958.4144;
 %filename='minpucksize1b.wav';t1=957.352;
-filename='D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\A0137B0137\010b.wav';t1=957.352;
+% filename='D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\A0137B0137\010b.wav';t1=957.352;
+filename='/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/styluswear/040318_A0000B0000r001a.wav';t1=950.713;
 
 %filename='minpucksizem6b.wav';t1=957.5021;
 %filename='042820_late_test_file.wav';t1=957.2155;%*********reference file
 %filename='042820_late_test_file_declicked.wav';t1=957.2155;
 %filename='040318_early_test_file.wav';t1=950.7134;% bad file
 
-reffilename='D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\styluswear\042820_A0000B0000r1a.wav';t1ref=957.2155;%*********reference file
+% reffilename='D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_files\styluswear\042820_A0000B0000r1a.wav';t1ref=957.2155;
+reffilename = '/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/styluswear/042820_A0000B0000r1a.wav';t1ref=957.2155; %*********reference file
 % reffilename='042820_late_test_file.wav';t1ref=957.2155;%*********reference file
 
 [sigref,fs]=audioread(reffilename);

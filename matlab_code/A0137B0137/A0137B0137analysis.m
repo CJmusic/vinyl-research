@@ -103,6 +103,16 @@ AudioStats.Properties.VariableNames{'Var18'}='StdWow_R';
 AudioStats.Properties.VariableNames{'Var19'}='AvgStereobleed';
 AudioStats.Properties.VariableNames{'Var20'}='StdevStereobleed';
 
+disp('AudioTable')
+head(AudioTable)
+disp('RecordTable')
+head(RecordTable)
+disp('SensorTable')
+head(SensorTable)
+disp('AudioStats')
+head(AudioStats)
+disp('SettingsTable')
+SettingsTable
 
 
 % AudioStats
@@ -113,11 +123,21 @@ Tbl.Properties.VariableNames([1]) = {'PressingNumber'};
 writetable(Tbl,'Tbl1.csv')
 
 head(Tbl)
-head(AudioTable)
 
-Tbl = outerjoin(Tbl, AudioTable);%, 'VariableNames', 'RecordNumber')%;, SensorTable)
+
+%% Audio table is possibly missing pressing number
+% need to read audio table and create a pressing number variable name based off pressing 
+% and record. Did I already do this before? 
+
+
+Tbl = outerjoin(Tbl, AudioTable, 'Keys', {'RecordID', 'RecordID'});%, 'VariableNames', 'RecordNumber')%;, SensorTable)
+% Tbl = outerjoin(Tbl, AudioTable);%, 'VariableNames', 'RecordNumber')%;, SensorTable)
+% Tbl = outerjoin(Tbl, AudioTable);%, 'VariableNames', 'RecordNumber')%;, SensorTable)
 % Tbl = innerjoin(Tbl, AudioTable);%, 'VariableNames', 'RecordNumber')%;, SensorTable)
-% Tbl
+% Tbl = Tbl2;
+
+
+
 Tbl.Properties.VariableNames([1]) = {'PressingNumber'};
 writetable(Tbl,'Tbl2.csv')
 
@@ -140,6 +160,8 @@ writetable(Tbl,'Tbl4.csv')
 Tbl.Properties.VariableNames([1]) = {'PressingNumber'};
 Tbl.Properties.VariableNames([33]) = {'track'};
 
+
+% return
 
 % Tbl = Tbl(strcmp(Tbl.side,'a'),:);
 
