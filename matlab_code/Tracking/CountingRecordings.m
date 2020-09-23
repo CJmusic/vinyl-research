@@ -89,7 +89,7 @@ for i = (1:height(recording))
     recording.ASide{i} = 'n';
     recording.BSide{i} = 'n';
     recording.AUDIOBANK{i} = 'n';
-    recording.OneDrive{i} = 'n';
+    % recording.OneDrive{i} = 'n';
     
 end
 
@@ -107,26 +107,30 @@ files = dir(fullfile(folder,'*.wav'))
 
 for i = (1:length(files)) %%loop through records
     filename = files(i).name;
-    % disp(filename)
-    recordid = str2num(filename(19:21));
+    disp(filename)
+    recordid = (filename(1:3));
     disp(recordid)
-    side = filename(22);
+    side = filename(4);
     disp(side)
 
 
     % index = ismember(recording.RECORDID, str2num(filename))
+    % index = find((str2num(recording.RecordID, recordid)));
+    % index
 
     % index = str2num(recordid)
+    recording.ASide(recording.RecordID == str2num(recordid))
+
     if strcmp(side, 'a');
-        recording.ASide{recordid} = 'y';
+        recording.ASide(recording.RecordID == str2num(recordid)) = {'y'};
     end
     if strcmp(side, 'b');
-        recording.BSide{recordid} = 'y';
+        recording.BSide(recording.RecordID == str2num(recordid)) = {'y'};
     end
 
 
 end
 
-csvwrite('A0137B0137recordingtracking.csv',recording)
+writetable(recording, 'A0137B0137recordingtracking.csv')
 
 %~~~~~~~~~~~  COUNTING A0137B0137 ENDS ~~~~~~~~~~~~%
