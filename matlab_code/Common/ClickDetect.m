@@ -78,22 +78,22 @@ function [csig, clicks] = ClickDetect(sig)
         end
     end
 
-    for i = (1:length(clicks)-1)
-        abs(clicks(i)-clicks(i+1))
-        abs(clicks(i)-length(sig))
-        if abs(clicks(i) - clicks(i+1)) < 50000;
-            clicks(i) = [];
-        end 
-        if abs(clicks(i) - length(sig)) < 50000;
-            clicks(i) = [];
-        end    
-    end
+    % for i = (1:length(clicks)-1)
+    %     abs(clicks(i)-clicks(i+1))
+    %     abs(clicks(i)-length(sig))
+    %     if abs(clicks(i) - clicks(i+1)) < 50000;
+    %         clicks(i) = [];
+    %     end 
+    %     if abs(clicks(i) - length(sig)) < 50000;
+    %         clicks(i) = [];
+    %     end    
+    % end
 
-    if length(clicks) > 0
-        if abs(clicks(end) - length(sig)) < 50000;
-            clicks(end) = [];
-         end    
-    end
+    % if length(clicks) > 0
+    %     if abs(clicks(end) - length(sig)) < 50000;
+    %         clicks(end) = [];
+    %      end    
+    % end
 
 
 

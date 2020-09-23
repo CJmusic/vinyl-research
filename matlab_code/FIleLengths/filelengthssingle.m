@@ -37,13 +37,13 @@ if ispc() == true
     addpath('')
 
     % record1 = SeperateTracks('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/A0137B0137/003a.wav');
-    record1 = SeperateTracks('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/A0137B0137/017b.wav'); offset1 = 957.35208:
+    record1 = SeperateTracks('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/A0137B0137/017b.wav'); offset1 = 957.35208;
     % record2 = SeperateTracks('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/A0137B0137/000a.wav');    
     record2 = SeperateTracks('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/A0137B0137/012b.wav'); offset2 = 957.5021;
 end
 
-[data1, fs]audioread('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/A0137B0137/017b.wav')
-[data2, fs]audioread('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/A0137B0137/012b.wav')
+[data1, fs] = audioread('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/A0137B0137/017b.wav')
+[data2, fs] = audioread('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/A0137B0137/012b.wav')
 lagdiff = floor((offset1 - offset2)*fs);
 
 sigtime = timedata(floor(timestamps(t,1) ) - lagdiff :floor(timestamps(t,2) ) - lagdiff);

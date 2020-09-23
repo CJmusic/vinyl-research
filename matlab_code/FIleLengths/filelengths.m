@@ -85,6 +85,9 @@ for i = (1:length(files)) %%loop through records
     ylabel('crosscorrelation')
     axis([xlim ylim])
     title('very coarse comparison')
+
+    clf(figure(20))
+    clf(figure(1))
     %----------plot amplitude------------
     % figure(30)
     % plot(tlag/fs,C1,'b')

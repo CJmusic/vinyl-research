@@ -12,7 +12,7 @@ addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_
 [record1, ~] = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); 
 
 % [record2, ~] = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/testing/maxbarrelzones3b.wav');  
-% record2 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/testing/maxbarrelzones3a.wav');
+record2 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/testing/maxbarrelzones3a.wav');
 % record2 = SeperateTracks('/Volumes/AUDIOBANK/audio_files/A0137B0137/-01a.wav');
 % record2 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/testing/mincool5b.wav');
 % record2 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/testing/minpucksize1a.wav');
@@ -23,58 +23,83 @@ addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_
 % plot(record2('100Hz'))
 signals = record1.values;
 signal_names = record1.keys;
-for t = 1:length(record1.keys)
+% sig = signals{t};
+sig = record1('transition');
+sig2 = record2('transition');
 
-    sig = signals{t};
 
-    [~, clicks1] = ClickDetect(sig)
-    % [~, clicks2] = ClickDetect(sig)
+[~, clicks1] = ClickDetect(sig);
+[~, clicks2] = ClickDetect(sig2)
 
-    figure(t)
-    plot(sig)
-    title(signal_names{t})
+figure(2)
+plot(sig)
+hold on; grid on;
+plot(sig2)
+title('transition')
 
-    for xi = 1:length(clicks1)
-        x1 = (clicks1(xi));
-        figure(t); hold on;
-        line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
-    end
-    
-    % figure(2)
-    % plot(record2('quiet'))
-    % for xi = 1:length(clicks1)
-    %     x1 = (clicks2(xi));
-    %     figure(1); hold on;
-    %     line([x1 x1], get(gca, 'ylim'),'Color', 'red','LineStyle', '--');
-    % end
-    
-    disp(strcat('clicks ' , signal_names{t}, '...', num2str(length(clicks1))))
-    % disp(strcat('clicks record 2... ', num2str(length(clicks2))))
-    
-    
-
+for xi = 1:length(clicks1)
+    x1 = (clicks1(xi));
+    figure(2); hold on;
+    line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
 end
+
+figure(1)
+plot(sig)
+hold on; grid on;
+plot(sig2)
+num_comclicks(clicks1, clicks2, 100)
+
+
+% for t = 1:length(record1.keys)
+
+%     sig = signals{t};
+
+%     [~, clicks1] = ClickDetect(sig)
+%     % [~, clicks2] = ClickDetect(sig)
+
+%     figure(t)
+%     plot(sig)
+%     title(signal_names{t})
+
+%     for xi = 1:length(clicks1)
+%         x1 = (clicks1(xi));
+%         figure(t); hold on;
+%         line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
+%     end
+    
+%     % figure(2)
+%     % plot(record2('quiet'))
+%     % for xi = 1:length(clicks1)
+%     %     x1 = (clicks2(xi));
+%     %     figure(1); hold on;
+%     %     line([x1 x1], get(gca, 'ylim'),'Color', 'red','LineStyle', '--');
+%     % end
+    
+%     disp(strcat('clicks ' , signal_names{t}, '...', num2str(length(clicks1))))
+%     % disp(strcat('clicks record 2... ', num2str(length(clicks2))))
+    
+% end
 
 % figure(1)
 % plot(record1('quiet'))
 
-% RELAX = [0, 250, 500, 750, 1000, 1250, 1500];
-% COM = [];
-% for i = 1:length(RELAX); 
-%     common = num_comclicks(clicks1, clicks2, RELAX(i))
-%     COM = [COM, common];
-% end
+RELAX = [0, 250, 500, 750, 1000, 1250, 1500, 2500, 5000, 10000, 20000, 50000];
+COM = [];
+for i = 1:length(RELAX); 
+    common = num_comclicks(clicks1, clicks2, RELAX(i))
+    COM = [COM, common];
+end
 
-% figure(100)
-% plot(RELAX, COM)
-% grid on; 
-% title('Common clicks vs relaxation')
-% xlabel('relaxation')
-% ylabel('# of common clicks')
+figure(100)
+plot(RELAX, COM)
+grid on; 
+title('Common clicks vs relaxation')
+xlabel('relaxation')
+ylabel('# of common clicks')
 
-% disp(strcat('clicks 1.....', num2str((length(clicks1)))))
-% disp(strcat('clicks 2.....', num2str((length(clicks2)))))
-% % disp(strcat('common .....' , num2str
+disp(strcat('clicks 1.....', num2str((length(clicks1)))))
+disp(strcat('clicks 2.....', num2str((length(clicks2)))))
+% disp(strcat('common .....' , num2str
 
 
 
