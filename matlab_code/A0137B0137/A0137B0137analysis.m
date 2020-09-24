@@ -382,215 +382,248 @@ ylabel('number of clicks')
 title('Number of clicks in quiet tracks')
 saveas(figure(plotnum),'clicksquiet.png')
 
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ INDIVIDUAL PLOTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 
-% Tbl.A_L
-% Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet'))
-plotnum = plotnum + 1;
-figure(plotnum);  
-plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')), Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet2')),'ko')
-grid on; hold on;
-plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')), Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet2')),'kx')
-legend('left channel', 'right channel')
-title('PressingNumber vs minMouldSteamIn')
-saveas(figure(plotnum),'PressingNumber vs minMouldSteamIn.png')
+% plotnum = plotnum + 1;
+% figure(plotnum);  
+% plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')), Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet2')),'ko')
+% grid on; hold on;
+% plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')), Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet2')),'kx')
+% legend('left channel', 'right channel')
+% title('PressingNumber vs minMouldSteamIn')
+% saveas(figure(plotnum),'PressingNumber vs minMouldSteamIn.png')
 
-plotnum = plotnum + 1;
-figure(plotnum);  
-plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')), Tbl.RMS_L(strcmp(Tbl.track,'quiet2')),'ko')
-grid on; hold on;
-plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')), Tbl.RMS_R(strcmp(Tbl.track,'quiet2')),'kx')
-legend('left channel', 'right channel')
-title('PressingNumber vs RMS')
-saveas(figure(plotnum),'PressingNumber vs RMS.png')
-
-
-plotnum = plotnum + 1;
-figure(plotnum);  
-plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')), Tbl.A_L(strcmp(Tbl.track,'quiet2')),'ko')
-grid on; hold on;
-plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')), Tbl.A_R(strcmp(Tbl.track,'quiet2')),'kx')
-title('PressingNumber vs ARMS')
-legend('left channel', 'right channel')
-saveas(figure(plotnum),'PressingNumber vs ARMS.png')
-
-plotnum = plotnum + 1;
-figure(plotnum);  
-plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')), Tbl.clicks_L(strcmp(Tbl.track,'quiet2')),'ko')
-grid on; hold on;
-plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')), Tbl.clicks_R(strcmp(Tbl.track,'quiet2')),'kx')
-title('PressingNumber vs Clicks')
-legend('left channel', 'right channel')
-saveas(figure(plotnum),'PressingNumber vs Clicks.png')
+% plotnum = plotnum + 1;
+% figure(plotnum);  
+% plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')), Tbl.RMS_L(strcmp(Tbl.track,'quiet2')),'ko')
+% grid on; hold on;
+% plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')), Tbl.RMS_R(strcmp(Tbl.track,'quiet2')),'kx')
+% legend('left channel', 'right channel')
+% title('PressingNumber vs RMS')
+% saveas(figure(plotnum),'PressingNumber vs RMS.png')
 
 
-plotnum = plotnum + 1;
-figure(plotnum);  
-plot(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet2')),Tbl.RMS_L(strcmp(Tbl.track,'quiet2'),:),'ko')
-grid on; hold on;
-plot(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet2')),Tbl.RMS_R(strcmp(Tbl.track,'quiet2'),:),'kx')
-legend('left channel', 'right channel')
-title('RMS vs minMouldSteamIn')
-saveas(figure(plotnum),'minMouldSteamIn vs RMS.png')
+% plotnum = plotnum + 1;
+% figure(plotnum);  
+% plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')), Tbl.A_L(strcmp(Tbl.track,'quiet2')),'ko')
+% grid on; hold on;
+% plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')), Tbl.A_R(strcmp(Tbl.track,'quiet2')),'kx')
+% title('PressingNumber vs ARMS')
+% legend('left channel', 'right channel')
+% saveas(figure(plotnum),'PressingNumber vs ARMS.png')
 
-plotnum = plotnum + 1;
-figure(plotnum); 
-scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_L(strcmp(Tbl.track,'3150Hz2'),:),'ko')
-grid on; hold on;
-scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_R(strcmp(Tbl.track,'3150Hz2'),:),'kx')
-legend('left channel', 'right channel')
-title('Wow vs minMouldSteamIn')
-saveas(figure(plotnum),'minMouldSteamIn vs Wow.png')
-
-
-plotnum = plotnum + 1;
-figure(plotnum); 
-scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'1kHzL2')),Tbl.stereo_bleed(strcmp(Tbl.track,'1kHzL2'),:),'ko')
-grid on; hold on;
-title('stereo bleed vs minMouldSteamIn')
-saveas(figure(plotnum),'minMouldSteamIn vs stereo_bleed.png')
-
-plotnum = plotnum + 1;
-figure(plotnum);  
-scatter(Tbl.maxPressForce_Ton(strcmp(Tbl.track,'quiet2')),Tbl.A_L(strcmp(Tbl.track,'quiet2'),:),'ko')
-grid on; hold on;
-scatter(Tbl.maxPressForce_Ton(strcmp(Tbl.track,'quiet2')),Tbl.A_R(strcmp(Tbl.track,'quiet2'),:),'kx')
-legend('left channel', 'right channel')
-title('ARMS vs maxPressForce')
-saveas(figure(plotnum),'maxPressForce vs ARMS.png')
-
-plotnum = plotnum + 1;
-figure(plotnum); 
-scatter(Tbl.maxPressForce_Ton(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_L(strcmp(Tbl.track,'3150Hz2'),:),'ko')
-grid on; hold on;
-scatter(Tbl.maxPressForce_Ton(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_R(strcmp(Tbl.track,'3150Hz2'),:),'kx')
-legend('left channel', 'right channel')
-title(' Wow vs maxPressForce')
-saveas(figure(plotnum),'maxPressForce vs Wow.png')
+% plotnum = plotnum + 1;
+% figure(plotnum);  
+% plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')), Tbl.clicks_L(strcmp(Tbl.track,'quiet2')),'ko')
+% grid on; hold on;
+% plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')), Tbl.clicks_R(strcmp(Tbl.track,'quiet2')),'kx')
+% title('PressingNumber vs Clicks')
+% legend('left channel', 'right channel')
+% saveas(figure(plotnum),'PressingNumber vs Clicks.png')
 
 
+% plotnum = plotnum + 1;
+% figure(plotnum);  
+% plot(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet2')),Tbl.RMS_L(strcmp(Tbl.track,'quiet2'),:),'ko')
+% grid on; hold on;
+% plot(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet2')),Tbl.RMS_R(strcmp(Tbl.track,'quiet2'),:),'kx')
+% legend('left channel', 'right channel')
+% title('RMS vs minMouldSteamIn')
+% saveas(figure(plotnum),'minMouldSteamIn vs RMS.png')
 
-plotnum = plotnum + 1;
-figure(plotnum); 
-scatter(Tbl.maxPressForce_Ton(strcmp(Tbl.track,'1kHzL2')),Tbl.stereo_bleed(strcmp(Tbl.track,'1kHzL2'),:),'ko')
-grid on; hold on;
-title('stereo bleed vs maxPressForce')
-saveas(figure(plotnum),'maxPressForce vs stereo_bleed.png')
+% plotnum = plotnum + 1;
+% figure(plotnum); 
+% scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_L(strcmp(Tbl.track,'3150Hz2'),:),'ko')
+% grid on; hold on;
+% scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_R(strcmp(Tbl.track,'3150Hz2'),:),'kx')
+% legend('left channel', 'right channel')
+% title('Wow vs minMouldSteamIn')
+% saveas(figure(plotnum),'minMouldSteamIn vs Wow.png')
 
-plotnum = plotnum + 1;
-figure(plotnum);  
-scatter(Tbl.minExtruderMeltTemp_F(strcmp(Tbl.track,'quiet2')),Tbl.A_L(strcmp(Tbl.track,'quiet2'),:),'ko')
-grid on; hold on;
-scatter(Tbl.minExtruderMeltTemp_F(strcmp(Tbl.track,'quiet2')),Tbl.A_R(strcmp(Tbl.track,'quiet2'),:),'kx')
-legend('left channel', 'right channel')
-title('RMS vs minExtruderMeltTemp')
-saveas(figure(plotnum),'minExtruderMeltTemp vs RMS.png')
 
-plotnum = plotnum + 1;
-figure(plotnum); 
-scatter(Tbl.minExtruderMeltTemp_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_L(strcmp(Tbl.track,'3150Hz2'),:),'ko')
-grid on; hold on;
-scatter(Tbl.minExtruderMeltTemp_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_R(strcmp(Tbl.track,'3150Hz2'),:),'kx')
-legend('left channel', 'right channel')
-title('Wow vs minExtruderMeltTemp')
-saveas(figure(plotnum),'minExtruderMeltTemp vs Wow.png')
+% plotnum = plotnum + 1;
+% figure(plotnum); 
+% scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'1kHzL2')),Tbl.stereo_bleed(strcmp(Tbl.track,'1kHzL2'),:),'ko')
+% grid on; hold on;
+% title('stereo bleed vs minMouldSteamIn')
+% saveas(figure(plotnum),'minMouldSteamIn vs stereo_bleed.png')
 
-plotnum = plotnum + 1;
-figure(plotnum); 
-scatter(Tbl.minExtruderMeltTemp_F(strcmp(Tbl.track,'1kHzL2')),Tbl.stereo_bleed(strcmp(Tbl.track,'1kHzL2'),:),'ko')
-grid on; hold on;
-title('stereo bleed vs minExtruderMeltTemp')
-saveas(figure(plotnum),'minExtruderMeltTemp vs stereo_bleed.png')
+% plotnum = plotnum + 1;
+% figure(plotnum);  
+% scatter(Tbl.maxPressForce_Ton(strcmp(Tbl.track,'quiet2')),Tbl.A_L(strcmp(Tbl.track,'quiet2'),:),'ko')
+% grid on; hold on;
+% scatter(Tbl.maxPressForce_Ton(strcmp(Tbl.track,'quiet2')),Tbl.A_R(strcmp(Tbl.track,'quiet2'),:),'kx')
+% legend('left channel', 'right channel')
+% title('ARMS vs maxPressForce')
+% saveas(figure(plotnum),'maxPressForce vs ARMS.png')
 
-plotnum = plotnum + 1;
-figure(plotnum);  
-scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet2')),Tbl.A_L(strcmp(Tbl.track,'quiet2'),:),'ko')
-grid on; hold on;
-scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet2')),Tbl.A_R(strcmp(Tbl.track,'quiet2'),:),'kx')
-legend('left channel', 'right channel')
-title('RMS vs minMouldSteamIn')
-saveas(figure(plotnum),'minMouldSteamIn vs RMS.png')
-
-plotnum = plotnum + 1;
-figure(plotnum); 
-scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_L(strcmp(Tbl.track,'3150Hz2'),:),'ko')
-grid on; hold on;
-scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_R(strcmp(Tbl.track,'3150Hz2'),:),'kx')
-legend('left channel', 'right channel')
-title('Wow vs minMouldSteamIn')
-saveas(figure(plotnum),'minMouldSteamIn vs Wow.png')
-
-plotnum = plotnum + 1;
-figure(plotnum); 
-scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'1kHzL2')),Tbl.stereo_bleed(strcmp(Tbl.track,'1kHzL2'),:),'ko')
-grid on; hold on;
-legend('left channel', 'right channel')
-title('stereo bleed vs minMouldSteamIn')
-saveas(figure(plotnum),'minMouldSteamIn vs stereo_bleed.png')
-
-plotnum = plotnum + 1;
-figure(plotnum);  
-scatter(Tbl.maxMouldSteamOutTop_F(strcmp(Tbl.track,'quiet2')),Tbl.A_L(strcmp(Tbl.track,'quiet2'),:),'ko')
-grid on; hold on;
-scatter(Tbl.maxMouldSteamOutTop_F(strcmp(Tbl.track,'quiet2')),Tbl.A_R(strcmp(Tbl.track,'quiet2'),:),'kx')
-legend('left channel', 'right channel')
-title('RMS vs maxMouldSteamOutTop')
-saveas(figure(plotnum),'maxMouldSteamOutTop vs RMS.png')
+% plotnum = plotnum + 1;
+% figure(plotnum); 
+% scatter(Tbl.maxPressForce_Ton(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_L(strcmp(Tbl.track,'3150Hz2'),:),'ko')
+% grid on; hold on;
+% scatter(Tbl.maxPressForce_Ton(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_R(strcmp(Tbl.track,'3150Hz2'),:),'kx')
+% legend('left channel', 'right channel')
+% title(' Wow vs maxPressForce')
+% saveas(figure(plotnum),'maxPressForce vs Wow.png')
 
 
 
-plotnum = plotnum + 1;
-figure(plotnum); 
-scatter(Tbl.maxMouldSteamOutBottom_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_L(strcmp(Tbl.track,'3150Hz2'),:),'ko')
-grid on; hold on;
-scatter(Tbl.maxMouldSteamOutBottom_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_R(strcmp(Tbl.track,'3150Hz2'),:),'kx')
-legend('left channel', 'right channel')
-title('Wow vs maxMouldSteamOutBottom')
-saveas(figure(plotnum),'maxMouldSteamOutBottom vs Wow.png')
+% plotnum = plotnum + 1;
+% figure(plotnum); 
+% scatter(Tbl.maxPressForce_Ton(strcmp(Tbl.track,'1kHzL2')),Tbl.stereo_bleed(strcmp(Tbl.track,'1kHzL2'),:),'ko')
+% grid on; hold on;
+% title('stereo bleed vs maxPressForce')
+% saveas(figure(plotnum),'maxPressForce vs stereo_bleed.png')
+
+% plotnum = plotnum + 1;
+% figure(plotnum);  
+% scatter(Tbl.minExtruderMeltTemp_F(strcmp(Tbl.track,'quiet2')),Tbl.A_L(strcmp(Tbl.track,'quiet2'),:),'ko')
+% grid on; hold on;
+% scatter(Tbl.minExtruderMeltTemp_F(strcmp(Tbl.track,'quiet2')),Tbl.A_R(strcmp(Tbl.track,'quiet2'),:),'kx')
+% legend('left channel', 'right channel')
+% title('RMS vs minExtruderMeltTemp')
+% saveas(figure(plotnum),'minExtruderMeltTemp vs RMS.png')
+
+% plotnum = plotnum + 1;
+% figure(plotnum); 
+% scatter(Tbl.minExtruderMeltTemp_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_L(strcmp(Tbl.track,'3150Hz2'),:),'ko')
+% grid on; hold on;
+% scatter(Tbl.minExtruderMeltTemp_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_R(strcmp(Tbl.track,'3150Hz2'),:),'kx')
+% legend('left channel', 'right channel')
+% title('Wow vs minExtruderMeltTemp')
+% saveas(figure(plotnum),'minExtruderMeltTemp vs Wow.png')
+
+% plotnum = plotnum + 1;
+% figure(plotnum); 
+% scatter(Tbl.minExtruderMeltTemp_F(strcmp(Tbl.track,'1kHzL2')),Tbl.stereo_bleed(strcmp(Tbl.track,'1kHzL2'),:),'ko')
+% grid on; hold on;
+% title('stereo bleed vs minExtruderMeltTemp')
+% saveas(figure(plotnum),'minExtruderMeltTemp vs stereo_bleed.png')
+
+% plotnum = plotnum + 1;
+% figure(plotnum);  
+% scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet2')),Tbl.A_L(strcmp(Tbl.track,'quiet2'),:),'ko')
+% grid on; hold on;
+% scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet2')),Tbl.A_R(strcmp(Tbl.track,'quiet2'),:),'kx')
+% legend('left channel', 'right channel')
+% title('RMS vs minMouldSteamIn')
+% saveas(figure(plotnum),'minMouldSteamIn vs RMS.png')
+
+% plotnum = plotnum + 1;
+% figure(plotnum); 
+% scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_L(strcmp(Tbl.track,'3150Hz2'),:),'ko')
+% grid on; hold on;
+% scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_R(strcmp(Tbl.track,'3150Hz2'),:),'kx')
+% legend('left channel', 'right channel')
+% title('Wow vs minMouldSteamIn')
+% saveas(figure(plotnum),'minMouldSteamIn vs Wow.png')
+
+% plotnum = plotnum + 1;
+% figure(plotnum); 
+% scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'1kHzL2')),Tbl.stereo_bleed(strcmp(Tbl.track,'1kHzL2'),:),'ko')
+% grid on; hold on;
+% legend('left channel', 'right channel')
+% title('stereo bleed vs minMouldSteamIn')
+% saveas(figure(plotnum),'minMouldSteamIn vs stereo_bleed.png')
+
+% plotnum = plotnum + 1;
+% figure(plotnum);  
+% scatter(Tbl.maxMouldSteamOutTop_F(strcmp(Tbl.track,'quiet2')),Tbl.A_L(strcmp(Tbl.track,'quiet2'),:),'ko')
+% grid on; hold on;
+% scatter(Tbl.maxMouldSteamOutTop_F(strcmp(Tbl.track,'quiet2')),Tbl.A_R(strcmp(Tbl.track,'quiet2'),:),'kx')
+% legend('left channel', 'right channel')
+% title('RMS vs maxMouldSteamOutTop')
+% saveas(figure(plotnum),'maxMouldSteamOutTop vs RMS.png')
 
 
 
-plotnum = plotnum + 1;
-figure(plotnum); 
-scatter(Tbl.maxMouldSteamOutBottom_F(strcmp(Tbl.track,'1kHzL2')),Tbl.stereo_bleed(strcmp(Tbl.track,'1kHzL2'),:),'ko')
-grid on; hold on;
-title('stereo bleed vs maxMouldSteamOutBottom')
-saveas(figure(plotnum),'maxMouldSteamOutBottom vs stereo bleed.png')
+% plotnum = plotnum + 1;
+% figure(plotnum); 
+% scatter(Tbl.maxMouldSteamOutBottom_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_L(strcmp(Tbl.track,'3150Hz2'),:),'ko')
+% grid on; hold on;
+% scatter(Tbl.maxMouldSteamOutBottom_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_R(strcmp(Tbl.track,'3150Hz2'),:),'kx')
+% legend('left channel', 'right channel')
+% title('Wow vs maxMouldSteamOutBottom')
+% saveas(figure(plotnum),'maxMouldSteamOutBottom vs Wow.png')
 
 
-plotnum = plotnum + 1;
-figure(plotnum);  
-scatter(Tbl.minMouldSteamOutBottom_F(strcmp(Tbl.track,'quiet2')),Tbl.A_L(strcmp(Tbl.track,'quiet2'),:),'ko')
-grid on; hold on;
-scatter(Tbl.minMouldSteamOutBottom_F(strcmp(Tbl.track,'quiet2')),Tbl.A_R(strcmp(Tbl.track,'quiet2'),:),'kx')
-legend('left channel', 'right channel')
-title('RMS vs minMouldSteamOutBottom')
-saveas(figure(plotnum),'minMouldSteamOutBottom vs RMS.png')
 
-plotnum = plotnum + 1;
-figure(plotnum); 
-scatter(Tbl.minMouldSteamOutBottom_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_L(strcmp(Tbl.track,'3150Hz2'),:),'ko')
-grid on; hold on;
-scatter(Tbl.minMouldSteamOutBottom_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_R(strcmp(Tbl.track,'3150Hz2'),:),'kx')
-legend('left channel', 'right channel')
-title(' Wow vs minMouldSteamOutBottom')
-saveas(figure(plotnum),'minMouldSteamOutBottom vs Wow.png')
-
-plotnum = plotnum + 1;
-plot_scatter(plotnum, Tbl.minMouldSteamOutBottom_F(strcmp(Tbl.track,'1kHzL2')),Tbl.stereo_bleed(strcmp(Tbl.track,'1kHzL2'),:),'minMouldSteamOutBottom vs stereo bleed')
-
-plotnum = plotnum + 1;
-plot_scatter2(plotnum,Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')),Tbl.A_L(strcmp(Tbl.track,'quiet2'),:),Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')),Tbl.A_R(strcmp(Tbl.track,'quiet2'),:),'RMS vs Pressing number')
-
-plotnum = plotnum + 1;
-figure(plotnum);  
-plot_scatter2(plotnum,Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet2')),Tbl.clicks_L(strcmp(Tbl.track,'quiet2'),:),Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet2')),Tbl.clicks_R(strcmp(Tbl.track,'quiet2'),:),'clicks vs minMouldSteamIn')
+% plotnum = plotnum + 1;
+% figure(plotnum); 
+% scatter(Tbl.maxMouldSteamOutBottom_F(strcmp(Tbl.track,'1kHzL2')),Tbl.stereo_bleed(strcmp(Tbl.track,'1kHzL2'),:),'ko')
+% grid on; hold on;
+% title('stereo bleed vs maxMouldSteamOutBottom')
+% saveas(figure(plotnum),'maxMouldSteamOutBottom vs stereo bleed.png')
 
 
-plotnum = plotnum + 1;
-plot_scatter2(plotnum,Tbl.maxExtruderBarrelZone3Temp_F(strcmp(Tbl.track,'quiet2')),Tbl.A_L(strcmp(Tbl.track,'quiet2')),Tbl.maxExtruderBarrelZone3Temp_F(strcmp(Tbl.track,'quiet2')),Tbl.A_R(strcmp(Tbl.track,'quiet2'),:),'maxExtruderBarrelZone3Temp_Fvs RMS.png')
+% plotnum = plotnum + 1;
+% figure(plotnum);  
+% scatter(Tbl.minMouldSteamOutBottom_F(strcmp(Tbl.track,'quiet2')),Tbl.A_L(strcmp(Tbl.track,'quiet2'),:),'ko')
+% grid on; hold on;
+% scatter(Tbl.minMouldSteamOutBottom_F(strcmp(Tbl.track,'quiet2')),Tbl.A_R(strcmp(Tbl.track,'quiet2'),:),'kx')
+% legend('left channel', 'right channel')
+% title('RMS vs minMouldSteamOutBottom')
+% saveas(figure(plotnum),'minMouldSteamOutBottom vs RMS.png')
 
-plotnum = plotnum + 1;
-plot_scatter2(plotnum,Tbl.PressingNumber(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_L(strcmp(Tbl.track,'3150Hz2'),:), Tbl.PressingNumber(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_R(strcmp(Tbl.track,'3150Hz2'),:),'Wow vs PressingNumber')
+% plotnum = plotnum + 1;
+% figure(plotnum); 
+% scatter(Tbl.minMouldSteamOutBottom_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_L(strcmp(Tbl.track,'3150Hz2'),:),'ko')
+% grid on; hold on;
+% scatter(Tbl.minMouldSteamOutBottom_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_R(strcmp(Tbl.track,'3150Hz2'),:),'kx')
+% legend('left channel', 'right channel')
+% title(' Wow vs minMouldSteamOutBottom')
+% saveas(figure(plotnum),'minMouldSteamOutBottom vs Wow.png')
+
+% plotnum = plotnum + 1;
+% plot_scatter(plotnum, Tbl.minMouldSteamOutBottom_F(strcmp(Tbl.track,'1kHzL2')),Tbl.stereo_bleed(strcmp(Tbl.track,'1kHzL2'),:),'minMouldSteamOutBottom vs stereo bleed')
+
+% plotnum = plotnum + 1;
+% plot_scatter2(plotnum,Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')),Tbl.A_L(strcmp(Tbl.track,'quiet2'),:),Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')),Tbl.A_R(strcmp(Tbl.track,'quiet2'),:),'RMS vs Pressing number')
+
+% plotnum = plotnum + 1;
+% figure(plotnum);  
+% plot_scatter2(plotnum,Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet2')),Tbl.clicks_L(strcmp(Tbl.track,'quiet2'),:),Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet2')),Tbl.clicks_R(strcmp(Tbl.track,'quiet2'),:),'clicks vs minMouldSteamIn')
+
+
+% plotnum = plotnum + 1;
+% plot_scatter2(plotnum,Tbl.maxExtruderBarrelZone3Temp_F(strcmp(Tbl.track,'quiet2')),Tbl.A_L(strcmp(Tbl.track,'quiet2')),Tbl.maxExtruderBarrelZone3Temp_F(strcmp(Tbl.track,'quiet2')),Tbl.A_R(strcmp(Tbl.track,'quiet2'),:),'maxExtruderBarrelZone3Temp_Fvs RMS.png')
+
+% plotnum = plotnum + 1;
+% plot_scatter2(plotnum,Tbl.PressingNumber(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_L(strcmp(Tbl.track,'3150Hz2'),:), Tbl.PressingNumber(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_R(strcmp(Tbl.track,'3150Hz2'),:),'Wow vs PressingNumber')
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ INDIVIDUAL PLOTS END ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+
+
+
+
+%~~~~~~~~~~~~~~~~~~~~~~ LOOP THROUGH AND GET EVERY POSSIBLE PLOT ~~~~~~~~~~~~~~~~~~~~~%
+
+% loop through track 
+% for each track, plot every possible audio column against every possible parameter column
+% the columns are as follows 
+
+% Pressing Number = col 1    
+% Sensor measurements = col 6:29
+% Audio measurements  = col 37:53 
+
+
+
+head(Tbl)
+
+TblCol = Tbl.Properties.VariableNames;
+for i = (6:29)
+    for j = (37:53)
+        press_name = TblCol(i);
+        audio_name = TblCol(j);
+        plot_scatter2(plotnum,Tbl.maxExtruderBarrelZone3Temp_F(strcmp(Tbl.track,'quiet2')),Tbl.A_L(strcmp(Tbl.track,'quiet2')), Tbl.maxExtruderBarrelZone3Temp_F(strcmp(Tbl.track,'quiet2')),Tbl.A_R(strcmp(Tbl.track,'quiet2'),:),'maxExtruderBarrelZone3Temp_Fvs RMS.png')
+
+        plot_scatter2
+
+    end
+end
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 
 function plot_scatter2(plotnum, x1, y1, x2, y2, titlestring)
     figure(plotnum);  
