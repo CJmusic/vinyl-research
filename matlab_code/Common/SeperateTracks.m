@@ -1,4 +1,8 @@
-
+% clear all;close all;clc
+% set(0,'DefaultLineLineWidth',1.0);
+% set(0,'DefaultAxesFontSize',12);
+% set(0,'DefaultAxesFontWeight','bold')
+% set(0,'DefaultAxesLineWidth',1.5)
 
 
 % file = ('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r029a.wav')
@@ -21,12 +25,16 @@ function [output, info_array] = SeperateTracks(file)
             disp('SEPERATE TRACKS CALLED')
             if ismac() == true
                 if file(length(file)-4) == 'a'
+                    disp('MAC')
+                    disp('Using a side reference')
                     [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); 
                     %% Reference 02072019_A0000B000r27a.wav 
                     offset = 15; 
                 elseif file(length(file)-4) == 'b'
-                    disp('PC')
-                    [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028b.wav'); 
+                    disp('MAC')
+                    disp('Using b side reference')
+
+                    [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r029b.wav'); 
                     %% Reference 02072019_A0000B000r27b.wav 
                     offset = 13.1;
                 else 
@@ -156,11 +164,16 @@ function [output, info_array] = SeperateTracks(file)
             % disp(strcat(num2str(size(timeref)), num2str(size(refLockout))))
             % disp(strcat(num2str(size(timedata)), num2str(size(dataLockout))))
             
+            % timereflockout = (0:length(refLockout)-1)/fs ;
+            % timedatalockout = (0:length(dataLockout)-1)/fs + lagdiff/fs;
     
     
-            % figure(100); grid on;
-            % plot(timeref,refLockout)
-            % plot(timedata,dataLockout)
+            % figure(100); grid on; hold on;
+            % plot(timedatalockout,dataLockout(:,1),'k')
+            % hold on;
+            % plot(timereflockout,refLockout(:,1),'b')
+            % title('Leadout tracks lined up')
+            % xlabel('time [s]')
             % title(track_name)
             %***   DEBUG ENDS  ***%
            
@@ -305,4 +318,19 @@ function [output, info_array] = SeperateTracks(file)
             % plot(signals{2})
             % figure(10001)
             % plot(output('1kHz'))
+
+            % figure(1001)
+            % timeref  = (0:length(ref)-1)/fs;
+            % timedata = (0:length(data)-1)/fs + lagdiff/fs;
+            % subplot(2,1,1)
+            % plot(timeref, ref(:,1),'k')
+            % grid on;
+            % title('Reference track')
+            % xlabel('time [s]')
+            % subplot(2,1,2)
+            % plot(timedata,data(:,1),'k')
+            % grid on;
+            % title('Recorded track')
+            % xlabel('time [s]')
+
         end

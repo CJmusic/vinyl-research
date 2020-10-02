@@ -384,6 +384,43 @@ saveas(figure(plotnum),'clicksquiet.png')
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ INDIVIDUAL PLOTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 
+
+
+head(Tbl)
+
+TblCol = Tbl.Properties.VariableNames;
+plotnum = 0
+tracks = unique(A0137B0137.track);
+
+for k = (1:length(tracks))
+    track = tracks{i};
+    for i = (6:29)
+        plotnum = plotnum + 1;
+        for j = (37:53)
+            press_name = TblCol(i);
+            audio_name = TblCol(j);
+
+            press_data = Tbl.(i);
+            audio_data = Tbl.(j);
+
+            aside = Tbl(strcmp(Tbl.track, track) & strcmp(Tbl.side, 'a'))
+            bside = Tbl(strcmp(Tbl.track, track) & strcmp(Tbl.side, 'a'))
+            
+
+
+
+
+            plot_scatter2(plotnum, Tbl)
+
+            plot_scatter2(plotnum,Tbl.maxExtruderBarrelZone3Temp_F(strcmp(Tbl.track,'quiet2')),Tbl.A_L(strcmp(Tbl.track,'quiet2')), Tbl.maxExtruderBarrelZone3Temp_F(strcmp(Tbl.track,'quiet2')),Tbl.A_R(strcmp(Tbl.track,'quiet2'),:),'maxExtruderBarrelZone3Temp_Fvs RMS.png')
+
+
+        end
+    end
+end
+
+
+
 % plotnum = plotnum + 1;
 % figure(plotnum);  
 % plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')), Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet2')),'ko')
@@ -608,19 +645,6 @@ saveas(figure(plotnum),'clicksquiet.png')
 
 
 
-head(Tbl)
-
-TblCol = Tbl.Properties.VariableNames;
-for i = (6:29)
-    for j = (37:53)
-        press_name = TblCol(i);
-        audio_name = TblCol(j);
-        plot_scatter2(plotnum,Tbl.maxExtruderBarrelZone3Temp_F(strcmp(Tbl.track,'quiet2')),Tbl.A_L(strcmp(Tbl.track,'quiet2')), Tbl.maxExtruderBarrelZone3Temp_F(strcmp(Tbl.track,'quiet2')),Tbl.A_R(strcmp(Tbl.track,'quiet2'),:),'maxExtruderBarrelZone3Temp_Fvs RMS.png')
-
-        plot_scatter2
-
-    end
-end
 
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%

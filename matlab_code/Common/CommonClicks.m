@@ -34,13 +34,13 @@ sig2 = record2('transition');
 figure(2)
 plot(sig)
 hold on; grid on;
-plot(sig2)
+% plot(sig2)
 title('transition')
 
 for xi = 1:length(clicks1)
     x1 = (clicks1(xi));
     figure(2); hold on;
-    line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
+    % line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
 end
 
 figure(1)
@@ -83,7 +83,7 @@ num_comclicks(clicks1, clicks2, 100)
 % figure(1)
 % plot(record1('quiet'))
 
-RELAX = [0, 250, 500, 750, 1000, 1250, 1500, 2500, 5000, 10000, 20000, 50000];
+RELAX = [0, 250, 500, 750, 1000, 1250, 1500, 2500, 5000, 10000, 20000, 50000, 96000];
 COM = [];
 for i = 1:length(RELAX); 
     common = num_comclicks(clicks1, clicks2, RELAX(i))
