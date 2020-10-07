@@ -11,31 +11,34 @@ addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_
 addpath('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
 addpath('/Volumes/AUDIOBANK/audio_files/A0000B0000/')
 
-% folder = ('/Volumes/AUDIOBANK/audio_files/A0000B0000/')
-% plot_folder = '/Volumes/AUDIOBANK/audio_files/A0000B0000/plots/';
+folder = ('/Volumes/AUDIOBANK/audio_files/A0000B0000/')
+plot_folder = '/Volumes/AUDIOBANK/audio_files/A0000B0000/plots/';
 
-folder = ('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
-plot_folder = '/Volumes/AUDIOBANK/audio_files/A0137B0137/plots/';
+% folder = ('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
+% plot_folder = '/Volumes/AUDIOBANK/audio_files/A0137B0137/plots/';
 
 
 files = dir(fullfile(folder,'*.wav'))
-plotfiles = dir(fullfile(plot_folder))
-cellplotfiles = struct2cell(plotfiles)
-plotnames = cellplotfiles{1,:}
+
+% plotfiles = dir(fullfile(plot_folder))
+% cellplotfiles = struct2cell(plotfiles)
+% plotnames = cellplotfiles{1,:}
 
 for i = (1:length(files)) %%loop through records
-    filename = files(i).name;
+    filename = files(i).name
     files(i);
     recordnum = filename(1:end-4)
 
-    plotfiles
+    % plotfiles
     strcat(recordnum,'.png')
 
-    if any(strcmp(plotnames, strcat(recordnum,'.png')))
-        disp('...already processed')
-        continue
-    end
-    % filename = filename(3:end);
+    % if any(strcmp(plotnames, strcat(recordnum,'.png')))
+    %     disp('...already processed')
+    %     continue
+    % end
+
+    % filename = filename(:end);
+
     disp(['opening file...:', filename])
     [data,fs] = audioread(filename);
     figure(1)
