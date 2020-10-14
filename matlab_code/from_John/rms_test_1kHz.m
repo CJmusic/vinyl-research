@@ -15,15 +15,24 @@ try
 catch
 end
 
-filename='042820_late_test_file_1kHz.wav';ts=35;tf=45;
-[rev,fs]=audioread(filename);
+addpath('/Users/cz/Code/vinyl-research/matlab_code/Common/')
+
+% filename='042820_late_test_file_1kHz.wav';ts=35;tf=45;
+% [rev,fs]=audioread(filename);
+
+tracks = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r029a.wav');
+rev = tracks('1kHz');tracks = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r029a.wav'); 
+revdeclick = rev;
+ts = 10; tf = 20;
+fs = 96000;
+
 
 w1=2*707/fs;w2=2*1404/fs;%bandpass for 1kHz
 [b,a]=butter(4,[w1 w2]);
 revf=filter(b,a,rev);
 
-filename='042820_late_test_file_declick_1kHz.wav';%ts=20;tf=30;
-[revdeclick,fs]=audioread(filename);
+% filename='042820_late_test_file_declick_1kHz.wav';%ts=20;tf=30;
+% [revdeclick,fs]=audioread(filename);
 
 lr=2; %1=left, 2=right
 disp(['left_right: ' num2str(lr)])

@@ -1,45 +1,45 @@
-% clear all;close all;clc
-% set(0,'DefaultLineLineWidth',1.0);
-% set(0,'DefaultAxesFontSize',12);
-% set(0,'DefaultAxesFontWeight','bold')
-% set(0,'DefaultAxesLineWidth',1.5)
+clear all;close all;clc
+set(0,'DefaultLineLineWidth',1.0);
+set(0,'DefaultAxesFontSize',12);
+set(0,'DefaultAxesFontWeight','bold')
+set(0,'DefaultAxesLineWidth',1.5)
 
-% addpath('/Users/cz/Code/vinyl-research/matlab_code/audio_functions')
+addpath('/Users/cz/Code/vinyl-research/matlab_code/audio_functions')
 
-% tracks = SeperateTracksTest('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r029a.wav')
-% reference = SeperateTracksTest('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav')
+tracks = SeperateTracksTest('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r029a.wav')
+reference = SeperateTracksTest('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav')
 
-% figure(1)
-% plot(tracks('1kHz'))
+figure(1)
+plot(tracks('1kHz'))
+hold on;
+title('normalized signal')
+
+
+fs = 96000;
+seg = tracks('1kHz');
+% seg = seg(1:2^16,:);
+L = 2^16;
+seg = seg(floor(length(seg)/2) - L/2:floor(length(seg)/2) + L/2 - 1,:);
+size(seg)
+
+refseg = reference('1kHz');
+refseg = refseg(1:2^16,:);
+
+
+[spec, fftfreq] = audio_spectrum(seg, fs, 1, 2^16);
+[refspec, fftfreq] = audio_spectrum(refseg, fs, 1, 2^16);
+
+figure(2)
+audio_plotspectrum(fftfreq, spec, 'after seperate tracks')
 % hold on;
-% title('normalized signal')
-
-
-% fs = 96000;
-% seg = tracks('1kHz');
-% % seg = seg(1:2^16,:);
-% L = 2^16;
-% seg = seg(floor(length(seg)/2) - L/2:floor(length(seg)/2) + L/2 - 1,:);
-% size(seg)
-
-% refseg = reference('1kHz');
-% refseg = refseg(1:2^16,:);
-
-
-% [spec, fftfreq] = audio_spectrum(seg, fs, 1, 2^16);
-% [refspec, fftfreq] = audio_spectrum(refseg, fs, 1, 2^16);
-
-% figure(2)
-% audio_plotspectrum(fftfreq, spec, 'after seperate tracks')
-% % hold on;
-% figure(3)
-% audio_plotspectrum(fftfreq, refspec, 'reference')
+figure(3)
+audio_plotspectrum(fftfreq, refspec, 'reference')
 
 
 
 
-function [output, info_array] = SeperateTracks(file)
-%function [output, info_array] = SeperateTracksTest(file)
+% function [output, info_array] = SeperateTracks(file)
+function [output, info_array] = SeperateTracksTest(file)
         %~~~~~~~~~~~~~~~~~ LOAD REFERENCE ~~~~~~~~~~~~~~~~~%
             % try 
             % addpath('/Users/cz/Code/vinyl-research/matlab_code/audio_functions')
@@ -220,16 +220,20 @@ function [output, info_array] = SeperateTracks(file)
             win = flattopwin(L);
             winseg = seg.*win;
             windowfactor = 0.2155774;% 0.2155774 for flattop window, 0.5 for hann window
-            normalization = max(abs(fftseg))/sqrt(2); % normalize to 5 cm/s rms = 0 dB
+
+            % normalization = max(abs(fftseg)); % normalize to 7 cm/s peak = 0 dB
+            % normalization = max(abs(fftseg))/sqrt(2); % normalize to 5 cm/s rms = 0 dB
 
             [fftseg, fftfreq] = audio_spectrum(winseg/windowfactor, fs, 1, L);
             figure(101)
             audio_plotspectrum(fftfreq, fftseg, 'before normalization')
 
-            
+            w1 = 2*707/fs; w2 = 2*1404/fs;
+            [b,a] = butter(4, [w1 w2]);
+            segfilt = filter(b,a,seg);
+            normalization = rms_response(seg);
 
 
-            % normalization = max(abs(fftseg)); % normalize to 7 cm/s peak = 0 dB
             normalization_L = normalization(1);
             normalization_R = normalization(2);
             
@@ -262,7 +266,14 @@ function [output, info_array] = SeperateTracks(file)
             figure(103)
             audio_plotspectrum(fftfreq, spec, 'after normalization')
 
+
+
             %~~~~~~~~~~~~~~~~~~~~~~~~~~~ END NORMALIZATION~~~~~~~~~~~~~~~~~~~~~~~~~~%
+
+
+
+            % normalization_L = 0;
+            % normalization_R = 0;
 
             signals = cell(length(signal_names),1);
             signal_times = cell(length(signal_names),1);
