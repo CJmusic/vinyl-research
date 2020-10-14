@@ -13,11 +13,14 @@ tracks = SeperateTracksTest(file)
 figure(1)
 plot(tracks('1kHz'))
 hold on;
-plot(reference('1kHz'))
+title('normalized signal')
+
 
 fs = 96000;
 seg = tracks('1kHz');
-seg = seg(1:2^16,:);
+% seg = seg(1:2^16,:);
+L = 2^16;
+seg = seg(floor(length(seg)/2) - L/2:floor(length(seg)/2) + L/2 - 1,:);
 size(seg)
 
 refseg = reference('1kHz');
@@ -109,7 +112,7 @@ function [output, info_array] = SeperateTracksTest(file)
                             '1kHz2',     % 15
                             '10kHz2',    % 16
                             '100Hz2',    % 17
-                            'sweep2',% 18
+                            'sweep2',    % 18
                             'quiet2',    % 19
                             '3150Hz2',   % 20
                             '1kHzL2',    % 21
@@ -201,92 +204,68 @@ function [output, info_array] = SeperateTracksTest(file)
            
     
         %~~~~~~~~~~~~~~~~~~~~ NORMALIZATION ~~~~~~~~~~~~~~~~~~~~%
+
+            %~~~~ separate out the 1 kHz track
             t = 1;
             sigtime = timedata(floor(timestamps(t,1)*fs):floor(timestamps(t,2)*fs));
             sig = data(floor(timestamps(t,1)*fs): floor(timestamps(t,2)*fs),:);
     
             sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
             sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
-            % sigMAX=max(sig);
-            
-            %% THIS NORMALIZATION IS ALL WRONG, NEED TO TAKE THE FFT WITH FLATTOP WINDOWS AND FIND THE MAX PEAK 
-
-
-            % Simple normalization DONT DO THIS
-            % sigRMS = rms(sig);
-            % normalization=sqrt(2)*sigRMS; %digital value of peak level
-            % normalization_L = normalization(1);
-            % normalization_R = normalization(2);
-            % Simple normalization ends
-
-
             L = 2^16;
-        
             seg = sig(floor(length(sig)/2) - L/2:floor(length(sig)/2) + L/2 - 1,:);
-            % seg = sig;
-            % [b,a]=butter(2,2*100 ,'high');% not really necessary with fft filter
-            % seg(:,1) = filter(b,a,seg(:,1));
-            % seg(:,2) = filter(b,a,seg(:,2));
-        
-            figure(100)
+            
+            figure(100) 
             plot(seg)
 
-            % win = flattopwin(L);
-            % seg = seg.*win;
-            % fftsigL = fft(seg(:,1));
-            % fftsigR = fft(seg(:,2));
-            
-            [fftsigL, fftfreq] = audio_spectrum(seg(:,1), fs, 1, L);
-            [fftsigR, fftfreq] = audio_spectrum(seg(:,2), fs, 1, L);
-            
+            %~~~~ window the data
+            win = flattopwin(L);
+            winseg = seg.*win;
+            windowfactor = 0.2155774;% 0.2155774 for flattop window, 0.5 for hann window
+
+            [fftseg, fftfreq] = audio_spectrum(winseg/windowfactor, fs, 1, L);
             figure(101)
-            audio_plotspectrum(fftfreq, [fftsigL, fftsigR], 'before normalization')
+            audio_plotspectrum(fftfreq, fftseg, 'before normalization')
 
-            figure(102)
-            plot(fftfreq, abs([fftsigL, fftsigR]))
-
-            % peak_L = max(abs(fftsigL));
-            % peak_R = max(abs(fftsigR));
-            % normalization = [peak_L, peak_R]
-            %flattop window
-
-
-            %fft 
-
-            %peak of fft
-
-            % figure(1000)
-            % plot(data)
-            % disp("MESSED UP PART")
-            % % size(data)
-            % disp(strcat('sigrms...', num2str(sigRMS)))
-            % disp(strcat('normalization...', num2str(normalization)))
+            % normalization = max(abs(fftseg)); % normalize to 7 cm/s peak = 0 dB
+            normalization = max(abs(fftseg))/sqrt(2); % normalize to 5 cm/s rms = 0 dB
+            normalization_L = normalization(1);
+            normalization_R = normalization(2);
+            
             disp(strcat('max data before...', num2str(max(data))))
+            disp(strcat('max data before dB...', num2str(20.0*log10(max(abs(fftseg))))))
             disp(strcat('rms data before...', num2str(rms(data))))
-            % normalization_L = normalization(1);
-            % normalization_R = normalization(2);
-            normalization_L = 0;
-            normalization_R = 0;
-            % disp(strcat('normalization_L...', num2str(normalization_L)))
-            % disp(strcat('normalization_R...', num2str(normalization_R)))
-            % data(:,1)=data(:,1)./normalization_L;% now normalized to 40cm/s peak    
-            % data(:,2)=data(:,2)./normalization_R;% now normalized to 40cm/s peak 
-            % size(data)
+            disp(strcat('rms data before dB...', num2str(20.0*log10(rms(data))))
+            disp(strcat('normalization_L...', num2str(normalization_L)))
+            disp(strcat('normalization_R...', num2str(normalization_R)))
+            
+            data(:,1)=data(:,1)./normalization_L;% now normalized to 40cm/s peak    
+            data(:,2)=data(:,2)./normalization_R;% now normalized to 40cm/s peak 
+
+            t = 1;
+            sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
+            L = 2^16;        
+            seg = sig(floor(length(sig)/2) - L/2:floor(length(sig)/2) + L/2 - 1,:);
+
+            [fftseg, fftfreq] = audio_spectrum(seg, fs, 1, L);
+
             disp(strcat('max data after...', num2str(max(data))))
+            disp(strcat('max data after dB...', num2str(20.0*log10(max(abs(fftseg))))))
             disp(strcat('rms data after...', num2str(rms(data))))
+            disp(strcat('rms data after dB...', num2str(20.0*log10(rms(data)))))
 
             sig = data(floor(timestamps(t,1)*fs): floor(timestamps(t,2)*fs),:);
-            [spec, fftfreq] = audio_spectrum(sig, fs, 1, 2^16);
+            seg = sig(floor(length(sig)/2) - L/2:floor(length(sig)/2) + L/2 - 1,:);
+            [spec, fftfreq] = audio_spectrum(seg.*win, fs, 1, 2^16);
 
             figure(103)
             audio_plotspectrum(fftfreq, spec, 'after normalization')
-            
 
-            % figure(1001)
-            % plot(data)
+            %~~~~~~~~~~~~~~~~~~~~~~~~~~~ END NORMALIZATION~~~~~~~~~~~~~~~~~~~~~~~~~~%
 
             signals = cell(length(signal_names),1);
             signal_times = cell(length(signal_names),1);
+
             for t = (1:length(signal_names))
                 track_name = signal_names{t};
                 disp(strcat('track  ...',track_name))
