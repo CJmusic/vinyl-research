@@ -46,43 +46,41 @@ function [output, info_array] = SeperateTracks(file)
     
             % %~~~~ MAC ~~~~%
             disp('SEPERATE TRACKS CALLED')
+            % USE 003a and 052b as references 
+
             if ismac() == true
                 if file(length(file)-4) == 'a'
                     disp('MAC')
                     disp('Using a side reference')
-                    [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); 
-                    %% Reference 02072019_A0000B000r27a.wav 
-                    offset = 15; 
+                    % [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); offset = 15; 
+                    [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/040318_A0000B0000r003a.wav'); offset = 9.227; 
                 elseif file(length(file)-4) == 'b'
                     disp('MAC')
                     disp('Using b side reference')
 
-                    [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r029b.wav'); 
-                    %% Reference 02072019_A0000B000r27b.wav 
-                    offset = 13.1;
+                    % [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r029b.wav'); offset = 13.1;
+                    [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/080619-A0000B0000r052b.wav'); offset = 14.662;
                 else 
                     disp('NO SIDE FOUND, USING SIDE A REFERENCE')
-                    [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); 
-                    %% Reference 02072019_A0000B000r27a.wav 
-                    offset = 15; 
+                    % [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav');offset = 15; 
+                    [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/040318_A0000B0000r003a.wav'); offset = 9.227; 
+                    
                 end
             end
             if ispc() == true
                 disp('IS PC')
                 if file(length(file)-4) == 'a'
-                    [ref, ] = audioread('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); 
-                    %% Reference 02072019_A0000B000r27a.wav 
-                    offset = 15; 
+                    % [ref, ] = audioread('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); offset = 15; 
+                    [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/040318_A0000B0000r003a.wav'); offset = 9.227; 
+
                 elseif file(length(file)-4) == 'b'
                     disp('PC')
-                    [ref, ] = audioread('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028b.wav'); 
-                    %% Reference 02072019_A0000B000r27b.wav 
-                    offset = 13.1;
+                    % [ref, ] = audioread('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028b.wav'); offset = 13.1;
+                    [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/080619-A0000B0000r052b.wav'); offset = 14.662;
                 else 
                     disp('NO SIDE FOUND, USING SIDE A REFERENCE')
-                    [ref, ] = audioread('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); 
-                    %% Reference 02072019_A0000B000r27a.wav 
-                    offset = 15; 
+                    % [ref, ] = audioread('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); offset = 15; 
+                    [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/040318_A0000B0000r003a.wav'); offset = 9.227; 
                 end
 
             end
@@ -213,8 +211,8 @@ function [output, info_array] = SeperateTracks(file)
             L = 2^16;
             seg = sig(floor(length(sig)/2) - L/2:floor(length(sig)/2) + L/2 - 1,:);
             
-            figure(100) 
-            plot(seg)
+            % figure(100) 
+            % plot(seg)
 
             %~~~~ window the data
             win = flattopwin(L);
@@ -225,8 +223,8 @@ function [output, info_array] = SeperateTracks(file)
             % normalization = max(abs(fftseg))/sqrt(2); % normalize to 5 cm/s rms = 0 dB
 
             [fftseg, fftfreq] = audio_spectrum(winseg/windowfactor, fs, 1, L);
-            figure(101)
-            audio_plotspectrum(fftfreq, fftseg, 'before normalization')
+            % figure(101)
+            % audio_plotspectrum(fftfreq, fftseg, 'before normalization')
 
             w1 = 2*707/fs; w2 = 2*1404/fs;
             [b,a] = butter(4, [w1 w2]);
@@ -263,8 +261,8 @@ function [output, info_array] = SeperateTracks(file)
             seg = sig(floor(length(sig)/2) - L/2:floor(length(sig)/2) + L/2 - 1,:);
             [spec, fftfreq] = audio_spectrum(seg.*win, fs, 1, 2^16);
 
-            figure(103)
-            audio_plotspectrum(fftfreq, spec, 'after normalization')
+            % figure(103)
+            % audio_plotspectrum(fftfreq, spec, 'after normalization')
 
 
 
