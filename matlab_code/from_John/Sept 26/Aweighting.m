@@ -9,6 +9,8 @@ try
 catch
 end
 
+
+addpath('/Users/cz/Code/vinyl-research/matlab_code/from_John/July 9')
 %--------------------------------------
 fs=96000; 
 N=2^14;disp(['Total duration [s] ' num2str(N/fs)])

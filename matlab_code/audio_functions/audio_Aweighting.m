@@ -6,19 +6,16 @@ set(0,'DefaultAxesFontWeight','bold')
 set(0,'DefaultAxesLineWidth',1.5)
 % dBfs = 0;%-34.0%-6.0
 
+%~~~~~ GENERATE LOG SWEEP ~~~~~~~~%
 
 % sig_frac=0.5;% fraction of full scale
 % sig_frac = 10^(dBfs/20.0)
-sig_frac = 1;
-
-
+sig_frac = 1.0;
 fs=96000;% must ensure that Windows settings are the same!
 N=2^21;%19;% make this larger if there is insufficient time clearance
-
 % S_dac=-1.59;% Focusrite 2i2 Yes, it inverts its monitor output!
 % S_adc=+1.16;% Focusrite 2i2 line input gain @ 12:00 o'clock
-
-Npad=N/4;% this is the total zeropad, added to end of play file
+Npad=0;%N/4;% this is the total zeropad, added to end of play file
 Ns=N-Npad;% most of array is used for sweep
 
 t=linspace(0,(N-1)/fs,N)';% column vector
@@ -47,6 +44,13 @@ windosweep=windo.*sweep;% tapered at each end for output to DAC
 %-----------------------------------------------------------------------%
 
 y=sig_frac*[windosweep windosweep];% in phase for vinyl pressing
+%~~~~~ GENERATE LOG SWEEP ENDS ~~~~~~~~%
+
+
+% y = sin(1000*ts*fs);
+% audiowrite('sweep.wav',y,fs)
+
+
 
 data = y;
 
@@ -57,38 +61,22 @@ data = y;
 
 
 fs = 96000;
-figure(10);
+figure(1);
 plot(data)
 grid on;
+
+
+[data_fft, freq_fft] = audio_spectrum(data, fs, 1, length(data));
+figure(2)
+audio_plotspectrum(freq_fft, data_fft, 'pre filter')
+
 
 % data = data(1:10*fs);
 data_A = audio_AweightingTest(data);
 
-N = length(data);
-freq=([1:N/2+1]'-1)*fs/N;
-
-data_A_fft = fft(data_A);
-data_A_fft = abs(data_A_fft(1:floor(N/2+1)));
-
-data_fft = fft(data);
-data_fft = abs(data_fft(1:floor(N/2+1)));
-figure(1); grid on;
-semilogx(freq,20*log10(data_A_fft),'b');
-grid on;
-xlabel('Frequency [Hz]')
-ylabel('SPL [dB]')
-title('A weighted noise');
-
-
-data_fft = fft(data);
-data_fft = abs(data_fft(1:floor(N/2+1)));
-
-figure(2); 
-semilogx(freq,20*log10(data_fft),'b');
-grid on;
-xlabel('Frequency [Hz]')
-ylabel('SPL [dB]')
-title('Unweighted noise');
+[dataA_fft, freqA_fft] = audio_spectrum(data_A, fs, 1, length(data_A));
+figure(3)
+audio_plotspectrum(freqA_fft, dataA_fft, 'post filter')
 
 % function data_A = audio_Aweighting(data)
 function data_A = audio_AweightingTest(data)

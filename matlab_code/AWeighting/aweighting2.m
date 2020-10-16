@@ -60,7 +60,6 @@ grid on;
 [data_A]=Aweighting_filterTest(data,96000);
 % data_A = audio_AweightingTest(data);
 
-audio_spectrum()
 
 % function[weighted_array]=Aweighting_filter(array,fs)
 function[weighted_array]=Aweighting_filterTest(array,fs)
