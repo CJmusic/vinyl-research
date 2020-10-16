@@ -1,5 +1,4 @@
-
-\%A-weighting digital filter
+%A-weighting digital filter
 clear all;close all;clc
 set(0,'DefaultLineLineWidth',1.5);
 set(0,'DefaultAxesFontSize',12);
@@ -17,7 +16,7 @@ time=([1:N]'-1)/fs; % make time positive column vector starting at zero
 signal=zeros(N,1);
 signal(10)=1;%unit impulse
 %-------------------------------------------------------
-% output=Aweighting_filter(signal,fs);
+output=Aweighting_filter(signal,fs);
 
 figure(30)
 plot(time,output,'b');
