@@ -308,6 +308,15 @@ function output = recordProcess(file)
                 
                 clicks_L = length(CLICKS_L);
                 clicks_R = length(CLICKS_R); 
+
+                rmssig_L = rms(sig(:,1));
+                rmssig_R = rms(sig(:,2));
+                rmscsig_L = rms(csig(:,1));
+                rmscsig_R = rms(csig(:,2));
+
+                RMSclicks_L = 20.0*log10(sqrt(rmssig_L^2-rmscsig_L^2));
+                RMSclicks_R = 20.0*log10(sqrt(rmssig_R^2-rmscsig_R^2));
+
     
                 RMS_L = 20.0*log10(rms(csig(:,1)));
                 RMS_R = 20.0*log10(rms(csig(:,2)));
@@ -341,18 +350,19 @@ function output = recordProcess(file)
                 end
     
                 if ismember(signal_names(t), {'3150Hz', '3150Hz2'})
-                    wow_L = WowFlutter(csig(:,1));
-                    wow_R = WowFlutter(csig(:,2));
+                    [wow_L, centreholeoffset] = WowFlutter(csig(:,1));
+                    [wow_R, ~] = WowFlutter(csig(:,2));
                 else 
                     wow_L = 0;
                     wow_R = 0;
+                    centreholeoffset = 0;
                 end
               
                 track = signal_names(t);
           
     
     
-                output = [output; track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, A_L, A_R, CCIR_L, CCIR_R, clicks_L, clicks_R, commonclicksa_L, commonclicksa_R ,commonclicksb_L, commonclicksb_R, THD_L, THD_R, wow_L, wow_R, stereo_bleed];
+                output = [output; track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, A_L, A_R, CCIR_L, CCIR_R, clicks_L, clicks_R, commonclicksa_L, commonclicksa_R ,commonclicksb_L, commonclicksb_R, RMSclicks_L, RMSclicks_R, THD_L, THD_R, wow_L, wow_R, centreholeoffset, stereo_bleed];
                
     
             end
