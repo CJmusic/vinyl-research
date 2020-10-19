@@ -176,7 +176,7 @@ function [output, info_array] = SeperateTracks(file)
             % figure(21)
             % plot(lags_L/fs, acor_L)
 
-            disp(strcat('lagdiff ...', num2str(lagdiff)))
+            disp(strcat('lagdiff...', num2str(lagdiff)))
     
             timeref = (0:length(ref)-1) ;
             timedata = (0:length(data)-1)   + lagdiff ;

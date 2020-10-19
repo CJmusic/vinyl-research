@@ -321,14 +321,14 @@ function output = recordProcess(file)
                 RMS_L = 20.0*log10(rms(csig(:,1)));
                 RMS_R = 20.0*log10(rms(csig(:,2)));
     
-                Aw = audio_Aweighting(csig(:,1));
-                CCIRw = audio_CCIRweighting(csig(:,1));
+                Aw = audio_Aweighting(csig);
+                CCIRw = audio_CCIRweighting(csig);
     
-                A_L = 20.0*log10(rms_response(Aw(1,:)));
-                A_R = 20.0*log10(rms_response(Aw(2,:)));
+                A_L = 20.0*log10(rms_response(Aw(:,1)));
+                A_R = 20.0*log10(rms_response(Aw(:,2)));
     
-                CCIR_L = 20.0*log10(avg_response(CCIRw(1,:)));
-                CCIR_R = 20.0*log10(avg_response(CCIRw(2,:)));
+                CCIR_L = 20.0*log10(avg_response(CCIRw(:,1)));
+                CCIR_R = 20.0*log10(avg_response(CCIRw(:,2)));
     
                 %***    DEBUG    ***%
                 % figure(t); grid on;
@@ -352,6 +352,7 @@ function output = recordProcess(file)
                 if ismember(signal_names(t), {'3150Hz', '3150Hz2'})
                     [wow_L, centreholeoffset] = WowFlutter(csig(:,1));
                     [wow_R, ~] = WowFlutter(csig(:,2));
+                    centreholeoffset = wow_L/3150*R*cosd(20)
                 else 
                     wow_L = 0;
                     wow_R = 0;
