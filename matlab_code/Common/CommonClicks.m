@@ -24,30 +24,30 @@
 % signals = record1.values;
 % signal_names = record1.keys;
 % % sig = signals{t};
-% sig = record1('transition');
-% sig2 = record2('transition');
+% sig = record1('1kHz');
+% sig2 = record2('1kHz');
 
 
 % [~, clicks1] = ClickDetect(sig);
 % [~, clicks2] = ClickDetect(sig2)
 
-% figure(2)
-% plot(sig)
-% hold on; grid on;
+% % figure(2)
+% % plot(sig)
+% % hold on; grid on;
+% % % plot(sig2)
+% % title('transition')
+
+% % for xi = 1:length(clicks1)
+% %     x1 = (clicks1(xi));
+% %     figure(2); hold on;
+% %     % line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
+% % end
+
+% % figure(1)
+% % plot(sig)
+% % hold on; grid on;
 % % plot(sig2)
-% title('transition')
-
-% for xi = 1:length(clicks1)
-%     x1 = (clicks1(xi));
-%     figure(2); hold on;
-%     % line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
-% end
-
-% figure(1)
-% plot(sig)
-% hold on; grid on;
-% plot(sig2)
-% num_comclicks(clicks1, clicks2, 100)
+% % num_comclicks(clicks1, clicks2, 100)
 
 
 % % for t = 1:length(record1.keys)
@@ -86,7 +86,7 @@
 % RELAX = [0, 250, 500, 750, 1000, 1250, 1500, 2500, 5000, 10000, 20000, 50000, 96000];
 % COM = [];
 % for i = 1:length(RELAX); 
-%     common = num_comclicks(clicks1, clicks2, RELAX(i))
+%     common = num_comclicksTest(clicks1, clicks2, RELAX(i))
 %     COM = [COM, common];
 % end
 
@@ -103,7 +103,8 @@
 
 
 
-function num_comclicks = num_comclicks(clicks, clicks_ref, relaxation);
+function num_comclicks = num_comclicks(clicks, clicks_ref);
+% function num_comclicks = num_comclicksTest(clicks, clicks_ref, relaxation);
     % relaxation = 750;
     relaxation = 1000;
     comclicks = [];

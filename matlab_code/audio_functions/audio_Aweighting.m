@@ -72,6 +72,7 @@
 % audio_plotspectrum(freqA_fft, dataA_fft, 'post filter')
 
 % tracks = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r029a.wav');
+% tracks = SeperateTracks('/Volumes/AUDIOBANK/audio_files/A0137B0137/-01a.wav');
 % data = tracks('1kHz');
 
 % fs = 96000;
