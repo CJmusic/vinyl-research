@@ -353,10 +353,10 @@ function output = recordProcess(file)
                     wow_L = WowFlutter(csig(:,1));
                     wow_R = WowFlutter(csig(:,2));
                     if strcmp(signal_names(t),'3150Hz')
-                        R = 13.5;
+                        R = 13;
                     end
                     if strcmp(signal_names(t),'3150Hz2')
-                        R = 7.75;
+                        R = 7.8;
                     end
                     centreholeoffset = (wow_L/3150)*R*cosd(20);
                 else 

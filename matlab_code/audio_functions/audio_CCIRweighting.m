@@ -51,8 +51,8 @@
 % fs = 96000;
 % time = (1:1/fs:10);
 % size(time)
-% data(:,1) = sin(2*pi*1000*time);
-% data(:,2) = sin(2*pi*1000*time);
+% data(:,1) = sin(2*pi*2000*time);
+% data(:,2) = sin(2*pi*2000*time);
 
 % fs = 96000;
 % figure(1);

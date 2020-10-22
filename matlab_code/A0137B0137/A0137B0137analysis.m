@@ -115,7 +115,7 @@ head(AudioStats)
 disp('SettingsTable')
 SettingsTable
 
-
+% writetable(AudioStats,'AudioStats.csv')
 % AudioStats
 Tbl = outerjoin(RecordTable, SensorTable);%,'VariableNames', 'RecordNumber')%;, SensorTable)
 % Tbl = innerjoin(RecordTable, SensorTable);%,'VariableNames', 'RecordNumber')%;, SensorTable)
@@ -142,10 +142,8 @@ Tbl = outerjoin(Tbl, AudioTable, 'Keys', {'RecordID', 'RecordID'});%, 'VariableN
 Tbl.Properties.VariableNames([1]) = {'PressingNumber'};
 writetable(Tbl,'Tbl2.csv')
 
-Tbl = outerjoin(Tbl, AudioStats);
-% Tbl = innerjoin(Tbl, AudioStats);
-% writetable(Tbl,'Tbl.csv')
-writetable(Tbl,'Tbl3.csv')
+% Tbl = outerjoin(Tbl, AudioStats);
+% writetable(Tbl,'Tbl3.csv')
 Tbl.Properties.VariableNames([3]) = {'pressing'};
 
 
@@ -166,7 +164,7 @@ Tbl.Properties.VariableNames([33]) = {'track'};
 
 % Tbl = Tbl(strcmp(Tbl.side,'a'),:);
 
-Tbl = Tbl(strcmp(Tbl.side,'a'),:);
+% Tbl = Tbl(strcmp(Tbl.side,'a'),:);
 
 for i = (1:length(Tbl.Properties.VariableNames))
     disp(string(Tbl.Properties.VariableNames(i)));
@@ -649,67 +647,129 @@ plotnum = 0;
 % Sensor settings = col 79:93
 width(Tbl)
 Tbl_headers = Tbl.Properties.VariableNames;
-for i = 37:53 % audio measurements
-    audio_data = table2array(Tbl(:,i));
-    for j = 6:29 % sensor measurements
-        sensor_data = table2array(Tbl(:,j));
-        plotnum = plotnum + 1; 
-        plotname = strcat(Tbl_headers{i}, 'vs', Tbl_headers{j},'.png');
-        plot_scatter(plotnum, sensor_data, audio_data, plotname);
-    end
+Tbl_a = Tbl(strcmp(Tbl.side,'a'),:);
+Tbl_b = Tbl(strcmp(Tbl.side,'b'),:);
+
+
+disp('PRINTING TABLES')
+head(Tbl_a)
+head(Tbl_b)
+
+files = dir('/Users/cz/Code/vinyl-research/matlab_code/A0137B0137/plots/*.png');
+
+filenames = files.name;
+filenames
+for i = (1:length(files))
+    filenames = [filenames, files(i).name];
 end
 
-for i = 37:53 % audio measurements
-    audio_data = table2array(Tbl(:,i));
-    for j = 79:93 % sensor settings
-        sensor_set = table2array(Tbl(:,k));
-        plotnum = plotnum + 1; 
-        plotname = strcat(Tbl_headers{i}, 'vs', Tbl_headers{j},'.png');
-        plot_scatter(plotnum, sensor_set, audio_data, plotname);
+for k = 1:length(tracks)
+    tbl_a = Tbl_a(strcmp(Tbl_a.track,tracks(k)),:);
+    tbl_b = Tbl_b(strcmp(Tbl_b.track,tracks(k)),:);
+
+
+    % head(tbl_a)
+    % head(tbl_b)
+
+    for i = 37:53 % audio measurements
+        audio_data_a = table2array(tbl_a(:,i));
+        audio_data_b = table2array(tbl_b(:,i));
+        for j = 6:29 % sensor measurements
+            plotname = strcat(tracks(k),Tbl_headers{i}, 'vs', Tbl_headers{j},'a.png');
+            plotname = plotname{1};
+
+            disp(plotname)
+            if ismember(plotname, filenames)
+                disp('plot already processed...')
+                continue
+            end
+        
+            sensor_data_a = table2array(tbl_a(:,j));
+            plotnum = plotnum + 1; 
+            plot_scatter(plotnum, sensor_data_a, audio_data_a, plotname);
+
+
+            plotname = strcat(tracks(k),Tbl_headers{i}, 'vs', Tbl_headers{j},'b.png');
+            plotname = plotname{1};
+
+            if ismember(plotname, filenames)
+                disp('plot already processed...')
+                continue
+            end
+
+            sensor_data_b = table2array(tbl_b(:,j));
+            plotnum = plotnum + 1; 
+            plot_scatter(plotnum, sensor_data_b, audio_data_b, plotname);
+
+        end
     end
+
+    % for i = 37:53 % audio measurements
+    %     audio_data_a = table2array(tbl_a(:,i));
+    %     audio_data_b = table2array(tbl_b(:,i));
+    %     for j = 79:93 % sensor settings
+    %         sensor_set_a = table2array(tbl_a(:,j));
+    %         plotnum = plotnum + 1; 
+    %         plotname = strcat(tracks(k),Tbl_headers{i}, 'vs', Tbl_headers{j},'a.png');
+    %         plot_scatter(plotnum, sensor_set_a, audio_data_a, plotname);
+
+    %         sensor_set_b = table2array(tbl_b(:,j));
+    %         plotnum = plotnum + 1; 
+    %         plotname = strcat(tracks(k),Tbl_headers{i}, 'vs', Tbl_headers{j},'b.png');
+    %         plot_scatter(plotnum, sensor_set_b, audio_data_b, plotname);
+
+    %     end
+    % end
+
 end
 
-for j = 6:29 % sensor measurements
-    sensor_data = table2array(Tbl(:,j));
-    for k = 79:93 % sensor settings
-        sensor_set = table2array(Tbl(:,k));
-        plotnum = plotnum + 1; 
-        plotname = strcat(Tbl_headers{i}, 'vs', Tbl_headers{j},'.png');
-        plot_scatter(plotnum, sensor_data, audio_data, plotname);
-    end
-end
+% for j = 6:29 % sensor measurements
+%     sensor_data_a = table2array(tbl_a(:,j));
+%     sensor_data_b = table2array(tbl_b(:,j));
+%     for j = 79:93 % sensor settings
+%         sensor_set_a = table2array(tbl_a(:,j));
+%         plotnum = plotnum + 1; 
+%         plotname = strcat(Tbl_headers{i}, 'vs', Tbl_headers{j},tracks(k),'a.png');
+%         plot_scatter(plotnum, sensor_data_a, audio_data_a, plotname);
 
+%         sensor_set_b = table2array(tbl_b(:,j));
+%         plotnum = plotnum + 1; 
+%         plotname = strcat(Tbl_headers{i}, 'vs', Tbl_headers{j},tracks(k),'b.png');
+%         plot_scatter(plotnum, sensor_data_b, audio_data_b, plotname);
+%     end
+% end
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 
 function plot_scatter2(plotnum, x1, y1, x2, y2, titlestring)
-    figure(plotnum);  
-    scatter(x1,y1,'ko')
+    % figure(plotnum);  
+    fig = figure('visible','off');
+    scatter(x1,y1,'ko');
     grid on; hold on;
-    scatter(x2,y2,'kx')
-    legend('left channel', 'right channel')
-    title(titlestring)
-    plotfile = strcat('plots/',titlestring)
-    saveas(figure(plotnum), plotfile)
+    scatter(x2,y2,'kx');
+    legend('left channel', 'right channel');
+    title(titlestring);
+    plotfile = strcat('plots/',titlestring);
+    saveas(fig, plotfile);
 end
 
 function plot_scatter(plotnum, x1, y1, titlestring)
-    figure(plotnum);  
-    scatter(x1,y1,'ko')
-    grid on; hold on;
-    legend('left channel', 'right channel')
-    title(titlestring)
-    plotfile = strcat('plots/',titlestring)
-    saveas(figure(plotnum), plotfile)
+    % figure(plotnum);  
+    fig = figure('visible','off');
+    scatter(x1,y1,'ko');
+    grid on;
+    title(titlestring);
+    plotfile = strcat('plots/',titlestring);
+    saveas(fig, plotfile);
 end
 
 function plot_scatteravg(plotnum, x1, y1, titlestring)
-    figure(plotnum);  
-    scatter(x1,y1,'ko')
-    grid on; hold on;
-    legend('left channel', 'right channel')
-    title(titlestring)
-    plotfile = strcat('plots/',titlestring)
-    saveas(figure(plotnum), plotfile)
+    % figure(plotnum);  
+    fig = figure('visible','off');
+    scatter(x1,y1,'ko');
+    grid on; hold on;;
+    title(titlestring);
+    plotfile = strcat('plots/',titlestring);
+    saveas(fig, plotfile);
 end
 
 
