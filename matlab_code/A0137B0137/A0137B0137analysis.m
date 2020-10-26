@@ -131,41 +131,22 @@ head(Tbl)
 
 
 Tbl = outerjoin(Tbl, AudioTable, 'Keys', {'RecordID', 'RecordID'});%, 'VariableNames', 'RecordNumber')%;, SensorTable)
-% Tbl = outerjoin(Tbl, AudioTable);%, 'VariableNames', 'RecordNumber')%;, SensorTable)
-% Tbl = outerjoin(Tbl, AudioTable);%, 'VariableNames', 'RecordNumber')%;, SensorTable)
-% Tbl = innerjoin(Tbl, AudioTable);%, 'VariableNames', 'RecordNumber')%;, SensorTable)
-% Tbl = Tbl2;
-
-
-
 Tbl.Properties.VariableNames([1]) = {'PressingNumber'};
 writetable(Tbl,'Tbl2.csv')
 
 Tbl = outerjoin(Tbl, AudioStats);
-% Tbl = innerjoin(Tbl, AudioStats);
-% writetable(Tbl,'Tbl.csv')
 writetable(Tbl,'Tbl3.csv')
 Tbl.Properties.VariableNames([3]) = {'pressing'};
 
 
 Tbl = outerjoin(Tbl, SettingsTable);
-% Tbl = innerjoin(Tbl, AudioStats);
-% writetable(Tbl,'Tbl.csv')
 writetable(Tbl,'Tbl4.csv')
-
-% Tbl = unique(Tbl.RMS_L) ;
-% writetable(Tbl,'Tbl5.csv')
-
 
 Tbl.Properties.VariableNames([1]) = {'PressingNumber'};
 Tbl.Properties.VariableNames([33]) = {'track'};
 
 
-% return
-
 % Tbl = Tbl(strcmp(Tbl.side,'a'),:);
-
-Tbl = Tbl(strcmp(Tbl.side,'a'),:);
 
 for i = (1:length(Tbl.Properties.VariableNames))
     disp(string(Tbl.Properties.VariableNames(i)));
@@ -564,14 +545,20 @@ plotnum = 0;
 
 % plot_scatter2(plotnum,Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet2')),Tbl.clicks_L(strcmp(Tbl.track,'quiet2'),:),Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet2')),Tbl.clicks_R(strcmp(Tbl.track,'quiet2'),:),'clicks vs minMouldSteamIn')
 plotnum = plotnum + 1; 
-plot_scatter(plotnum, Tbl, 'quiet', 'minMouldSteamIn_F', 'clicks_L','test')
-plot_scatter2(plotnum, Tbl, 'quiet', 'minMouldSteamIn_F', 'clicks_L', 'clicks_R','test')
+plot_scatter(plotnum, Tbl, 'quiet', 'a', 'minMouldSteamIn_F', 'clicks_L','test')
+plotnum = plotnum + 1; 
+plot_scatter(plotnum, Tbl, 'quiet', 'b', 'minMouldSteamIn_F', 'clicks_L','test')
+plotnum = plotnum + 1; 
+plot_scatter2(plotnum, Tbl,'quiet', 'a', 'minMouldSteamIn_F', 'clicks_L', 'clicks_R','test')
+plotnum = plotnum + 1; 
+plot_scatter2(plotnum, Tbl,'quiet', 'b', 'minMouldSteamIn_F', 'clicks_L', 'clicks_R','test')
 
 
 
-function plot_scatter(plotnum, Tbl, trackname, x, y,titlestring)
+function plot_scatter(plotnum, Tbl, trackname, side, x, y,titlestring)
     cols = Tbl.Properties.VariableNames;
     Tbl = Tbl(strcmp(Tbl.track,trackname),:);
+    Tbl = Tbl(strcmp(Tbl.side,side),:);
     colx = find(ismember(cols, x));
     coly = find(ismember(cols, y));
     X = table2array(Tbl(:,colx));
@@ -586,15 +573,13 @@ function plot_scatter(plotnum, Tbl, trackname, x, y,titlestring)
 
 end
 
-function plot_scatter2(plotnum, Tbl, trackname, x, y1, y2, titlestring)
+function plot_scatter2(plotnum, Tbl, trackname, side, x, y1, y2, titlestring)
     cols = Tbl.Properties.VariableNames;
     Tbl = Tbl(strcmp(Tbl.track,trackname),:);
-    
+    Tbl = Tbl(strcmp(Tbl.side,side),:);
     colx = find(ismember(cols, x));
     coly1 = find(ismember(cols, y1));
-
     coly2 = find(ismember(cols, y2));
-
     X = table2array(Tbl(:,colx));
     Y1 = table2array(Tbl(:,coly1));
     Y2 = table2array(Tbl(:,coly2));
