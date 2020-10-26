@@ -476,25 +476,26 @@ plotnum = 0;
 % saveas(figure(plotnum),'stereoL2.png')
 
 plotnum = plotnum + 1;
-plot_histogram(plotnum, Tbl, '1kHzR2','a','stereo_bleed','test2')
+plot_histogram(plotnum, Tbl, '1kHzR2','a','stereo_bleed','test2','stereo bleed',[-50,0])
 plotnum = plotnum + 1;
-plot_histogram(plotnum, Tbl, '1kHzR2','b','stereo_bleed','test2')
+plot_histogram(plotnum, Tbl, '1kHzR2','b','stereo_bleed','test2', 'stereo bleed',[-50,0])
 
-function plot_histogram(plotnum, Tbl, trackname, side, x, titlestring)
+function plot_histogram(plotnum, Tbl, trackname, side, x, titlestring, varname, binlims)
     cols = Tbl.Properties.VariableNames;
     Tbl = Tbl(strcmp(Tbl.track,trackname),:);
     Tbl = Tbl(strcmp(Tbl.side,side),:);
     colx = find(ismember(cols, x));
     X = table2array(Tbl(:,colx));
 
-
     figure(plotnum); grid on; hold on;
-    histogram(X,50,'BinLimits',[-50,0])
-    ylabel('number of Records')
-    xlabel('stereo bleed')
-    title('stereo bleed in the 1kHzR2 track')
-    saveas(figure(plotnum),'stereoR2.png')
+    histogram(X,50,'BinLimits',binlims)
 
+    ylabel('number of records')
+    varname
+    xlabel(varname)
+    title(titlestring)
+    plotname = strcat('plots/', titlestring,'.png');
+    saveas(figure(plotnum), plotname)
 end
 
 
