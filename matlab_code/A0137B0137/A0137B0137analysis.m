@@ -48,7 +48,7 @@ tracks = unique(AudioTable.track);
 % head(AudioTable)
 AudioTable.RecordID = erase(AudioTable.record,'.wav');
 AudioTable.RecordID = erase(AudioTable.RecordID,'a');
-AudioTable.RecordID = erase(AudioTable.RecordID,'b');
+AudioTable.RecordID = erase(AudioTable.RecordID,'b'); 
 AudioTable.RecordID =  cellfun(@str2num, AudioTable.RecordID);
 
 % AudioTable.RecordID = cell(AudioTable.RecordID);
@@ -179,54 +179,17 @@ SensorError.ste = SensorError.std/sqrt(5);
 
 plotnum = 0;
 
+% %~~~~~~~~~~~~~~~~~ PLOTTING HISTOGRAMS ~~~~~~~~~~~~~~~~~~~~%
 
-
-plotnum = plotnum + 1;
-figure(plotnum); grid on; hold on;
-
-%% PULL ERROR VALUE
-tb1 = AudioError(strcmp(AudioError.track,'quiet2'),:)
-tb1 = AudioError(strcmp(tb1.measurement,'RMS_L'),:)
-% tb1.ste
-figure(plotnum); grid on; hold on;
-H = bar([Tbl.AvgRMS_L(strcmp(AudioStats.track,'quiet2'),:), Tbl.AvgRMS_R(strcmp(AudioStats.track,'quiet2'),:)], 'LineWidth', 2)
-H(1).FaceColor = [0.6 0.6 0.6];
-H(2).FaceColor = [.9 .9 .9];
-
-%% TWO SETS OF ERROR BARS FOR L AND R CHANNELS
-numcats = (height(AudioStats(strcmp(AudioStats.track,'quiet2'),:)))
-er = errorbar(double(categorical(pressruns)),AudioStats.AvgRMS_L(strcmp(AudioStats.track,'quiet2'),:), ones(numcats,1)*tb1.ste, ones(numcats,1)*tb1.ste,'k','LineWidth', 2);   
-er.LineStyle = 'none';
-numcats = (height(AudioStats(strcmp(AudioStats.track,'quiet2'),:)))
-er = errorbar(double(categorical(pressruns)),AudioStats.AvgRMS_R(strcmp(AudioStats.track,'quiet2'),:), ones(numcats,1)*tb1.ste, ones(numcats,1)*tb1.ste,'k','LineWidth', 2);   
-er.LineStyle = 'none';
-
-set(gca,'xticklabel',pressruns)
-ax=gca;
-ax.FontSize=8;
-ax.XTick = (1:length(pressruns))   %THIS WAY, YOU SET HOW MANY XTICKS YOU WANT FOR YOUR XTICKLABELS
-xtickangle(45)
-
-
-legend('RMS Left Channel', 'RMS Right Channel')
-xlabel('number of records')
-ylabel('RMS level [dB]')
-title('RMS noise in quiet track')
-saveas(figure(plotnum),'RMSquiet.png')
-
-plotnum = plotnum + 1;
-figure(plotnum); grid on; hold on;
-
-%% PULL ERROR VALUE
+% plotnum = plotnum + 1;
+% figure(plotnum); grid on; hold on;
 % tb1 = AudioError(strcmp(AudioError.track,'quiet2'),:)
-% tb1 = AudioError(strcmp(tb1.measurement,'A_L'),:)
-% tb1.ste
-figure(plotnum); grid on; hold on;
-H = bar([Tbl.AvgA_L(strcmp(AudioStats.track,'quiet2'),:), Tbl.AvgA_R(strcmp(AudioStats.track,'quiet2'),:)], 'LineWidth', 2)
-H(1).FaceColor = [0.6 0.6 0.6];
-H(2).FaceColor = [.9 .9 .9];
+% tb1 = AudioError(strcmp(tb1.measurement,'RMS_L'),:)
+% figure(plotnum); grid on; hold on;
+% H = bar([Tbl.AvgRMS_L(strcmp(AudioStats.track,'quiet2'),:), Tbl.AvgRMS_R(strcmp(AudioStats.track,'quiet2'),:)], 'LineWidth', 2)
+% H(1).FaceColor = [0.6 0.6 0.6];
+% H(2).FaceColor = [.9 .9 .9];
 
-%% TWO SETS OF ERROR BARS FOR L AND R CHANNELS
 % numcats = (height(AudioStats(strcmp(AudioStats.track,'quiet2'),:)))
 % er = errorbar(double(categorical(pressruns)),AudioStats.AvgRMS_L(strcmp(AudioStats.track,'quiet2'),:), ones(numcats,1)*tb1.ste, ones(numcats,1)*tb1.ste,'k','LineWidth', 2);   
 % er.LineStyle = 'none';
@@ -234,424 +197,440 @@ H(2).FaceColor = [.9 .9 .9];
 % er = errorbar(double(categorical(pressruns)),AudioStats.AvgRMS_R(strcmp(AudioStats.track,'quiet2'),:), ones(numcats,1)*tb1.ste, ones(numcats,1)*tb1.ste,'k','LineWidth', 2);   
 % er.LineStyle = 'none';
 
-set(gca,'xticklabel',pressruns)
-ax=gca;
-ax.FontSize=8;
-ax.XTick = (1:length(pressruns))   %THIS WAY, YOU SET HOW MANY XTICKS YOU WANT FOR YOUR XTICKLABELS
-xtickangle(45)
-
-
-legend('RMS Left Channel', 'RMS Right Channel')
-xlabel('number of records')
-ylabel('RMS level [dB]')
-title('A weighted RMS noise in quiet track')
-saveas(figure(plotnum),'ARMSquiet.png')
-
-
-plotnum = plotnum + 1;
-
-figure(plotnum); grid on; hold on;
-H = bar([Tbl.AvgWow_L(strcmp(AudioStats.track,'3150Hz2'),:), Tbl.AvgWow_R(strcmp(AudioStats.track,'3150Hz2'),:)], 'LineWidth', 2)
-H(1).FaceColor = [0.6 0.6 0.6];
-H(2).FaceColor = [.9 .9 .9];
-
-%% TWO SETS OF ERROR BARS FOR L AND R CHANNELS
-numcats = (height(AudioStats(strcmp(AudioStats.track,'3150Hz2'),:)))
-er = errorbar(double(categorical(pressruns)),AudioStats.AvgWow_L(strcmp(AudioStats.track,'3150Hz2'),:), ones(numcats,1)*tb1.ste, ones(numcats,1)*tb1.ste,'k','LineWidth', 2);   
-er.LineStyle = 'none';
-numcats = (height(AudioStats(strcmp(AudioStats.track,'3150Hz2'),:)))
-er = errorbar(double(categorical(pressruns)),AudioStats.AvgWow_R(strcmp(AudioStats.track,'3150Hz2'),:), ones(numcats,1)*tb1.ste, ones(numcats,1)*tb1.ste,'k','LineWidth', 2);   
-er.LineStyle = 'none';
-
-set(gca,'xticklabel',pressruns)
-ax=gca;
-ax.FontSize=8;
-ax.XTick = (1:length(pressruns))   %THIS WAY, YOU SET HOW MANY XTICKS YOU WANT FOR YOUR XTICKLABELS
-xtickangle(45)
-
-
-legend('Wow Left Channel', 'Wow Right Channel')
-xlabel('number of records')
-ylabel('Wow [Hz]')
-title('Avg Wow in 3150 Hz track')
-saveas(figure(plotnum),'WowAvg.png')
-
-plotnum = plotnum + 1;
-
-figure(plotnum); grid on; hold on;
-H = bar([Tbl.StdWow_L(strcmp(AudioStats.track,'3150Hz2'),:), Tbl.StdWow_R(strcmp(AudioStats.track,'3150Hz2'),:)], 'LineWidth', 2)
-H(1).FaceColor = [0.6 0.6 0.6];
-H(2).FaceColor = [.9 .9 .9];
-
-%% TWO SETS OF ERROR BARS FOR L AND R CHANNELS
-numcats = (height(AudioStats(strcmp(AudioStats.track,'3150Hz2'),:)))
-er = errorbar(double(categorical(pressruns)),AudioStats.StdWow_L(strcmp(AudioStats.track,'3150Hz2'),:), ones(numcats,1)*tb1.ste, ones(numcats,1)*tb1.ste,'k','LineWidth', 2);   
-er.LineStyle = 'none';
-numcats = (height(AudioStats(strcmp(AudioStats.track,'3150Hz2'),:)))
-er = errorbar(double(categorical(pressruns)),AudioStats.StdWow_R(strcmp(AudioStats.track,'3150Hz2'),:), ones(numcats,1)*tb1.ste, ones(numcats,1)*tb1.ste,'k','LineWidth', 2);   
-er.LineStyle = 'none';
-
-%% SET X VALUES
-% xticklabels(pressruns)
+% set(gca,'xticklabel',pressruns)
+% ax=gca;
+% ax.FontSize=8;
+% ax.XTick = (1:length(pressruns))   %THIS WAY, YOU SET HOW MANY XTICKS YOU WANT FOR YOUR XTICKLABELS
 % xtickangle(45)
-% er.LineStyle = 'none';
 
-set(gca,'xticklabel',pressruns)
-ax=gca;
-ax.FontSize=8;
-ax.XTick = (1:length(pressruns))   %THIS WAY, YOU SET HOW MANY XTICKS YOU WANT FOR YOUR XTICKLABELS
-xtickangle(45)
-
-
-legend('Wow Left Channel', 'Wow Right Channel')
-xlabel('number of records')
-ylabel('Wow [Hz]')
-title('Std Wow in 3150 Hz track')
-saveas(figure(plotnum),'WowStd.png')
+% legend('RMS Left Channel', 'RMS Right Channel')
+% xlabel('number of records')
+% ylabel('RMS level [dB]')
+% title('RMS noise in quiet track')
+% saveas(figure(plotnum),'RMSquiet.png')
 
 % plotnum = plotnum + 1;
 % figure(plotnum); grid on; hold on;
 
-% H = bar(Tbl.AvgStereobleed(strcmp(AudioStats.track,'1kHz2'),:), 'LineWidth', 2)
+% H = bar([Tbl.AvgA_L(strcmp(AudioStats.track,'quiet2'),:), Tbl.AvgA_R(strcmp(AudioStats.track,'quiet2'),:)], 'LineWidth', 2)
 % H(1).FaceColor = [0.6 0.6 0.6];
-% % H(2).FaceColor = [.9 .9 .9];
-% numcats = (height(AudioStats(strcmp(AudioStats.track,'1kHz2'),:)))
-% er = errorbar(double(categorical(pressruns)),AudioStats.AvgStereobleed(strcmp(AudioStats.track,'1kHz2'),:), ones(numcats,1)*tb1.ste, ones(numcats,1)*tb1.ste,'k','LineWidth', 2);    
-% er.LineStyle = 'none';
-% grid on; hold on;
-
-% xticklabels(pressruns)
-% xtickangle(45)
-
-plotnum = plotnum + 1;
-figure(plotnum); grid on; hold on;
-
-H = bar(Tbl.AvgStereobleed(strcmp(AudioStats.track,'1kHzL2'),:), 'LineWidth', 2)
-H(1).FaceColor = [0.6 0.6 0.6];
-
-%% TWO SETS OF ERROR BARS FOR L AND R CHANNELS
-numcats = (height(AudioStats(strcmp(AudioStats.track,'1kHzL2'),:)))
-er = errorbar(double(categorical(pressruns)),AudioStats.AvgStereobleed(strcmp(AudioStats.track,'1kHzL2'),:), ones(numcats,1)*tb1.ste, ones(numcats,1)*tb1.ste,'k','LineWidth', 2);   
-er.LineStyle = 'none';
-
-%% SET X VALUES
-% xticklabels(pressruns)
-% xtickangle(45)
-% er.LineStyle = 'none';
-
-set(gca,'xticklabel',pressruns)
-ax=gca;
-ax.FontSize=8;
-ax.XTick = (1:length(pressruns))   %THIS WAY, YOU SET HOW MANY XTICKS YOU WANT FOR YOUR XTICKLABELS
-xtickangle(45)
-
-xlabel('number of records')
-ylabel('stereo bleed [dB]')
-title('Stereo bleed in  1HzL track')
-saveas(figure(plotnum),'Stereobleedin1HzLtrack.png')
-
-plotnum = plotnum + 1;
-figure(plotnum); grid on; hold on;
-
-H = bar([Tbl.AvgClicks_L(strcmp(AudioStats.track,'quiet2'),:), Tbl.AvgClicks_R(strcmp(AudioStats.track,'quiet'),:)], 'LineWidth', 2)
-H(1).FaceColor = [0.6 0.6 0.6];
-H(2).FaceColor = [0.9 0.9 0.9];
-
-%% TWO SETS OF ERROR BARS FOR L AND R CHANNELS
-numcats = (height(AudioStats(strcmp(AudioStats.track,'quiet2'),:)))
-er = errorbar(double(categorical(pressruns)),AudioStats.AvgClicks_L(strcmp(AudioStats.track,'quiet2'),:), ones(numcats,1)*tb1.ste, ones(numcats,1)*tb1.ste,'k','LineWidth', 2);   
-er.LineStyle = 'none';
-numcats = (height(AudioStats(strcmp(AudioStats.track,'quiet2'),:)))
-er = errorbar(double(categorical(pressruns)),AudioStats.AvgClicks_R(strcmp(AudioStats.track,'quiet2'),:), ones(numcats,1)*tb1.ste, ones(numcats,1)*tb1.ste,'k','LineWidth', 2);   
-er.LineStyle = 'none';
-
-%% SET X VALUES
-xticklabels(pressruns)
-xtickangle(45)
-er.LineStyle = 'none';
+% H(2).FaceColor = [.9 .9 .9];
 
 % set(gca,'xticklabel',pressruns)
-set(gca,'xticklabel',pressruns)
-ax=gca;
-ax.FontSize=8;
-ax.XTick = (1:length(pressruns))   %THIS WAY, YOU SET HOW MANY XTICKS YOU WANT FOR YOUR XTICKLABELS
-xtickangle(45)
-
-xlabel('number of records')
-ylabel('number of clicks')
-title('Number of clicks in quiet tracks')
-saveas(figure(plotnum),'clicksquiet.png')
-
-%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ INDIVIDUAL PLOTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-
-plotnum = plotnum + 1;
-figure(plotnum);  
-plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')), Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet2')),'ko')
-grid on; hold on;
-plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')), Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet2')),'kx')
-legend('left channel', 'right channel')
-title('PressingNumber vs minMouldSteamIn')
-saveas(figure(plotnum),'PressingNumber vs minMouldSteamIn.png')
-
-plotnum = plotnum + 1;
-figure(plotnum);  
-plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')), Tbl.RMS_L(strcmp(Tbl.track,'quiet2')),'ko')
-grid on; hold on;
-plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')), Tbl.RMS_R(strcmp(Tbl.track,'quiet2')),'kx')
-legend('left channel', 'right channel')
-title('PressingNumber vs RMS')
-saveas(figure(plotnum),'PressingNumber vs RMS.png')
+% ax=gca;
+% ax.FontSize=8;
+% ax.XTick = (1:length(pressruns))   %THIS WAY, YOU SET HOW MANY XTICKS YOU WANT FOR YOUR XTICKLABELS
+% xtickangle(45)
 
 
-plotnum = plotnum + 1;
-figure(plotnum);  
-plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')), Tbl.A_L(strcmp(Tbl.track,'quiet2')),'ko')
-grid on; hold on;
-plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')), Tbl.A_R(strcmp(Tbl.track,'quiet2')),'kx')
-title('PressingNumber vs ARMS')
-legend('left channel', 'right channel')
-saveas(figure(plotnum),'PressingNumber vs ARMS.png')
-
-plotnum = plotnum + 1;
-figure(plotnum);  
-plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')), Tbl.clicks_L(strcmp(Tbl.track,'quiet2')),'ko')
-grid on; hold on;
-plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')), Tbl.clicks_R(strcmp(Tbl.track,'quiet2')),'kx')
-title('PressingNumber vs Clicks')
-legend('left channel', 'right channel')
-saveas(figure(plotnum),'PressingNumber vs Clicks.png')
+% legend('RMS Left Channel', 'RMS Right Channel')
+% xlabel('number of records')
+% ylabel('RMS level [dB]')
+% title('A weighted RMS noise in quiet track')
+% saveas(figure(plotnum),'ARMSquiet.png')
 
 
-plotnum = plotnum + 1;
-figure(plotnum);  
-plot(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet2')),Tbl.RMS_L(strcmp(Tbl.track,'quiet2'),:),'ko')
-grid on; hold on;
-plot(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet2')),Tbl.RMS_R(strcmp(Tbl.track,'quiet2'),:),'kx')
-legend('left channel', 'right channel')
-title('RMS vs minMouldSteamIn')
-saveas(figure(plotnum),'minMouldSteamIn vs RMS.png')
+% plotnum = plotnum + 1;
 
-plotnum = plotnum + 1;
-figure(plotnum); 
-scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_L(strcmp(Tbl.track,'3150Hz2'),:),'ko')
-grid on; hold on;
-scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_R(strcmp(Tbl.track,'3150Hz2'),:),'kx')
-legend('left channel', 'right channel')
-title('Wow vs minMouldSteamIn')
-saveas(figure(plotnum),'minMouldSteamIn vs Wow.png')
+% figure(plotnum); grid on; hold on;
+% H = bar([Tbl.AvgWow_L(strcmp(AudioStats.track,'3150Hz2'),:), Tbl.AvgWow_R(strcmp(AudioStats.track,'3150Hz2'),:)], 'LineWidth', 2)
+% H(1).FaceColor = [0.6 0.6 0.6];
+% H(2).FaceColor = [.9 .9 .9];
 
+% %% TWO SETS OF ERROR BARS FOR L AND R CHANNELS
+% numcats = (height(AudioStats(strcmp(AudioStats.track,'3150Hz2'),:)))
+% er = errorbar(double(categorical(pressruns)),AudioStats.AvgWow_L(strcmp(AudioStats.track,'3150Hz2'),:), ones(numcats,1)*tb1.ste, ones(numcats,1)*tb1.ste,'k','LineWidth', 2);   
+% er.LineStyle = 'none';
+% numcats = (height(AudioStats(strcmp(AudioStats.track,'3150Hz2'),:)))
+% er = errorbar(double(categorical(pressruns)),AudioStats.AvgWow_R(strcmp(AudioStats.track,'3150Hz2'),:), ones(numcats,1)*tb1.ste, ones(numcats,1)*tb1.ste,'k','LineWidth', 2);   
+% er.LineStyle = 'none';
 
-plotnum = plotnum + 1;
-figure(plotnum); 
-scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'1kHzL2')),Tbl.stereo_bleed(strcmp(Tbl.track,'1kHzL2'),:),'ko')
-grid on; hold on;
-title('stereo bleed vs minMouldSteamIn')
-saveas(figure(plotnum),'minMouldSteamIn vs stereo_bleed.png')
-
-plotnum = plotnum + 1;
-figure(plotnum);  
-scatter(Tbl.maxPressForce_Ton(strcmp(Tbl.track,'quiet2')),Tbl.A_L(strcmp(Tbl.track,'quiet2'),:),'ko')
-grid on; hold on;
-scatter(Tbl.maxPressForce_Ton(strcmp(Tbl.track,'quiet2')),Tbl.A_R(strcmp(Tbl.track,'quiet2'),:),'kx')
-legend('left channel', 'right channel')
-title('ARMS vs maxPressForce')
-saveas(figure(plotnum),'maxPressForce vs ARMS.png')
-
-plotnum = plotnum + 1;
-figure(plotnum); 
-scatter(Tbl.maxPressForce_Ton(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_L(strcmp(Tbl.track,'3150Hz2'),:),'ko')
-grid on; hold on;
-scatter(Tbl.maxPressForce_Ton(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_R(strcmp(Tbl.track,'3150Hz2'),:),'kx')
-legend('left channel', 'right channel')
-title(' Wow vs maxPressForce')
-saveas(figure(plotnum),'maxPressForce vs Wow.png')
+% set(gca,'xticklabel',pressruns)
+% ax=gca;
+% ax.FontSize=8;
+% ax.XTick = (1:length(pressruns))   %THIS WAY, YOU SET HOW MANY XTICKS YOU WANT FOR YOUR XTICKLABELS
+% xtickangle(45)
 
 
+% legend('Wow Left Channel', 'Wow Right Channel')
+% xlabel('number of records')
+% ylabel('Wow [Hz]')
+% title('Avg Wow in 3150 Hz track')
+% saveas(figure(plotnum),'WowAvg.png')
 
-plotnum = plotnum + 1;
-figure(plotnum); 
-scatter(Tbl.maxPressForce_Ton(strcmp(Tbl.track,'1kHzL2')),Tbl.stereo_bleed(strcmp(Tbl.track,'1kHzL2'),:),'ko')
-grid on; hold on;
-title('stereo bleed vs maxPressForce')
-saveas(figure(plotnum),'maxPressForce vs stereo_bleed.png')
+% plotnum = plotnum + 1;
 
-plotnum = plotnum + 1;
-figure(plotnum);  
-scatter(Tbl.minExtruderMeltTemp_F(strcmp(Tbl.track,'quiet2')),Tbl.A_L(strcmp(Tbl.track,'quiet2'),:),'ko')
-grid on; hold on;
-scatter(Tbl.minExtruderMeltTemp_F(strcmp(Tbl.track,'quiet2')),Tbl.A_R(strcmp(Tbl.track,'quiet2'),:),'kx')
-legend('left channel', 'right channel')
-title('RMS vs minExtruderMeltTemp')
-saveas(figure(plotnum),'minExtruderMeltTemp vs RMS.png')
+% figure(plotnum); grid on; hold on;
+% H = bar([Tbl.StdWow_L(strcmp(AudioStats.track,'3150Hz2'),:), Tbl.StdWow_R(strcmp(AudioStats.track,'3150Hz2'),:)], 'LineWidth', 2)
+% H(1).FaceColor = [0.6 0.6 0.6];
+% H(2).FaceColor = [.9 .9 .9];
 
-plotnum = plotnum + 1;
-figure(plotnum); 
-scatter(Tbl.minExtruderMeltTemp_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_L(strcmp(Tbl.track,'3150Hz2'),:),'ko')
-grid on; hold on;
-scatter(Tbl.minExtruderMeltTemp_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_R(strcmp(Tbl.track,'3150Hz2'),:),'kx')
-legend('left channel', 'right channel')
-title('Wow vs minExtruderMeltTemp')
-saveas(figure(plotnum),'minExtruderMeltTemp vs Wow.png')
+% %% TWO SETS OF ERROR BARS FOR L AND R CHANNELS
+% numcats = (height(AudioStats(strcmp(AudioStats.track,'3150Hz2'),:)))
+% er = errorbar(double(categorical(pressruns)),AudioStats.StdWow_L(strcmp(AudioStats.track,'3150Hz2'),:), ones(numcats,1)*tb1.ste, ones(numcats,1)*tb1.ste,'k','LineWidth', 2);   
+% er.LineStyle = 'none';
+% numcats = (height(AudioStats(strcmp(AudioStats.track,'3150Hz2'),:)))
+% er = errorbar(double(categorical(pressruns)),AudioStats.StdWow_R(strcmp(AudioStats.track,'3150Hz2'),:), ones(numcats,1)*tb1.ste, ones(numcats,1)*tb1.ste,'k','LineWidth', 2);   
+% er.LineStyle = 'none';
 
-plotnum = plotnum + 1;
-figure(plotnum); 
-scatter(Tbl.minExtruderMeltTemp_F(strcmp(Tbl.track,'1kHzL2')),Tbl.stereo_bleed(strcmp(Tbl.track,'1kHzL2'),:),'ko')
-grid on; hold on;
-title('stereo bleed vs minExtruderMeltTemp')
-saveas(figure(plotnum),'minExtruderMeltTemp vs stereo_bleed.png')
-
-plotnum = plotnum + 1;
-figure(plotnum);  
-scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet2')),Tbl.A_L(strcmp(Tbl.track,'quiet2'),:),'ko')
-grid on; hold on;
-scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet2')),Tbl.A_R(strcmp(Tbl.track,'quiet2'),:),'kx')
-legend('left channel', 'right channel')
-title('RMS vs minMouldSteamIn')
-saveas(figure(plotnum),'minMouldSteamIn vs RMS.png')
-
-plotnum = plotnum + 1;
-figure(plotnum); 
-scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_L(strcmp(Tbl.track,'3150Hz2'),:),'ko')
-grid on; hold on;
-scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_R(strcmp(Tbl.track,'3150Hz2'),:),'kx')
-legend('left channel', 'right channel')
-title('Wow vs minMouldSteamIn')
-saveas(figure(plotnum),'minMouldSteamIn vs Wow.png')
-
-plotnum = plotnum + 1;
-figure(plotnum); 
-scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'1kHzL2')),Tbl.stereo_bleed(strcmp(Tbl.track,'1kHzL2'),:),'ko')
-grid on; hold on;
-legend('left channel', 'right channel')
-title('stereo bleed vs minMouldSteamIn')
-saveas(figure(plotnum),'minMouldSteamIn vs stereo_bleed.png')
-
-plotnum = plotnum + 1;
-figure(plotnum);  
-scatter(Tbl.maxMouldSteamOutTop_F(strcmp(Tbl.track,'quiet2')),Tbl.A_L(strcmp(Tbl.track,'quiet2'),:),'ko')
-grid on; hold on;
-scatter(Tbl.maxMouldSteamOutTop_F(strcmp(Tbl.track,'quiet2')),Tbl.A_R(strcmp(Tbl.track,'quiet2'),:),'kx')
-legend('left channel', 'right channel')
-title('RMS vs maxMouldSteamOutTop')
-saveas(figure(plotnum),'maxMouldSteamOutTop vs RMS.png')
+% set(gca,'xticklabel',pressruns)
+% ax=gca;
+% ax.FontSize=8;
+% ax.XTick = (1:length(pressruns))   %THIS WAY, YOU SET HOW MANY XTICKS YOU WANT FOR YOUR XTICKLABELS
+% xtickangle(45)
 
 
-
-plotnum = plotnum + 1;
-figure(plotnum); 
-scatter(Tbl.maxMouldSteamOutBottom_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_L(strcmp(Tbl.track,'3150Hz2'),:),'ko')
-grid on; hold on;
-scatter(Tbl.maxMouldSteamOutBottom_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_R(strcmp(Tbl.track,'3150Hz2'),:),'kx')
-legend('left channel', 'right channel')
-title('Wow vs maxMouldSteamOutBottom')
-saveas(figure(plotnum),'maxMouldSteamOutBottom vs Wow.png')
+% legend('Wow Left Channel', 'Wow Right Channel')
+% xlabel('number of records')
+% ylabel('Wow [Hz]')
+% title('Std Wow in 3150 Hz track')
+% saveas(figure(plotnum),'WowStd.png')
 
 
+% plotnum = plotnum + 1;
+% figure(plotnum); grid on; hold on;
 
-plotnum = plotnum + 1;
-figure(plotnum); 
-scatter(Tbl.maxMouldSteamOutBottom_F(strcmp(Tbl.track,'1kHzL2')),Tbl.stereo_bleed(strcmp(Tbl.track,'1kHzL2'),:),'ko')
-grid on; hold on;
-title('stereo bleed vs maxMouldSteamOutBottom')
-saveas(figure(plotnum),'maxMouldSteamOutBottom vs stereo bleed.png')
+% H = bar(Tbl.AvgStereobleed(strcmp(AudioStats.track,'1kHzL2'),:), 'LineWidth', 2)
+% H(1).FaceColor = [0.6 0.6 0.6];
 
-
-plotnum = plotnum + 1;
-figure(plotnum);  
-scatter(Tbl.minMouldSteamOutBottom_F(strcmp(Tbl.track,'quiet2')),Tbl.A_L(strcmp(Tbl.track,'quiet2'),:),'ko')
-grid on; hold on;
-scatter(Tbl.minMouldSteamOutBottom_F(strcmp(Tbl.track,'quiet2')),Tbl.A_R(strcmp(Tbl.track,'quiet2'),:),'kx')
-legend('left channel', 'right channel')
-title('RMS vs minMouldSteamOutBottom')
-saveas(figure(plotnum),'minMouldSteamOutBottom vs RMS.png')
-
-plotnum = plotnum + 1;
-figure(plotnum); 
-scatter(Tbl.minMouldSteamOutBottom_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_L(strcmp(Tbl.track,'3150Hz2'),:),'ko')
-grid on; hold on;
-scatter(Tbl.minMouldSteamOutBottom_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_R(strcmp(Tbl.track,'3150Hz2'),:),'kx')
-legend('left channel', 'right channel')
-title(' Wow vs minMouldSteamOutBottom')
-saveas(figure(plotnum),'minMouldSteamOutBottom vs Wow.png')
-
-plotnum = plotnum + 1;
-plot_scatter(plotnum, Tbl.minMouldSteamOutBottom_F(strcmp(Tbl.track,'1kHzL2')),Tbl.stereo_bleed(strcmp(Tbl.track,'1kHzL2'),:),'minMouldSteamOutBottom vs stereo bleed')
-
-plotnum = plotnum + 1;
-plot_scatter2(plotnum,Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')),Tbl.A_L(strcmp(Tbl.track,'quiet2'),:),Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')),Tbl.A_R(strcmp(Tbl.track,'quiet2'),:),'RMS vs Pressing number')
-
-plotnum = plotnum + 1;
-figure(plotnum);  
-plot_scatter2(plotnum,Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet2')),Tbl.clicks_L(strcmp(Tbl.track,'quiet2'),:),Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet2')),Tbl.clicks_R(strcmp(Tbl.track,'quiet2'),:),'clicks vs minMouldSteamIn')
+% %% TWO SETS OF ERROR BARS FOR L AND R CHANNELS
+% numcats = (height(AudioStats(strcmp(AudioStats.track,'1kHzL2'),:)))
+% er = errorbar(double(categorical(pressruns)),AudioStats.AvgStereobleed(strcmp(AudioStats.track,'1kHzL2'),:), ones(numcats,1)*tb1.ste, ones(numcats,1)*tb1.ste,'k','LineWidth', 2);   
+% er.LineStyle = 'none';
 
 
-plotnum = plotnum + 1;
-plot_scatter2(plotnum,Tbl.maxExtruderBarrelZone3Temp_F(strcmp(Tbl.track,'quiet2')),Tbl.A_L(strcmp(Tbl.track,'quiet2')),Tbl.maxExtruderBarrelZone3Temp_F(strcmp(Tbl.track,'quiet2')),Tbl.A_R(strcmp(Tbl.track,'quiet2'),:),'maxExtruderBarrelZone3Temp_Fvs RMS.png')
+% set(gca,'xticklabel',pressruns)
+% ax=gca;
+% ax.FontSize=8;
+% ax.XTick = (1:length(pressruns))   %THIS WAY, YOU SET HOW MANY XTICKS YOU WANT FOR YOUR XTICKLABELS
+% xtickangle(45)
 
-plotnum = plotnum + 1;
-plot_scatter2(plotnum,Tbl.PressingNumber(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_L(strcmp(Tbl.track,'3150Hz2'),:), Tbl.PressingNumber(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_R(strcmp(Tbl.track,'3150Hz2'),:),'Wow vs PressingNumber')
+% xlabel('number of records')
+% ylabel('stereo bleed [dB]')
+% title('Stereo bleed in  1HzL track')
+% saveas(figure(plotnum),'Stereobleedin1HzLtrack.png')
+
+% plotnum = plotnum + 1;
+% figure(plotnum); grid on; hold on;
+
+% H = bar([Tbl.AvgClicks_L(strcmp(AudioStats.track,'quiet2'),:), Tbl.AvgClicks_R(strcmp(AudioStats.track,'quiet'),:)], 'LineWidth', 2)
+% H(1).FaceColor = [0.6 0.6 0.6];
+% H(2).FaceColor = [0.9 0.9 0.9];
+
+% %% TWO SETS OF ERROR BARS FOR L AND R CHANNELS
+% numcats = (height(AudioStats(strcmp(AudioStats.track,'quiet2'),:)))
+% er = errorbar(double(categorical(pressruns)),AudioStats.AvgClicks_L(strcmp(AudioStats.track,'quiet2'),:), ones(numcats,1)*tb1.ste, ones(numcats,1)*tb1.ste,'k','LineWidth', 2);   
+% er.LineStyle = 'none';
+% numcats = (height(AudioStats(strcmp(AudioStats.track,'quiet2'),:)))
+% er = errorbar(double(categorical(pressruns)),AudioStats.AvgClicks_R(strcmp(AudioStats.track,'quiet2'),:), ones(numcats,1)*tb1.ste, ones(numcats,1)*tb1.ste,'k','LineWidth', 2);   
+% er.LineStyle = 'none';
+
+% %% SET X VALUES
+% xticklabels(pressruns)
+% xtickangle(45)
+% er.LineStyle = 'none';
+
+% % set(gca,'xticklabel',pressruns)
+% set(gca,'xticklabel',pressruns)
+% ax=gca;
+% ax.FontSize=8;
+% ax.XTick = (1:length(pressruns))   %THIS WAY, YOU SET HOW MANY XTICKS YOU WANT FOR YOUR XTICKLABELS
+% xtickangle(45)
+
+% xlabel('number of records')
+% ylabel('number of clicks')
+% title('Number of clicks in quiet tracks')
+% saveas(figure(plotnum),'clicksquiet.png')
+
+% %~~~~~~~~~~~~~~~~~ PLOTTING HISTOGRAMS ENDS ~~~~~~~~~~~~~~~~~~~~%
+
+% %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ INDIVIDUAL PLOTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+
+% plotnum = plotnum + 1;
+% figure(plotnum);  
+% plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')), Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet2')),'ko')
+% grid on; hold on;
+% plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')), Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet2')),'kx')
+% legend('left channel', 'right channel')
+% title('PressingNumber vs minMouldSteamIn')
+% saveas(figure(plotnum),'PressingNumber vs minMouldSteamIn.png')
+
+% plotnum = plotnum + 1;
+% figure(plotnum);  
+% plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')), Tbl.RMS_L(strcmp(Tbl.track,'quiet2')),'ko')
+% grid on; hold on;
+% plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')), Tbl.RMS_R(strcmp(Tbl.track,'quiet2')),'kx')
+% legend('left channel', 'right channel')
+% title('PressingNumber vs RMS')
+% saveas(figure(plotnum),'PressingNumber vs RMS.png')
+
+
+% plotnum = plotnum + 1;
+% figure(plotnum);  
+% plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')), Tbl.A_L(strcmp(Tbl.track,'quiet2')),'ko')
+% grid on; hold on;
+% plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')), Tbl.A_R(strcmp(Tbl.track,'quiet2')),'kx')
+% title('PressingNumber vs ARMS')
+% legend('left channel', 'right channel')
+% saveas(figure(plotnum),'PressingNumber vs ARMS.png')
+
+% plotnum = plotnum + 1;
+% figure(plotnum);  
+% plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')), Tbl.clicks_L(strcmp(Tbl.track,'quiet2')),'ko')
+% grid on; hold on;
+% plot(Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')), Tbl.clicks_R(strcmp(Tbl.track,'quiet2')),'kx')
+% title('PressingNumber vs Clicks')
+% legend('left channel', 'right channel')
+% saveas(figure(plotnum),'PressingNumber vs Clicks.png')
+
+
+% plotnum = plotnum + 1;
+% figure(plotnum);  
+% plot(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet2')),Tbl.RMS_L(strcmp(Tbl.track,'quiet2'),:),'ko')
+% grid on; hold on;
+% plot(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet2')),Tbl.RMS_R(strcmp(Tbl.track,'quiet2'),:),'kx')
+% legend('left channel', 'right channel')
+% title('RMS vs minMouldSteamIn')
+% saveas(figure(plotnum),'minMouldSteamIn vs RMS.png')
+
+% plotnum = plotnum + 1;
+% figure(plotnum); 
+% scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_L(strcmp(Tbl.track,'3150Hz2'),:),'ko')
+% grid on; hold on;
+% scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_R(strcmp(Tbl.track,'3150Hz2'),:),'kx')
+% legend('left channel', 'right channel')
+% title('Wow vs minMouldSteamIn')
+% saveas(figure(plotnum),'minMouldSteamIn vs Wow.png')
+
+
+% plotnum = plotnum + 1;
+% figure(plotnum); 
+% scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'1kHzL2')),Tbl.stereo_bleed(strcmp(Tbl.track,'1kHzL2'),:),'ko')
+% grid on; hold on;
+% title('stereo bleed vs minMouldSteamIn')
+% saveas(figure(plotnum),'minMouldSteamIn vs stereo_bleed.png')
+
+% plotnum = plotnum + 1;
+% figure(plotnum);  
+% scatter(Tbl.maxPressForce_Ton(strcmp(Tbl.track,'quiet2')),Tbl.A_L(strcmp(Tbl.track,'quiet2'),:),'ko')
+% grid on; hold on;
+% scatter(Tbl.maxPressForce_Ton(strcmp(Tbl.track,'quiet2')),Tbl.A_R(strcmp(Tbl.track,'quiet2'),:),'kx')
+% legend('left channel', 'right channel')
+% title('ARMS vs maxPressForce')
+% saveas(figure(plotnum),'maxPressForce vs ARMS.png')
+
+% plotnum = plotnum + 1;
+% figure(plotnum); 
+% scatter(Tbl.maxPressForce_Ton(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_L(strcmp(Tbl.track,'3150Hz2'),:),'ko')
+% grid on; hold on;
+% scatter(Tbl.maxPressForce_Ton(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_R(strcmp(Tbl.track,'3150Hz2'),:),'kx')
+% legend('left channel', 'right channel')
+% title(' Wow vs maxPressForce')
+% saveas(figure(plotnum),'maxPressForce vs Wow.png')
+
+
+
+% plotnum = plotnum + 1;
+% figure(plotnum); 
+% scatter(Tbl.maxPressForce_Ton(strcmp(Tbl.track,'1kHzL2')),Tbl.stereo_bleed(strcmp(Tbl.track,'1kHzL2'),:),'ko')
+% grid on; hold on;
+% title('stereo bleed vs maxPressForce')
+% saveas(figure(plotnum),'maxPressForce vs stereo_bleed.png')
+
+% plotnum = plotnum + 1;
+% figure(plotnum);  
+% scatter(Tbl.minExtruderMeltTemp_F(strcmp(Tbl.track,'quiet2')),Tbl.A_L(strcmp(Tbl.track,'quiet2'),:),'ko')
+% grid on; hold on;
+% scatter(Tbl.minExtruderMeltTemp_F(strcmp(Tbl.track,'quiet2')),Tbl.A_R(strcmp(Tbl.track,'quiet2'),:),'kx')
+% legend('left channel', 'right channel')
+% title('RMS vs minExtruderMeltTemp')
+% saveas(figure(plotnum),'minExtruderMeltTemp vs RMS.png')
+
+% plotnum = plotnum + 1;
+% figure(plotnum); 
+% scatter(Tbl.minExtruderMeltTemp_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_L(strcmp(Tbl.track,'3150Hz2'),:),'ko')
+% grid on; hold on;
+% scatter(Tbl.minExtruderMeltTemp_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_R(strcmp(Tbl.track,'3150Hz2'),:),'kx')
+% legend('left channel', 'right channel')
+% title('Wow vs minExtruderMeltTemp')
+% saveas(figure(plotnum),'minExtruderMeltTemp vs Wow.png')
+
+% plotnum = plotnum + 1;
+% figure(plotnum); 
+% scatter(Tbl.minExtruderMeltTemp_F(strcmp(Tbl.track,'1kHzL2')),Tbl.stereo_bleed(strcmp(Tbl.track,'1kHzL2'),:),'ko')
+% grid on; hold on;
+% title('stereo bleed vs minExtruderMeltTemp')
+% saveas(figure(plotnum),'minExtruderMeltTemp vs stereo_bleed.png')
+
+% plotnum = plotnum + 1;
+% figure(plotnum);  
+% scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet2')),Tbl.A_L(strcmp(Tbl.track,'quiet2'),:),'ko')
+% grid on; hold on;
+% scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet2')),Tbl.A_R(strcmp(Tbl.track,'quiet2'),:),'kx')
+% legend('left channel', 'right channel')
+% title('RMS vs minMouldSteamIn')
+% saveas(figure(plotnum),'minMouldSteamIn vs RMS.png')
+
+% plotnum = plotnum + 1;
+% figure(plotnum); 
+% scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_L(strcmp(Tbl.track,'3150Hz2'),:),'ko')
+% grid on; hold on;
+% scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_R(strcmp(Tbl.track,'3150Hz2'),:),'kx')
+% legend('left channel', 'right channel')
+% title('Wow vs minMouldSteamIn')
+% saveas(figure(plotnum),'minMouldSteamIn vs Wow.png')
+
+% plotnum = plotnum + 1;
+% figure(plotnum); 
+% scatter(Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'1kHzL2')),Tbl.stereo_bleed(strcmp(Tbl.track,'1kHzL2'),:),'ko')
+% grid on; hold on;
+% legend('left channel', 'right channel')
+% title('stereo bleed vs minMouldSteamIn')
+% saveas(figure(plotnum),'minMouldSteamIn vs stereo_bleed.png')
+
+% plotnum = plotnum + 1;
+% figure(plotnum);  
+% scatter(Tbl.maxMouldSteamOutTop_F(strcmp(Tbl.track,'quiet2')),Tbl.A_L(strcmp(Tbl.track,'quiet2'),:),'ko')
+% grid on; hold on;
+% scatter(Tbl.maxMouldSteamOutTop_F(strcmp(Tbl.track,'quiet2')),Tbl.A_R(strcmp(Tbl.track,'quiet2'),:),'kx')
+% legend('left channel', 'right channel')
+% title('RMS vs maxMouldSteamOutTop')
+% saveas(figure(plotnum),'maxMouldSteamOutTop vs RMS.png')
+
+
+
+% plotnum = plotnum + 1;
+% figure(plotnum); 
+% scatter(Tbl.maxMouldSteamOutBottom_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_L(strcmp(Tbl.track,'3150Hz2'),:),'ko')
+% grid on; hold on;
+% scatter(Tbl.maxMouldSteamOutBottom_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_R(strcmp(Tbl.track,'3150Hz2'),:),'kx')
+% legend('left channel', 'right channel')
+% title('Wow vs maxMouldSteamOutBottom')
+% saveas(figure(plotnum),'maxMouldSteamOutBottom vs Wow.png')
+
+
+
+% plotnum = plotnum + 1;
+% figure(plotnum); 
+% scatter(Tbl.maxMouldSteamOutBottom_F(strcmp(Tbl.track,'1kHzL2')),Tbl.stereo_bleed(strcmp(Tbl.track,'1kHzL2'),:),'ko')
+% grid on; hold on;
+% title('stereo bleed vs maxMouldSteamOutBottom')
+% saveas(figure(plotnum),'maxMouldSteamOutBottom vs stereo bleed.png')
+
+
+% plotnum = plotnum + 1;
+% figure(plotnum);  
+% scatter(Tbl.minMouldSteamOutBottom_F(strcmp(Tbl.track,'quiet2')),Tbl.A_L(strcmp(Tbl.track,'quiet2'),:),'ko')
+% grid on; hold on;
+% scatter(Tbl.minMouldSteamOutBottom_F(strcmp(Tbl.track,'quiet2')),Tbl.A_R(strcmp(Tbl.track,'quiet2'),:),'kx')
+% legend('left channel', 'right channel')
+% title('RMS vs minMouldSteamOutBottom')
+% saveas(figure(plotnum),'minMouldSteamOutBottom vs RMS.png')
+
+% plotnum = plotnum + 1;
+% figure(plotnum); 
+% scatter(Tbl.minMouldSteamOutBottom_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_L(strcmp(Tbl.track,'3150Hz2'),:),'ko')
+% grid on; hold on;
+% scatter(Tbl.minMouldSteamOutBottom_F(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_R(strcmp(Tbl.track,'3150Hz2'),:),'kx')
+% legend('left channel', 'right channel')
+% title(' Wow vs minMouldSteamOutBottom')
+% saveas(figure(plotnum),'minMouldSteamOutBottom vs Wow.png')
+
+% plotnum = plotnum + 1;
+% plot_scatter(plotnum, Tbl.minMouldSteamOutBottom_F(strcmp(Tbl.track,'1kHzL2')),Tbl.stereo_bleed(strcmp(Tbl.track,'1kHzL2'),:),'minMouldSteamOutBottom vs stereo bleed')
+
+% plotnum = plotnum + 1;
+% plot_scatter2(plotnum,Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')),Tbl.A_L(strcmp(Tbl.track,'quiet2'),:),Tbl.PressingNumber(strcmp(Tbl.track,'quiet2')),Tbl.A_R(strcmp(Tbl.track,'quiet2'),:),'RMS vs Pressing number')
+
+% plotnum = plotnum + 1;
+% figure(plotnum);  
+% plot_scatter2(plotnum,Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet2')),Tbl.clicks_L(strcmp(Tbl.track,'quiet2'),:),Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet2')),Tbl.clicks_R(strcmp(Tbl.track,'quiet2'),:),'clicks vs minMouldSteamIn')
+
+
+% plotnum = plotnum + 1;
+% plot_scatter2(plotnum,Tbl.maxExtruderBarrelZone3Temp_F(strcmp(Tbl.track,'quiet2')),Tbl.A_L(strcmp(Tbl.track,'quiet2')),Tbl.maxExtruderBarrelZone3Temp_F(strcmp(Tbl.track,'quiet2')),Tbl.A_R(strcmp(Tbl.track,'quiet2'),:),'maxExtruderBarrelZone3Temp_Fvs RMS.png')
+
+% plotnum = plotnum + 1;
+% plot_scatter2(plotnum,Tbl.PressingNumber(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_L(strcmp(Tbl.track,'3150Hz2'),:), Tbl.PressingNumber(strcmp(Tbl.track,'3150Hz2')),Tbl.wow_R(strcmp(Tbl.track,'3150Hz2'),:),'Wow vs PressingNumber')
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ INDIVIDUAL PLOTS END ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 
 
 
 
-%~~~~~~~~~~~~~~~~~~~~~~ LOOP THROUGH AND GET EVERY POSSIBLE PLOT ~~~~~~~~~~~~~~~~~~~~~%
-
-% loop through track 
-% for each track, plot every possible audio column against every possible parameter column
-% the columns are as follows 
-
-% Pressing Number = col 1    
-% Sensor measurements = col 6:29
-% Audio measurements  = col 37:53 
 
 
 
-% head(Tbl)
 
-% TblCol = Tbl.Properties.VariableNames;
-% for i = (6:29)
-%     for j = (37:53)
-%         press_name = TblCol(i);
-%         audio_name = TblCol(j);
-%         plot_scatter2(plotnum,Tbl.maxExtruderBarrelZone3Temp_F(strcmp(Tbl.track,'quiet2')),Tbl.A_L(strcmp(Tbl.track,'quiet2')), Tbl.maxExtruderBarrelZone3Temp_F(strcmp(Tbl.track,'quiet2')),Tbl.A_R(strcmp(Tbl.track,'quiet2'),:),'maxExtruderBarrelZone3Temp_Fvs RMS.png')
+% plot_scatter2(plotnum,Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet2')),Tbl.clicks_L(strcmp(Tbl.track,'quiet2'),:),Tbl.minMouldSteamIn_F(strcmp(Tbl.track,'quiet2')),Tbl.clicks_R(strcmp(Tbl.track,'quiet2'),:),'clicks vs minMouldSteamIn')
+plotnum = plotnum + 1; 
+plot_scatter(plotnum, Tbl, 'quiet', 'minMouldSteamIn_F', 'clicks_L','test')
+plot_scatter2(plotnum, Tbl, 'quiet', 'minMouldSteamIn_F', 'clicks_L', 'clicks_R','test')
 
-%         plot_scatter2
 
-%     end
+
+function plot_scatter(plotnum, Tbl, trackname, x, y,titlestring)
+    cols = Tbl.Properties.VariableNames;
+    Tbl = Tbl(strcmp(Tbl.track,trackname),:);
+    colx = find(ismember(cols, x));
+    coly = find(ismember(cols, y));
+    X = table2array(Tbl(:,colx));
+    Y = table2array(Tbl(:,coly));
+
+    figure(plotnum);  
+    scatter(X,Y,'ko')
+    grid on; hold on;
+    title(titlestring)
+    plotname = strcat('plots/', titlestring,'.png');
+    saveas(figure(plotnum), plotname)
+
+end
+
+function plot_scatter2(plotnum, Tbl, trackname, x, y1, y2, titlestring)
+    cols = Tbl.Properties.VariableNames;
+    Tbl = Tbl(strcmp(Tbl.track,trackname),:);
+    
+    colx = find(ismember(cols, x));
+    coly1 = find(ismember(cols, y1));
+
+    coly2 = find(ismember(cols, y2));
+
+    X = table2array(Tbl(:,colx));
+    Y1 = table2array(Tbl(:,coly1));
+    Y2 = table2array(Tbl(:,coly2));
+
+    figure(plotnum);  
+    scatter(X,Y1,'ko')
+    grid on; hold on;
+    scatter(X,Y2,'kx')
+    legend({'left channel', 'right channel'})
+    title(titlestring)
+    plotname = strcat('plots/', titlestring,'.png');
+    saveas(figure(plotnum), plotname)
+
+end
+
+% function plot_scatter2(plotnum, x1, y1, x2, y2, titlestring)
+%     figure(plotnum);  
+%     scatter(x1,y1,'ko')
+%     grid on; hold on;
+%     scatter(x2,y2,'kx')
+%     legend('left channel', 'right channel')
+%     title(titlestring)
+%     plotname = strcat('plots/', titlestring)
+%     saveas(figure(plotnum), plotname)
 % end
 
 
-%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-
-function plot_scatter2(plotnum, x1, y1, x2, y2, titlestring)
-    figure(plotnum);  
-    scatter(x1,y1,'ko')
-    grid on; hold on;
-    scatter(x2,y2,'kx')
-    legend('left channel', 'right channel')
-    title(titlestring)
-    saveas(figure(plotnum), titlestring)
-end
-
-function plot_scatter(plotnum, x1, y1, titlestring)
-    figure(plotnum);  
-    scatter(x1,y1,'ko')
-    grid on; hold on;
-    legend('left channel', 'right channel')
-    title(titlestring)
-    saveas(figure(plotnum), titlestring)
-end
-
-function plot_scatteravg(plotnum, x1, y1, titlestring)
-    figure(plotnum);  
-    scatter(x1,y1,'ko')
-    grid on; hold on;
-    legend('left channel', 'right channel')
-    title(titlestring)
-    saveas(figure(plotnum), titlestring)
-end
+% function plot_scatteravg(plotnum, x1, y1, titlestring)
+%     figure(plotnum);  
+%     scatter(x1,y1,'ko')
+%     grid on; hold on;
+%     legend('left channel', 'right channel')
+%     title(titlestring)
+%     plotname = strcat('plots/', titlestring)
+%     saveas(figure(plotnum), plotname)
+% end
 
 
 % function plot_histogram(Tbl,plotnum,track,measurement)
