@@ -189,13 +189,13 @@ function [output, info_array] = SeperateTracks(file)
             % timedatalockout = (0:length(dataLockout)-1)/fs + lagdiff/fs;
     
     
-            % figure(100); grid on; hold on;
+            % figure(10000); grid on; hold on;
             % plot(timedatalockout,dataLockout(:,1),'k')
             % hold on;
             % plot(timereflockout,refLockout(:,1),'b')
             % title('Leadout tracks lined up')
             % xlabel('time [s]')
-            % title(track_name)
+            
             %***   DEBUG ENDS  ***%
            
     
