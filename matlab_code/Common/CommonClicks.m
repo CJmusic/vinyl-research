@@ -103,7 +103,7 @@
 
 
 
-function num_comclicks = num_comclicks(clicks, clicks_ref);
+function num_comclicks = CommonClicks(clicks, clicks_ref);
 % function num_comclicks = num_comclicksTest(clicks, clicks_ref, relaxation);
     % relaxation = 750;
     relaxation = 1000;

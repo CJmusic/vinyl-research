@@ -12,10 +12,18 @@ if ismac()
     addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/')
     addpath('/Users/cz/Code/vinyl-research/matlab_code/Common')
     data_folder = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/data/A0000B0000/'
-    AudioTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/A0000B0000-AudioTableOct26.csv') 
-    AudioStats = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/A0000B0000_AudioStats.csv')
-    SensorTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/A0000B0000_SensorTable.csv')
-    RecordTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/A0000B0000_SensorTable.csv')
+    AudioTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/A0000B0000-AudioTableOct26.csv') ;
+    SensorTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/A0000B0000_SensorTable.csv');
+    RecordTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/A0000B0000_SensorTable.csv');
+    AudioStats = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/A0000B0000_AudioStats.csv');
+
+
+
+    head(AudioTable)
+    head(SensorTable)
+    head(RecordTable)
+    head(AudioStats)
+
 
 end
 if ispc()
@@ -32,292 +40,101 @@ AudioTable = sortrows(AudioTable,7);
 
 
 
-AudioStats
-AudioStats(strcmp(AudioStats.track,'transition') & strcmp(AudioStats.measurement,'RMS_L'),:)
-
-
 plotnum = 0;
 
-% %~~~~~~~~~~~~~HISTOGRAM PLOTS~~~~~~~~~~~~~~~~~%
-
-% plotnum = plotnum + 1;
-% figure(plotnum); grid on; hold on;
-% histogram(AudioTable.RMS_L(strcmp(AudioTable.track,'quiet'),:),50,'BinLimits',[-50,-30], 'facecolor',[0.3 0.3 0.3])
-% histogram(AudioTable.RMS_R(strcmp(AudioTable.track,'quiet'),:),50,'BinLimits',[-50,-30], 'facecolor',[0.5 0.5 0.5])
-% legend('RMS Left Channel', 'RMS Right Channel')
-% ylabel('number of records')
-% xlabel('RMS level [dB]')
-% title('RMS noise in quiet track')
-% xlim([-50,-30])
-% saveas(figure(plotnum),'RMSquiet.png')
-
-% plotnum = plotnum + 1;
-% figure(plotnum); grid on; hold on;
-% histogram(AudioTable.clicks_L(strcmp(AudioTable.track,'quiet'),:),50,'BinLimits',[0,500], 'facecolor',[0.3 0.3 0.3])
-% histogram(AudioTable.clicks_R(strcmp(AudioTable.track,'quiet'),:),50,'BinLimits',[0,500], 'facecolor',[0.5 0.5 0.5])
-% legend('Num Clicks Left Channel', 'Num Clicks Right Channel')
-% ylabel('number of records')
-% xlabel('number of clicks')
-% title('number of clicks in quiet track')
-% xlim([0,500])
-% saveas(figure(plotnum),'clicksquiet.png')
+pressruns = unique(AudioTable.pressing);
+tracks = unique(AudioTable.track);
 
 
-% plotnum = plotnum + 1;
-% figure(plotnum); grid on; hold on;
-% histogram(AudioTable.RMS_L(strcmp(AudioTable.track,'quiet2'),:),50,'BinLimits',[-50,-30], 'facecolor',[0.3 0.3 0.3])
-% histogram(AudioTable.RMS_R(strcmp(AudioTable.track,'quiet2'),:),50,'BinLimits',[-50,-30], 'facecolor',[0.5 0.5 0.5])
-% legend('RMS Left Channel', 'RMS Right Channel')
-% ylabel('number of records')
-% xlabel('RMS level [dB]')
-% title('RMS noise in quiet2 track')
-% xlim([-50,-30])
-% saveas(figure(plotnum),'RMSquiet2.png')
-
-% plotnum = plotnum + 1;
-% figure(plotnum); grid on; hold on;
-% histogram(AudioTable.clicks_L(strcmp(AudioTable.track,'quiet2'),:),50,'BinLimits',[0,500], 'facecolor',[0.3 0.3 0.3])
-% histogram(AudioTable.clicks_R(strcmp(AudioTable.track,'quiet2'),:),50,'BinLimits',[0,500], 'facecolor',[0.5 0.5 0.5])
-% legend('Num Clicks Left Channel', 'Num Clicks Right Channel')
-% ylabel('number of records')
-% xlabel('RMS level [dB]')
-% title('RMS noise in quiet2 track')
-% % xlim([0,500])
-% saveas(figure(plotnum),'clicksquiet2.png')
+% clean up AudioTable
+% AudioTable.RecordID = erase(AudioTable.record,'.wav');
+% AudioTable.RecordID = erase(AudioTable.RecordID,'a');
+% AudioTable.RecordID = erase(AudioTable.RecordID,'b'); 
+% AudioTable.RecordID =  cellfun(@str2num, AudioTable.RecordID);
 
 
+%~~~~~~~~~~~~~~~ GENERATE AUDIOSTATS TABLE ~~~~~~~~~~~~~~~~~~%
 
-% plotnum = plotnum + 1;
-% figure(plotnum); grid on; hold on;
-% histogram(AudioTable.RMS_L(strcmp(AudioTable.track,'transition'),:),50,'BinLimits',[-50,-30], 'facecolor',[0.3 0.3 0.3])
-% histogram(AudioTable.RMS_R(strcmp(AudioTable.track,'transition'),:),50,'BinLimits',[-50,-30], 'facecolor',[0.5 0.5 0.5])
-% legend('RMS Left Channel', 'RMS Right Channel')
-% ylabel('number of records')
-% xlabel('RMS level [dB]')
-% title('RMS noise in transition track')
-% xlim([-50,-30])
-% saveas(figure(plotnum),'rmstransition.png')
+    % StatNames2 = {'pressing', 'track', 'AvgRMS_L','StdRMS_L', 'AvgRMS_R', 'StdRMS_R','AvgClicks_L', 'StdevClicks_L', 'AvgClicks_R', 'StdevClicks_R', 'AvgWow_L', 'StdWow_L', 'AvgStereobleed', 'StdevStereobleed'};
+    % SensorStats = cell(0,14);
+
+    % StatNames = {'pressing', 'track', 'AvgRMS_L','StdRMS_L', 'AvgRMS_R', 'StdRMS_R', 'AvgA_L', 'StdA_L', 'AvgA_R', 'StdA_R','AvgClicks_L', 'StdevClicks_L', 'AvgClicks_R', 'StdevClicks_R', 'AvgWow_L', 'StdWow_L', 'AvgWow_R', 'StdWow_R', 'AvgStereobleed', 'StdevStereobleed'};
+    % AudioStats = cell(0,20);
 
 
-% plotnum = plotnum + 1;
-% figure(plotnum); grid on; hold on;
-% histogram(AudioTable.clicks_L(strcmp(AudioTable.track,'transition'),:),50,'BinLimits',[0,3000], 'facecolor',[0.3 0.3 0.3])
-% histogram(AudioTable.clicks_R(strcmp(AudioTable.track,'transition'),:),50,'BinLimits',[0,3000], 'facecolor',[0.5 0.5 0.5])
-% legend('Num Clicks Left Channel', 'Num Clicks Right Channel')
-% ylabel('number of Records')
-% xlabel('number of clicks')
-% title('num clicks in transition track')
-% xlim([0,3000])
-% saveas(figure(plotnum),'clickstransition.png')
+    % for j = (1:length(tracks))
+    %     for i = (1:length(pressruns))
+    %         RMS_L = struct2table(datastats(AudioTable.RMS_L(strcmp(AudioTable.pressing,pressruns{i}),:)));
+    %         RMS_R = struct2table(datastats(AudioTable.RMS_R(strcmp(AudioTable.pressing,pressruns{i}),:)));
+    %         A_L = struct2table(datastats(AudioTable.A_L(strcmp(AudioTable.pressing,pressruns{i}),:)));
+    %         A_R = struct2table(datastats(AudioTable.A_R(strcmp(AudioTable.pressing,pressruns{i}),:)));
+    %         clicks_L = struct2table(datastats(AudioTable.clicks_L(strcmp(AudioTable.pressing,pressruns{i}),:)));
+    %         clicks_R = struct2table(datastats(AudioTable.clicks_R(strcmp(AudioTable.pressing,pressruns{i}),:)));
+    %         wow_L= struct2table(datastats(AudioTable.wow_L(strcmp(AudioTable.pressing,pressruns{i}),:)));
+    %         wow_R= struct2table(datastats(AudioTable.wow_R(strcmp(AudioTable.pressing,pressruns{i}),:)));
+    %         stereo_bleed = struct2table(datastats(AudioTable.stereo_bleed(strcmp(AudioTable.pressing,pressruns{i}),:)));
+            
+
+            
+
+    %         AudioStats = [AudioStats ; cell2table({pressruns{i}, tracks{j}, RMS_L.mean, RMS_L.std, RMS_R.mean, RMS_R.std,A_L.mean, A_L.std, A_R.mean, A_R.std,clicks_L.mean, clicks_L.std, clicks_R.mean, clicks_R.std, wow_L.mean, wow_L.std, wow_R.mean, wow_R.std, stereo_bleed.mean, stereo_bleed.std})];
+        
+    %     end
+    % end
+
+    % AudioStats.Properties.VariableNames{'Var1'}='pressrun';
+    % AudioStats.Properties.VariableNames{'Var2'}='track';
+    % AudioStats.Properties.VariableNames{'Var3'}='AvgRMS_L';
+    % AudioStats.Properties.VariableNames{'Var4'}='StdRMS_L';
+    % AudioStats.Properties.VariableNames{'Var5'}='AvgRMS_R';
+    % AudioStats.Properties.VariableNames{'Var6'}='StdRMS_R';
+    % AudioStats.Properties.VariableNames{'Var7'}='AvgA_L';
+    % AudioStats.Properties.VariableNames{'Var8'}='StdA_L';
+    % AudioStats.Properties.VariableNames{'Var9'}='AvgA_R';
+    % AudioStats.Properties.VariableNames{'Var10'}='StdA_R';
+    % AudioStats.Properties.VariableNames{'Var11'}='AvgClicks_L';
+    % AudioStats.Properties.VariableNames{'Var12'}='StdevClicks_L';
+    % AudioStats.Properties.VariableNames{'Var13'}='AvgClicks_R';
+    % AudioStats.Properties.VariableNames{'Var14'}='StdevClicks_R';
+    % AudioStats.Properties.VariableNames{'Var15'}='AvgWow_L';
+    % AudioStats.Properties.VariableNames{'Var16'}='StdWow_L';
+    % AudioStats.Properties.VariableNames{'Var17'}='AvgWow_R';
+    % AudioStats.Properties.VariableNames{'Var18'}='StdWow_R';
+    % AudioStats.Properties.VariableNames{'Var19'}='AvgStereobleed';
+    % AudioStats.Properties.VariableNames{'Var20'}='StdevStereobleed';
+%~~~~~~~~~~~~~~~ GENERATE AUDIOSTATS TABLE ENDS ~~~~~~~~~~~~~~~~~~%
+
+%~~~~~~~~~~~~~~~ MERGING TABLES STARTS ~~~~~~~~~~~~~~%
+    % disp('AudioStats')
+    % head(AudioStats)
+    disp('AudioTable')
+    head(AudioTable)
+    disp('RecordTable')
+    head(RecordTable)
+    disp('SensorTable')
+    head(SensorTable)
+
+    % join RecordTable and SensorTable
+    Tbl = outerjoin(RecordTable, SensorTable);%,'VariableNames', 'RecordNumber')%;, SensorTable)
+    Tbl.Properties.VariableNames([1]) = {'RecordID'};
+    writetable(Tbl,'Tbl1.csv')
+
+    head(Tbl)
+
+    % join in AudioTable
+    Tbl = outerjoin(Tbl, AudioTable, 'Keys', {'RecordID', 'RecordID'});%, 'VariableNames', 'RecordNumber')%;, SensorTable)
+    Tbl.Properties.VariableNames([1]) = {'PressingNumber'};
+    writetable(Tbl,'Tbl2.csv')
+
+    head(Tbl)
+
+    % join in AudioStats
+    % Tbl = outerjoin(Tbl, AudioStats);
+    % writetable(Tbl,'Tbl3.csv')
+    % Tbl.Properties.VariableNames([3]) = {'pressing'};
 
 
-% plotnum = plotnum + 1;
-% figure(plotnum); grid on; hold on;
-% histogram(AudioTable.wow_L(strcmp(AudioTable.track,'3150Hz'),:),50,'BinLimits',[10,50], 'facecolor',[0.3 0.3 0.3])
-% histogram(AudioTable.wow_R(strcmp(AudioTable.track,'3150Hz'),:),50,'BinLimits',[10,50], 'facecolor',[0.5 0.5 0.5])
-% legend('wow and flutter Left Channel', 'wow and flutter Right Channel')
-% ylabel('number of Records')
-% xlabel('wow and flutter')
-% title('Wow and flutter in 3150Hz track')
-% saveas(figure(plotnum),'wow1.png')
-
-
-
-% plotnum = plotnum + 1;
-% figure(plotnum); grid on; hold on;
-% histogram(AudioTable.wow_R(strcmp(AudioTable.track,'3150Hz2'),:),50,'BinLimits',[10,50], 'facecolor',[0.3 0.3 0.3])
-% histogram(AudioTable.wow_L(strcmp(AudioTable.track,'3150Hz2'),:),50,'BinLimits',[10,50], 'facecolor',[0.5 0.5 0.5])
-% legend('wow and flutter Left Channel', 'wow and flutter Right Channel')
-% ylabel('number of Records')
-% xlabel('wow and flutter')
-% title('Wow and flutter in 3150Hz2 track')
-% saveas(figure(plotnum),'wow2.png')
-
-% plotnum = plotnum + 1;
-% figure(plotnum); grid on; hold on;
-% histogram(AudioTable.THD_L(strcmp(AudioTable.track,'1kHz'),:),50,'BinLimits',[-60,-30], 'facecolor',[0.3 0.3 0.3])
-% histogram(AudioTable.THD_R(strcmp(AudioTable.track,'1kHz'),:),50,'BinLimits',[-60,-30], 'facecolor',[0.5 0.5 0.5])
-% legend('thd Left Channel', 'thd Right Channel')
-% ylabel('number of Records')
-% xlabel('thd [dB]')
-% title('THD in the 1kHz track')
-% saveas(figure(plotnum),'thd1.png')
-
-% plotnum = plotnum + 1;
-% figure(plotnum); grid on; hold on;
-% histogram(AudioTable.THD_L(strcmp(AudioTable.track,'1kHz2'),:),50,'BinLimits',[-60,-30], 'facecolor',[0.3 0.3 0.3])
-% histogram(AudioTable.THD_R(strcmp(AudioTable.track,'1kHz2'),:),50,'BinLimits',[-60,-30], 'facecolor',[0.5 0.5 0.5])
-% legend('thd Left Channel', 'thd Right Channel')
-% ylabel('number of Records')
-% xlabel('thd [dB]')
-% title('THD in the 1kHz2 track')
-% saveas(figure(plotnum),'thd2.png')
-
-% plotnum = plotnum + 1;
-% figure(plotnum); grid on; hold on;
-% histogram(AudioTable.stereo_bleed(strcmp(AudioTable.track,'1kHzL'),:),50,'BinLimits',[-50,0], 'facecolor',[0.3 0.3 0.3])
-% ylabel('number of Records')
-% xlabel('stereo bleed')
-% title('stereo bleed in the 1kHzL track')
-% saveas(figure(plotnum),'stereoL1.png')
-
-% plotnum = plotnum + 1;
-% figure(plotnum); grid on; hold on;
-% histogram(AudioTable.stereo_bleed(strcmp(AudioTable.track,'1kHzR'),:),50,'BinLimits',[-50,0], 'facecolor',[0.3 0.3 0.3])
-% ylabel('number of Records')
-% xlabel('stereo bleed')
-% title('stereo bleed in the 1kHzR track')
-% saveas(figure(plotnum),'stereoR1.png')
-
-% plotnum = plotnum + 1;
-% figure(plotnum); grid on; hold on;
-% histogram(AudioTable.stereo_bleed(strcmp(AudioTable.track,'1kHzL2'),:),50,'BinLimits',[-50,0], 'facecolor',[0.3 0.3 0.3])
-% ylabel('number of Records')
-% xlabel('stereo bleed')
-% title('stereo bleed in the 1kHzL2 track')
-% saveas(figure(plotnum),'stereoL2.png')
-
-% plotnum = plotnum + 1;
-% figure(plotnum); grid on; hold on;
-% histogram(AudioTable.stereo_bleed(strcmp(AudioTable.track,'1kHzR2'),:),50,'BinLimits',[-50,0], 'facecolor',[0.3 0.3 0.3])
-% ylabel('number of Records')
-% xlabel('stereo bleed')
-% title('stereo bleed in the 1kHzR2 track')
-% saveas(figure(plotnum),'stereoR2.png')
-
-% %~~~~~~~~~~~~~HISTOGRAM PLOTS END~~~~~~~~~~~~~~~~~%
-
-
-% %~~~~~~~~~~~~~SENSOR TABLE PLOTS~~~~~~~~~~~~~~~~~%
-
-% plotnum = plotnum + 1;
-% figure(plotnum); grid on; hold on;
-% plot(SensorTable.recordNumber,SensorTable.maxMouldSteamIn_F,'k-o')
-% ylabel('maxMouldSteamIn [F]')
-% xlabel('record number')
-% title('record number vs maxMouldSteamIn_F')
-% saveas(figure(plotnum),'maxMouldSteamIn_F.png')
-
-% % SensorTable
-
-% plotnum = plotnum + 1;
-% figure(plotnum); grid on; hold on;
-% plot(SensorTable.recordNumber,SensorTable.maxMouldSteamOutBottom_F,'k-o')
-% ylabel('MouldSteamOutBottom_F [F]')
-% xlabel('record number')
-% title('record number vs MouldSteamOutBottom_F')
-% saveas(figure(plotnum),'MouldSteamOutBottom_F.png')
-
-% plotnum = plotnum + 1;
-% figure(plotnum); grid on; hold on;
-% plot(SensorTable.recordNumber,SensorTable.maxMouldSteamOutTop_F,'k-o')
-% ylabel('MouldSteamOutTop_F [F]')
-% xlabel('record number')
-% title('record number vs MouldSteamOutTop_F')
-% saveas(figure(plotnum),'MouldSteamOutTop_F.png')
-
-
-% plotnum = plotnum + 1;
-% figure(plotnum); grid on; hold on;
-% plot(SensorTable.recordNumber, SensorTable.maxPressForce_Ton,'k-o')
-% ylabel('maxPressForce_Ton')
-% xlabel('record number')
-% title('record number vs maxPressForce_Ton')
-% saveas(figure(plotnum),'maxPressForce_Ton.png')
-
-
-% %~~~~~~~~~~~~~SENSOR TABLE PLOTS END~~~~~~~~~~~~~%
-
-% %~~~~~~~~~~~~~AUDIO TABLE PLOTS~~~~~~~~~~~~~%
-
-disp('PRINTING')
-AudioTable.recordnum(strcmp(AudioTable.track,'quiet'),:)
-
-
-plotnum = plotnum + 1;
-figure(plotnum); grid on; hold on;
-plot(AudioTable.recordnum(strcmp(AudioTable.track,'quiet'),:), AudioTable.RMS_L(strcmp(AudioTable.track,'quiet'),:),'ko')
-plot(AudioTable.recordnum(strcmp(AudioTable.track,'quiet'),:), AudioTable.RMS_R(strcmp(AudioTable.track,'quiet'),:),'kx')
-ylabel('RMS [dB]')
-xlabel('record number')
-title('record number vs RMS in quiet track')
-saveas(figure(plotnum),'RMSquiet.png')
-
-
-
-
-plotnum = plotnum + 1;
-figure(plotnum); grid on; hold on;
-plot(AudioTable.recordnum(strcmp(AudioTable.track,'quiet'),:), AudioTable.clicks_L(strcmp(AudioTable.track,'quiet'),:),'ko')
-plot(AudioTable.recordnum(strcmp(AudioTable.track,'quiet'),:), AudioTable.clicks_R(strcmp(AudioTable.track,'quiet'),:),'kx')
-ylabel('RMS [dB]')
-xlabel('record number')
-title('record number vs RMS in quiet track')
-saveas(figure(plotnum),'RMSquiet.png')
-
-
-
-
-
-
-%~~~~~~~~~~~~~AUDIO TABLE PLOTS END~~~~~~~~~~~~~%
-AudioTable.Properties.VariableNames([2]) = {'recordname'};
-AudioTable.Properties.VariableNames([3]) = {'record'};
-Tbl = SensorTable(ismember(SensorTable.recordNumber,AudioTable.record),:)
-Tbl.Properties.VariableNames([1]) = {'record'};
-head(Tbl)
-head(AudioTable)
-Tbl = outerjoin(Tbl, AudioTable)
-%~~~~~~~~~~~~~MIXED TABLE PLOTS~~~~~~~~~~~~~%
-plotnum = plotnum + 1;
-figure(plotnum); grid on; hold on;
-plot(AudioTable.record(strcmp(AudioTable.track,'quiet'),:), Tbl.maxMouldSteamOutBottom_F(strcmp(Tbl.track,'quiet'),:),'ko')
-plot(AudioTable.record(strcmp(AudioTable.track,'quiet'),:), Tbl.maxMouldSteamOutBottom_F(strcmp(Tbl.track,'quiet'),:),'kx')
-ylabel('RMS [dB]')
-xlabel('record number')
-title('record number vs Mould Steam Out in quiet track')
-saveas(figure(plotnum),'mouldsteamout.png')
-
-
-plotnum = plotnum + 1;
-figure(plotnum); grid on; hold on;
-plot(Tbl.maxMouldSteamIn_F(strcmp(Tbl.track,'quiet'),:), Tbl.RMS_L(strcmp(Tbl.track,'quiet'),:),'ko')
-ylabel('RMS [dB]')
-xlabel('rmaxMouldSteamIn_F')
-title('maxMouldSteamIn_F vs RMS in quiet track')
-saveas(figure(plotnum),'maxMouldSteamIn_F.png')
-
-
-
-plotnum = plotnum + 1;
-figure(plotnum); grid on; hold on;
-plot(Tbl.maxPressForce_Ton(strcmp(Tbl.track,'quiet'),:), Tbl.RMS_L(strcmp(Tbl.track,'quiet'),:),'ko')
-ylabel('RMS [dB]')
-xlabel('maxPressForce_Ton')
-title('maxPressForce_Ton vs RMS in quiet track')
-saveas(figure(plotnum),'maxPressForce_Ton.png')
-
-
-
-plotnum = plotnum + 1;
-figure(plotnum); grid on; hold on;
-plot(Tbl.maxMouldSteamOutBottom_F(strcmp(Tbl.track,'quiet'),:), Tbl.RMS_L(strcmp(Tbl.track,'quiet'),:),'ko')
-ylabel('RMS [dB]')
-xlabel('maxMouldSteamOutBottom_F')
-title('maxMouldSteamOutBottom_F vs RMS in quiet track')
-saveas(figure(plotnum),'maxMouldSteamOutBottom_F.png')
-
-
-
-plotnum = plotnum + 1;
-figure(plotnum); grid on; hold on;
-plot(Tbl.maxExtruderBarrelZone2Temp_F(strcmp(Tbl.track,'quiet'),:), Tbl.RMS_L(strcmp(Tbl.track,'quiet'),:),'ko')
-ylabel('RMS [dB]')
-xlabel('maxExtruderBarrelZone2Temp_F')
-title('maxExtruderBarrelZone2Temp_F vs RMS in quiet track')
-saveas(figure(plotnum),'maxExtruderBarrelZone2Temp_F.png')
-
-
-
-%~~~~~~~~~~~~~MIXED TABLE PLOTS END~~~~~~~~~~~~~%
-
+    % Tbl.Properties.VariableNames([1]) = {'PressingNumber'};
+    % Tbl.Properties.VariableNames([33]) = {'track'};
+    % Tbl.Properties.VariableNames([3]) = {'pressing'};
+    writetable(Tbl,'Tbl4.csv')
