@@ -1,5 +1,5 @@
-clear all;close all;clc
-set(0,'DefaultLineLineWidth',1.5);
+ clear all;close all;clc
+set(0,'DefaultLineLineWidth',0.5);
 set(0,'DefaultAxesFontSize',12);
 set(0,'DefaultAxesFontWeight','bold')
 set(0,'DefaultAxesLineWidth',1.5)

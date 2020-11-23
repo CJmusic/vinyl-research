@@ -12,125 +12,52 @@ c = gray(20);
 
 % do histograms for RMS of each
 
-A0137B0137 = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0137B0137/A0137B0137-AudioTableMay12.csv');
-A0000B0000 = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/A0000B0000-AudioTableMay26.csv');
+% A0000B0000 = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/A0000B0000-AudioTableOct26.csv');
+A0000B0000 = readtable('/Users/cz/Code/vinyl-research/matlab_code/A0000B0000/Tbl4.csv');
+A0137B0137 = readtable('/Users/cz/Code/vinyl-research/matlab_code/A0137B0137/Tbl4.csv');
+% A0137B0137 = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0137B0137/A0137B0137-AudioTableOct21.csv');
 
-head(A0137B0137)
+
 head(A0000B0000)
+head(A0137B0137)
 
-tracks = unique(A0137B0137.track);
-tracks
 
-plotnum = 0;
+plot_stereohistogram(A0000B0000, 'quiet','a','RMS_L','RMS_R','First pressing RMS levels in the quiet tracks side a','A0000B0000quietRMSa')
+plot_stereohistogram(A0137B0137, 'quiet','a','RMS_L','RMS_R','Second pressing RMS levels in the quiet tracks side a','A0137B0137quietRMSa')
 
-for i = (1:length(tracks))
-    track = tracks{i};
+plot_stereohistogram(A0000B0000, 'quiet','b','RMS_L','RMS_R','First pressing RMS levels in the quiet tracks side a','A0000B0000quietRMSa')
+plot_stereohistogram(A0137B0137, 'quiet','b','RMS_L','RMS_R','Second pressing RMS levels in the quiet tracks side a','A0137B0137quietRMSa')
+
+
+
+function plot_stereohistogram(Tbl, trackname, side, x1, x2, titlestring, filename)
+    cols = Tbl.Properties.VariableNames
+    Tbl = Tbl(strcmp(Tbl.track,trackname),:);
+    Tbl = Tbl(strcmp(Tbl.side,side),:);
+    colx1 = find(ismember(cols, x1));
+    colx2 = find(ismember(cols, x2));
+    data_L = table2array(Tbl(:,colx1));
+    data_R = table2array(Tbl(:,colx2));
+
+
+    statsL = datastats(data_L);
+    statsR = datastats(data_R);    
     
-    
-
-    if strcmp(track, 'quiet') || strcmp(track, 'transition') || strcmp(track, 'quiet2')
-
-
-        statsLa = datastats(A0000B0000.RMS_L(strcmp(A0000B0000.track, track) & strcmp(A0000B0000.side, 'a'),:))
-        statsRa = datastats(A0000B0000.RMS_R(strcmp(A0000B0000.track, track) & strcmp(A0000B0000.side, 'a'),:))
-        
-        
-        lower_binLa = statsLa.mean - 10;
-        lower_binRa = statsRa.mean - 10;
-        upper_binLa = statsLa.mean + 10;
-        upper_binRa = statsRa.mean + 10;
+    lower_binL = statsL.mean - 10;
+    lower_binR = statsR.mean - 10;
+    upper_binL = statsL.mean + 10;
+    upper_binR = statsR.mean + 10;
 
 
-        statsLb = datastats(A0000B0000.RMS_L(strcmp(A0000B0000.track, track) & strcmp(A0000B0000.side, 'b'),:))
-        statsRb = datastats(A0000B0000.RMS_R(strcmp(A0000B0000.track, track) & strcmp(A0000B0000.side, 'b'),:))
-
-        lower_binLb = statsLb.mean - 10;
-        lower_binRb = statsRb.mean - 10;
-        upper_binLb = statsLb.mean + 10;
-        upper_binRb = statsRb.mean + 10;
-
-
-        plotnum = plotnum + 1;
-        figure(plotnum)
-        histogram(A0000B0000.RMS_L(strcmp(A0000B0000.track, track) & strcmp(A0000B0000.side, 'a'),:),50,'BinLimits',[lower_binLa,upper_binLa], 'facecolor',[0.3 0.3 0.3])
-        hold on; grid on;
-        histogram(A0000B0000.RMS_R(strcmp(A0000B0000.track, track) & strcmp(A0000B0000.side, 'a'),:),50,'BinLimits',[lower_binLa,upper_binLa], 'facecolor',[0.3 0.3 0.3])
-        title(strcat('A0000B0000 ', track, ' RMS noise side a'))
-        legend('left channel', 'right channel')
-        dim = [0.2 0.5 0.3 0.3];
-        str = {strcat('left mean :',num2str(statsLa.mean)),strcat('left std :',num2str(statsLa.std)),strcat('right mean :',num2str(statsRa.mean)),strcat('right std :',num2str(statsRa.std))};
-        annotation('textbox',dim,'String',str,'FitBoxToText','on');
-        saveas(figure(plotnum),strcat(track, 'A0000B0000aRMS.png'))
-        
-
-        title(strcat('A0000B0000 ', track, ' RMS noise side a'))
-        
-        plotnum = plotnum + 1;
-        figure(plotnum)
-        histogram(A0000B0000.RMS_L(strcmp(A0000B0000.track, track) & strcmp(A0000B0000.side, 'b'),:),50,'BinLimits',[lower_binLb,upper_binLb], 'facecolor',[0.3 0.3 0.3])
-        hold on; grid on;
-        histogram(A0000B0000.RMS_R(strcmp(A0000B0000.track, track) & strcmp(A0000B0000.side, 'b'),:),50,'BinLimits',[lower_binLb,upper_binLb], 'facecolor',[0.3 0.3 0.3])
-        title(strcat('A0000B0000 ', track, ' RMS noise side b'))
-        legend('left channel', 'right channel')
-        dim = [0.2 0.5 0.3 0.3];
-        str = {strcat('left mean :',num2str(statsLa.mean)),strcat('left std :',num2str(statsLa.std)),strcat('right mean :',num2str(statsRa.mean)),strcat('right std :',num2str(statsRa.std))};
-        annotation('textbox',dim,'String',str,'FitBoxToText','on');
-        saveas(figure(plotnum),strcat(track, 'A0000B0000bRMS.png'))
-
-        % plotnum += 1;
-        % figure(plotnum)
-
-        statsLa = datastats(A0137B0137.RMS_L(strcmp(A0137B0137.track, track) & strcmp(A0137B0137.side, 'a'),:))
-        statsRa = datastats(A0137B0137.RMS_R(strcmp(A0137B0137.track, track) & strcmp(A0137B0137.side, 'a'),:))
-
-        lower_binLa = statsLa.mean - 10;
-        lower_binRa = statsRa.mean - 10;
-
-        upper_binLa = statsLa.mean + 10;
-        upper_binRa = statsRa.mean + 10;
-
-        plotnum = plotnum + 1;
-        figure(plotnum)
-        histogram(A0137B0137.RMS_L(strcmp(A0137B0137.track, track) & strcmp(A0137B0137.side, 'a'),:),50,'BinLimits',[lower_binLa, upper_binLa], 'facecolor',[0.3 0.3 0.3])
-        hold on; grid on;
-        histogram(A0137B0137.RMS_R(strcmp(A0137B0137.track, track) & strcmp(A0137B0137.side, 'a'),:),50,'BinLimits',[lower_binLa, upper_binLa], 'facecolor',[0.3 0.3 0.3])
-        legend('left channel', 'right channel')
-        dim = [0.2 0.5 0.3 0.3];
-        str = {strcat('left mean :',num2str(statsLa.mean)),strcat('left std :',num2str(statsLa.std)),strcat('right mean :',num2str(statsRa.mean)),strcat('right std :',num2str(statsRa.std))};
-        annotation('textbox',dim,'String',str,'FitBoxToText','on');
-        title(strcat('A0137B0137', track, ' RMS noise side a'))
-        saveas(figure(plotnum),strcat(track, 'A0137B0137aRMS.png'))
-
-        statsLb = datastats(A0137B0137.RMS_L(strcmp(A0137B0137.track, track) & strcmp(A0137B0137.side, 'b'),:))
-        statsRb = datastats(A0137B0137.RMS_R(strcmp(A0137B0137.track, track) & strcmp(A0137B0137.side, 'b'),:))
-
-        lower_binLb = statsLb.mean - 10;
-        lower_binRb = statsRb.mean - 10;
-
-        upper_binLb = statsLb.mean + 10;
-        upper_binRb = statsRb.mean + 10;
-
-
-        plotnum = plotnum + 1;
-        figure(plotnum)
-        histogram(A0137B0137.RMS_L(strcmp(A0137B0137.track, track) & strcmp(A0137B0137.side, 'b'),:),50,'BinLimits',[lower_binLb,upper_binLb], 'facecolor',[0.3 0.3 0.3])
-        hold on; grid on;
-        histogram(A0137B0137.RMS_R(strcmp(A0137B0137.track, track) & strcmp(A0137B0137.side, 'b'),:),50,'BinLimits',[lower_binLb,upper_binLb], 'facecolor',[0.3 0.3 0.3])
-        legend('left channel', 'right channel')
-        dim = [0.2 0.5 0.3 0.3];
-        str = {strcat('left mean :',num2str(statsLa.mean)),strcat('left std :',num2str(statsLa.std)),strcat('right mean :',num2str(statsRa.mean)),strcat('right std :',num2str(statsRa.std))};
-        annotation('textbox',dim,'String',str,'FitBoxToText','on');
-        title(strcat('A0137B0137 ', track, ' RMS noise side b'))
-        saveas(figure(plotnum),strcat(track, 'A0137B0137bRMS.png'))
-
-
-    end
-
+    fig = figure('Visible', 'off');
+    histogram(data_L, 50,'BinLimits',[lower_binL,upper_binL], 'facecolor',[0.3 0.3 0.3])
+    hold on; grid on;
+    histogram(data_R,50,'BinLimits',[lower_binL,upper_binL], 'facecolor',[0.6 0.6 0.6])
+    title(titlestring)
+    legend('left channel', 'right channel')
+    dim = [0.2 0.5 0.3 0.3];
+    str = {strcat('left mean :',num2str(statsL.mean)),strcat('left std :',num2str(statsL.std)),strcat('right mean :',num2str(statsR.mean)),strcat('right std :',num2str(statsR.std))};
+    annotation('textbox',dim,'String',str,'FitBoxToText','on','BackgroundColor', 'white');
+    plotname = strcat('plots/',filename,'.png')
+    saveas(fig, plotname);
 end
-
-% figure(1)
-% histogram(A0000B0000.RMS_L(strcmp(A0000B0000.track,'transition'),:),50,'BinLimits',[-50,-30], 'facecolor',[0.3 0.3 0.3])
-
-
-% figure(2)
-% histogram(A0137B0137.RMS_L(strcmp(A0137B0137.track,'transition'),:),50,'BinLimits',[-50,-30], 'facecolor',[0.3 0.3 0.3])

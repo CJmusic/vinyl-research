@@ -1,4 +1,3 @@
-
 function [data_fft, freq_fft] = audio_spectrum(data, fs, start_sam, n_sam);
     % data = hanning(length(data)).*data;
     disp('inside audio_spectrum')
