@@ -31,7 +31,7 @@ plot_stereohistogram(A0137B0137, 'quiet','b','RMS_L','RMS_R','Second pressing RM
 
 
 function plot_stereohistogram(Tbl, trackname, side, x1, x2, titlestring, filename)
-    cols = Tbl.Properties.VariableNames
+    cols = Tbl.Properties.VariableNames;
     Tbl = Tbl(strcmp(Tbl.track,trackname),:);
     Tbl = Tbl(strcmp(Tbl.side,side),:);
     colx1 = find(ismember(cols, x1));
@@ -50,14 +50,14 @@ function plot_stereohistogram(Tbl, trackname, side, x1, x2, titlestring, filenam
 
 
     fig = figure('Visible', 'off');
-    histogram(data_L, 50,'BinLimits',[lower_binL,upper_binL], 'facecolor',[0.3 0.3 0.3])
+    histogram(data_L, 50,'BinLimits',[lower_binL,upper_binL], 'facecolor',[0.6 0.6 0.6])
     hold on; grid on;
-    histogram(data_R,50,'BinLimits',[lower_binL,upper_binL], 'facecolor',[0.6 0.6 0.6])
+    histogram(data_R,50,'BinLimits',[lower_binL,upper_binL], 'facecolor',[0.3 0.3 0.3])
     title(titlestring)
     legend('left channel', 'right channel')
     dim = [0.2 0.5 0.3 0.3];
     str = {strcat('left mean :',num2str(statsL.mean)),strcat('left std :',num2str(statsL.std)),strcat('right mean :',num2str(statsR.mean)),strcat('right std :',num2str(statsR.std))};
     annotation('textbox',dim,'String',str,'FitBoxToText','on','BackgroundColor', 'white');
-    plotname = strcat('plots/',filename,'.png')
+    plotname = strcat('plots/',filename,'.png');
     saveas(fig, plotname);
 end

@@ -139,6 +139,14 @@ AudioTable.RecordID =  cellfun(@str2num, AudioTable.RecordID);
     Tbl.Properties.VariableNames([33]) = {'track'};
     Tbl.Properties.VariableNames([3]) = {'pressing'};
 
+    Tbl.Properties.VariableNames([2]) = {'RecordID'};
+
+    Tbl.PressingNumber_SensorTable = [];
+    Tbl.pressing_AudioTable = [];
+    Tbl.pressing_SettingsTable = [];
+
+    writetable(Tbl,'A0137B0137.csv')
+
 
     % Tbl = Tbl(strcmp(Tbl.side,'a'),:);
 

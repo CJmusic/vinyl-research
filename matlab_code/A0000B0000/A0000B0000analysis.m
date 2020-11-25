@@ -14,14 +14,15 @@ if ismac()
     data_folder = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/data/A0000B0000/'
     AudioTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/A0000B0000-AudioTableOct26.csv') ;
     SensorTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/A0000B0000_SensorTable.csv');
-    RecordTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/A0000B0000_SensorTable.csv');
+    % RecordTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/A0000B0000_SensorTable.csv');
     AudioStats = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/A0000B0000_AudioStats.csv');
 
-
+    SettingsTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/A0000B0000_SettingsTable.csv');
+    RecordTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/A0000B0000_RecordTable.csv');
 
     head(AudioTable)
     head(SensorTable)
-    head(RecordTable)
+    % head(RecordTable)
     head(AudioStats)
 
 
@@ -109,17 +110,20 @@ tracks = unique(AudioTable.track);
     % head(AudioStats)
     disp('AudioTable')
     head(AudioTable)
-    disp('RecordTable')
-    head(RecordTable)
+    % disp('RecordTable')
+    % head(RecordTable)
     disp('SensorTable')
     head(SensorTable)
 
     % join RecordTable and SensorTable
-    Tbl = outerjoin(RecordTable, SensorTable);%,'VariableNames', 'RecordNumber')%;, SensorTable)
-    Tbl.Properties.VariableNames([1]) = {'RecordID'};
-    writetable(Tbl,'Tbl1.csv')
+    % Tbl = outerjoin(RecordTable, SensorTable);%,'VariableNames', 'RecordNumber')%;, SensorTable)
+    % Tbl.Properties.VariableNames([1]) = {'RecordID'};
+    % writetable(Tbl,'Tbl1.csv')
 
-    head(Tbl)
+    % head(Tbl)
+
+    Tbl = SensorTable;
+    Tbl.Properties.VariableNames([1]) = {'RecordID'};
 
     % join in AudioTable
     Tbl = outerjoin(Tbl, AudioTable, 'Keys', {'RecordID', 'RecordID'});%, 'VariableNames', 'RecordNumber')%;, SensorTable)
@@ -127,6 +131,11 @@ tracks = unique(AudioTable.track);
     writetable(Tbl,'Tbl2.csv')
 
     head(Tbl)
+
+    Tbl2 = outerjoin(SettingsTable, RecordTable, 'Keys', {'pressing', 'pressing'});%, 'VariableNames', 'RecordNumber')%;, SensorTable)
+    writetable(Tbl,'Tbl2.csv')
+
+    Tbl = outerjoin(Tbl,Tbl2,'Keys', {'PressingNumber', 'PressingNumber'});
 
     % join in AudioStats
     % Tbl = outerjoin(Tbl, AudioStats);
@@ -137,4 +146,8 @@ tracks = unique(AudioTable.track);
     % Tbl.Properties.VariableNames([1]) = {'PressingNumber'};
     % Tbl.Properties.VariableNames([33]) = {'track'};
     % Tbl.Properties.VariableNames([3]) = {'pressing'};
-    writetable(Tbl,'Tbl4.csv')
+    Tbl.RecordID_AudioTable=[];
+    
+    
+
+    writetable(Tbl,'A0000B0000.csv')
