@@ -144,7 +144,7 @@ AudioTable.RecordID =  cellfun(@str2num, AudioTable.RecordID);
     Tbl.PressingNumber_SensorTable = [];
     Tbl.pressing_AudioTable = [];
     Tbl.pressing_SettingsTable = [];
-
+    Tbl.RecordID_AudioTable = [];
     writetable(Tbl,'A0137B0137.csv')
 
 

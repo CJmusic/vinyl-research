@@ -13,20 +13,23 @@ c = gray(20);
 % do histograms for RMS of each
 
 % A0000B0000 = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/A0000B0000-AudioTableOct26.csv');
-A0000B0000 = readtable('/Users/cz/Code/vinyl-research/matlab_code/A0000B0000/Tbl4.csv');
-A0137B0137 = readtable('/Users/cz/Code/vinyl-research/matlab_code/A0137B0137/Tbl4.csv');
+A0000B0000 = readtable('/Users/cz/Code/vinyl-research/matlab_code/A0000B0000/A0000B0000.csv');
+A0137B0137 = readtable('/Users/cz/Code/vinyl-research/matlab_code/A0137B0137/A0137B0137.csv');
 % A0137B0137 = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0137B0137/A0137B0137-AudioTableOct21.csv');
 
 
 head(A0000B0000)
 head(A0137B0137)
 
+BOTH = [A0000B0000; A0137B0137];
 
 plot_stereohistogram(A0000B0000, 'quiet','a','RMS_L','RMS_R','First pressing RMS levels in the quiet tracks side a','A0000B0000quietRMSa')
 plot_stereohistogram(A0137B0137, 'quiet','a','RMS_L','RMS_R','Second pressing RMS levels in the quiet tracks side a','A0137B0137quietRMSa')
 
 plot_stereohistogram(A0000B0000, 'quiet','b','RMS_L','RMS_R','First pressing RMS levels in the quiet tracks side a','A0000B0000quietRMSa')
 plot_stereohistogram(A0137B0137, 'quiet','b','RMS_L','RMS_R','Second pressing RMS levels in the quiet tracks side a','A0137B0137quietRMSa')
+
+plot_stereohistogram(BOTH, 'quiet','a','RMS_L','RMS_R','Both pressings RMS levels in the quiet tracks side a','BOTH quiet rmsa')
 
 
 

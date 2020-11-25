@@ -128,7 +128,7 @@ tracks = unique(AudioTable.track);
     % join in AudioTable
     Tbl = outerjoin(Tbl, AudioTable, 'Keys', {'RecordID', 'RecordID'});%, 'VariableNames', 'RecordNumber')%;, SensorTable)
     Tbl.Properties.VariableNames([1]) = {'PressingNumber'};
-    writetable(Tbl,'Tbl2.csv')
+    writetable(Tbl,'Tbl.csv')
 
     head(Tbl)
 
@@ -136,18 +136,32 @@ tracks = unique(AudioTable.track);
     writetable(Tbl,'Tbl2.csv')
 
     Tbl = outerjoin(Tbl,Tbl2,'Keys', {'PressingNumber', 'PressingNumber'});
-
+    writetable(Tbl,'Tbl3.csv')
     % join in AudioStats
     % Tbl = outerjoin(Tbl, AudioStats);
     % writetable(Tbl,'Tbl3.csv')
     % Tbl.Properties.VariableNames([3]) = {'pressing'};
 
 
-    % Tbl.Properties.VariableNames([1]) = {'PressingNumber'};
+    Tbl.Properties.VariableNames([1]) = {'PressingNumber'};
     % Tbl.Properties.VariableNames([33]) = {'track'};
-    % Tbl.Properties.VariableNames([3]) = {'pressing'};
-    Tbl.RecordID_AudioTable=[];
+    Tbl.pressing = [];
+    Tbl.Properties.VariableNames([54]) = {'pressing'};
     
+
+    Tbl.RecordID = Tbl.PressingNumber;
+    Tbl.RecordNumber = Tbl.PressingNumber;
+    Tbl.RecordID_AudioTable = [];
+    Tbl.PressingNumber_Tbl2 = [];
+
+    Tbl.pressing_RecordTable = [];
+    Tbl.TimeStamp = [];
+    Tbl.timestamp = [];
+    writetable(Tbl,'Tbl4.csv')
+
+    Tbl = movevars(Tbl, 'RecordID', 'After', 'PressingNumber');
+    Tbl = movevars(Tbl, 'pressing', 'After', 'RecordID');
+    Tbl = movevars(Tbl, 'RecordNumber', 'After', 'pressing');
     
 
     writetable(Tbl,'A0000B0000.csv')
