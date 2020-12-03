@@ -52,7 +52,7 @@ function [output, info_array] = SeperateTracks(file)
                 if file(length(file)-4) == 'a'
                     disp('MAC')
                     disp('Using a side reference')
-                    % [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); offset = 15; 
+                    % [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); offset = 15; \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ \\\\\\\\\\\\ 
                     [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/040318_A0000B0000r003a.wav'); offset = 9.227; 
                 elseif file(length(file)-4) == 'b'
                     disp('MAC')

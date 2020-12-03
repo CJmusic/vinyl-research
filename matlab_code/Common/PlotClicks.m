@@ -10,19 +10,22 @@ addpath('/Users/cz/Code/vinyl-research/matlab_code/Common/')
 addpath('/Users/cz/Code/vinyl-research/matlab_code/audio_functions')
 addpath('/Volumes/AUDIOBANK/audio_files/A0000B0000/')
 
-file_ref = '/Volumes/AUDIOBANK/audio_files/A0137B0137/074a.wav';
+file_ref = '/Volumes/AUDIOBANK/audio_files/A0000B0000/043019_A0000B0000r008a.wav';
 
 [reference, ~] = SeperateTracks(file_ref);
 
-sig = reference('transition');
+sig = reference('1kHz2');
+figure(1)
+plot(sig)
 fs = 96000;
 %plot the click and the spectrum, as well as the corrected audio
 
 [csig_L, clicks_L] = ClickDetect(sig(:,1));
 [csig_R, clicks_R] = ClickDetect(sig(:,2));
 
-size(csig_L)
-size(csig_R)
+disp('NUMBER OF CLICKS')
+size(clicks_L)
+size(clicks_R)
 
 csig = [csig_L, csig_R];
 
@@ -36,18 +39,14 @@ for i = (1:length(clicks_L))
         start_sam = 1;
     end
 
-    end_sam = clicks_L(i) + 0.002*fs;
+    end_sam = clicks_L(i) + 0.02*fs;
     if end_sam > length(sig)
         end_sam = length(sig);
     end
 
 
     click = sig(start_sam:end_sam,1);
-    plot_click(click, strcat('Click ',num2str(i) ,' detected in left channel on record A0137B0137 74 side a'))
-
-    cclick = csig(start_sam:end_sam,1);
-    plot_click(cclick, strcat('Corrected audio of Click ',num2str(i) ,' detected in left channel on record A0137B0137 74 side a'))
-
+    plot_click(click, strcat('test1'))
     [click_spec, freq] = audio_spectrum(click,96000, 1, length(click));
     
 
@@ -55,21 +54,20 @@ for i = (1:length(clicks_L))
 end
 
 for i = (1:length(clicks_R))
-    start_sam = clicks_L(i) - 0.0005*fs;
+    % start_sam = clicks_L(i) - 0.0005*fs;
+    start_sam = clicks_L(i) - 0.05*fs;
     if start_sam < 0
         start_sam = 1;
     end
 
-    end_sam = clicks_L(i) + 0.002*fs;
+    end_sam = clicks_L(i) + 20*fs;
     if end_sam > length(sig)
         end_sam = length(sig);
     end
 
     click = sig(start_sam:end_sam,2);
-    plot_click(click, strcat('Click ',num2str(i) ,' detected in right channel on record A0137B0137 74 side a'))
+    plot_click(click, strcat('Click ',num2str(i) ,' test3'))
 
-    cclick = csig(start_sam:end_sam,2);
-    plot_click(cclick, strcat('Corrected audio of Click ',num2str(i) ,' detected in right channel on record A0137B0137 74 side a'))
 end
 
 
@@ -86,7 +84,7 @@ function plot_click(click, titlestring)
     title(titlestring)
     xlabel('time [ms]')
     ylabel('signal level')
-    plotname = strcat('plots/PlotClicks/', titlestring, '.png')
+    plotname = strcat('plots/PlotClicks/1kHz/', titlestring, '.png')
     saveas(fig, plotname);
 
 end

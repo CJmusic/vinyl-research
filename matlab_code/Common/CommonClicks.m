@@ -5,7 +5,7 @@ set(0,'DefaultAxesFontWeight','bold')
 set(0,'DefaultAxesLineWidth',1.5)
 
 
-addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/')
+addpath('/Users/cz/OneDrive - U   niversity of Waterloo/School/Vinyl_Project/audio_files/')
 
 [record1, ~] = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav');
 [record2, ~] = SeperateTracks('/Volumes/AUDIOBANK/audio_files/A0000B0000/042119_A0000B0000r070a.wav');

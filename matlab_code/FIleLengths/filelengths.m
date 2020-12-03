@@ -19,7 +19,8 @@ if ismac() == true
 
     % record1 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/testing/maxbarrelzones3a.wav');
     % record2 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/styluswear/042820_A0000B0000r1a.wav');
-    reference = SeperateTracks('/AUDIOBANK/audio_files/A0137B0137/003a.wav')
+    reference = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/040318_A0000B0000r003a.wav')
+
     % record1 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/ableton/r27a-ableton1024a.wav')
     folder = '/Volumes/AUDIOBANK/audio_files/A0137B0137/'
     % record2 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/styluswear/040318_A0000B0000r001a.wav');
@@ -40,14 +41,15 @@ end
 % data1 = data1(1:length(data1)-1,1);
 % time = (1:length(data1))/96000;
 
-folder = '/Volumes/AUDIOBANK/audio_files/A0137B0137/'
+% folder = '/Volumes/AUDIOBANK/audio_files/A0137B0137/'
+folder = '/Volumes/AUDIOBANK/audio_files/A0000B0000/'
 files = dir(fullfile(folder,'*.wav'))
 
-plot_folder = '/Users/cz/Code/vinyl-research/matlab_code/FileLengths/plots/';
+plot_folder = '/Users/cz/Code/vinyl-research/matlab_code/FileLengths/plots/A0000B0000/';
 fs = 96000;
 for i = (1:length(files)) %%loop through records
     filename = files(i).name
-    record = SeperateTracks(filename);
+    record = SeperateTracks(strcat(folder,filename));
     recordnum = filename(1:end-4)
 
     refsweep = reference('sweep');

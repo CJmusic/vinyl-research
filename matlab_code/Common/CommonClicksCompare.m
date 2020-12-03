@@ -2,7 +2,7 @@
 set(0,'DefaultLineLineWidth',0.5);
 set(0,'DefaultAxesFontSize',12);
 set(0,'DefaultAxesFontWeight','bold')
-set(0,'DefaultAxesLineWidth',1.5)
+set(0,'DefaultAxesLineWidth',0.5)
 
 
 addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/')
@@ -81,4 +81,39 @@ function plot_waveclicks(sig, clicks_L, clicks_R, filename)
 
     plotname = strcat('plots/ClickCompare/', filename, '.png')
     saveas(fig, plotname);
+end
+
+
+
+function plot_click(click, sig, titlestring)
+    fs = 96000;
+    start_sam = click - 0.0005*fs;
+    if start_sam < 0
+        start_sam = 1;
+    end
+
+    end_sam = click + 0.002*fs;
+    if end_sam > length(sig)
+        end_sam = length(sig);
+    end
+
+
+    click = sig(start_sam:end_sam,1);
+
+
+
+    fs = 96000;
+    time = (1:length(click))/fs;
+    time = time*1000;
+
+    fig = figure('Visible', 'off')
+    plot(time,click,'k')
+    grid on;
+    ylim([-0.5,0.5])
+    title(titlestring)
+    xlabel('time [ms]')
+    ylabel('signal level')
+    plotname = strcat('plots/ClickDetect/clickplots/', titlestring, '.png')
+    saveas(fig, plotname);
+
 end
