@@ -46,7 +46,7 @@ for i = (1:length(clicks_L))
 
 
     click = sig(start_sam:end_sam,1);
-    plot_click(click, strcat('test1'))
+    plot_click(click, strcat('click ', num2str(i), ' test1'))
     [click_spec, freq] = audio_spectrum(click,96000, 1, length(click));
     
 
@@ -66,11 +66,13 @@ for i = (1:length(clicks_R))
     end
 
     click = sig(start_sam:end_sam,2);
-    plot_click(click, strcat('Click ',num2str(i) ,' test3'))
+    plot_click(click, strcat('Click ',num2str(i) ,' test2'))
 
 end
 
-
+plot_waveclicks(sig, clicks_L, clicks_R, 'TESTINGWAVES')
+length(clicks_L)
+length(clicks_R)
 
 function plot_click(click, titlestring)
     fs = 96000;
@@ -88,3 +90,35 @@ function plot_click(click, titlestring)
     saveas(fig, plotname);
 
 end
+
+
+function plot_waveclicks(sig, clicks_L, clicks_R, filename)
+    fig = figure('Visible', 'off')
+    subplot(2,1,1)
+    plot(sig(:,1),'k')
+    ylim([-0.2, 0.2])
+    hold on; grid on;
+    % plot(sig2)
+    title(strcat(filename, ' left channel'))
+    
+    for xi = 1:length(clicks_L)
+        x1 = (clicks_L(xi));
+        line([x1 x1], get(gca, 'ylim'),'Color', 'green','LineStyle', '--');
+    end
+
+    subplot(2,1,2)
+    plot(sig(:,2),'k')
+    ylim([-0.2, 0.2])
+    hold on; grid on;
+    % plot(sig2)
+    title(strcat(filename, ' right channel'))
+
+    for xi = 1:length(clicks_R)
+        x1 = (clicks_R(xi));
+        line([x1 x1], get(gca, 'ylim'),'Color', 'green','LineStyle', '--');
+    end
+
+    plotname = strcat('plots/CommonClicks/1kHz/', filename, '.png')
+    saveas(fig, plotname);
+end
+
