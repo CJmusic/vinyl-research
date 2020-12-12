@@ -4,36 +4,25 @@ set(0,'DefaultAxesFontSize',12);
 set(0,'DefaultAxesFontWeight','bold')
 set(0,'DefaultAxesLineWidth',1.5)
 
-
+addpath('/Users/cz/Code/vinyl-research/matlab_code/audio_functions')
+addpath('/Users/cz/Code/vinyl-research/matlab_code/from_John')
 
 timestring = '161.695'
-timediff = str2num(timestring(1:2))*60 + str2num(timestring(3:end));
-lagdiff = floor(timediff*96000)
 
-timestringref = '1558.066';
-timediffref = str2num(timestringref(1:2))*60 + str2num(timestringref(3:end));
-
-lagdiff = floor((timediff - timediffref)*96000)
-
-tracks = SeperateTracksTest('/Volumes/AUDIOBANK/audio_files/A0137B0137/039b.wav', lagdiff)
+tracks = SeperateTracksTest('/Volumes/AUDIOBANK/audio_files/A0137B0137/039b.wav', timestring)
 
 signal_names = tracks.keys;
 signals = tracks.values;
 fs = 96000;
 for i = 1:length(signal_names);
     trackname = signal_names{i};
-    sig = signals{i};
+    sig = signals{i}; 
     time = (1:length(sig))/fs;
-
     plot_track(time,sig,trackname,trackname)
     
-
-    % [spec, fftfreq] = audio_spectrum(sig, fs, 1, 2^16);
-    % % fig = figure('Visible', 'off')
-    % figure(i+100)
-    % audio_plotspectrum(fftfreq, spec, strcat(trackname,' spectrum'));
-    
 end
+
+
 
 function plot_track(x, y, trackname, filename)
   
@@ -41,6 +30,7 @@ function plot_track(x, y, trackname, filename)
     subplot(2,1,1)
     title(strcat(trackname, ' left channel'))
     plot(x,y(:,1),'k')
+    grid on;
     subplot(2,1,2)
     plot(x,y(:,2),'k')
     title(strcat(trackname, ' right channel'))
@@ -56,7 +46,7 @@ function plot_track(x, y, trackname, filename)
 
 end
 
-function [output, info_array] = SeperateTracksTest(file, lagdiff)
+function [output, info_array] = SeperateTracksTest(file, timestring)
     % function [output, info_array] = SeperateTracksTest(file)
             %~~~~~~~~~~~~~~~~~ LOAD REFERENCE ~~~~~~~~~~~~~~~~~%
                 % try 
@@ -80,7 +70,7 @@ function [output, info_array] = SeperateTracksTest(file, lagdiff)
                 %         [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/080619-A0000B0000r052b.wav'); offset = 14.662;
                 %     else 
                 %         disp('NO SIDE FOUND, USING SIDE A REFERENCE')
-                [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav');offset = 15; 
+                    [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); offset = 14.5; refpip = 1558.006;
                 %         [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/040318_A0000B0000r003a.wav'); offset = 9.227; 
                         
                 %     end
@@ -143,8 +133,8 @@ function [output, info_array] = SeperateTracksTest(file, lagdiff)
                 % offset = 15; %28a
                 % % offset = 13.5; %28b
                 timestamps =       [[0, 61],    % 1. 1 kHz
-                                    [61,91],    % 2. 10 kHz
-                                    [91,121],   % 3. 100 Hz
+                                    [61,90],    % 2. 10 kHz
+                                    [90,121],   % 3. 100 Hz
                                     [121,159],  % 4. sweep
                                     [159,180],  % 5. quiet
                                     [180,245],  % 6. 3150 Hz
@@ -169,7 +159,7 @@ function [output, info_array] = SeperateTracksTest(file, lagdiff)
                                     [900, 938]];% 25. sweep vertical  
                                     % [938, 950]];               
                                     %% dont forget lead in and leadout
-                % timestamps = timestamps + offset;
+                timestamps = timestamps + offset;
         
         
         
@@ -195,10 +185,24 @@ function [output, info_array] = SeperateTracksTest(file, lagdiff)
                 % % plot(lags_L/fs, acor_L)
     
                 % disp(strcat('lagdiff...', num2str(lagdiff)))
-        
+                timediff = str2num(timestring(1:2))*60 + str2num(timestring(3:end));
+                timestringref = '1558.066';
+                timediffref = str2num(timestringref(1:2))*60 + str2num(timestringref(3:end));
+
+
+
+                timediff = timediffref - timediff; 
+                lagdiff = floor(timediff*96000);
+
                 % timeref = (0:length(ref)-1) ;
-                timedata = (0:length(data)-1)   + lagdiff ;
-                timestamps = timestamps + lagdiff/96000;
+                timedata = (0:length(data)-1) - timediff;
+                timestamps = timestamps - timediff;
+                if timestamps(1,1) < 0; 
+                    timestamps(1,1) = 1;
+                end
+
+                disp(strcat('timediff...',num2str(timediff)))
+                timestamps
                 % %***   DEBUG   ***%
                 % % disp(strcat(num2str(size(timeref)), num2str(size(refLockout))))
                 % % disp(strcat(num2str(size(timedata)), num2str(size(dataLockout))))
