@@ -42,7 +42,7 @@ function [output, info_array] = SeperateTracks(file)
 % function [output, info_array] = SeperateTracksTest(file)
         %~~~~~~~~~~~~~~~~~ LOAD REFERENCE ~~~~~~~~~~~~~~~~~%
             % try 
-            % addpath('/Users/cz/Code/vinyl-research/matlab_code/audio_functions')
+            addpath('/Users/cz/Code/vinyl-research/matlab_code/audio_functions')
     
             % %~~~~ MAC ~~~~%
             disp('SEPERATE TRACKS CALLED')
@@ -160,45 +160,48 @@ function [output, info_array] = SeperateTracks(file)
             [data, fs] = audioread(file);
      
         %~~~~~~~~~~~~~~~~~~~~~ LINE UP ~~~~~~~~~~~~~~~~~~~~~~~~% 
-    
-            lockout = 950; 
-            refLockout = ref(floor(lockout*96000):end,:);
-            %% lineup audio                                                     with reference 
-            dataLockout = data(floor(950*fs):end,:);
-            disp(strcat('time diff to ref... ', num2str(length(data)  - length(ref))))
-            disp(strcat('size dataLockout... ', num2str(size(dataLockout))))
-            disp(strcat('size refLockout...  ', num2str(size(refLockout))))
+            %~~~~~~~~~~ CORRELATION ~~~~~~~~~%
+            % lockout = 950; 
+            % refLockout = ref(floor(lockout*96000):end,:);
+            % %% lineup audio with reference 
+            % dataLockout = data(floor(950*fs):end,:);
+            % disp(strcat('time diff to ref... ', num2str(length(data)  - length(ref))))
+            % disp(strcat('size dataLockout... ', num2str(size(dataLockout))))
+            % disp(strcat('size refLockout...  ', num2str(size(refLockout))))
 
-            [acor_L,lags_L] = xcorr(refLockout(:,1),dataLockout(:,1));
-            [M_L,I_L] = max(abs(acor_L));
-            lagdiff_L = lags_L(I_L);
-            lagdiff = lagdiff_L;
-            % figure(21)
-            % plot(lags_L/fs, acor_L)
+            % [acor_L,lags_L] = xcorr(refLockout(:,1),dataLockout(:,1));
+            % [M_L,I_L] = max(abs(acor_L));
+            % lagdiff_L = lags_L(I_L);
+            % lagdiff = lagdiff_L;
+            % disp(strcat('lagdiff...', num2str(lagdiff)))
+    
+            % timeref = (0:length(ref)-1) ;
+            % timedata = (0:length(data)-1)   + lagdiff ;
+            %~~~~~~~~~~ CORRELATION  ENDS ~~~~~~~~~%
+    
 
-            disp(strcat('lagdiff...', num2str(lagdiff)))
-    
-            timeref = (0:length(ref)-1) ;
-            timedata = (0:length(data)-1)   + lagdiff ;
-    
-            %***   DEBUG   ***%
-            % disp(strcat(num2str(size(timeref)), num2str(size(refLockout))))
-            % disp(strcat(num2str(size(timedata)), num2str(size(dataLockout))))
-            
-            % timereflockout = (0:length(refLockout)-1)/fs ;
-            % timedatalockout = (0:length(dataLockout)-1)/fs + lagdiff/fs;
-    
-    
-            % figure(10000); grid on; hold on;
-            % plot(timedatalockout,dataLockout(:,1),'k')
-            % hold on;
-            % plot(timereflockout,refLockout(:,1),'b')
-            % title('Leadout tracks lined up')
-            % xlabel('time [s]')
-            
-            %***   DEBUG ENDS  ***%
-           
-    
+            %~~~~~~~~~~ MANUAL LINEUP ~~~~~~~~~~~%
+            timestring = file(end-11:end-4);
+            timediff = str2num(timestring(1:2))*60 + str2num(timestring(3:end));
+            timestringref = '1558.066';
+            timediffref = str2num(timestringref(1:2))*60 + str2num(timestringref(3:end));
+
+
+
+            timediff = timediffref - timediff; 
+            lagdiff = floor(timediff*96000);
+
+            % timeref = (0:length(ref)-1) ;
+            timedata = (0:length(data)-1) - timediff;
+            timestamps = timestamps - timediff;
+            if timestamps(1,1) < 0; 
+                timestamps(1,1) = 1;
+            end
+
+            disp(strcat('timediff...',num2str(timediff)))
+            timestamps
+            %~~~~~~~~~~ MANUAL LINEUP  ENDS ~~~~~~~~~~~%
+
         %~~~~~~~~~~~~~~~~~~~~ NORMALIZATION ~~~~~~~~~~~~~~~~~~~~%
 
             %~~~~ separate out the 1 kHz track
