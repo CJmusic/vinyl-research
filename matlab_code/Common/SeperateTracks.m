@@ -48,42 +48,42 @@ function [output, info_array] = SeperateTracks(file)
             disp('SEPERATE TRACKS CALLED')
             % USE 003a and 052b as references 
 
-            if ismac() == true
-                if file(length(file)-4) == 'a'
-                    disp('MAC')
-                    disp('Using a side reference')
-                    % [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); offset = 15; \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ \\\\\\\\\\\\ 
-                    [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/040318_A0000B0000r003a.wav'); offset = 9.227; 
-                elseif file(length(file)-4) == 'b'
-                    disp('MAC')
-                    disp('Using b side reference')
+            % if ismac() == true
+            %     if file(length(file)-4) == 'a'
+            %         disp('MAC')
+            %         disp('Using a side reference')
+            %         % [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); offset = 15; \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ \\\\\\\\\\\\ 
+            %         [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/040318_A0000B0000r003a.wav'); offset = 9.227; 
+            %     elseif file(length(file)-4) == 'b'
+            %         disp('MAC')
+            %         disp('Using b side reference')
 
-                    % [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r029b.wav'); offset = 13.1;
-                    [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/080619-A0000B0000r052b.wav'); offset = 14.662;
-                else 
-                    disp('NO SIDE FOUND, USING SIDE A REFERENCE')
-                    % [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav');offset = 15; 
-                    [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/040318_A0000B0000r003a.wav'); offset = 9.227; 
+            %         % [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r029b.wav'); offset = 13.1;
+            %         [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/080619-A0000B0000r052b.wav'); offset = 14.662;
+            %     else 
+            %         disp('NO SIDE FOUND, USING SIDE A REFERENCE')
+            %         % [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav');offset = 15; 
+            %         [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/040318_A0000B0000r003a.wav'); offset = 9.227; 
                     
-                end
-            end
-            if ispc() == true
-                disp('IS PC')
-                if file(length(file)-4) == 'a'
-                    % [ref, ] = audioread('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); offset = 15; 
-                    [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/040318_A0000B0000r003a.wav'); offset = 9.227; 
+            %     end
+            % end
+            % if ispc() == true
+            %     disp('IS PC')
+            %     if file(length(file)-4) == 'a'
+            %         % [ref, ] = audioread('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); offset = 15; 
+            %         [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/040318_A0000B0000r003a.wav'); offset = 9.227; 
 
-                elseif file(length(file)-4) == 'b'
-                    disp('PC')
-                    % [ref, ] = audioread('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028b.wav'); offset = 13.1;
-                    [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/080619-A0000B0000r052b.wav'); offset = 14.662;
-                else 
-                    disp('NO SIDE FOUND, USING SIDE A REFERENCE')
-                    % [ref, ] = audioread('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); offset = 15; 
-                    [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/040318_A0000B0000r003a.wav'); offset = 9.227; 
-                end
+            %     elseif file(length(file)-4) == 'b'
+            %         disp('PC')
+            %         % [ref, ] = audioread('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028b.wav'); offset = 13.1;
+            %         [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/080619-A0000B0000r052b.wav'); offset = 14.662;
+            %     else 
+            %         disp('NO SIDE FOUND, USING SIDE A REFERENCE')
+            %         % [ref, ] = audioread('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); offset = 15; 
+            %         [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/040318_A0000B0000r003a.wav'); offset = 9.227; 
+            %     end
 
-            end
+            % end
             
     
         %~~~~~~~~~~~~~~~~~~ Reference info ~~~~~~~~~~~~~~~~%
@@ -119,11 +119,6 @@ function [output, info_array] = SeperateTracks(file)
                             'sweepV2',   % 26
                             'leadout'    % 27
             };
-            % offset = 10.625; 
-            % transition = 517.375; 
-    
-            % offset = 15; %28a
-            % % offset = 13.5; %28b
             timestamps =       [[0, 61],    % 1. 1 kHz
                                 [61,91],    % 2. 10 kHz
                                 [91,121],   % 3. 100 Hz
@@ -151,20 +146,53 @@ function [output, info_array] = SeperateTracks(file)
                                 [900, 938]];% 25. sweep vertical  
                                 % [938, 950]];               
                                 %% dont forget lead in and leadout
-            timestamps = timestamps + offset;
+
+        timestamps =       [[14.624, 75.229],    % 1. 1 kHz
+                                [75.229, 105.512],    % 2. 10 kHz
+                                [150.512, 135.775],   % 3. 100 Hz
+                                [135.775, 173.224],  % 4. sweep
+                                [173.224, 195.111],  % 5. quiet
+                                [195.111, 258.293],  % 6. 3150 Hz
+                                [258.293, 281.625],  % 7. 1 kHz left
+                                [281.625, 318.352], % 8. sweep left
+                                [318.352, 339.302], % 9. 1 kHz right
+                                [339.302, 376.067], % 10. sweep right
+                                [376.067, 396.919], % 11. 1 kHz vertical
+                                [396.919, 432.435], % 12. sweep vertical
+                                [432.435, 532.324], % 13. transition
+                                [532.324, 592.655], % 14. 1 kHz
+                                [592.655, 623.211], % 15. 10 kHz
+                                [623.211, 653.123], % 16. 100 Hz
+                                [653.123, 690.572], % 17. sweep
+                                [690.572, 712.537], % 18. quiet
+                                [712.537, 775.368], % 19. 3150 Hz
+                                [775.368, 799.286], % 20. 1 kHz left
+                                [799.286, 835.582], % 21. sweep left
+                                [835.582, 857.235], % 22. 1 kHz right
+                                [857.235, 893.610], % 23. sweep right
+                                [893.610, 914.697], % 24. 1 kHz vertical
+                                [914.697, 950.037]];% 25. sweep vertical  
+                                % [938, 950]];               
+                                %% dont forget lead in and leadout
+
+
+            [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); offset = 15; timestringref = 1558.006;
+
+
+            % timestamps = timestamps + offset;
+
     
-    
-    
+
     
     
             [data, fs] = audioread(file);
      
         %~~~~~~~~~~~~~~~~~~~~~ LINE UP ~~~~~~~~~~~~~~~~~~~~~~~~% 
             %~~~~~~~~~~ CORRELATION ~~~~~~~~~%
-            % lockout = 950; 
-            % refLockout = ref(floor(lockout*96000):end,:);
+            lockout = 950; 
+            refLockout = ref(floor(lockout*96000):end,:);
             % %% lineup audio with reference 
-            % dataLockout = data(floor(950*fs):end,:);
+            dataLockout = data(floor(950*fs):end,:);
             % disp(strcat('time diff to ref... ', num2str(length(data)  - length(ref))))
             % disp(strcat('size dataLockout... ', num2str(size(dataLockout))))
             % disp(strcat('size refLockout...  ', num2str(size(refLockout))))
@@ -174,26 +202,26 @@ function [output, info_array] = SeperateTracks(file)
             % lagdiff_L = lags_L(I_L);
             % lagdiff = lagdiff_L;
             % disp(strcat('lagdiff...', num2str(lagdiff)))
-    
+
             % timeref = (0:length(ref)-1) ;
             % timedata = (0:length(data)-1)   + lagdiff ;
             %~~~~~~~~~~ CORRELATION  ENDS ~~~~~~~~~%
     
 
             %~~~~~~~~~~ MANUAL LINEUP ~~~~~~~~~~~%
-            timestring = file(end-11:end-4);
-            timediff = str2num(timestring(1:2))*60 + str2num(timestring(3:end));
+            timestring = file(end-11:end-4); % get the 
+            timepip = str2num(timestring(1:2))*60 + str2num(timestring(3:end));
             timestringref = '1558.066';
-            timediffref = str2num(timestringref(1:2))*60 + str2num(timestringref(3:end));
+            timeref = str2num(timestringref(1:2))*60 + str2num(timestringref(3:end));
 
 
 
-            timediff = timediffref - timediff; 
+            timediff = timeref - timepip; 
             lagdiff = floor(timediff*96000);
 
             % timeref = (0:length(ref)-1) ;
-            timedata = (0:length(data)-1) - timediff;
-            timestamps = timestamps - timediff;
+            timedata = (0:length(data)-1) + timediff;
+            timestamps = timestamps + timediff;
             if timestamps(1,1) < 0; 
                 timestamps(1,1) = 1;
             end
@@ -201,6 +229,15 @@ function [output, info_array] = SeperateTracks(file)
             disp(strcat('timediff...',num2str(timediff)))
             timestamps
             %~~~~~~~~~~ MANUAL LINEUP  ENDS ~~~~~~~~~~~%
+
+            %~~~~~~~~~~ DEBUG ~~~~~~~~~~%
+
+
+
+
+            %~~~~~~~~~~ DEBUG ENDS ~~~~~~~~~~%
+            
+
 
         %~~~~~~~~~~~~~~~~~~~~ NORMALIZATION ~~~~~~~~~~~~~~~~~~~~%
 
@@ -328,6 +365,29 @@ function [output, info_array] = SeperateTracks(file)
             output = containers.Map(signal_names, signals)
             info_array = [lagdiff, normalization_L, normalization_R]
             disp('EXITING SEPERATE TRACKS')
+
+
+            %~~~~~~~~~~ DEBUG ~~~~~~~~~~%
+
+            % timelockout = sigtime
+            % timelockoutref = 
+
+            sig = data(floor(timestamps(end,2)*fs) - lagdiff : length(data),:);
+            sigtime = timedata(floor(timestamps(end,2)*fs) - lagdiff : length(data));  
+
+            refT = ref(floor(timestamps(end,2)*fs) - lagdiff : length(ref),:);
+
+
+            figure(100)
+            sigtime = (1:length(sig(:,1)))/fs;
+            plot(sigtime, sig(:,1))
+            hold on; grid on;
+            reftime = (1:length(refT(:,1)))/fs;
+            plot(reftime,refT(:,1))
+
+            %~~~~~~~~~~ DEBUG ENDS ~~~~~~~~~~%
+
+
 
             % figure(10000)
             % plot(signals{2})
