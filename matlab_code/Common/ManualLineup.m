@@ -9,7 +9,8 @@ addpath('/Users/cz/Code/vinyl-research/matlab_code/from_John')
 
 timestring = '161.695'
 
-tracks = SeperateTracksTest('/Volumes/AUDIOBANK/audio_files/A0137B0137/039b.wav', timestring)
+% tracks = SeperateTracksTest('/Volumes/AUDIOBANK/audio_files/A0137B0137/039b.wav', timestring)
+tracks = SeperateTracks('/Volumes/AUDIOBANK/audio_files/A0137B0137/039b1601.695.wav')
 
 signal_names = tracks.keys;
 signals = tracks.values;

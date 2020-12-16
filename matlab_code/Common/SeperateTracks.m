@@ -119,38 +119,38 @@ function [output, info_array] = SeperateTracks(file)
                             'sweepV2',   % 26
                             'leadout'    % 27
             };
-            timestamps =       [[0, 61],    % 1. 1 kHz
-                                [61,91],    % 2. 10 kHz
-                                [91,121],   % 3. 100 Hz
-                                [121,159],  % 4. sweep
-                                [159,180],  % 5. quiet
-                                [180,245],  % 6. 3150 Hz
-                                [245,267],  % 7. 1 kHz left
-                                [267, 302], % 8. sweep left
-                                [302, 325], % 9. 1 kHz right
-                                [325, 361], % 10. sweep right
-                                [361, 383], % 11. 1 kHz vertical
-                                [383, 418], % 12. sweep vertical
-                                [418, 515], % 13. transition
-                                [515, 578], % 14. 1 kHz
-                                [578, 608], % 15. 10 kHz
-                                [608, 639], % 16. 100 Hz
-                                [639, 676], % 17. sweep
-                                [676, 698], % 18. quiet
-                                [698, 760], % 19. 3150 Hz
-                                [760, 785], % 20. 1 kHz left
-                                [785, 820], % 21. sweep left
-                                [820, 842], % 22. 1 kHz right
-                                [842, 878], % 23. sweep right
-                                [878, 900], % 24. 1 kHz vertical
-                                [900, 938]];% 25. sweep vertical  
-                                % [938, 950]];               
-                                %% dont forget lead in and leadout
+            % timestamps =       [[0, 61],    % 1. 1 kHz
+            %                     [61,91],    % 2. 10 kHz
+            %                     [91,121],   % 3. 100 Hz
+            %                     [121,159],  % 4. sweep
+            %                     [159,180],  % 5. quiet
+            %                     [180,245],  % 6. 3150 Hz
+            %                     [245,267],  % 7. 1 kHz left
+            %                     [267, 302], % 8. sweep left
+            %                     [302, 325], % 9. 1 kHz right
+            %                     [325, 361], % 10. sweep right
+            %                     [361, 383], % 11. 1 kHz vertical
+            %                     [383, 418], % 12. sweep vertical
+            %                     [418, 515], % 13. transition
+            %                     [515, 578], % 14. 1 kHz
+            %                     [578, 608], % 15. 10 kHz
+            %                     [608, 639], % 16. 100 Hz
+            %                     [639, 676], % 17. sweep
+            %                     [676, 698], % 18. quiet
+            %                     [698, 760], % 19. 3150 Hz
+            %                     [760, 785], % 20. 1 kHz left
+            %                     [785, 820], % 21. sweep left
+            %                     [820, 842], % 22. 1 kHz right
+            %                     [842, 878], % 23. sweep right
+            %                     [878, 900], % 24. 1 kHz vertical
+            %                     [900, 938]];% 25. sweep vertical  
+            %                     % [938, 950]];               
+            %                     %% dont forget lead in and leadout
 
-        timestamps =       [[14.624, 75.229],    % 1. 1 kHz
-                                [75.229, 105.512],    % 2. 10 kHz
-                                [150.512, 135.775],   % 3. 100 Hz
-                                [135.775, 173.224],  % 4. sweep
+        timestamps =            [[14.624, 75.229],    % 1. 1 kHz
+                                [75.229, 104.512],    % 2. 10 kHz
+                                [104.512, 135.275],   % 3. 100 Hz
+                                [135.275, 173.224],  % 4. sweep
                                 [173.224, 195.111],  % 5. quiet
                                 [195.111, 258.293],  % 6. 3150 Hz
                                 [258.293, 281.625],  % 7. 1 kHz left
@@ -210,18 +210,20 @@ function [output, info_array] = SeperateTracks(file)
 
             %~~~~~~~~~~ MANUAL LINEUP ~~~~~~~~~~~%
             timestring = file(end-11:end-4); % get the 
+
             timepip = str2num(timestring(1:2))*60 + str2num(timestring(3:end));
+            
             timestringref = '1558.066';
-            timeref = str2num(timestringref(1:2))*60 + str2num(timestringref(3:end));
+            timepipref = str2num(timestringref(1:2))*60 + str2num(timestringref(3:end));
 
 
 
-            timediff = timeref - timepip; 
+            timediff = timepipref - timepip; 
             lagdiff = floor(timediff*96000);
 
             % timeref = (0:length(ref)-1) ;
-            timedata = (0:length(data)-1) + timediff;
-            timestamps = timestamps + timediff;
+            timedata = (0:length(data)-1);% + timediff;
+            timestamps = timestamps - timediff;
             if timestamps(1,1) < 0; 
                 timestamps(1,1) = 1;
             end
@@ -246,11 +248,12 @@ function [output, info_array] = SeperateTracks(file)
             sigtime = timedata(floor(timestamps(t,1)*fs):floor(timestamps(t,2)*fs));
             sig = data(floor(timestamps(t,1)*fs): floor(timestamps(t,2)*fs),:);
     
-            sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
-            sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
+            % sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
+            % sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
             L = 2^16;
             seg = sig(floor(length(sig)/2) - L/2:floor(length(sig)/2) + L/2 - 1,:);
             
+        
             % figure(100) 
             % plot(seg)
 
@@ -286,7 +289,7 @@ function [output, info_array] = SeperateTracks(file)
             data(:,2)=data(:,2)./normalization_R;% now normalized to 40cm/s peak 
 
             t = 1;
-            sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
+            sig = data(floor(timestamps(t,1)*fs): floor(timestamps(t,2)*fs),:);
             L = 2^16;        
             seg = sig(floor(length(sig)/2) - L/2:floor(length(sig)/2) + L/2 - 1,:);
 
@@ -330,24 +333,24 @@ function [output, info_array] = SeperateTracks(file)
                 THD_R = [];
                 
                 if t == 1
-                    sig = data(1 : floor(timestamps(1,1)*fs) - lagdiff,:);
-                    sigtime = timedata(1 : floor(timestamps(1,1)*fs) - lagdiff);  
-    
-                    refT = ref(1 : floor(timestamps(1,1)*fs) - lagdiff,:);
+                    sig = data(1 : floor(timestamps(1,1)*fs),:);
+                    sigtime = timedata(1 : floor(timestamps(1,1)*fs)); 
+                    refT = ref(1 : floor(timestamps(1,1)*fs),:);
                 elseif t == length(signal_names)
-                    sig = data(floor(timestamps(end,2)*fs) - lagdiff : length(data),:);
-                    sigtime = timedata(floor(timestamps(end,2)*fs) - lagdiff : length(data));  
+                    sig = data(floor(timestamps(end,2)*fs) : length(data),:);
+                    sigtime = timedata(floor(timestamps(end,2)*fs) : length(data));  
     
-                    refT = ref(floor(timestamps(end,2)*fs) - lagdiff : length(ref),:);
+                    refT = ref(floor(timestamps(end,2)*fs) : length(ref),:);
                 else
-                    sig = data(floor(timestamps(t-1,1)*fs) - lagdiff : floor(timestamps(t-1,2)*fs) - lagdiff,:);
-                    sigtime = timedata(floor(timestamps(t-1,1)*fs) - lagdiff :floor(timestamps(t-1,2)*fs) - lagdiff);  
+                    sig = data(floor(timestamps(t-1,1)*fs) : floor(timestamps(t-1,2)*fs),:);
+                    sigtime = timedata(floor(timestamps(t-1,1)*fs) :floor(timestamps(t-1,2)*fs));  
     
-                    % floor(timestamps(t-1,1) ) - lagdiff
-                    % floor(timestamps(t-1,2) ) - lagdiff
-                    refT = ref(floor(timestamps(t-1,1)*fs) - lagdiff : floor(timestamps(t-1,2)*fs) - lagdiff,:);
+                    % floor(timestamps(t-1,1) )
+                    % floor(timestamps(t-1,2) )
+                    refT = ref(floor(timestamps(t-1,1)*fs) : floor(timestamps(t-1,2)*fs),:);
                 end
-                % tracks(signal_names(i)) = sig;
+
+            % tracks(signal_names(i)) = sig;
                 signals{t} = sig;
                 signal_times{t} = sigtime; % not currently assigned to output
 
@@ -372,10 +375,10 @@ function [output, info_array] = SeperateTracks(file)
             % timelockout = sigtime
             % timelockoutref = 
 
-            sig = data(floor(timestamps(end,2)*fs) - lagdiff : length(data),:);
-            sigtime = timedata(floor(timestamps(end,2)*fs) - lagdiff : length(data));  
+            sig = data(floor(timestamps(end,2)*fs)  : length(data),:);
+            sigtime = timedata(floor(timestamps(end,2)*fs)  : length(data));  
 
-            refT = ref(floor(timestamps(end,2)*fs) - lagdiff : length(ref),:);
+            refT = ref(floor(timestamps(end,2)*fs) : length(ref),:);
 
 
             figure(100)
