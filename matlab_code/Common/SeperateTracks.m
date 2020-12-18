@@ -176,7 +176,7 @@ function [output, info_array] = SeperateTracks(file)
                                 %% dont forget lead in and leadout
 
 
-            [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); offset = 15; timestringref = 1558.006;
+            [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a1558.066.wav'); offset = 15; timestringref = 1558.006;
 
 
             % timestamps = timestamps + offset;
@@ -375,18 +375,18 @@ function [output, info_array] = SeperateTracks(file)
             % timelockout = sigtime
             % timelockoutref = 
 
-            sig = data(floor(timestamps(end,2)*fs)  : length(data),:);
-            sigtime = timedata(floor(timestamps(end,2)*fs)  : length(data));  
+            % sig = data(floor(timestamps(end,2)*fs)  : length(data),:);
+            % sigtime = timedata(floor(timestamps(end,2)*fs)  : length(data));  
 
-            refT = ref(floor(timestamps(end,2)*fs) : length(ref),:);
+            % refT = ref(floor(timestamps(end,2)*fs) : length(ref),:);
 
 
-            figure(100)
-            sigtime = (1:length(sig(:,1)))/fs;
-            plot(sigtime, sig(:,1))
-            hold on; grid on;
-            reftime = (1:length(refT(:,1)))/fs;
-            plot(reftime,refT(:,1))
+            % figure(100)
+            % sigtime = (1:length(sig(:,1)))/fs;
+            % plot(sigtime, sig(:,1))
+            % hold on; grid on;
+            % reftime = (1:length(refT(:,1)))/fs;
+            % plot(reftime,refT(:,1))
 
             %~~~~~~~~~~ DEBUG ENDS ~~~~~~~~~~%
 
