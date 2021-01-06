@@ -4,7 +4,10 @@ set(0,'DefaultAxesFontSize',12);
 set(0,'DefaultAxesFontWeight','bold')
 set(0,'DefaultAxesLineWidth',1.5)
 
-addpath('D:\Code\vinyl-research\matlab_code\audio_functions')
+addpath('/Users/cz/Code/vinyl-research/matlab_code/audio_functions')
+addpath('/Users/cz/Code/vinyl-research/matlab_code/Common')
+addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/')
+addpath('/Volumes/AUDIOBANK/audio_files/')
 
 %generate test signal
 L = 2^16;
@@ -12,6 +15,20 @@ fs = 96000;
 t = (0:L-1)/fs;
 seg = [0.5*sin(1000*2*pi*t); 0.5*sin(1000*2*pi*t)];
 seg = seg.';
+%generate test signal ends
+
+%use real test signal
+tracks = SeperateTracks('/Volumes/AUDIOBANK/audio_files/A0137B0137/-03b1558.270.wav')
+
+seg = tracks('1kHz');
+seg = seg(0.33*length(seg):0.33*length(seg) + L - 1,:);
+
+size(seg)
+
+
+%use real test signal ends
+
+
 
 
 lr=1;%%%%%%%%%%%%%%%%% left or right chosen first
@@ -60,6 +77,9 @@ win = flattopwin(L);
 plot(win); grid on;
 title('flattop window')
 % seg3 = seg2.*win*(length(win)/sum(win));
+size(seg)
+size(win)
+
 seg3 = seg.*win;
 seg3 = seg3/0.2156;
 

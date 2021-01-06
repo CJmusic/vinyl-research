@@ -1,4 +1,4 @@
-% Record Surface Noise analysis
+c% Record Surface Noise analysis
 % using xcorrelation between groove signals
 % John Vanderkooy
 % Nov. 2018

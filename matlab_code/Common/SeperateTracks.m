@@ -176,7 +176,7 @@ function [output, info_array] = SeperateTracks(file)
                                 %% dont forget lead in and leadout
 
 
-            [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a1558.066.wav'); offset = 15; timestringref = 1558.006;
+            % [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a1558.066.wav'); offset = 15; timestringref = 1558.006;
 
 
             % timestamps = timestamps + offset;
@@ -189,10 +189,10 @@ function [output, info_array] = SeperateTracks(file)
      
         %~~~~~~~~~~~~~~~~~~~~~ LINE UP ~~~~~~~~~~~~~~~~~~~~~~~~% 
             %~~~~~~~~~~ CORRELATION ~~~~~~~~~%
-            lockout = 950; 
-            refLockout = ref(floor(lockout*96000):end,:);
+            % lockout = 950; 
+            % refLockout = ref(floor(lockout*96000):end,:);
             % %% lineup audio with reference 
-            dataLockout = data(floor(950*fs):end,:);
+            % dataLockout = data(floor(950*fs):end,:);
             % disp(strcat('time diff to ref... ', num2str(length(data)  - length(ref))))
             % disp(strcat('size dataLockout... ', num2str(size(dataLockout))))
             % disp(strcat('size refLockout...  ', num2str(size(refLockout))))
@@ -285,8 +285,8 @@ function [output, info_array] = SeperateTracks(file)
             disp(strcat('normalization_L...', num2str(normalization_L)))
             disp(strcat('normalization_R...', num2str(normalization_R)))
             
-            data(:,1)=data(:,1)./normalization_L;% now normalized to 40cm/s peak    
-            data(:,2)=data(:,2)./normalization_R;% now normalized to 40cm/s peak 
+            data(:,1)=data(:,1)./normalization_L;
+            data(:,2)=data(:,2)./normalization_R;
 
             t = 1;
             sig = data(floor(timestamps(t,1)*fs): floor(timestamps(t,2)*fs),:);
@@ -335,19 +335,19 @@ function [output, info_array] = SeperateTracks(file)
                 if t == 1
                     sig = data(1 : floor(timestamps(1,1)*fs),:);
                     sigtime = timedata(1 : floor(timestamps(1,1)*fs)); 
-                    refT = ref(1 : floor(timestamps(1,1)*fs),:);
+                    % refT = ref(1 : floor(timestamps(1,1)*fs),:);
                 elseif t == length(signal_names)
                     sig = data(floor(timestamps(end,2)*fs) : length(data),:);
                     sigtime = timedata(floor(timestamps(end,2)*fs) : length(data));  
     
-                    refT = ref(floor(timestamps(end,2)*fs) : length(ref),:);
+                    % refT = ref(floor(timestamps(end,2)*fs) : length(ref),:);
                 else
                     sig = data(floor(timestamps(t-1,1)*fs) : floor(timestamps(t-1,2)*fs),:);
                     sigtime = timedata(floor(timestamps(t-1,1)*fs) :floor(timestamps(t-1,2)*fs));  
     
                     % floor(timestamps(t-1,1) )
                     % floor(timestamps(t-1,2) )
-                    refT = ref(floor(timestamps(t-1,1)*fs) : floor(timestamps(t-1,2)*fs),:);
+                    % refT = ref(floor(timestamps(t-1,1)*fs) : floor(timestamps(t-1,2)*fs),:);
                 end
 
             % tracks(signal_names(i)) = sig;
@@ -365,8 +365,8 @@ function [output, info_array] = SeperateTracks(file)
             end
 
             disp('ASSIGNING OUTPUT')
-            output = containers.Map(signal_names, signals)
-            info_array = [lagdiff, normalization_L, normalization_R]
+            output = containers.Map(signal_names, signals);
+            info_array = [lagdiff, normalization_L, normalization_R];
             disp('EXITING SEPERATE TRACKS')
 
 

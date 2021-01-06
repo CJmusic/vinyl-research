@@ -12,7 +12,8 @@ if ismac()
     addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/')
     addpath('/Users/cz/Code/vinyl-research/matlab_code/Common')
     data_folder = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/data/A0000B0000/'
-    AudioTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/A0000B0000-AudioTableOct26.csv') ;
+    % AudioTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/A0000B0000-AudioTableOct26.csv') ;
+    AudioTable = readtable('/Volumes/AUDIOBANK/audio_files/A0000B0000/A0000B0000-AudioTable.csv');
     SensorTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/A0000B0000_SensorTable.csv');
     % RecordTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/A0000B0000_SensorTable.csv');
     AudioStats = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0000B0000/A0000B0000_AudioStats.csv');
@@ -48,10 +49,19 @@ tracks = unique(AudioTable.track);
 
 
 % clean up AudioTable
-% AudioTable.RecordID = erase(AudioTable.record,'.wav');
-% AudioTable.RecordID = erase(AudioTable.RecordID,'a');
-% AudioTable.RecordID = erase(AudioTable.RecordID,'b'); 
-% AudioTable.RecordID =  cellfun(@str2num, AudioTable.RecordID);
+% AudioTable.RecordID = erase(AudioTable.record,'.wav')
+% AudioTable.RecordID = erase(AudioTable.RecordID,'a')
+% AudioTable.RecordID = erase(AudioTable.RecordID,'b')
+% AudioTable.RecordID =  cellfun(@str2num, AudioTable.RecordID)
+
+% AudioTable.RecordID = AudioTable.record;
+% AudioTable.RecordID = eraseBetween(AudioTable.record, 'a', 'v');
+AudioTable.RecordID = extractBetween(AudioTable.record, 19, 21);
+AudioTable.RecordID =  cellfun(@str2num, AudioTable.RecordID)
+
+
+
+head(AudioTable)
 
 
 %~~~~~~~~~~~~~~~ GENERATE AUDIOSTATS TABLE ~~~~~~~~~~~~~~~~~~%
@@ -146,7 +156,7 @@ tracks = unique(AudioTable.track);
     Tbl.Properties.VariableNames([1]) = {'PressingNumber'};
     % Tbl.Properties.VariableNames([33]) = {'track'};
     Tbl.pressing = [];
-    Tbl.Properties.VariableNames([54]) = {'pressing'};
+    Tbl.Properties.VariableNames([58]) = {'pressing'};
     
 
     Tbl.RecordID = Tbl.PressingNumber;

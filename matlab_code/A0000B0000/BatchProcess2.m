@@ -70,7 +70,7 @@ files = dir(fullfile(folder,'*.wav'));
 
 
 % AudioTableHeaders = {'date_recorded', 'pressing', 'top_stamper', 'top_hits', 'bottom_stamper', 'bottom_hits', 'record', 'side', 'track', 'lagdiff', 'normalization_L', 'normalization_R','RMS_L', 'RMS_R', 'A_L', 'A_R', 'CCIR_L', 'CCIR_R','clicks_L', 'clicks_R', 'commonclicks_L', 'commonclicks_R', 'THD_L', 'THD_R', 'wow_L', 'wow_R', 'stereo_bleed'};
-AudioTableHeaders = {'pressing','record', 'side','track', 'lagdiff', 'normalization_L', 'normalization_R','RMS_L', 'RMS_R', 'A_L', 'A_R', 'CCIR_L', 'CCIR_R','clicks_L', 'clicks_R', 'commonclicksa_L', 'commonclicksa_R','commonclicksb_L', 'commonclicksb_R',  'RMSclicks_L', 'RMSclicks_R', 'THD_L', 'THD_R', 'wow_L', 'wow_R', 'centreholeoffset' 'stereo_bleed'};
+AudioTableHeaders = {'pressing','record', 'side','track', 'lagdiff', 'normalization_L', 'normalization_R','RMS_L', 'RMS_R', 'A_L', 'A_R', 'CCIR_L', 'CCIR_R','clicks_L', 'clicks_R', 'commonclicksa1_L', 'commonclicksa1_R','commonclicksb1_L', 'commonclicksb1_R', 'commonclicksa2_L', 'commonclicksa2_R','commonclicksb2_L', 'commonclicksb2_R',  'RMSclicks_L', 'RMSclicks_R', 'THD_L', 'THD_R', 'wow_L', 'wow_R', 'centreholeoffset','stereo_bleed'};
 
 
 % check if there is already a csv file to append to 
@@ -141,7 +141,7 @@ for i = (1:length(files)) %%loop through records
     % pressing = pressing.pressing{1};
     pressing = 'A0000B0000';
     record = filename;
-    side = filename(end-4);
+    side = filename(22);
 
     disp([strcat('...pressing:', pressing)])
     disp([strcat('...recordid:', recordid)])
@@ -151,9 +151,16 @@ for i = (1:length(files)) %%loop through records
     infoCell = {pressing, record, side};
     AudioOutput = RecordProcess(file);
 
-    infoCell
-    % cell2table([infoCell, AudioOutput], 'VariableNames', AudioTableHeaders)
-    for j = (1:length(AudioOutput))
+    % infoCell
+    % AudioOutput
+    % length(AudioOutput)
+    % length(AudioOutput)
+    % size(AudioOutput)
+    % cell2table([infoCell, AudioOutput(1,:)], 'VariableNames', AudioTableHeaders)
+
+    len = size(AudioOutput);
+    len = len(1);
+    for j = (1:len)
         AudioTable = [AudioTable; cell2table([infoCell, AudioOutput(j,:)], 'VariableNames', AudioTableHeaders)];
     end
     %append audio output to info cell array

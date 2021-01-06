@@ -11,14 +11,18 @@ if ismac() == true
     addpath('/Users/cz/Code/vinyl-research/matlab_code/audio_functions')
     addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/')    
     addpath('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
-    folder = ('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
+    addpath('/Users/cz/Code/vinyl-research/matlab_code/Common')
+    addpath('/Users/cz/Code/vinyl-research/matlab_code/')
+    addpath('/Users/cz/Code/vinyl-research/matlab_code/Wow')
+    folder = ('/Volumes/AUDIOBANK/audio_files/styluswear/')
 end 
 if ispc() == true
     addpath('D:\Code\vinyl-research\matlab_code')
     addpath('D:\Code\vinyl-research\matlab_code\audio_functions')
     addpath('D:\OneDrive - University of Waterloo\School\Vinyl_Project\audio_bin')    
     addpath('e:/audio_files/styluswear/')
-    addpath('D:\Code\vinyl-research\matlab_code\A0137B0137)
+    addpath('D:\Code\vinyl-research\matlab_code\A0137B0137')
+    addpath('D:\Code\vinyl-research\matlab_code\Common\')
     folder = ('e:/audio_files/styluswear/')
 end
 
@@ -29,7 +33,7 @@ pressingID = 'StylusWear';
 
 disp(['loading folder...:', folder])
 files = dir(fullfile(folder,'*.wav'))
-AudioTableHeaders = {'pressing','record', 'side','track', 'lagdiff', 'normalization_L', 'normalization_R','RMS_L', 'RMS_R', 'A_L', 'A_R', 'CCIR_L', 'CCIR_R','clicks_L', 'clicks_R', 'commonclicksa_L', 'commonclicksa_R','commonclicksb_L', 'commonclicksb_R', 'THD_L', 'THD_R', 'wow_L', 'wow_R', 'stereo_bleed'};
+AudioTableHeaders = {'pressing','record', 'side','track', 'lagdiff', 'normalization_L', 'normalization_R','RMS_L', 'RMS_R', 'A_L', 'A_R', 'CCIR_L', 'CCIR_R','clicks_L', 'clicks_R', 'commonclicksa1_L', 'commonclicksa1_R','commonclicksb1_L', 'commonclicksb1_R', 'commonclicksa2_L', 'commonclicksa2_R','commonclicksb2_L', 'commonclicksb2_R',  'RMSclicks_L', 'RMSclicks_R', 'THD_L', 'THD_R', 'wow_L', 'wow_R', 'centreholeoffset','stereo_bleed'};
 
 
 % check if there is already a csv file to append to 
@@ -76,7 +80,9 @@ for i = (1:length(files)) %%loop through records
     AudioOutput = RecordProcess(file);
 
     infoCell
-    for j = (1:length(AudioOutput))
+    len = size(AudioOutput);
+    len = len(1);
+    for j = (1:len)
         AudioTable = [AudioTable; cell2table([infoCell, AudioOutput(j,:)], 'VariableNames', AudioTableHeaders)]
     end
     disp('SAVING CSV')

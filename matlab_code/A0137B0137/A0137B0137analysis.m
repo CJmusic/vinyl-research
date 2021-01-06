@@ -17,7 +17,8 @@ if ismac()
 
     data_folder = '/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/data/A0137B0137/';
 
-    AudioTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0137B0137/A0137B0137-AudioTableOct21.csv');
+    % AudioTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0137B0137/A0137B0137-AudioTable.csv');
+    AudioTable = readtable('/Volumes/AUDIOBANK/audio_files/A0137B0137/A0137B0137-AudioTable.csv');
     SensorTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0137B0137/A0137B0137_SensorTable.csv');
     RecordTable = readtable('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/A0137B0137/A0137B0137_RecordNumbers.csv');
 
@@ -121,6 +122,9 @@ AudioTable.RecordID =  cellfun(@str2num, AudioTable.RecordID);
     Tbl.Properties.VariableNames([1]) = {'PressingNumber'};
     writetable(Tbl,'Tbl1.csv')
 
+    head(Tbl)
+    head(AudioTable)
+
     % join in AudioTable
     Tbl = outerjoin(Tbl, AudioTable, 'Keys', {'RecordID', 'RecordID'});%, 'VariableNames', 'RecordNumber')%;, SensorTable)
     Tbl.Properties.VariableNames([1]) = {'PressingNumber'};
@@ -144,6 +148,7 @@ AudioTable.RecordID =  cellfun(@str2num, AudioTable.RecordID);
     Tbl.PressingNumber_SensorTable = [];
     Tbl.pressing_AudioTable = [];
     Tbl.pressing_SettingsTable = [];
+    % Tbl.pressing_SettingsTable = [];
     Tbl.RecordID_AudioTable = [];
     Tbl.PressingNumber = Tbl.PressingNumber + 137;
     writetable(Tbl,'A0137B0137.csv')

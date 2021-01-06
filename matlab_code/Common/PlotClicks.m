@@ -10,11 +10,11 @@ addpath('/Users/cz/Code/vinyl-research/matlab_code/Common/')
 addpath('/Users/cz/Code/vinyl-research/matlab_code/audio_functions')
 addpath('/Volumes/AUDIOBANK/audio_files/A0000B0000/')
 
-file_ref = '/Volumes/AUDIOBANK/audio_files/A0000B0000/043019_A0000B0000r008a.wav';
-
+file_ref = '/Volumes/AUDIOBANK/audio_files/A0137B0137/-01a1558.884.wav';
+file_ref = '/Volumes/AUDIOBANK/audio_files/A0137B0137/-02a1558.981.wav';
 [reference, ~] = SeperateTracks(file_ref);
 
-sig = reference('1kHz2');
+sig = reference('10kHz');
 figure(1)
 plot(sig)
 fs = 96000;
@@ -34,7 +34,7 @@ size(csig)
 
 for i = (1:length(clicks_L))
 
-    start_sam = clicks_L(i) - 0.0005*fs;
+    start_sam = clicks_L(i) - 0.02*fs;
     if start_sam < 0
         start_sam = 1;
     end
@@ -55,12 +55,12 @@ end
 
 for i = (1:length(clicks_R))
     % start_sam = clicks_L(i) - 0.0005*fs;
-    start_sam = clicks_L(i) - 0.05*fs;
+    start_sam = clicks_L(i) - 0.02*fs;
     if start_sam < 0
         start_sam = 1;
     end
 
-    end_sam = clicks_L(i) + 20*fs;
+    end_sam = clicks_L(i) + 0.02*fs;
     if end_sam > length(sig)
         end_sam = length(sig);
     end
@@ -75,6 +75,7 @@ length(clicks_L)
 length(clicks_R)
 
 function plot_click(click, titlestring)
+    disp('PLOT CLICKS CALLED')
     fs = 96000;
     time = (1:length(click))/fs;
     time = time*1000;
@@ -82,7 +83,7 @@ function plot_click(click, titlestring)
     fig = figure('Visible', 'off')
     plot(time,click,'k')
     grid on;
-    ylim([-0.5,0.5])
+    % ylim([-0.5,0.5])
     title(titlestring)
     xlabel('time [ms]')
     ylabel('signal level')
@@ -96,7 +97,7 @@ function plot_waveclicks(sig, clicks_L, clicks_R, filename)
     fig = figure('Visible', 'off')
     subplot(2,1,1)
     plot(sig(:,1),'k')
-    ylim([-0.2, 0.2])
+    ylim([-2, 2])
     hold on; grid on;
     % plot(sig2)
     title(strcat(filename, ' left channel'))
@@ -108,8 +109,8 @@ function plot_waveclicks(sig, clicks_L, clicks_R, filename)
 
     subplot(2,1,2)
     plot(sig(:,2),'k')
-    ylim([-0.2, 0.2])
     hold on; grid on;
+    ylim([-2, 2])
     % plot(sig2)
     title(strcat(filename, ' right channel'))
 
@@ -118,7 +119,8 @@ function plot_waveclicks(sig, clicks_L, clicks_R, filename)
         line([x1 x1], get(gca, 'ylim'),'Color', 'green','LineStyle', '--');
     end
 
-    plotname = strcat('plots/CommonClicks/1kHz/', filename, '.png')
+
+    plotname = strcat('plots/PlotClicks/1kHz/', filename, '.png')
     saveas(fig, plotname);
 end
 

@@ -56,34 +56,34 @@ function output = recordProcess(file)
     %         timestamps_ref = [0, 60, 90, 122, 158, 180, 246, 266, 304, 324, 362, 382, 417.5];
     %         % this is how many seconds each signal is according to Chris Muths track listing
     %         lengths = [60, 30, 31, 36, 21, 66, 20, 37, 19, 37, 19, 37, 19]; %starts with 1kHz
-    %         signal_names = {'leadin',    % 1
-    %                         '1kHz',      % 2
-    %                         '10kHz',     % 3
-    %                         '100Hz',     % 4
-    %                         'sweep',     % 5
-    %                         'quiet',     % 6
-    %                         '3150Hz',    % 7 
-    %                         '1kHzL',     % 8
-    %                         'sweepL',    % 9
-    %                         '1kHzR',     % 10
-    %                         'sweepR',    % 11
-    %                         '1kHzV',     % 12
-    %                         'sweepV',    % 13
-    %                         'transition',% 14
-    %                         '1kHz2',     % 15
-    %                         '10kHz2',    % 16
-    %                         '100Hz2',    % 17
-    %                         'freqsweep2',% 18
-    %                         'quiet2',    % 19
-    %                         '3150Hz2',   % 20
-    %                         '1kHzL2',    % 21
-    %                         'sweepL2',   % 22
-    %                         '1kHzR2',    % 23
-    %                         'sweepR2',   % 24
-    %                         '1kHzV2',    % 25
-    %                         'sweepV2',   % 26
-    %                         'leadout'    % 27
-    %         };
+            % signal_names = {'leadin',    % 1
+            %                 '1kHz',      % 2
+            %                 '10kHz',     % 3
+            %                 '100Hz',     % 4
+            %                 'sweep',     % 5
+            %                 'quiet',     % 6
+            %                 '3150Hz',    % 7 
+            %                 '1kHzL',     % 8
+            %                 'sweepL',    % 9
+            %                 '1kHzR',     % 10
+            %                 'sweepR',    % 11
+            %                 '1kHzV',     % 12
+            %                 'sweepV',    % 13
+            %                 'transition',% 14
+            %                 '1kHz2',     % 15
+            %                 '10kHz2',    % 16
+            %                 '100Hz2',    % 17
+            %                 'freqsweep2',% 18
+            %                 'quiet2',    % 19
+            %                 '3150Hz2',   % 20
+            %                 '1kHzL2',    % 21
+            %                 'sweepL2',   % 22
+            %                 '1kHzR2',    % 23
+            %                 'sweepR2',   % 24
+            %                 '1kHzV2',    % 25
+            %                 'sweepV2',   % 26
+            %                 'leadout'    % 27
+            % };
     %         timestamps =       [[0, 61],    % 1. 1 kHz
     %                             [61,91],    % 2. 10 kHz
     %                             [91,121],   % 3. 100 Hz
@@ -239,9 +239,9 @@ function output = recordProcess(file)
                 end
             end
             % reference = ;
-            [reftracks, ~] = SeperateTracks(reference);
-            ref_signal_names = reftracks.keys;
-            ref_signals = reftracks.values;
+            % [reftracks, ~] = SeperateTracks(reference);
+            % ref_signal_names = reftracks.keys;
+            % ref_signals = reftracks.values;
 
             
             for t = 1:length(signal_names)
@@ -256,7 +256,7 @@ function output = recordProcess(file)
                 %  - wow and flutter 
                 track_name = signal_names{t};
                 sig = signals{t};
-                refT = ref_signals{t};
+                % refT = ref_signals{t};
                 disp(strcat('track  ...',track_name))
     
     
@@ -291,19 +291,65 @@ function output = recordProcess(file)
                 [csig(:,1), CLICKS_L] = ClickDetect(sig(:,1));
                 [csig(:,2), CLICKS_R] = ClickDetect(sig(:,2));
 
+                REFSa1_L = load('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/clicks/A0000B0000r028a1558.066clicks_L.mat');
+
+                REFSa1_R = load('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/clicks/A0000B0000r028a1558.066clicks_R.mat');
+
+                % REFSa1_L = REFSa1_L(1);
+                % signal_names(t)
+                % REFSa1_L = REFSa1_L.clicks_L
+                % REFSa1_L = REFSa1_L.clicks_L(signal_names{t});
+                refsa1_L = REFSa1_L.clicks_L(signal_names{t});
+
+                % REFSa1_R = REFSa1_R(1);
+                refsa1_R = REFSa1_R.clicks_R(signal_names{t});
+
+                REFSb1_L = load('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/clicks/A0000B0000r028a1558.066clicks_L.mat');
+                REFSb1_R = load('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/clicks/A0000B0000r028a1558.066clicks_R.mat');
+                % REFSb1_L = REFSb1_L(1);
+                refsb1_L = REFSb1_L.clicks_L(signal_names{t});
+
+                % REFSb1_R = REFSb1_R(1);
+                refsb1_R = REFSb1_R.clicks_R(signal_names{t});
 
 
-               
-                [~, REFSa_L] = ClickDetect(refT(:,1));
-                [~, REFSa_R] = ClickDetect(refT(:,2));
-                [~, REFSb_L] = ClickDetect(refT(:,1));
-                [~, REFSb_R] = ClickDetect(refT(:,2));
+                REFSa2_L = load('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/clicks/131a1552.480clicks_L.mat');
+                REFSa2_R = load('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/clicks/131a1552.480clicks_R.mat');
+                
+                % REFSa2_L = REFSa2_L(1);
+                refsa2_L = REFSa2_L.clicks_L(signal_names{t});
+                % REFSa2_R = REFSa2_R(1);
+                refsa2_R = REFSa2_R.clicks_R(signal_names{t});
+
+
+                REFSb2_L = load('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/clicks/075b1559.017clicks_L.mat');
+                REFSb2_R = load('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/data/clicks/075b1559.017clicks_R.mat');
+
+                % REFSb2_L = REFSb2_L(1);
+                refsb2_L = REFSb2_L.clicks_L(signal_names{t});
+
+
+                % REFSb2_R = REFSb2_R(1);
+                refsb2_R = REFSb2_R.clicks_R(signal_names{t});
+
+                % [~, REFSa_L] = ClickDetect(refT(:,1));
+                % [~, REFSa_R] = ClickDetect(refT(:,2));
+                % [~, REFSb_L] = ClickDetect(refT(:,1));
+                % [~, REFSb_R] = ClickDetect(refT(:,2));
+
+                
     
                 % need to do the reference here by track 
-                commonclicksa_L = CommonClicks(CLICKS_L, REFSa_L);
-                commonclicksa_R = CommonClicks(CLICKS_R, REFSa_R);
-                commonclicksb_L = CommonClicks(CLICKS_L, REFSb_L);
-                commonclicksb_R = CommonClicks(CLICKS_R, REFSb_R);
+                commonclicksa1_L = CommonClicks(CLICKS_L, refsa1_L);
+                commonclicksa1_R = CommonClicks(CLICKS_R, refsa1_R);
+                commonclicksb1_L = CommonClicks(CLICKS_L, refsb1_L);
+                commonclicksb1_R = CommonClicks(CLICKS_R, refsb1_R);
+
+                commonclicksa2_L = CommonClicks(CLICKS_L, refsa2_L);
+                commonclicksa2_R = CommonClicks(CLICKS_R, refsa2_R);
+                commonclicksb2_L = CommonClicks(CLICKS_L, refsb2_L);
+                commonclicksb2_R = CommonClicks(CLICKS_R, refsb2_R);
+
     
                 
                 clicks_L = length(CLICKS_L);
@@ -369,7 +415,7 @@ function output = recordProcess(file)
           
     
     
-                output = [output; track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, A_L, A_R, CCIR_L, CCIR_R, clicks_L, clicks_R, commonclicksa_L, commonclicksa_R ,commonclicksb_L, commonclicksb_R, RMSclicks_L, RMSclicks_R, THD_L, THD_R, wow_L, wow_R, centreholeoffset, stereo_bleed];
+                output = [output; track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, A_L, A_R, CCIR_L, CCIR_R, clicks_L, clicks_R, commonclicksa1_L, commonclicksa1_R, commonclicksb1_L, commonclicksb1_R, commonclicksa2_L, commonclicksa2_R, commonclicksb2_L, commonclicksb2_R, RMSclicks_L, RMSclicks_R, THD_L, THD_R, wow_L, wow_R, centreholeoffset, stereo_bleed];
                
     
             end

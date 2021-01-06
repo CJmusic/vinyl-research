@@ -8,10 +8,10 @@ addpath('audio')
 addpath('/Users/cz/Code/vinyl-research/matlab_code/audio_functions')
 
 % files = dir('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/stylusforce/sf*.wav')
-files = dir('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/samerecordtest/*.wav')
+files = dir('/Volumes/AUDIOBANK/audio_files/stylusforce/*.wav')
 
 
-[norm_file, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/stylusforce/normalization1.0g.wav');
+[norm_file, fs] = audioread('/Volumes/AUDIOBANK/audio_files/stylusforce/normalization1.0g.wav');
 % size(norm_file)
 % 1/3*fs
 % 2/3*fs
@@ -125,15 +125,15 @@ RMS2_R.'
 Tbl = table(AS2.',RMS2_L.',RMS2_R.')
 % figure(100)
 % plot(aS)
-figure(1)
-H = plot(AS, RMS(:,1),'ko')
-hold on;
-H = plot(AS, RMS(:,2),'kx')
-grid on;
-legend('RMS Left Channel', 'RMS Right Channel')
-xlabel('stylus force [g]')
-ylabel('RMS level [dB]')
-title('RMS noise vs stylus force')
+% figure(1)
+% H = plot(AS2, RMS(:,1),'ko')
+% hold on;
+% H = plot(AS2, RMS(:,2),'kx')
+% grid on;
+% legend('RMS Left Channel', 'RMS Right Channel')
+% xlabel('stylus force [g]')
+% ylabel('RMS level [dB]')
+% title('RMS noise vs stylus force')
 
 
 figure(2)

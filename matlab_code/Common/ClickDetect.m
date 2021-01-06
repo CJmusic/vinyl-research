@@ -156,46 +156,67 @@
 %     saveas(fig, plotname);
 % end
 
-filename = '/Volumes/AUDIOBANK/audio_files/A0137B0137/298b1600.386.wav';
+% %~~~~~~~~~~~~~~~ MAKE REFERENCE CLICK FILES ~~~~~~~~~~~~~~~~%
 
-filename = '/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a1558.066.wav'
+% % filename = '/Volumes/AUDIOBANK/audio_files/A0137B0137/298b1600.386.wav';
 
-[tracks, info_array] = SeperateTracks(filename);
+% % filename = '/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a1558.066.wav'
 
-signal_names = tracks.keys;
-signals = tracks.values;
+% % filename = '/Volumes/AUDIOBANK/audio_files/A0000B0000/110919-A0000B0000r100b1559.147.wav';
 
-clicks_L = {};
-clicks_R = {};
+% % filename = '/Volumes/AUDIOBANK/audio_files/A0137B0137/075b1559.017.wav';
 
-for t = 1:length(signal_names);
-    sig = signals{t}; 
-
-    [~, CLICKS_L] = ClickDetectTest(sig(:,1));
-    [~, CLICKS_R] = ClickDetectTest(sig(:,2));
-
-    clicks_L{t} = CLICKS_L;
-    clicks_R{t} = CLICKS_R;
-    %create map container of all the clicks
-
-end
-
-clicks_L = containers.Map(signal_names,clicks_R);
-clicks_R = containers.Map(signal_names,clicks_R);
-
-clicks_L
-
-clicks_L('1kHz')
+% filename = '/Volumes/AUDIOBANK/audio_files/A0137B0137/131a1552.480.wav';
 
 
-save('A0000B0000r028a1558.066clicks_L', 'clicks_L')
-save('A0000B0000r028a1558.066clicks_R', 'clicks_R')
+% [tracks, info_array] = SeperateTracks(filename);
 
-function [csig, clicks] = ClickDetectTest(sig)%, threshold, clickwidth)
-% function [csig, clicks] = ClickDetect(sig)
+% signal_names = tracks.keys;
+% signals = tracks.values;
+
+% clicks_L = {};
+% clicks_R = {};
+
+% for t = 1:length(signal_names);
+%     sig = signals{t}; 
+
+%     [~, CLICKS_L] = ClickDetectTest(sig(:,1));
+%     [~, CLICKS_R] = ClickDetectTest(sig(:,2));
+
+%     clicks_L{t} = CLICKS_L;
+%     clicks_R{t} = CLICKS_R;
+%     %create map container of all the clicks
+
+% end
+
+% clicks_L = containers.Map(signal_names,clicks_L);
+% clicks_R = containers.Map(signal_names,clicks_R);
+
+% clicks_L
+
+% clicks_L('1kHz')
+% clicks_L('transition')
+
+
+% % save('A0000B0000r028a1558.066clicks_L', 'clicks_L')
+% % save('A0000B0000r028a1558.066clicks_R', 'clicks_R')
+
+% % save('A0000B0000r100b1559.147clicks_L', 'clicks_L')
+% % save('A0000B0000r100b1559.147clicks_R', 'clicks_R')
+
+% % save('075b1559.017clicks_L', 'clicks_L')
+% % save('075b1559.017clicks_R', 'clicks_R')
+
+% save('131a1552.480clicks_L', 'clicks_L')
+% save('131a1552.480clicks_R', 'clicks_R')
+
+% %~~~~~~~~~~~~~~~ MAKE REFERENCE CLICK FILES ENDS ~~~~~~~~~~~~~~~~%
+
+function [csig, clicks] = ClickDetect(sig)
     threshold = 200;
     clickwidth = 20;
     csig = sig;
+
     sep = 2048;
     s2 = sep/2;
     
