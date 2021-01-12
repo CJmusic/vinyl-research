@@ -7,11 +7,14 @@ set(0,'DefaultAxesLineWidth',1.5)
 
 % addpath('/Users/cz/Code/vinyl-research/matlab_code/')
 
-A0000B0000 = readtable('/Users/cz/Code/vinyl-research/matlab_code/A0000B0000/A0000B0000.csv');
-A0137B0137 = readtable('/Users/cz/Code/vinyl-research/matlab_code/A0137B0137/A0137B0137.csv');
+A0000B0000 = readtable('/Users/cz/Code/vinyl-research/A0000B0000manual.csv');
+A0137B0137 = readtable('/Users/cz/Code/vinyl-research/A0137B0137manual.csv');
 BOTH = readtable('/Users/cz/Code/vinyl-research/manualmatching.csv');
+% cols = Tbl.Properties.VariableNames;
 
+% A0000B0000 = BOTH(strcmp(BOTH.pressing,'A0000B0000'));
 
+% A0137B0137 = BOTH(strcmp(BOTH.pressing,'')
 
 % % 
 % % A0000B0000 = removevars(A0000B0000,{'pressing_SettingsTable'});

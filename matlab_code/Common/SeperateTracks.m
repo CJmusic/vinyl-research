@@ -219,7 +219,29 @@ function [output, info_array] = SeperateTracks(file)
 
 
             timediff = timepipref - timepip; 
+
             lagdiff = floor(timediff*96000);
+
+            %~~~~~ Correlation correction ~~~~~%
+
+            ref = audioread('/Volumes/AUDIOBANK/audio_files/A0000B0000/031418_A0000B0000r028a1558.066/leadout.wav');
+            timepipref2 = 7.934;
+
+            lockout = timepipref2; 
+            refLockout = ref(timepipref2*fs-0.25*fs:timepipref2*fs+0.25,:);
+            dataLockout = data(timepip*fs-0.25*fs:timepip*fs+0.25*fs,:);
+
+            [acor_L,lags_L2] = xcorr(refLockout(:,1),dataLockout(:,1));
+            [M_L,I_L] = max(abs(acor_L));
+            lagdiff_L2 = lags_L2(I_L);
+            lagdiff2 = lagdiff_L2;
+            % disp(strcat('lagdiff...', num2str(lagdiff)))
+
+            % timeref = (0:length(ref)-1) ;
+            % timedata = (0:length(data)-1)   + lagdiff ;
+            timediff 
+            timediff = timediff + lagdiff2/fs;
+            %~~~~~ Correlation correction ends ~~~~~%
 
             % timeref = (0:length(ref)-1) ;
             timedata = (0:length(data)-1);% + timediff;
@@ -233,7 +255,10 @@ function [output, info_array] = SeperateTracks(file)
             %~~~~~~~~~~ MANUAL LINEUP  ENDS ~~~~~~~~~~~%
 
             %~~~~~~~~~~ DEBUG ~~~~~~~~~~%
-
+            % figure(1)
+            % plot(ref(timepipref2*fs-0.25*fs:timepipref2*fs+0.25*fs))
+            % hold on; grid on;
+            % plot(data(timepip*fs-0.25*fs:timepip*fs+0.25*fs))
 
 
 
