@@ -15,18 +15,33 @@ try
 catch
 end
 
-trackname = '1kHz'
+addpath('/Users/cz/Code/vinyl-research/matlab_code/Common')
+
+
+trackname = 'sweep2'
 ts = 2; tf = 22;
 ts2 = ts;
 ts3 = ts;
 
+ts = 1;
+ts2 =  1;
+ts3 = 1;
+ts4 = 1;
+ts5 = 1;
 
-filename=strcat('/Volumes/AUDIOBANK/audio_files/A0000B0000/031418_A0000B0000r027a1553.770/', trackname ,'.wav');ts=2.000;tf=22.000;
-[rev4_1,fs]=audioread(filename);
-filename=strcat('/Volumes/AUDIOBANK/audio_files/A0000B0000/031418_A0000B0000r028a1558.066/', trackname, '.wav');ts2=2.000;
-[rev4_2,fs]=audioread(filename);
-filename=strcat('/Volumes/AUDIOBANK/audio_files/A0000B0000/031418_A0000B0000r029a1554.214/', trackname, '.wav');ts3=2.000;
-[rev4_3,fs]=audioread(filename);
+
+tracks1 = SeperateTracks('/Volumes/AUDIOBANK/audio_files/SameRecordTest2/r300a1550.844.wav');
+tracks2 = SeperateTracks('/Volumes/AUDIOBANK/audio_files/SameRecordTest2/r300a1553.621.wav');
+tracks3 = SeperateTracks('/Volumes/AUDIOBANK/audio_files/SameRecordTest2/r300a1558.697.wav');
+tracks4 = SeperateTracks('/Volumes/AUDIOBANK/audio_files/SameRecordTest2/r300a1559.267.wav');
+tracks5 = SeperateTracks('/Volumes/AUDIOBANK/audio_files/SameRecordTest2/r300a1559.287.wav');
+
+rev4_1=tracks1(trackname);
+rev4_2=tracks2(trackname);
+rev4_3=tracks3(trackname);
+rev4_4=tracks4(trackname);
+rev4_5=tracks5(trackname);
+fs = 96000;
 lr=1; %1=left, 2=right
 disp(['lr: ' num2str(lr)])
 Nt=length(rev4_1);
@@ -51,22 +66,33 @@ ns2=round(ts2*fs);
 rev4_2=rev4_2(ns2:ns2+Nt-1,:);
 ns3=round(ts3*fs);
 rev4_3=rev4_3(ns3:ns3+Nt-1,:);
+ns4=round(ts4*fs);
+rev4_4=rev4_4(ns4:ns4+Nt-1,:);
+ns5=round(ts5*fs);
+rev4_5=rev4_5(ns5:ns5+Nt-1,:);
+
 t=linspace(0,(Nt-1)/fs,Nt)';%column vector
 %-----------------xcorr plots------------
 [b,a]=butter(2,2*200/fs,'high');% remove LF arm resonance
 rev4_1f=filter(b,a,rev4_1);
 rev4_2f=filter(b,a,rev4_2);
 rev4_3f=filter(b,a,rev4_3);
+rev4_4f=filter(b,a,rev4_4);
+rev4_5f=filter(b,a,rev4_5);
 maxlag=2^16;
 C0=xcorr(rev4_1f(:,1),rev4_1f(:,2),maxlag);
 C1=xcorr(rev4_1f(:,lr),rev4_2f(:,lr),maxlag);
 C2=xcorr(rev4_1f(:,lr),rev4_3f(:,lr),maxlag);
+C3=xcorr(rev4_1f(:,lr),rev4_4f(:,lr),maxlag);
+C4=xcorr(rev4_1f(:,lr),rev4_5f(:,lr),maxlag);
 figure(21)
-plot(C0,'k')
+% plot(C0,'k')
 hold on;grid on;
 plot(C1,'b')
 plot(C2,'r')
-legend('27 L&R','27-28','27-29')
+plot(C3,'g')
+plot(C4,'o')
+% legend()
 %axis([ fs/100 fs/2 0 1.05])
 title('cross correlations')
 %-----------------------------
@@ -146,16 +172,20 @@ title('PSD')
 [Cc0,fc]=mscohere(rev4_1(:,1),rev4_1(:,2),window,nfft/2,nfft,fs);
 [Cc1(:,lr),fc]=mscohere(rev4_1(:,lr),rev4_2(:,lr),window,nfft/2,nfft,fs);
 [Cc2(:,lr),fc]=mscohere(rev4_1(:,lr),rev4_3(:,lr),window,nfft/2,nfft,fs);
-[Cc3(:,lr),fc]=mscohere(rev4_2(:,lr),rev4_3(:,lr),window,nfft/2,nfft,fs);
+[Cc3(:,lr),fc]=mscohere(rev4_1(:,lr),rev4_3(:,lr),window,nfft/2,nfft,fs);
+[Cc4(:,lr),fc]=mscohere(rev4_1(:,lr),rev4_4(:,lr),window,nfft/2,nfft,fs);
+[Cc5(:,lr),fc]=mscohere(rev4_1(:,lr),rev4_5(:,lr),window,nfft/2,nfft,fs);
 %---------------plot coherences---------
 figure(70)
-semilogx(fc,Cc0,'k')
+% semilogx(fc,Cc0,'k')
 grid on;hold on;
 semilogx(fc,Cc1(:,lr),'r')
 semilogx(fc,Cc2(:,lr),'g')
 semilogx(fc,Cc3(:,lr),'c')
+semilogx(fc,Cc4(:,lr),'p')
+semilogx(fc,Cc5(:,lr),'b')
 axis([0,fs/2,0,1])
-legend('27L&R','27&28','27&29','28&29','Location','Best')
+% legend('27L&R','27&28','27&29','28&29','Location','Best')
 xlabel('frequency [Hz]')
 title('Run Coherences')
 disp('-------------------finished--------------------') 

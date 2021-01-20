@@ -27,45 +27,33 @@ tracks = SeperateTracks('/Volumes/AUDIOBANK/audio_files/A0137B0137/-03b1558.270.
 data = tracks('transition');
 fs = 96000;
 
-
-%signal_names = {'leadin','1kHz', '10kHz', '100Hz', 'freqsweep', 'quiet', '3150Hz', '1kHzL', 'sweepL', '1kHzR', 'sweepR', '1kHzV', 'sweepV','transition', '1kHz2', '10kHz2', '100Hz2', 'freqsweep2', 'quiet2', '3150Hz2', '1kHzL2', 'sweepL2', '1kHzR2', 'sweepR2', '1kHzV2', 'sweepV2','leadout'};
-%timestamps = [0, 60, 90, 122, 158, 180, 246, 266, 304, 324, 362, 382, 417.5];
-%lengths = [60, 30, 31, 36, 21, 66, 20, 37, 19, 37, 19, 37, 19]; %starts with 1kHz
-
 % 1 khz
 tstart = 3;
-tend = 10;
-
-% quiet track on record
-%tstart = 180;
-%tend = 246;
+tend = 21;
 data = data(tstart*fs:tend*fs,:);
-
 time = linspace(0,(length(data)-1)/fs,length(data));
 rotation_speed = 33.33333;%45;
-% T = 60/rotation_speed; %this is the length of one groove segment
 n_sam = 172800;
-% num_segs = (floor(length(data)/fs/T))
 num_segs = (floor(length(data)/n_sam))
-% n_sam = round(T*fs)
 time_seg = time(1:n_sam);
-seg_array = []; %need to 
-
+seg_array = []; 
 
 for ng = 1:num_segs
     seg_array(:,:,ng) = data(1+(ng-1)*n_sam:ng*n_sam,:);
 end
-for ng = 1:num_segs-1
 
+for ng = 1:num_segs-1
     %%% coherences in the left channel 
     disp('NEW LOOP~~~~~~~~~~~~~~~~~~~~~~~~~')
     %%********* PRINT THE LAGDIFF BETWEEN GROOVES ************
     if ng > 1;
         groovediff = audio_corrlineup(seg_array(:,1,ng), seg_array(:,1,ng-1))
-        seg_array(:,2,ng-1)= circshift(seg_array(:,2,ng-1), groovediff);
+        seg_array(:,2,ng-1) = circshift(seg_array(:,2,ng-1), groovediff);
     end
 
     %%%%%
+    coh_LR = audio_mscohere(seg_array(:,1,ng), seg_array(:,2,ng),fs); 
+
     [coh_nextL, freq_coh] = audio_mscohere(seg_array(:,1,ng), seg_array(:,1,ng+1), fs);
     [coh_firstL, ~] = audio_mscohere(seg_array(:,1,1), seg_array(:,1,ng+1), fs);
 
@@ -147,3 +135,12 @@ for ng = 1:num_segs-1
     xlabel('lag')
     ylabel('correlation')
 end
+
+saveas(figure(1), 'signals.png')
+saveas(figure(2), 'signals.png')
+saveas(figure(3), 'signals.png')
+saveas(figure(4), 'signals.png')
+saveas(figure(5), 'signals.png')
+saveas(figure(6), 'signals.png')
+saveas(figure(7), 'signals.png')
+saveas(figure(8), 'signals.png')
