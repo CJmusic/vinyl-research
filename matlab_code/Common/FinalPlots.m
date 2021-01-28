@@ -88,13 +88,13 @@ plot_scatter2(BOTH, '1kHz', 'b', 'PressingNumber', 'A_L', 'A_R','A weighted RMS 
 plot_scatter2(BOTH, 'transition', 'a', 'PressingNumber', 'clicks_L', 'clicks_R','Number of clicks in the transition track', 'BOTHclickstransitiona')
 plot_scatter2(BOTH, 'transition', 'b', 'PressingNumber', 'clicks_L', 'clicks_R','Number of clicks in the transition track', 'BOTHclickstransitionb')
 
-plot_stereohistogram(A0000B0000, 'quiet', 'a', 'A_L', 'A_R', 'A-weighted noise in the quiet track of the first pressing side a', 'A0000B0000quietAhista')
-plot_stereohistogram(A0000B0000, 'quiet', 'b', 'A_L', 'A_R', 'A-weighted noise in the quiet track of the first pressing side b', 'A0000B0000quietAhistb')
-plot_stereohistogram(A0137B0137, 'quiet', 'a', 'A_L', 'A_R', 'A-weighted noise in the quiet track of the second pressing side a', 'A0137B0137quietAhista')
-plot_stereohistogram(A0137B0137, 'quiet', 'b', 'A_L', 'A_R', 'A-weighted noise in the quiet track of the second pressing side b', 'A0137B0137quietAhistb')
+plot_stereohistogramstats(A0000B0000, 'quiet', 'a', 'A_L', 'A_R', 'A-weighted noise in the quiet track of the first pressing side a', 'A0000B0000quietAhista')
+plot_stereohistogramstats(A0000B0000, 'quiet', 'b', 'A_L', 'A_R', 'A-weighted noise in the quiet track of the first pressing side b', 'A0000B0000quietAhistb')
+plot_stereohistogramstats(A0137B0137, 'quiet', 'a', 'A_L', 'A_R', 'A-weighted noise in the quiet track of the second pressing side a', 'A0137B0137quietAhista')
+plot_stereohistogramstats(A0137B0137, 'quiet', 'b', 'A_L', 'A_R', 'A-weighted noise in the quiet track of the second pressing side b', 'A0137B0137quietAhistb')
 
-plot_stereohistogram(BOTH, 'quiet', 'a', 'A_L', 'A_R', 'A-weighted noise in the quiet track side a', 'BOTHquietAhista')
-plot_stereohistogram(BOTH, 'quiet', 'b', 'A_L', 'A_R', 'A-weighted noise in the quiet track side b', 'BOTHquietAhistb')
+plot_stereohistogramstats(BOTH, 'quiet', 'a', 'A_L', 'A_R', 'A-weighted noise in the quiet track side a', 'BOTHquietAhista')
+plot_stereohistogramstats(BOTH, 'quiet', 'b', 'A_L', 'A_R', 'A-weighted noise in the quiet track side b', 'BOTHquietAhistb')
 
 
 plot_stereohistogram(BOTH, 'transition', 'a', 'A_L', 'A_R', 'A-weighted noise in the transition track side a', 'transitionAhista')
@@ -122,6 +122,10 @@ BOTH(:,'A_Rabs') = num2cell(A_Rabs);
 
 plot_scatter2(BOTH, 'quiet', 'a', 'PressingNumber', 'A_Labs', 'A_Rabs','A-weighted RMS levels per record', 'quietPressingNumberAabsa')
 plot_scatter2(BOTH, 'quiet', 'b', 'PressingNumber', 'A_Labs', 'A_Rabs','A-weighted RMS levels per record', 'quietPressingNumberAabsb')
+
+plot_scatter2(A0000B0000, 'quiet', 'a', 'PressingNumber', 'A_L', 'A_R','A-weighted RMS levels per record', 'A0000B0000quietPressingNumberARMSa')
+plot_scatter2(A0000B0000, 'quiet', 'b', 'PressingNumber', 'A_L', 'A_R','A-weighted RMS levels per record', 'A0000B0000quietPressingNumberARMSb')
+
 
 
 function stats = get_stats(Tbl, trackname, side, column)
@@ -294,7 +298,7 @@ end
 
 
 
-function plot_stereohistogram(Tbl, trackname, side, x1, x2, titlestring, filename)
+function plot_stereohistogramstats(Tbl, trackname, side, x1, x2, titlestring, filename)
     cols = Tbl.Properties.VariableNames;
     Tbl = Tbl(strcmp(Tbl.track,trackname),:);
     Tbl = Tbl(strcmp(Tbl.side,side),:);
@@ -324,6 +328,41 @@ function plot_stereohistogram(Tbl, trackname, side, x1, x2, titlestring, filenam
     dim = [0.2 0.5 0.3 0.3];
     str = {strcat('left mean :',num2str(statsL.mean)),strcat('left std :',num2str(statsL.std)),strcat('right mean :',num2str(statsR.mean)),strcat('right std :',num2str(statsR.std))};
     annotation('textbox',dim,'String',str,'FitBoxToText','on','BackgroundColor', 'white');
+    plotname = strcat('plots/',filename,'.png');
+    saveas(fig, plotname);
+end
+
+
+function plot_stereohistogram(Tbl, trackname, side, x1, x2, titlestring, filename)
+    cols = Tbl.Properties.VariableNames;
+    Tbl = Tbl(strcmp(Tbl.track,trackname),:);
+    Tbl = Tbl(strcmp(Tbl.side,side),:);
+    colx1 = find(ismember(cols, x1));
+    colx2 = find(ismember(cols, x2));
+    data_L = table2array(Tbl(:,colx1));
+    data_R = table2array(Tbl(:,colx2));
+
+
+    statsL = datastats(data_L);
+    statsR = datastats(data_R);    
+    
+    % lower_binL = statsL.mean - 10;
+    % lower_binR = statsR.mean - 10;
+    % upper_binL = statsL.mean + 10;
+    % upper_binR = statsR.mean + 10;
+
+
+    fig = figure('Visible', 'off');
+    % histogram(data_L, 50,'BinLimits',[lower_binL,upper_binL], 'facecolor',[0.6 0.6 0.6])
+    histogram(data_L, 50, 'facecolor',[0.6 0.6 0.6])
+    hold on; grid on;
+    histogram(data_R,50, 'facecolor',[0.3 0.3 0.3])
+    % histogram(data_R,50,'BinLimits',[lower_binL,upper_binL], 'facecolor',[0.3 0.3 0.3])
+    title(titlestring)
+    legend('left channel', 'right channel')
+    % dim = [0.2 0.5 0.3 0.3];
+    % str = {strcat('left mean :',num2str(statsL.mean)),strcat('left std :',num2str(statsL.std)),strcat('right mean :',num2str(statsR.mean)),strcat('right std :',num2str(statsR.std))};
+    % annotation('textbox',dim,'String',str,'FitBoxToText','on','BackgroundColor', 'white');
     plotname = strcat('plots/',filename,'.png');
     saveas(fig, plotname);
 end

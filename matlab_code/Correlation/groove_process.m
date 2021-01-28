@@ -63,60 +63,110 @@ for ng = 1:num_segs-1
 
 
     figure(1); hold on;
-    plot(time_seg,seg_array(:,1,ng), 'DisplayName',['segment',num2str(ng)]) 
-    % plot(time_seg,seg_array(:,1,ng), 'DisplayName',['segment',num2str(ng)], 'Color', [1 - 1.0*ng/100 ,0,1.0*ng/100,0.5]);
+    subplot(2,1,1)
+    hold on; grid on;
+    plot(time_seg,seg_array(:,1,ng), 'DisplayName',['segment',num2str(ng)])
+    title('left channel') 
+    set(gca,'YGrid','on')
+    set(gca,'XGrid','on')
+
+    subplot(2,1,2)
+    hold on; grid on;
+    plot(time_seg,seg_array(:,2,ng), 'DisplayName',['segment',num2str(ng)]) 
+    title('right channel') 
+
+    % plot(time_seg,seg_array(:,1,ng), 'DisplayName',['segment',num2str(ng)], 'Color', [1 - 1.0*ng/100 ,0,1.0*ng/100,0.5]);\
+    title('Groove segments')
     set(gca,'YGrid','on')
     set(gca,'XGrid','on')
     xlabel('time (s)')
     ylabel('Amplitude')
 
     figure(2); hold on;
+    subplot(2,1,1)
+    hold on;
     plot(freq_coh, coh_nextL, 'DisplayName',['segment',num2str(ng)])
+    title('left channel')
+    xlabel('Frequency (Hz)')
     set(gca, 'XScale', 'log');
     set(gca,'YGrid','on')
     set(gca,'XGrid','on')
-    xlabel('Frequency (Hz)')
-    title(strcat('Coherences next groove Left Channel'))
-
-
-    figure(3); hold on;
+    subplot(2,1,2)
+    hold on;
     plot(freq_coh, coh_nextR, 'DisplayName',['segment',num2str(ng)])
+    title('right channel')
     set(gca, 'XScale', 'log');
     set(gca,'YGrid','on')
     set(gca,'XGrid','on')
     xlabel('Frequency (Hz)')
-    title(strcat('Coherences next groove Right Channel'))
+    % title(strcat('Coherences next groove Left Channel'))
+
+
+    % figure(3); hold on;
+    % plot(freq_coh, coh_nextR, 'DisplayName',['segment',num2str(ng)])
+    % set(gca, 'XScale', 'log');
+    % set(gca,'YGrid','on')
+    % set(gca,'XGrid','on')
+    % xlabel('Frequency (Hz)')
+    % title(strcat('Coherences next groove Right Channel'))
 
 
     figure(4); hold on;
+    subplot(2,1,1)
+    hold on;
     plot(freq_coh, coh_firstL, 'DisplayName',['segment',num2str(ng)])
+    title('left channel')
     set(gca, 'XScale', 'log');
     set(gca,'YGrid','on')
     set(gca,'XGrid','on')
     xlabel('Frequency (Hz)')
-    title(strcat('Coherences first groove Left Channel'))
-
-    figure(5); hold on;
+    subplot(2,1,2)
+    hold on;
     plot(freq_coh, coh_firstR, 'DisplayName',['segment',num2str(ng)])
+    title('right channel')
     set(gca, 'XScale', 'log');
     set(gca,'YGrid','on')
     set(gca,'XGrid','on')
     xlabel('Frequency (Hz)')
-    title(strcat('Coherences first groove Right Channel'))
+
+    % title(strcat('Coherences first groove Left Channel'))
+
+    % figure(5); hold on;
+    % plot(freq_coh, coh_firstR, 'DisplayName',['segment',num2str(ng)])
+    % set(gca, 'XScale', 'log');
+    % set(gca,'YGrid','on')
+    % set(gca,'XGrid','on')
+    % xlabel('Frequency (Hz)')
+    % title(strcat('Coherences first groove Right Channel'))
 
 
     figure(6); hold on; %% plot the spectrum of each groove
+    subplot(2,1,1)
+    hold on;
     n_sam = length(seg_array(:,1,ng));
     freq_fft = fs*(0:(n_sam/2))/n_sam;
     data_fft = fft(seg_array(:,1,ng))/n_sam;
     data_fft = data_fft(1:n_sam/2+1);
-
     plot(freq_fft, 20.0*log10(data_fft)) 
     grid on; 
     set(gca, 'XScale', 'log');
-    title(strcat("Groove's Spectrum"))
+    title('left channel')    
     xlabel('Frequency (Hz)')
     ylabel('Level (dB)')  
+    subplot(2,1,2)
+    hold on;
+    n_sam = length(seg_array(:,2,ng));
+    freq_fft = fs*(0:(n_sam/2))/n_sam;
+    data_fft = fft(seg_array(:,2,ng))/n_sam;
+    data_fft = data_fft(1:n_sam/2+1);
+    plot(freq_fft, 20.0*log10(data_fft)) 
+    grid on; 
+    set(gca, 'XScale', 'log');
+    title('right channel')    
+    xlabel('Frequency (Hz)')
+    ylabel('Level (dB)')  
+
+
 
     [cor_first, lags_first] = xcorr(seg_array(:,1,1), seg_array(:,1,ng));
     [cor_next, lags_next] = xcorr(seg_array(:,1,ng), seg_array(:,1,ng+1));
@@ -136,11 +186,7 @@ for ng = 1:num_segs-1
     ylabel('correlation')
 end
 
-saveas(figure(1), 'signals.png')
-saveas(figure(2), 'signals.png')
-saveas(figure(3), 'signals.png')
-saveas(figure(4), 'signals.png')
-saveas(figure(5), 'signals.png')
-saveas(figure(6), 'signals.png')
-saveas(figure(7), 'signals.png')
-saveas(figure(8), 'signals.png')
+saveas(figure(1),'groovesegments.png')
+saveas(figure(2),'coherencenext.png')
+saveas(figure(4), 'coherencefirst.png')
+saveas(figure(6),'groovespectrum.png')
