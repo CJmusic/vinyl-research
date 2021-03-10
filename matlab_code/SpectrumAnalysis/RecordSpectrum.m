@@ -13,22 +13,11 @@ if ismac() == true
     addpath('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
     addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/')
 
-    record1 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/testing/maxbarrelzones3a.wav');
-    % record1 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/styluswear/040318_A0000B0000r001a.wav');
-    record1 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/styluswear/042820_A0000B0000r1a.wav');
-
+    record1 = SeperateTracks('/Volumes/AUDIOBANK/audio_files/A0137B0137/300b1600.957.wav');
 end 
-if ispc() == true
-    addpath('D:\Code\vinyl-research\matlab_code\A0137B0137')
-    addpath('D:\Code\vinyl-research\matlab_code\')
-    addpath('D:\Code\vinyl-research\matlab_code\audio_functions\')
-    record1 = SeperateTracks('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/testing/maxsteam1a.wav');
-    record2 = SeperateTracks('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/testing/maxbarrelzones3a.wav');    
-end
 
 
-
-csig = record1('sweep');
+csig = record1('quiet');
 % csig = csig(0.1*96000:30.5*96000,:);
 % figure(2)
 % plot(csig);
@@ -40,7 +29,7 @@ CCIRw = audio_CCIRweighting(csig(:,1));
 [data_fft, freq] = audio_spectrum(csig, 96000, 1, length(csig)-1);
 % [data_ffta, freq] = audio_spectrum(Aw, 96000, 1, length(csig)-1);
 % [data_fftccir, freq] = audio_spectrum(CCIRw, 96000, 1, length(csig)-1);
-data_fft = pwroctsmooth(data_fft,0.33);
+% data_fft = pwroctsmooth(data_fft,0.33);
 % data_ffta = pwroctsmooth(data_ffta,0.33);
 % data_fftccir = pwroctsmooth(data_fftccir,0.33);
 
