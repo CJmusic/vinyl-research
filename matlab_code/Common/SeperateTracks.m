@@ -295,9 +295,9 @@ function [output, info_array] = SeperateTracks(file)
             % figure(101)
             % audio_plotspectrum(fftfreq, fftseg, 'before normalization')
 
-            w1 = 2*707/fs; w2 = 2*1404/fs;
-            [b,a] = butter(4, [w1 w2]);
-            segfilt = filter(b,a,seg);
+            % w1 = 2*707/fs; w2 = 2*1404/fs;
+            % [b,a] = butter(4, [w1 w2]);
+            % segfilt = filter(b,a,seg);
             normalization = rms_response(seg);
 
 
