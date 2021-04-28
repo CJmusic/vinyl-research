@@ -5,9 +5,14 @@ sweep_names = {'sweep', 'sweepL', 'sweepR', 'sweepV','sweep2', 'sweepL2', 'sweep
 % ref_tracks = SeperateTracks('/Volumes/AUDIOBANK/audio_files/coherencetest/A0000B0000/031418_A0000B0000r027a1553.770.wav')
 % folder = '/Volumes/AUDIOBANK/audio_files/coherencetest/A0000B0000/';
 
-folder = '/Volumes/AUDIOBANK/audio_files/SameRecordTest2';
+folder = '/Volumes/AUDIOBANK/audio_files/SameRecordTest2/';
+% folder =  '/Volumes/AUDIOBANK/audio_files/coherencetest/A0000B0000/';
+folder =  '/Volumes/AUDIOBANK/audio_files/coherencetest/A0137B0137/';
+folder = '/Volumes/AUDIOBANK/audio_files/rotationtests/';
+
 % ref_tracks = SeperateTracks('/Volumes/AUDIOBANK/audio_files/SameRecordTest2/r300a1550.844.wav')
-ref_tracks = SeperateTracks('/Volumes/AUDIOBANK/audio_files/SameRecordTest2/r300a1553.621.wav')
+% ref_tracks = SeperateTracks('/Volumes/AUDIOBANK/audio_files/SameRecordTest2/r300a1558.697.wav')
+ref_tracks = SeperateTracks('/Volumes/AUDIOBANK/audio_files/rotationtests/300a-0-1557.761.wav');
 
 
 files = dir(fullfile(folder,'*.wav'))
@@ -17,6 +22,7 @@ keys(ref_tracks)
 for i = (1:length(files)) %%loop through records
     filename = files(i).name;
     tracks = SeperateTracks(strcat(files(i).folder,'/',filename));
+    disp(strcat('filename.......', filename))
 
     for ii = (1:length(sweep_names))
         trackname = sweep_names{ii}

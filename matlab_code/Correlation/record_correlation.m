@@ -22,19 +22,25 @@ addpath('/Users/cz/Code/vinyl-research/matlab_code/audio_functions')
 trackname = 'quiet'
 
 % clicks_timestamps = [11.9574, 11.7464, 11.8166,11.5757, 11.9574]; %transition
-clicks_timestamps = [10.0672, 10.0017, 9.99723, 9.91687, 10.1332];  %quiet
+% clicks_timestamps = [10.0672, 10.0017, 9.99723, 9.91687, 10.1332];  %quiet
 fs = 96000; 
 
 [b,a]=butter(2,2*200/fs,'high');% remove LF arm resonance
 reftracks = SeperateTracks('/Volumes/AUDIOBANK/audio_files/coherencetest/A0000B0000/031418_A0000B0000r027a1553.770.wav')
-folder = '/Volumes/AUDIOBANK/audio_files/coherencetest/A0000B0000';
+% reftracks = SeperateTracks('/Volumes/AUDIOBANK/audio_files/coherencetest/linedup/031418_A0000B0000r027alinedup1558.066.wav');
+% reftracks = SeperateTracks('/Volumes/AUDIOBANK/audio_files/rotationtests/300a-90-1601.052.wav');
+
+% folder = '/Volumes/AUDIOBANK/audio_files/coherencetest/linedup/';
+folder = '/Volumes/AUDIOBANK/audio_files/coherencetest/A0000B0000/';
+% folder = '/Volumes/AUDIOBANK/audio_files/coherencetest/A0137B0137/';
+% folder = '/Volumes/AUDIOBANK/audio_files/rotationtests/';
 
 files = dir(fullfile(folder,'*.wav'))
 
 
 for i = (1:length(files)) %%loop through records
-    ts = 10;
-    tf = 20;
+    ts = 2;
+    tf = 18;
     filename = files(i).name
     tracks = SeperateTracks(strcat(files(i).folder,'/',filename));
     data = tracks(trackname);
@@ -44,11 +50,15 @@ for i = (1:length(files)) %%loop through records
     [M_L,I_L] = max(abs(acor_L));
     lagdiff_L2 = lags_L2(I_L);
     lagdiff2 = lagdiff_L2;
-    lagdiff = floor((clicks_timestamps(1) - clicks_timestamps(i)));
-    lagdiff2
-    floor(ts*fs + lagdiff2)
-    floor(tf*fs + lagdiff2)
-    data = data(floor(ts*fs + lagdiff):floor( tf*fs + lagdiff),:);
+    % lagdiff = floor((clicks_timestamps(1) - clicks_timestamps(i)));
+    lagdiff = lagdiff2/fs;
+    disp(strcat('lagdiff......', num2str(lagdiff)))
+    disp(strcat('lagdiff2.....', num2str(lagdiff2)))
+    disp(strcat('start......', num2str(floor(ts*fs + lagdiff2))))
+    disp(strcat('end......', num2str(floor(tf*fs + lagdiff2))))
+    disp(strcat('length data.....',num2str(length(data)))) 
+    % data = data(floor(ts*fs + lagdiff):floor( tf*fs + lagdiff),:);
+    data = data(floor(ts*fs):floor( tf*fs),:);
     ref = ref(floor(ts*fs):floor(tf*fs),:); 
     length(data)
     length(ref)
@@ -91,8 +101,8 @@ for i = (1:length(files)) %%loop through records
     subplot(2,1,1)
     plot(time,data(:,1))
     hold on;
-    x1 = clicks_timestamps(i) + lagdiff;
-    line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
+    % x1 = clicks_timestamps(i) + lagdiff;
+    % line([x1 x1], get(gca, 'ylim'),'Color', 'black','LineStyle', '--');
 
     subplot(2,1,2)
     time=(0:length(data(:,2))-1)/fs;%column vector

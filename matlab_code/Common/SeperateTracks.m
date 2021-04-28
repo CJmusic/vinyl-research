@@ -235,6 +235,7 @@ function [output, info_array] = SeperateTracks(file)
             [M_L,I_L] = max(abs(acor_L));
             lagdiff_L2 = lags_L2(I_L);
             lagdiff2 = lagdiff_L2;
+            lagdiff2 = 0;
             % disp(strcat('lagdiff...', num2str(lagdiff)))
 
             % timeref = (0:length(ref)-1) ;

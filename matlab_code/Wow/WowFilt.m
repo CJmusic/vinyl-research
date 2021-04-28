@@ -9,6 +9,10 @@ try
 catch
 end
 
+addpath('/Users/cz/Code/vinyl-research/matlab_code/Common')
+addpath('/Users/cz/Code/vinyl-research/matlab_code/audio_functions')
+
+
 %--------------------------------------
 fs=96000; 
 N=2^14;disp(['Total duration [s] ' num2str(N/fs)])
@@ -16,7 +20,7 @@ time=([1:N]'-1)/fs; % make time positive column vector starting at zero
 signal=zeros(N,1);
 signal(10)=1;%unit impulse
 %-------------------------------------------------------
-% output=Aweighting_filter(signal,fs);
+output=audio_Aweighting(signal);
 
 figure(30)
 plot(time,output,'b');

@@ -42,6 +42,8 @@ if ispc() == true
 
 end
 
+folder = '/Volumes/AUDIOBANK/audio_files/lacquer_recordings/lacquerwow';
+
 pressingID = 'A0137B0137'
 
 
@@ -225,7 +227,8 @@ for i = (1:length(files)) %%loop through records
     size(WFfreq)
     nfft = pow2(floor(log2(length(WFfreq))))
 
-    [data_fft, freq_fft] = audio_spectrum(WFfreq, fsn, 1, nfft);
+
+    [data_fft, freq_fft] = audio_spectrum(WFfreq.', fsn, 1, nfft);
     size(data_fft)
     audio_plotspectrum(freq_fft, data_fft, '') 
     xlabel('Time[sec]')
