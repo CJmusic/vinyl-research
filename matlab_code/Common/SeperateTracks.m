@@ -276,43 +276,35 @@ function [output, info_array] = SeperateTracks(file)
     
             % sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
             % sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
-            L = 2^16;
-            seg = sig(floor(length(sig)/2) - L/2:floor(length(sig)/2) + L/2 - 1,:);
+            N = 2^16;
+            % L = 2^16;
+            seg = sig(floor(length(sig)/2) - N/2:floor(length(sig)/2) + N/2 - 1,:);
             
         
-            % figure(100) 
-            % plot(seg)
-
-            %~~~~ window the data
-            win = flattopwin(L);
+            fs = 96000;
+            time = (0:N-1)/fs;
+            win = flattopwin(N);
+            windowfactor = 0.2155774;
             winseg = seg.*win;
-            windowfactor = 0.2155774;% 0.2155774 for flattop window, 0.5 for hann window
-
-            % normalization = max(abs(fftseg)); % normalize to 7 cm/s peak = 0 dB
-            % normalization = max(abs(fftseg))/sqrt(2); % normalize to 5 cm/s rms = 0 dB
-
-            [fftseg, fftfreq] = audio_spectrum(winseg/windowfactor, fs, 1, L);
-            % figure(101)
-            % audio_plotspectrum(fftfreq, fftseg, 'before normalization')
-
-            % w1 = 2*707/fs; w2 = 2*1404/fs;
-            % [b,a] = butter(4, [w1 w2]);
-            % segfilt = filter(b,a,seg);
-            normalization = rms_response(seg);
-
-
-            normalization_L = normalization(1);
-            normalization_R = normalization(2);
+            
+            [seg_fft, freq_fft] = audio_spectrum(winseg, fs, 1, N);
+            normalization = max(abs(seg_fft))/(sqrt(2)*windowfactor);
+            
+                        
             
             disp(strcat('max data before...', num2str(max(data))))
-            disp(strcat('max data before dB...', num2str(20.0*log10(max(abs(fftseg))))))
+            disp(strcat('max data before dB...', num2str(20.0*log10(max(abs(seg_fft))))))
             disp(strcat('rms data before...', num2str(rms(data))))
             disp(strcat('rms data before dB...', num2str(20.0*log10(rms(data)))))
-            disp(strcat('normalization_L...', num2str(normalization_L)))
-            disp(strcat('normalization_R...', num2str(normalization_R)))
             
+            normalization_L = normalization(1);
+            normalization_R = normalization(2);
+
             data(:,1)=data(:,1)./normalization_L;
             data(:,2)=data(:,2)./normalization_R;
+
+            disp(strcat('normalization_L...', num2str(normalization_L)))
+            disp(strcat('normalization_R...', num2str(normalization_R)))
 
             t = 1;
             sig = data(floor(timestamps(t,1)*fs): floor(timestamps(t,2)*fs),:);
@@ -326,9 +318,9 @@ function [output, info_array] = SeperateTracks(file)
             disp(strcat('rms data after...', num2str(rms(data))))
             disp(strcat('rms data after dB...', num2str(20.0*log10(rms(data)))))
 
-            sig = data(floor(timestamps(t,1)*fs): floor(timestamps(t,2)*fs),:);
-            seg = sig(floor(length(sig)/2) - L/2:floor(length(sig)/2) + L/2 - 1,:);
-            [spec, fftfreq] = audio_spectrum(seg.*win, fs, 1, 2^16);
+            % sig = data(floor(timestamps(t,1)*fs): floor(timestamps(t,2)*fs),:);
+            % seg = sig(floor(length(sig)/2) - L/2:floor(length(sig)/2) + L/2 - 1,:);
+            % [spec, fftfreq] = audio_spectrum(seg.*win, fs, 1, 2^16);
 
             % figure(103)
             % audio_plotspectrum(fftfreq, spec, 'after normalization')

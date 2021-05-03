@@ -16,13 +16,14 @@ function output = PlotTracks(filename);
 
         fig = figure('Visible', 'off')
         subplot(2,1,1)
-        title(strcat(trackname, ' left channel'))
         plot(x,y(:,1),'k')
+        title(strcat(trackname, ' left channel'))
+        grid on;
         subplot(2,1,2)
         plot(x,y(:,2),'k')
         title(strcat(trackname, ' right channel'))
         grid on;
-        ylim([-1,1])
+        % ylim([-1,1])
         xlabel('time [s]')
         ylabel('signal level')
         plotname = strcat(filename(1:end-4),'/', signal_names{t}, '.png')
