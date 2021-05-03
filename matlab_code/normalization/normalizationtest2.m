@@ -9,8 +9,8 @@ addpath('/Users/cz/Code/vinyl-research/matlab_code/Common')
 addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/')
 addpath('/Volumes/AUDIOBANK/audio_files/')
 
-N = 2^16;
 fs = 96000;
+N = 3*fs;
 time = (0:N-1)/fs;
 
 % seg = [0.5*sin(1000*2*pi*time); 0.5*sin(1000*2*pi*time)];
@@ -20,16 +20,17 @@ tracks = SeperateTracks('/Volumes/AUDIOBANK/audio_files/A0137B0137/-03b1558.270.
 seg = tracks('1kHz');
 seg = seg(0.33*length(seg):0.33*length(seg) + N - 1,:);
 
-
+figure(2)
+plot(seg)
 
 % seg = seg(:,1);
 win = flattopwin(N);
 windowfactor = 0.2155774;
-winseg = seg.*win;
+winseg = seg.*win/windowfactor;
 
 [seg_fft, freq_fft] = audio_spectrum(winseg, fs, 1, N);
 
-normalization = max(abs(seg_fft))/(sqrt(2)*windowfactor);
+normalization = max(abs(seg_fft))/(sqrt(2));
 segnorm = seg./normalization;
 winsegnorm = segnorm.*win/windowfactor;
 [seg_fftnorm, freq_fft] = audio_spectrum(winsegnorm, fs, 1, N);

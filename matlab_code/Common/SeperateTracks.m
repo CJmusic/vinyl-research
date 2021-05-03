@@ -43,49 +43,8 @@ function [output, info_array] = SeperateTracks(file)
         %~~~~~~~~~~~~~~~~~ LOAD REFERENCE ~~~~~~~~~~~~~~~~~%
             % try 
             addpath('/Users/cz/Code/vinyl-research/matlab_code/audio_functions')
-    
-            % %~~~~ MAC ~~~~%
             disp('SEPERATE TRACKS CALLED')
-            % USE 003a and 052b as references 
-
-            % if ismac() == true
-            %     if file(length(file)-4) == 'a'
-            %         disp('MAC')
-            %         disp('Using a side reference')
-            %         % [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); offset = 15; \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ \\\\\\\\\\\\ 
-            %         [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/040318_A0000B0000r003a.wav'); offset = 9.227; 
-            %     elseif file(length(file)-4) == 'b'
-            %         disp('MAC')
-            %         disp('Using b side reference')
-
-            %         % [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r029b.wav'); offset = 13.1;
-            %         [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/080619-A0000B0000r052b.wav'); offset = 14.662;
-            %     else 
-            %         disp('NO SIDE FOUND, USING SIDE A REFERENCE')
-            %         % [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav');offset = 15; 
-            %         [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/040318_A0000B0000r003a.wav'); offset = 9.227; 
-                    
-            %     end
-            % end
-            % if ispc() == true
-            %     disp('IS PC')
-            %     if file(length(file)-4) == 'a'
-            %         % [ref, ] = audioread('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); offset = 15; 
-            %         [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/040318_A0000B0000r003a.wav'); offset = 9.227; 
-
-            %     elseif file(length(file)-4) == 'b'
-            %         disp('PC')
-            %         % [ref, ] = audioread('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028b.wav'); offset = 13.1;
-            %         [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/080619-A0000B0000r052b.wav'); offset = 14.662;
-            %     else 
-            %         disp('NO SIDE FOUND, USING SIDE A REFERENCE')
-            %         % [ref, ] = audioread('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav'); offset = 15; 
-            %         [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/040318_A0000B0000r003a.wav'); offset = 9.227; 
-            %     end
-
-            % end
-            
-    
+           
         %~~~~~~~~~~~~~~~~~~ Reference info ~~~~~~~~~~~~~~~~%
     
             timestamps_ref = [0, 60, 90, 122, 158, 180, 246, 266, 304, 324, 362, 382, 417.5];
@@ -176,14 +135,6 @@ function [output, info_array] = SeperateTracks(file)
                                 %% dont forget lead in and leadout
 
 
-            % [ref, ] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a1558.066.wav'); offset = 15; timestringref = 1558.006;
-
-
-            % timestamps = timestamps + offset;
-
-    
-
-    
     
             [data, fs] = audioread(file);
      
@@ -236,15 +187,9 @@ function [output, info_array] = SeperateTracks(file)
             lagdiff_L2 = lags_L2(I_L);
             lagdiff2 = lagdiff_L2;
             lagdiff2 = 0;
-            % disp(strcat('lagdiff...', num2str(lagdiff)))
-
-            % timeref = (0:length(ref)-1) ;
-            % timedata = (0:length(data)-1)   + lagdiff ;
-            timediff 
             timediff = timediff + lagdiff2/fs;
             %~~~~~ Correlation correction ends ~~~~~%
 
-            % timeref = (0:length(ref)-1) ;
             timedata = (0:length(data)-1);% + timediff;
             timestamps = timestamps - timediff;
             if timestamps(1,1) < 0; 
@@ -252,7 +197,6 @@ function [output, info_array] = SeperateTracks(file)
             end
 
             disp(strcat('timediff...',num2str(timediff)))
-            timestamps
             %~~~~~~~~~~ MANUAL LINEUP  ENDS ~~~~~~~~~~~%
 
             %~~~~~~~~~~ DEBUG ~~~~~~~~~~%
@@ -279,12 +223,10 @@ function [output, info_array] = SeperateTracks(file)
             windowfactor = 0.2155774;
             
             seg = sig(0.33*length(sig):0.33*length(sig) + N - 1,:);
+            winseg = seg.*win/windowfactor;
             
-            winseg = seg.*win;
-            
-            [seg_fft, freq_fft] = audio_spectrum(winseg, fs, 1, N);
-            
-            normalization = max(abs(seg_fft))/(sqrt(2)*windowfactor);
+            [seg_fft, freq_fft] = audio_spectrum(winseg, fs, 1, N); 
+            normalization = max(abs(seg_fft))/(sqrt(2));
             segnorm = seg./normalization;
             winsegnorm = segnorm.*win/windowfactor;
             [seg_fftnorm, freq_fft] = audio_spectrum(winsegnorm, fs, 1, N);
@@ -305,8 +247,19 @@ function [output, info_array] = SeperateTracks(file)
             disp(strcat('dB... ', num2str(20*log10(max(abs(seg_fftnorm))))))
             
 
+            sig = data(floor(timestamps(t,1)*fs): floor(timestamps(t,2)*fs),:);
+            N = 3*fs;
+            win = flattopwin(N);
+            windowfactor = 0.2155774;
+            seg = sig(0.33*length(sig):0.33*length(sig) + N - 1,:);
+            winseg = seg.*win/windowfactor;
+            [seg_fft, freq_fft] = audio_spectrum(winseg, fs, 1, N); 
+            disp(strcat('data amplitude after norm... ', num2str(max(abs(seg_fft)))))
+            disp(strcat('dB... ', num2str(20*log10(max(abs(seg_fft))))))
 
 
+            figure(1)
+            plot(seg)
 
             %~~~~~~~~~~~~~~~~~~~~~~~~~~~ END NORMALIZATION~~~~~~~~~~~~~~~~~~~~~~~~~~%
 
