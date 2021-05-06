@@ -10,7 +10,7 @@ addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_
 addpath('/Volumes/AUDIOBANK/audio_files/')
 
 fs = 96000;
-N = 3*fs;
+N = 0.05*fs;
 time = (0:N-1)/fs;
 
 % seg = [0.5*sin(1000*2*pi*time); 0.5*sin(1000*2*pi*time)];
@@ -43,3 +43,39 @@ disp(strcat('dB... ', num2str(20*log10(max(abs(seg_fftnorm))))))
 
 normalization_L = normalization(1);
 normalization_R = normalization(2);
+
+%plot test signal
+figure(1)
+time = (0:length(seg)-1)/fs;
+plot(time, seg); grid on;
+xlabel('Time [s]')
+ylabel('Signal')
+% title('test signal')
+legend(['left channel', 'right channel'])
+saveas(figure(1),'plots/testsignal.png')
+
+figure(2)
+audio_plotspectrum(freq_fft, seg_fft, '');
+legend(['left channel', 'right channel'])
+saveas(figure(2),'plots/testsignalspectrum.png')
+
+figure(3)
+timenorm = (0:length(segnorm)-1)/fs;
+plot(timenorm,segnorm); grid on; 
+xlabel('Time [s]')
+ylabel('Signal')
+legend(['left channel', 'right channel'])
+saveas(figure(3),'plots/testsignalnorm.png')
+
+figure(4)
+audio_plotspectrum(freq_fft, seg_fftnorm, '');
+legend(['left channel', 'right channel'])
+saveas(figure(4),'plots/spectrumnorm.png')
+
+
+figure(5)
+plot(win,'k')
+grid on;
+ylabel('Amplitude')
+xlabel('Sample')
+saveas(figure(5),'plots/window.png')

@@ -210,30 +210,24 @@ function [output, info_array] = SeperateTracks(file)
             %~~~~~~~~~~ DEBUG ENDS ~~~~~~~~~~%
             
 
+        %~~~~~~~~~~~~~~~~~~ NORMALIZATION RMS ~~~~~~~~~~~~~~~~~~~~%
 
-        %~~~~~~~~~~~~~~~~~~~~ NORMALIZATION ~~~~~~~~~~~~~~~~~~~~%
 
-            %~~~~ separate out the 1 kHz track
             t = 1;
             sigtime = timedata(floor(timestamps(t,1)*fs):floor(timestamps(t,2)*fs));
             sig = data(floor(timestamps(t,1)*fs): floor(timestamps(t,2)*fs),:);
-
             N = 3*fs;
-            win = flattopwin(N);
-            windowfactor = 0.2155774;
-            
             seg = sig(0.33*length(sig):0.33*length(sig) + N - 1,:);
-            winseg = seg.*win/windowfactor;
+
+
             
-            [seg_fft, freq_fft] = audio_spectrum(winseg, fs, 1, N); 
-            normalization = max(abs(seg_fft))/(sqrt(2));
-            segnorm = seg./normalization;
-            winsegnorm = segnorm.*win/windowfactor;
-            [seg_fftnorm, freq_fft] = audio_spectrum(winsegnorm, fs, 1, N);
+            disp(strcat('RMS before norm... ', num2str((rms(seg)))))
+            disp(strcat('dB... ', num2str(20*log10(rms(seg)))))
             
+            normalization = rms_response(seg);
+
             normalization_L = normalization(1);
             normalization_R = normalization(2);
-
 
 
             data(:,1)=data(:,1)./normalization_L;
@@ -241,27 +235,141 @@ function [output, info_array] = SeperateTracks(file)
 
             disp(strcat('normalization_L...', num2str(normalization_L)))
             disp(strcat('normalization_R...', num2str(normalization_R)))
-            disp(strcat('max fft before norm... ', num2str(max(abs(seg_fft)))))
-            disp(strcat('dB... ', num2str(20*log10(max(abs(seg_fft))))))
-            disp(strcat('max fft after norm... ', num2str(max(abs(seg_fftnorm)))))
-            disp(strcat('dB... ', num2str(20*log10(max(abs(seg_fftnorm))))))
-            
+
 
             sig = data(floor(timestamps(t,1)*fs): floor(timestamps(t,2)*fs),:);
             N = 3*fs;
-            win = flattopwin(N);
-            windowfactor = 0.2155774;
             seg = sig(0.33*length(sig):0.33*length(sig) + N - 1,:);
-            winseg = seg.*win/windowfactor;
-            [seg_fft, freq_fft] = audio_spectrum(winseg, fs, 1, N); 
-            disp(strcat('data amplitude after norm... ', num2str(max(abs(seg_fft)))))
-            disp(strcat('dB... ', num2str(20*log10(max(abs(seg_fft))))))
+
+            disp(strcat('RMS after norm... ', num2str((rms(seg)))))
+            disp(strcat('dB... ', num2str(20*log10(rms(seg)))))
+
+        %~~~~~~~~~~~~~~~~~~ NORMALIZATION RMS ENDS ~~~~~~~~~~~~~~~~~~~~%
 
 
-            figure(1)
-            plot(seg)
+
+        %~~~~~~~~~~~~~~~~~~~~ NORMALIZATION ~~~~~~~~~~~~~~~~~~~~%
+
+            %~~~~ separate out the 1 kHz track
+            % t = 1;
+            % sigtime = timedata(floor(timestamps(t,1)*fs):floor(timestamps(t,2)*fs));
+            % sig = data(floor(timestamps(t,1)*fs): floor(timestamps(t,2)*fs),:);
+
+            % N = 3*fs;
+            % win = flattopwin(N);
+            % windowfactor = 0.2155774;
+            
+            % seg = sig(0.33*length(sig):0.33*length(sig) + N - 1,:);
+            % winseg = seg.*win/windowfactor;
+            
+            % [seg_fft, freq_fft] = audio_spectrum(winseg, fs, 1, N); 
+            % normalization = max(abs(seg_fft))/(sqrt(2));
+            % segnorm = seg./normalization;
+            % winsegnorm = segnorm.*win/windowfactor;
+            % [seg_fftnorm, freq_fft] = audio_spectrum(winsegnorm, fs, 1, N);
+            
+            % % normalization = normalization;
+            % normalization_L = normalization(1);
+            % normalization_R = normalization(2);
+ 
+            % % data(:,1)=data(:,1)./normalization_L;
+            % % data(:,2)=data(:,2)./normalization_R;
+
+            % disp(strcat('normalization_L...', num2str(normalization_L)))
+            % disp(strcat('normalization_R...', num2str(normalization_R)))
+            % disp(strcat('max fft before norm... ', num2str(max(abs(seg_fft)))))
+            % disp(strcat('dB... ', num2str(20*log10(max(abs(seg_fft))))))
+            % disp(strcat('max fft after norm... ', num2str(max(abs(seg_fftnorm)))))
+            % disp(strcat('dB... ', num2str(20*log10(max(abs(seg_fftnorm))))))
+            
+
+            % sig = data(floor(timestamps(t,1)*fs): floor(timestamps(t,2)*fs),:);
+            % N = 3*fs;
+            % win = flattopwin(N);
+            % windowfactor = 0.2155774;
+            % seg = sig(0.33*length(sig):0.33*length(sig) + N - 1,:);
+            % figure(1000);
+            % plot(seg)
+            % winseg = seg.*win/windowfactor;
+            % [seg_fft, freq_fft] = audio_spectrum(winseg, fs, 1, N); 
+            % disp(strcat('data amplitude after norm... ', num2str(max(abs(seg_fft)))))
+            % disp(strcat('dB... ', num2str(20*log10(max(abs(seg_fft))))))
+
+            % sig = data(floor(timestamps(t,1)*fs): floor(timestamps(t,2)*fs),:);
+            % N = 3*fs;
+            % winseg = seg;
+            % [seg_fft, freq_fft] = audio_spectrum(winseg, fs, 1, N); 
+            % disp(strcat('unwindowed data amplitude after norm... ', num2str(max(abs(seg_fft)))))
+            % disp(strcat('dB... ', num2str(20*log10(max(abs(seg_fft))))))
+
+
+
+            % figure(1);
+            % plot(seg);
 
             %~~~~~~~~~~~~~~~~~~~~~~~~~~~ END NORMALIZATION~~~~~~~~~~~~~~~~~~~~~~~~~~%
+
+
+            %~~~~~~~~~~~~~~~~~~~~~~~ NORMALIZATION NO WINDOW ~~~~~~~~~~~~~~~~~~~~~~~%
+
+            
+            %~~~~ separate out the 1 kHz track
+            % t = 1;
+            % sigtime = timedata(floor(timestamps(t,1)*fs):floor(timestamps(t,2)*fs));
+            % sig = data(floor(timestamps(t,1)*fs): floor(timestamps(t,2)*fs),:);
+
+            % N = 3*fs;
+            
+            % seg = sig(0.33*length(sig):0.33*length(sig) + N - 1,:);
+            
+            
+            % [seg_fft, freq_fft] = audio_spectrum(seg, fs, 1, N); 
+            % normalization = max(abs(seg_fft))/(sqrt(2));
+            % segnorm = seg./normalization;
+            % [seg_fftnorm, freq_fft] = audio_spectrum(segnorm, fs, 1, N);
+            
+            % % normalization = normalization;
+            % normalization_L = normalization(1);
+            % normalization_R = normalization(2);
+ 
+            % data(:,1)=data(:,1)./normalization_L;
+            % data(:,2)=data(:,2)./normalization_R;
+
+            % disp(strcat('normalization_L...', num2str(normalization_L)))
+            % disp(strcat('normalization_R...', num2str(normalization_R)))
+            % disp(strcat('max fft before norm... ', num2str(max(abs(seg_fft)))))
+            % disp(strcat('dB... ', num2str(20*log10(max(abs(seg_fft))))))
+            % disp(strcat('max fft after norm... ', num2str(max(abs(seg_fftnorm)))))
+            % disp(strcat('dB... ', num2str(20*log10(max(abs(seg_fftnorm))))))
+            
+
+            % sig = data(floor(timestamps(t,1)*fs): floor(timestamps(t,2)*fs),:);
+            % N = 3*fs;
+            % win = flattopwin(N);
+            % windowfactor = 0.2155774;
+            % seg = sig(0.33*length(sig):0.33*length(sig) + N - 1,:);
+            % figure(1000);
+            % plot(seg)
+            % winseg = seg.*win/windowfactor;
+            % [seg_fft, freq_fft] = audio_spectrum(winseg, fs, 1, N); 
+            % disp(strcat('data amplitude after norm... ', num2str(max(abs(seg_fft)))))
+            % disp(strcat('dB... ', num2str(20*log10(max(abs(seg_fft))))))
+
+            % sig = data(floor(timestamps(t,1)*fs): floor(timestamps(t,2)*fs),:);
+            % N = 3*fs;
+            % winseg = seg;
+            % [seg_fft, freq_fft] = audio_spectrum(winseg, fs, 1, N); 
+            % disp(strcat('unwindowed data amplitude after norm... ', num2str(max(abs(seg_fft)))))
+            % disp(strcat('dB... ', num2str(20*log10(max(abs(seg_fft))))))
+            % disp(strcat('peak seg... ', num2str((max(abs(seg))))))
+            
+
+
+            % figure(1);
+            % plot(seg);
+
+
+            %~~~~~~~~~~~~~~~~~~~~ NORMALIZATION NO WINDOW ENDS ~~~~~~~~~~~~~~~~~~~~~%
 
 
 
