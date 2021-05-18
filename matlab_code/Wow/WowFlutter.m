@@ -33,7 +33,7 @@ function [wow, centreholeoffset] = WowFlutter(rev4_1 );
     % disp(['fs: ' num2str(fs) '  N_total: ' num2str(Nt) '  duration: ' num2str(Nt/fs)])
     t=linspace(0,(Nt-1)/fs,Nt)';%column vector
     %-----------------prefiltering-----------
-    [b,a]=butter(2,2*100/fs,'high');% not really necessary with fft filter
+    % [b,a]=butter(2,2*100/fs,'high');% not really necessary with fft filter
     %rev4_1=filter(b,a,rev4_1);
     %-------------------plot all data------------
     % figure(20)
@@ -196,5 +196,7 @@ function [wow, centreholeoffset] = WowFlutter(rev4_1 );
     % disp('-------------------finished--------------------') 
 
     wow = max(freq) - min(freq); %%peak to peak measurement
-
+    freq_dt = freq - mean(freq);
+    wow = rms(freq_dt)/test_freq;
+    
 end

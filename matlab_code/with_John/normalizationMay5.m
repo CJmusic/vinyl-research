@@ -10,28 +10,29 @@ addpath('/Volumes/AUDIOBANK/audio_files/')
 
 % fs = 96000;
 % N = 3*fs;
-% time = (1:N)/fs;
-% data = zeros(length(time),1);
-% data(1) = 1; 
 
-% data = 0.3333*sin(1000*2*pi*time);
-% data = data.';
-% % size(y)
-
-% seg = data;
 
 fs = 96000;
 N = 9*fs;
 
+time = (1:N)/fs;
+data = zeros(length(time),1);
+data(1) = 1; 
 
-tracks = SeperateTracks('/Volumes/AUDIOBANK/audio_files/A0137B0137/-03b1558.270.wav')
-data = tracks('1kHz');
+data = 0.3333*sin(1000*2*pi*time);
+data = data.';
+% size(y)
+
+seg = data;
+
+% tracks = SeperateTracks('/Volumes/AUDIOBANK/audio_files/A0137B0137/-03b1558.270.wav')
+% data = tracks('1kHz');
 time= (0:length(data)-1)/fs;
 
 figure(1)
 plot(time, data)
 title('data')
-seg = data(0.33*length(data):0.33*length(data) + N - 1,:);
+% seg = data(0.33*length(data):0.33*length(data) + N - 1,:);
 
 win = flattopwin(N);
 windowfactor = 0.2155774;
@@ -70,7 +71,7 @@ audio_plotspectrum(freq_fft, seg_fftnorm, '');
 % title('no window normalized data spectrum')
 xlim([970,1030])
 ylim([-80,0])
-saveas(figure(4),'normalizedspectrumnowindow.png')
+saveas(figure(5),'normalizedspectrumnowindow.png')
 
 RMSNORM = rms_response(segnorm);
 disp(strcat('rms normalized data....', num2str(RMSNORM)))
