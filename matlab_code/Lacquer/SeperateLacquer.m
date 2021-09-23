@@ -1,4 +1,4 @@
-function output = SeperateLacquer(file, offset)
+function [output, info_array] = SeperateLacquer(file, offset)
                 % if ismac() == true
                 %     [ref, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/A0000B0000/031419_A0000B0000r028a.wav');
                 % end
@@ -83,11 +83,13 @@ function output = SeperateLacquer(file, offset)
                 % lagdiff_L = lags_L(I_L);
                 % lagdiff = lagdiff_L;
                 lagdiff = -offset*fs;
+                lagdiff = 0;
         
-                disp(strcat('lagdiff ...', num2str(lagdiff)))
+                % disp(strcat('lagdiff ...', num2str(lagdiff)))
         
-                % timeref = (0:length(ref)-1)/fs;
-                timedata = (0:length(data)-1)/fs  + lagdiff/fs;
+                % % timeref = (0:length(ref)-1)/fs;
+                % timedata = (0:length(data)-1)/fs  + lagdiff/fs;
+                timedata = (0:length(data)-1)/fs;
         
                 %***   DEBUG   ***%
                 % disp(strcat(num2str(size(timeref)), num2str(size(refLockout))))
@@ -102,53 +104,46 @@ function output = SeperateLacquer(file, offset)
                 %***   DEBUG ENDS  ***%
                
         
-            %~~~~~~~~~~~~~~~~~~~~ NORMALIZATION ~~~~~~~~~~~~~~~~~~~~%
+        %~~~~~~~~~~~~~~~~~~ NORMALIZATION RMS ~~~~~~~~~~~~~~~~~~~~%
+
+
                 t = 1;
                 sigtime = timedata(floor(timestamps(t,1)*fs):floor(timestamps(t,2)*fs));
                 sig = data(floor(timestamps(t,1)*fs): floor(timestamps(t,2)*fs),:);
-        
-                % figure(t)
-                % plot(sigtime,sig)
-        
-        
-                % floor(timestamps(t,1)*fs) - lagdiff 
-                % floor(timestamps(t,2)*fs) - lagdiff
-        
-                sigtime = timedata(floor(timestamps(t,1)*fs) - lagdiff :floor(timestamps(t,2)*fs) - lagdiff);
-                sig = data(floor(timestamps(t,1)*fs) - lagdiff : floor(timestamps(t,2)*fs) - lagdiff,:);
-                % sigRMS=rms(sig);
-                % normalization=sqrt(2)*sigRMS*40/7; %digital value of peak level
-                % data(:,1)=data(:,1)/normalization(1);% now normalized to 40cm/s peak    
-                % data(:,2)=data(:,2)/normalization(2);% now normalized to 40cm/s peak 
-                % normalization_L = normalization(1);
-                % normalization_R = normalization(2);
-    
-                L = 2^16;
-        
-                seg = sig(floor(length(sig)/2) - L/2:floor(length(sig)/2) + L/2 - 1,:);
-            
-                [b,a]=butter(2,2*100/fs,'high');% not really necessary with fft filter
-                seg(:,1) = filter(b,a,seg(:,1));
-                seg(:,2) = filter(b,a,seg(:,2));
-            
-                win = flattopwin(L);
-                seg = seg.*win;
-                fftsigL = fft(seg(:,1))/L;
-                fftsigL = fftsigL(1:L/2+1);
-                fftsigR = fft(seg(:,2))/L;
-                fftsigR = fftsigR(1:L/2+1);
-                fftfreq = fs*(0:(L/2))/L;
+                N = 3*fs;
+                seg = sig(0.33*length(sig):0.33*length(sig) + N - 1,:);
+
+
                 
-                peak_L = max(real(fftsigL));
-                peak_R = max(real(fftsigR))
-    
-                sigRMS= [peak_L, peak_R]
-                normalization=sqrt(2)*sigRMS*40/7; %digital value of peak level
-                data(:,1)=data(:,1)/normalization(1);% now normalized to 40cm/s peak    
-                data(:,2)=data(:,2)/normalization(2);% now normalized to 40cm/s peak 
+                disp(strcat('RMS before norm... ', num2str((rms(seg)))))
+                disp(strcat('dB... ', num2str(20*log10(rms(seg)))))
+                
+                normalization = rms_response(seg);
+
                 normalization_L = normalization(1);
                 normalization_R = normalization(2);
+
+
+                data(:,1)=data(:,1)./normalization_L;
+                data(:,2)=data(:,2)./normalization_R;
+
+                disp(strcat('normalization_L...', num2str(normalization_L)))
+                disp(strcat('normalization_R...', num2str(normalization_R)))
+
+
+                sig = data(floor(timestamps(t,1)*fs): floor(timestamps(t,2)*fs),:);
+                N = 3*fs;
+                seg = sig(0.33*length(sig):0.33*length(sig) + N - 1,:);
+
+                disp(strcat('RMS after norm... ', num2str((rms(seg)))))
+                disp(strcat('dB... ', num2str(20*log10(rms(seg)))))
+
+    %~~~~~~~~~~~~~~~~~~ NORMALIZATION RMS ENDS ~~~~~~~~~~~~~~~~~~~~%
+
+
                 signals = cell(length(signal_names),1);
+                signal_times = cell(length(signal_names),1);
+
                 for t = (1:length(signal_names))
                     track_name = signal_names{t};
                     disp(strcat('track  ...',track_name))
@@ -163,18 +158,18 @@ function output = SeperateLacquer(file, offset)
                     THD_R = [];
                     
                     if t == 1
-                        sig = data(1 : floor(timestamps(1,1)*fs) - lagdiff,:);
-                        sigtime = timedata(1 : floor(timestamps(1,1)*fs) - lagdiff);  
+                        sig = data(1 : floor(timestamps(1,1)*fs),:);
+                        sigtime = timedata(1 : floor(timestamps(1,1)*fs));  
         
                         % refT = ref(1 : floor(timestamps(1,1)*fs) - lagdiff,:);
                     elseif t == length(signal_names)
-                        sig = data(floor(timestamps(end,2)*fs) - lagdiff : length(data),:);
-                        sigtime = timedata(floor(timestamps(end,2)*fs) - lagdiff : length(data));  
+                        sig = data(floor(timestamps(end,2)*fs) : length(data),:);
+                        sigtime = timedata(floor(timestamps(end,2)*fs): length(data));  
         
-                        % refT = ref(floor(timestamps(end,2)*fs) - lagdiff : length(ref),:);
+                        % refT = ref(floor(timestamps(end,2)*fs) : length(ref),:);
                     else
-                        sig = data(floor(timestamps(t-1,1)*fs) - lagdiff : floor(timestamps(t-1,2)*fs) - lagdiff,:);
-                        sigtime = timedata(floor(timestamps(t-1,1)*fs) - lagdiff :floor(timestamps(t-1,2)*fs) - lagdiff);  
+                        sig = data(floor(timestamps(t-1,1)*fs): floor(timestamps(t-1,2)*fs),:);
+                        sigtime = timedata(floor(timestamps(t-1,1)*fs) :floor(timestamps(t-1,2)*fs));  
         
                         % floor(timestamps(t-1,1)*fs) - lagdiff
                         % floor(timestamps(t-1,2)*fs) - lagdiff
@@ -186,5 +181,6 @@ function output = SeperateLacquer(file, offset)
                 end
     
                 output = containers.Map(signal_names, signals)
-    
+                info_array = [lagdiff, normalization_L, normalization_R];
+
             end

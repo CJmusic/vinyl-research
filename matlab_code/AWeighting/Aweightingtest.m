@@ -12,7 +12,7 @@ if ismac() == true
     addpath('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
     addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/')
 
-    record1 = SeperateTracks('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/testing/maxbarrelzones3a.wav');
+    record1 = SeperateTracks('/Volumes/AUDIOBANK/audio_files/A0137B0137/027a1557.344.wav');
 
 end 
 if ispc() == true
@@ -26,7 +26,7 @@ end
 
 
 csig = record1('transition');
-plot(csig);
+% plot(csig);
 
 Aw = audio_Aweighting(csig(:,1));
 CCIRw = audio_CCIRweighting(csig(:,1));
@@ -37,6 +37,13 @@ CCIRw = audio_CCIRweighting(csig(:,1));
 [data_fftccir, freq] = audio_spectrum(CCIRw, 96000, 5*96000, 2^16);
 size(freq)
 size(data_fft)
+
+data_fft = pwroctsmooth(data_fft,0.33);
+data_ffta = pwroctsmooth(data_ffta,0.33);
+data_fftccir = pwroctsmooth(data_fftccir,0.33);
+
+
+
 
 plot(freq, 20.0*log10(data_fft))
 hold on; grid on;

@@ -395,7 +395,7 @@ function output = recordProcess(file)
                     stereo_bleed = 0;
                 end
     
-                if ismember(signal_names(t), {'3150Hz', '3150Hz2'})
+                if ismember(signal_names(t), {'3150Hz', '3150Hz2', '1kHz', '1kHz2', '1kHzL', '1kHzL2','1kHzR', '1kHzR2', '1kHzV', '1kHzV2'})
                     % wow_L = WowFlutter(csig(:,1));
                     % wow_R = WowFlutter(csig(:,2));
                     
@@ -426,7 +426,7 @@ function output = recordProcess(file)
     
                 % output = [output; track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, A_L, A_R, CCIR_L, CCIR_R, clicks_L, clicks_R, commonclicksa1_L, commonclicksa1_R, commonclicksb1_L, commonclicksb1_R, commonclicksa2_L, commonclicksa2_R, commonclicksb2_L, commonclicksb2_R, RMSclicks_L, RMSclicks_R, THD_L, THD_R, wow_L, wow_R, centreholeoffset, stereo_bleed];
 
-                output = [output; track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, A_L, A_R, CCIR_L, CCIR_R, clicks_L, clicks_R, commonclicksa1_L, commonclicksa1_R, commonclicksb1_L, commonclicksb1_R, commonclicksa2_L, commonclicksa2_R, commonclicksb2_L, commonclicksb2_R, RMSclicks_L, RMSclicks_R, THD_L, THD_R, test_freq_L, wfreqspecamplitude_L, freqrms_L, WFrms_L, est_freq_R, wfreqspecamplitude_R, freqrms_R, WFrms_R, stereo_bleed];
+                output = [output; track, lagdiff, normalization_L, normalization_R, RMS_L, RMS_R, A_L, A_R, CCIR_L, CCIR_R, clicks_L, clicks_R, commonclicksa1_L, commonclicksa1_R, commonclicksb1_L, commonclicksb1_R, commonclicksa2_L, commonclicksa2_R, commonclicksb2_L, commonclicksb2_R, RMSclicks_L, RMSclicks_R, THD_L, THD_R, test_freq_L, wfreqspecamplitude_L, freqrms_L, WFrms_L, test_freq_R, wfreqspecamplitude_R, freqrms_R, WFrms_R, stereo_bleed];
                
     
             end

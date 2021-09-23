@@ -93,3 +93,4 @@ set(gca,'XGrid','on')
 xlabel('Frequency (Hz)')
 title(strcat('Coherences next groove Left Channel'))
 
+% fft_1 = data1 

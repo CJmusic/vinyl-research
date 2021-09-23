@@ -1,44 +1,35 @@
-% This file looks at the specific grooves on a single
-% recordings and does the measurements we need for that
-% 
-% christopher zaworski
-%
-% last edited : april 25, 2019
-
-clc; close all; clear all; 
+close all; clear all; 
 set(0,'DefaultLineLineWidth',1.0);
 set(0,'DefaultAxesFontSize',12);
 set(0,'DefaultAxesFontWeight','bold')
 set(0,'DefaultAxesLineWidth',1.5)
-disp('-----------groove_process.m------------')
+disp('-----------lacquer_coherence         .m------------')
+
 addpath('audio_functions')
 addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/');
 addpath('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/');
 
-addpath('/Volumes/AUDIOBANK/audio_files/A0000B0000/')
-addpath('/Users/cz/Code/vinyl-research/matlab_code/Common/')
+addpath('/Volumes/AUDIOBANK/audio_files/')
+addpath('/Users/cz/Code/vinyl-research/matlab_code/Lacquer')
 addpath('/Users/cz/Code/vinyl-research/matlab_code/from_John')
 
 
-% [data, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/030419_r26fivetrials/one.wav');
-% [data, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/042619_lacquerApostsweepv.wav');
-% [data, fs] = audioread('/Users/cz/OneDrive - University of Waterloo/Vinyl_Project/audio_bin/lacquer+pioneer/052319_pioneer.wav');
 
-% tracks = SeperateTracks('/Volumes/AUDIOBANK/audio_files/A0137B0137/-03b1558.270.wav')
+% tracks = SeperateLacquer('/Volumes/AUDIOBANK/audio_files/lacquer_recordings/lacquerpartone-offset126.wav', 19.3);
 
-tracks = SeperateTracks('/Volumes/AUDIOBANK/audio_files/A0000B0000/040318_A0000B0000r031b1559.717.wav')
+tracks = SeperateLacquer('/Volumes/AUDIOBANK/audio_files/lacquer_recordings/lacquerpartthree-offset000.wav', 0.0);
 
-data = tracks('transition');
-fs = 96000;
-
+data = tracks('quiet');
+fs = 44100;
+% figure
 % 1 khz
-tstart = 3;
-tend = 21;
-data = data(tstart*fs:tend*fs,:);
+% tstart = 3;
+% tend = 21;
+% data = data(tstart*fs:tend*fs,:);
 time = linspace(0,(length(data)-1)/fs,length(data));
 rotation_speed = 33.33333;%45;
-n_sam = 172800;
-num_segs = (floor(length(data)/n_sam))
+n_sam = fs*1.8;
+num_segs = (floor(length(data)/n_sam));
 time_seg = time(1:n_sam);
 seg_array = []; 
 
@@ -51,7 +42,7 @@ for ng = 1:num_segs-1
     disp('NEW LOOP~~~~~~~~~~~~~~~~~~~~~~~~~')
     %%********* PRINT THE LAGDIFF BETWEEN GROOVES ************
     if ng > 1;
-        groovediff = audio_corrlineup(seg_array(:,1,ng), seg_array(:,1,ng-1))
+        groovediff = audio_corrlineup(seg_array(:,1,ng), seg_array(:,1,ng-1));
         seg_array(:,2,ng-1) = circshift(seg_array(:,2,ng-1), groovediff);
     end
 

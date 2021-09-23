@@ -14,7 +14,7 @@ if ismac() == true
     addpath('/Users/cz/Code/vinyl-research/matlab_code/Lacquer')
     addpath('/Users/cz/Code/vinyl-research/matlab_code/from_John')
 
-    file = '/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/lacquer_recordings/lacquerpartone-offset126.wav';
+    file = '/Volumes/AUDIOBANK/audio_files/lacquer_recordings/lacquerpartone-offset126.wav';
 
 end 
 if ispc() == true
@@ -30,7 +30,7 @@ record1 = SeperateLacquer(file, 12.6);
 % record2 = SeperateLacquer('d:/OneDrive - University of Waterloo/School/Vinyl_Project/audio_files/testing/maxbarrelzones3a.wav');
 
 
-csig = record1('sweep');
+csig = record1('quiet');
 plot(csig);
 
 Aw = audio_Aweighting(csig(:,1));
@@ -38,19 +38,33 @@ CCIRw = audio_CCIRweighting(csig(:,1));
 
 
 [data_fft, freq] = audio_spectrum(csig, 96000, 1, length(csig)-1);
-% [data_ffta, freq] = audio_spectrum(Aw, 96000, 1, length(csig)-1);
-% [data_fftccir, freq] = audio_spectrum(CCIRw, 96000, 1, length(csig)-1);
+[data_ffta, freq] = audio_spectrum(Aw, 96000, 1, length(csig)-1);
+[data_fftccir, freq] = audio_spectrum(CCIRw, 96000, 1, length(csig)-1);
 size(freq)
 size(data_fft)
 data_fft = pwroctsmooth(data_fft,0.33);
+data_ffta = pwroctsmooth(data_ffta,0.33);
+data_fftccir = pwroctsmooth(data_fftccir,0.33);
 
+figure(1)
 plot(freq, 20.0*log10(data_fft),'k')
 hold on; grid on;
 % plot(freq, 20.0*log10(data_ffta))  
 % plot(freq, 20.0*log10(data_fftccir))
 % legend('non-weighted','A-weighted','CCIR-weighted')
 set(gca, 'XScale', 'log');
-title('Lacquer Frequency Response Sweep')
+title('Lacquer Frequency Response')
+xlabel('Frequency (Hz)')
+ylabel('Level (dB)')  
+
+figure(2)
+plot(freq, 20.0*log10(data_fft))
+hold on; grid on;
+plot(freq, 20.0*log10(data_ffta))  
+plot(freq, 20.0*log10(data_fftccir))
+legend('non-weighted','A-weighted','CCIR-weighted')
+set(gca, 'XScale', 'log');
+title('Lacquer Frequency Response')
 xlabel('Frequency (Hz)')
 ylabel('Level (dB)')  
 

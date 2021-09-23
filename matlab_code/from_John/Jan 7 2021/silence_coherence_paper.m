@@ -22,7 +22,7 @@ offset=-20;% default %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % filename='043019_lacquerA_declicked_silence.wav';
 % ts=10;tf=53;
 
-filename='r9technics_declick_sil&1kHz.wav';
+filename='/Volumes/AUDIOBANK/audio_files/A0000B0000/031418_A0000B0000r027a1553.770/transition.wav';
 ts=0.0;tf=84.6;% silent closely packed 30 grooves
 t2s=71.0;t2f=101.6;% 1mm spaced 17 grooves
 
@@ -171,7 +171,7 @@ title('Coherence lat or vert all ff grooves wrt reference groove')
 figure(90)
 for k=1:n_rev
 C=mscohere(sig_gr(:,1,k),sig_gr(:,2,k),hanning(nfft),[],nfft,fs);
-C=boxsmooth(C,smoothwidth);
+% C=boxsmooth(C,smoothwidth);
 plot(fc,C)
 axis([0,fs/2,0,1.1])
 grid on;hold on;
@@ -183,7 +183,7 @@ end
 SIG=fft(sig(:,lr));
 f=[0:Nt/2]'*fs/Nt;
 figure(110)
-SIG=boxsmooth(abs(SIG(1:floor(Nt/2+1))),35);
+% SIG=boxsmooth(abs(SIG(1:floor(Nt/2+1))),35);
 semilogx(f,20*log10(SIG),'b');
 grid on;
 axis([1 fs/2 ylim])

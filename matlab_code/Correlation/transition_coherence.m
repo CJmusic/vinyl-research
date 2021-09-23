@@ -33,7 +33,7 @@ fs = 96000;
 
 % 1 khz
 tstart = 3;
-tend = 21;
+tend = 91;
 data = data(tstart*fs:tend*fs,:);
 time = linspace(0,(length(data)-1)/fs,length(data));
 rotation_speed = 33.33333;%45;
@@ -46,7 +46,12 @@ for ng = 1:num_segs
     seg_array(:,:,ng) = data(1+(ng-1)*n_sam:ng*n_sam,:);
 end
 
-for ng = 1:num_segs-1
+for ng = 1:num_segs
+    cf_L(ng) = sum(seg_array(:,1,1).*seg_array(:,1,ng),1);
+    cf_R(ng) = sum(seg_array(:,2,1).*seg_array(:,2,ng),1);
+end
+
+for ng = 28:num_segs-10
     %%% coherences in the left channel 
     disp('NEW LOOP~~~~~~~~~~~~~~~~~~~~~~~~~')
     %%********* PRINT THE LAGDIFF BETWEEN GROOVES ************
@@ -79,6 +84,8 @@ for ng = 1:num_segs-1
     coh_nextRL = pwroctsmooth(coh_nextRL, 0.33);
     coh_LR = pwroctsmooth(coh_LR, 0.33);
 
+
+    
 
     figure(1); hold on;
     subplot(2,1,1)
@@ -220,6 +227,17 @@ for ng = 1:num_segs-1
     xlabel('lag')
     ylabel('correlation')
 end
+
+
+figure(10)
+plot(cf_L)
+hold on; grid on; 
+plot(cf_R)
+title('Correlation coeffecient decay transition track')
+xlabel('groove segment')
+ylabel('correlation')
+
+
 
 saveas(figure(1),'groovesegments.png')
 saveas(figure(2),'coherencenext.png')
