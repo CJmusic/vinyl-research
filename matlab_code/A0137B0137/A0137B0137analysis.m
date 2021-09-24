@@ -49,10 +49,16 @@ tracks = unique(AudioTable.track);
 
 % clean up AudioTable
 AudioTable.RecordID = erase(AudioTable.record,'.wav');
-AudioTable.RecordID = erase(AudioTable.RecordID,'a');
-AudioTable.RecordID = erase(AudioTable.RecordID,'b'); 
-AudioTable.RecordID =  cellfun(@str2num, AudioTable.RecordID);
+% AudioTable.RecordID = erase(AudioTable.RecordID,'a');
+% AudioTable.RecordID = erase(AudioTable.RecordID,'b'); 
+% AudioTable.RecordID =  cellfun(@str2num, AudioTable.RecordID(1:3));
+for i = 1:height(AudioTable)
+    AudioTable.RecordID{i} = str2num(AudioTable.RecordID{i}(1:3));
+end
 
+AudioTable.RecordID = cell2table(AudioTable.RecordID);
+AudioTable.RecordID = AudioTable.RecordID.Var1;
+% AudioTable.VariableName([31]) = {'RecordID'};
 
 %~~~~~~~~~~~~~~~ GENERATE AUDIOSTATS TABLE ~~~~~~~~~~~~~~~~~~%
 
@@ -124,9 +130,11 @@ AudioTable.RecordID =  cellfun(@str2num, AudioTable.RecordID);
 
     head(Tbl)
     head(AudioTable)
-
+    
+    Tbl(isnan(Tbl.RecordID), :) = [];
     % join in AudioTable
     Tbl = outerjoin(Tbl, AudioTable, 'Keys', {'RecordID', 'RecordID'});%, 'VariableNames', 'RecordNumber')%;, SensorTable)
+    % Tbl = innerjoin(Tbl, AudioTable, 'Keys', {'RecordID', 'RecordID'});%, 'VariableNames', 'RecordNumber')%;, SensorTable)
     Tbl.Properties.VariableNames([1]) = {'PressingNumber'};
     writetable(Tbl,'Tbl2.csv')
 
