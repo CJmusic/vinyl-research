@@ -415,9 +415,15 @@ function output = recordProcess(file)
                     %     R = 7.8;
                     % end
                 else 
-                    wow_L = 0;
-                    wow_R = 0;
-                    centreholeoffset = 0;
+                    test_freq_L = 0;
+                    test_freq_R = 0;
+                    wfreqspecamplitude_L = 0;
+                    wfreqspecamplitude_R = 0;
+                    freqrms_L = 0;
+                    freqrms_R = 0;
+                    WFrms_L = 0; 
+                    WFrms_R = 0;
+
                 end
               
                 track = signal_names(t);

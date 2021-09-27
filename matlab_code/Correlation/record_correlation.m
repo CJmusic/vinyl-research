@@ -19,16 +19,16 @@ addpath('/Users/cz/Code/vinyl-research/matlab_code/Common')
 addpath('/Users/cz/Code/vinyl-research/matlab_code/audio_functions')
 
 
-trackname = 'quiet'
+trackname = 'quiet2'
 
 % clicks_timestamps = [11.9574, 11.7464, 11.8166,11.5757, 11.9574]; %transition
 % clicks_timestamps = [10.0672, 10.0017, 9.99723, 9.91687, 10.1332];  %quiet
 fs = 96000; 
 
 [b,a]=butter(2,2*200/fs,'high');% remove LF arm resonance
-reftracks = SeperateTracks('/Volumes/AUDIOBANK/audio_files/coherencetest/A0000B0000/031418_A0000B0000r027a1553.770.wav')
+% reftracks = SeperateTracks('/Volumes/AUDIOBANK/audio_files/coherencetest/A0000B0000/031418_A0000B0000r027a1553.770.wav')
 % reftracks = SeperateTracks('/Volumes/AUDIOBANK/audio_files/coherencetest/linedup/031418_A0000B0000r027alinedup1558.066.wav');
-% reftracks = SeperateTracks('/Volumes/AUDIOBANK/audio_files/rotationtests/300a-90-1601.052.wav');
+reftracks = SeperateTracks('/Volumes/AUDIOBANK/audio_files/rotationtests/300a-90-1601.052.wav');
 
 % folder = '/Volumes/AUDIOBANK/audio_files/coherencetest/linedup/';
 folder = '/Volumes/AUDIOBANK/audio_files/coherencetest/A0000B0000/';

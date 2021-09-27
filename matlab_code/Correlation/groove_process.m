@@ -28,7 +28,7 @@ addpath('/Users/cz/Code/vinyl-research/matlab_code/from_John')
 
 tracks = SeperateTracks('/Volumes/AUDIOBANK/audio_files/A0000B0000/040318_A0000B0000r031b1559.717.wav')
 
-data = tracks('transition');
+data = tracks('quiet2');
 fs = 96000;
 
 % 1 khz

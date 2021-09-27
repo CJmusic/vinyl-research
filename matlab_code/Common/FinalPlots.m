@@ -5,7 +5,7 @@ set(0,'DefaultAxesFontWeight','bold')
 set(0,'DefaultAxesLineWidth',1.5)
 
 
-% addpath('/Users/cz/Code/vinyl-research/matlab_code/')
+addpath('/Users/cz/Code/vinyl-research/matlab_code/')
 
 A0000B0000 = readtable('/Users/cz/Code/vinyl-research/A0000B0000manual.csv');
 A0137B0137 = readtable('/Users/cz/Code/vinyl-research/A0137B0137manual.csv');
@@ -21,110 +21,194 @@ BOTH = readtable('/Users/cz/Code/vinyl-research/manualmatching.csv');
 
 % T.Properties.VariableNames{58} = 'pressing';
 
-get_stats(A0000B0000, 'transition', 'a', 'A_L')
-get_stats(A0000B0000, 'transition', 'a', 'A_R')
+disp('transition')
+firsttransA_La = get_stats(A0000B0000, 'transition', 'a', 'A_L')
+firsttransA_Ra = get_stats(A0000B0000, 'transition', 'a', 'A_R')
+firsttransA_Lb = get_stats(A0000B0000, 'transition', 'b', 'A_L')
+firsttransA_Rb = get_stats(A0000B0000, 'transition', 'b', 'A_R')
+secondtransA_La = get_stats(A0137B0137, 'transition', 'a', 'A_L')
+secondtransA_R = get_stats(A0137B0137, 'transition', 'a', 'A_R')
+secondtransA_Lb = get_stats(A0137B0137, 'transition', 'b', 'A_L')
+secondtransA_R = get_stats(A0137B0137, 'transition', 'b', 'A_R')
 
-get_stats(A0000B0000, 'transition', 'b', 'A_L')
-get_stats(A0000B0000, 'transition', 'b', 'A_R')
+disp('quiet')
+firstquietA_La = get_stats(A0000B0000, 'quiet', 'a', 'A_L')
+firstquietA_Rb = get_stats(A0000B0000, 'quiet', 'a', 'A_R')
+firstquietA_Lb = get_stats(A0000B0000, 'quiet', 'b', 'A_L')
+firstquietA_Rb = get_stats(A0000B0000, 'quiet', 'b', 'A_R')
+secondquietA_La = get_stats(A0137B0137, 'quiet', 'a', 'A_L')
+secondquietA_Ra = get_stats(A0137B0137, 'quiet', 'a', 'A_R')
+secondquietA_Lb = get_stats(A0137B0137, 'quiet', 'b', 'A_L')
+secondquietA_Rb = get_stats(A0137B0137, 'quiet', 'b', 'A_R')
 
-get_stats(A0137B0137, 'transition', 'a', 'A_L')
-get_stats(A0137B0137, 'transition', 'a', 'A_R')
+disp('quiet2')
+firstquiet2A_La = get_stats(A0000B0000, 'quiet2', 'a', 'A_L')
+firstquiet2A_Ra = get_stats(A0000B0000, 'quiet2', 'a', 'A_R')
+firstquiet2A_Lb = get_stats(A0000B0000, 'quiet2', 'b', 'A_L')
+firstquiet2A_Rb = get_stats(A0000B0000, 'quiet2', 'b', 'A_R')
+secondquiet2A_La = get_stats(A0137B0137, 'quiet2', 'a', 'A_L')
+secondquiet2A_Ra = get_stats(A0137B0137, 'quiet2', 'a', 'A_R')
+secondquiet2A_Lb = get_stats(A0137B0137, 'quiet2', 'b', 'A_L')
+secondquiet2A_Rb = get_stats(A0137B0137, 'quiet2', 'b', 'A_R')
 
-get_stats(A0137B0137, 'transition', 'b', 'A_L')
-get_stats(A0137B0137, 'transition', 'b', 'A_R')
+A_LstatsTable(1,:) = struct2table(firsttransA_La)
+A_LstatsTable(2,:) = struct2table(firsttransA_Ra)
+A_LstatsTable(3,:) = struct2table(firsttransA_Lb)
+A_LstatsTable(4,:) = struct2table(firsttransA_Rb)
+A_LstatsTable(5,:) = struct2table(firsttransA_La)
+A_LstatsTable(6,:) = struct2table(firsttransA_Ra)
+A_LstatsTable(7,:) = struct2table(firsttransA_La)
+A_LstatsTable(8,:) = struct2table(firsttransA_La)
+A_LstatsTable(9,:) = struct2table(firsttransA_La)
+A_LstatsTable(10,:) = struct2table(firsttransA_La)
+A_LstatsTable(11,:) = struct2table(firsttransA_La)
+A_LstatsTable(12,:) = struct2table(firsttransA_La)
+A_LstatsTable(13,:) = struct2table(firsttransA_La)
+A_LstatsTable(14,:) = struct2table(firsttransA_La)
+A_LstatsTable(15,:) = struct2table(firsttransA_La)
+A_LstatsTable(16,:) = struct2table(firsttransA_La)
+A_LstatsTable(17,:) = struct2table(firsttransA_La)
 
-
-
-plot_scatter2(BOTH, 'quiet', 'a', 'PressingNumber', 'A_L', 'A_R','A-weighted RMS vs. pressing number side a', 'BOTHPressingNumberARMSa')
-plot_scatter2(BOTH, 'quiet', 'b', 'PressingNumber', 'A_L', 'A_R','A-weighted RMS  vs. pressing number side b', 'BOTHPressingNumberARMSb')
-plot_scatter2(BOTH, 'quiet', 'a', 'PressingNumber', 'RMS_L', 'RMS_R','RMS vs. pressing number side a', 'BOTHPressingNumberRMSa')
-plot_scatter2(BOTH, 'quiet', 'b', 'PressingNumber', 'RMS_L', 'RMS_R','RMS  vs. pressing number side b', 'BOTHPressingNumberRMSb')
-plot_scatter2(BOTH, 'quiet', 'a', 'PressingNumber', 'THD_L', 'THD_R','Total harmonic distortion  vs. pressing number side a', 'BOTHPressingNumberTHDa')
-plot_scatter2(BOTH, 'quiet', 'b', 'PressingNumber', 'THD_L', 'THD_R','Total harmonic distortion vs. pressing number side b', 'BOTHPressingNumberTHDb')
-plot_scatter2(BOTH, 'quiet', 'a', 'PressingNumber', 'clicks_L', 'clicks_R','Number of clicks  vs. pressing number side a', 'BOTHPressingNumberCLICKSa')
-plot_scatter2(BOTH, 'quiet', 'b', 'PressingNumber', 'clicks_L', 'clicks_R','Number of clicks vs. pressing number side b', 'BOTHPressingNumberCLICKSb')
-
-
-
-plot_scatter2(BOTH, '3150Hz', 'a', 'PressingNumber', 'wow_L', 'wow_R','Wow  vs. pressing number side a', 'BOTHPressingNumberWOWa')
-plot_scatter2(BOTH, '3150Hz', 'b', 'PressingNumber', 'wow_L', 'wow_R','Wow  vs. pressing number side b', 'BOTHPressingNumberWOWb')
-plot_scatter(BOTH, '3150Hz', 'a', 'PressingNumber', 'centreholeoffset','Centre hole offset vs. pressing number side a', 'BOTHPressingNumberCHOa')
-plot_scatter(BOTH, '3150Hz', 'b', 'PressingNumber', 'centreholeoffset','Centre hole offset vs. pressing number side b', 'BOTHPressingNumberCHOb')
-
-
-plot_scatter(BOTH, '1kHzL', 'a', 'PressingNumber', 'stereo_bleed','Stereo bleed vs pressing number side a', 'BOTHPressingNumberSBa')
-plot_scatter(BOTH, '1kHzL', 'b', 'PressingNumber', 'stereo_bleed','Stereo bleed vs pressing number side b', 'BOTHPressingNumberSBb')
-
-
-plot_scatter2(BOTH, 'quiet', 'a', 'maxMouldSteamIn_F', 'A_L', 'A_R','A-weighted RMS vs. maximum mould steam in temperature side a', 'BOTHmaxMouldSteamInARMSa')
-plot_scatter2(BOTH, 'quiet', 'b', 'maxMouldSteamIn_F', 'A_L', 'A_R','A-weighted RMS vs. maximum mould steam in temperature side b', 'BOTHmaxMouldSteamINARMSb')
-plot_scatter2(BOTH, 'quiet', 'a', 'maxMouldSteamIn_F', 'RMS_L', 'RMS_R','RMS vs. maximum mould steam in temperature side a', 'BOTHmaxMouldSteamInRMSa')
-plot_scatter2(BOTH, 'quiet', 'b', 'maxMouldSteamIn_F', 'RMS_L', 'RMS_R','RMS vs. maximum mould steam in temperature side b', 'BOTHmaxMouldSteamINRMSb')
-plot_scatter2(BOTH, 'quiet', 'a', 'maxMouldSteamIn_F', 'clicks_L', 'clicks_R','Number of clicks vs. maximum mould steam in temperature side a', 'BOTHmaxMouldSteamInCLICKSa')
-plot_scatter2(BOTH, 'quiet', 'b', 'maxMouldSteamIn_F', 'clicks_L', 'clicks_R','Number of clicks vs. maximum mould steam in temperature side b', 'BOTHmaxMouldSteamInCLICKSb')
-
-
-plot_scatter2(BOTH, 'quiet', 'a', 'maxExtruderPremouldTemp_F', 'A_L', 'A_R','A-weighted RMS vs. maximum extruder premould temperature  side a', 'BOTHmaxExtruderPremouldTempARMSa')
-plot_scatter2(BOTH, 'quiet', 'b', 'maxExtruderPremouldTemp_F', 'A_L', 'A_R','A-weighted RMS vs. maximum extruder premould temperature side b', 'BOTHmaxmaxExtruderPremouldTempARMSb')
-plot_scatter2(BOTH, 'quiet', 'a', 'maxExtruderPremouldTemp_F', 'RMS_L', 'RMS_R','RMS vs. maximum extruder premould temperature  side a', 'BOTHmaxExtruderPremouldTempRMSa')
-plot_scatter2(BOTH, 'quiet', 'b', 'maxExtruderPremouldTemp_F', 'RMS_L', 'RMS_R','RMS vs. maximum extruder premould temperature  side b', 'BOTHmaxmaxExtruderPremouldTempRMSb')
-plot_scatter2(BOTH, 'quiet', 'a', 'maxExtruderPremouldTemp_F', 'clicks_L', 'clicks_R','Number of clicks vs. maximum extruder premould temperature side a', 'BOTHmaxExtruderPremouldTempCLICKSa')
-plot_scatter2(BOTH, 'quiet', 'b', 'maxMouldSteamIn_F', 'clicks_L', 'clicks_R','Number of clicks vs. maximum extruder premould temperature side b', 'BOTHmaxmaxExtruderPremouldTempCLICKSb')
-
-plot_scatter2(BOTH, 'quiet', 'a', 'minMouldSteamOutBottom_F', 'A_L', 'A_R','Minimum steam out temperature of the bottom mould vs. A-weighted RMS side a', 'BOTHminMouldSteamOutBottomARMSa')
-plot_scatter2(BOTH, 'quiet', 'b', 'minMouldSteamOutBottom_F', 'A_L', 'A_R','Minimum steam out temperature of the bottom mould vs. RMS side b', 'BOTHminMouldSteamOutBottomARMSb')
-plot_scatter2(BOTH, 'quiet', 'a', 'minMouldSteamOutTop_F', 'RMS_L', 'RMS_R','Minimum steam out temperature of the top mould vs. RMS side a', 'BOTHminMouldSteamOutTopRMSa')
-plot_scatter2(BOTH, 'quiet', 'b', 'minMouldSteamOutBottom_F', 'RMS_L', 'RMS_R','Minimum steam out temperature of the top mould vs. number of clicks side b', 'BOTHminMouldSteamOutTopRMSb')
-plot_scatter2(BOTH, 'quiet', 'a', 'minMouldSteamOutTop_F', 'clicks_L', 'clicks_R','Minimum steam out temperature of the top mould vs. number of clicks side a', 'BOTHminMouldSteamOutToCLICKSa')
-plot_scatter2(BOTH, 'quiet', 'b', 'minMouldSteamOutBottom_F', 'clicks_L', 'clicks_R','Minimum steam out temperature of the top mould vs. number of clicks side b', 'BOTHminMouldSteamOutTopCLICKSb')
-
-
-
-plot_scatter2(BOTH, '1kHz', 'a', 'PressingNumber', 'RMS_L', 'RMS_R','Pressing number vs. A-weighted RMS', 'BOTH1kHzRMSa')
-plot_scatter2(BOTH, '1kHz', 'b', 'PressingNumber', 'RMS_L', 'RMS_R','RMS level of reference tone', 'BOTH1kHzRMSb')
-plot_scatter2(BOTH, '1kHz', 'a', 'PressingNumber', 'A_L', 'A_R','A-weighted RMS level of reference tone', 'BOTH1kHzARMSa')
-plot_scatter2(BOTH, '1kHz', 'b', 'PressingNumber', 'A_L', 'A_R','A weighted RMS level of reference tone', 'BOTH1kHzARMSb')
-
-plot_scatter2(BOTH, 'transition', 'a', 'PressingNumber', 'clicks_L', 'clicks_R','Number of clicks in the transition track', 'BOTHclickstransitiona')
-plot_scatter2(BOTH, 'transition', 'b', 'PressingNumber', 'clicks_L', 'clicks_R','Number of clicks in the transition track', 'BOTHclickstransitionb')
-
-plot_stereohistogramstats(A0000B0000, 'quiet', 'a', 'A_L', 'A_R', 'A-weighted noise in the quiet track of the first pressing side a', 'A0000B0000quietAhista')
-plot_stereohistogramstats(A0000B0000, 'quiet', 'b', 'A_L', 'A_R', 'A-weighted noise in the quiet track of the first pressing side b', 'A0000B0000quietAhistb')
-plot_stereohistogramstats(A0137B0137, 'quiet', 'a', 'A_L', 'A_R', 'A-weighted noise in the quiet track of the second pressing side a', 'A0137B0137quietAhista')
-plot_stereohistogramstats(A0137B0137, 'quiet', 'b', 'A_L', 'A_R', 'A-weighted noise in the quiet track of the second pressing side b', 'A0137B0137quietAhistb')
-
-plot_stereohistogramstats(BOTH, 'quiet', 'a', 'A_L', 'A_R', 'A-weighted noise in the quiet track side a', 'BOTHquietAhista')
-plot_stereohistogramstats(BOTH, 'quiet', 'b', 'A_L', 'A_R', 'A-weighted noise in the quiet track side b', 'BOTHquietAhistb')
+% plot_scatter2(BOTH, 'quiet', 'a', 'PressingNumber', 'A_L', 'A_R','A-weighted RMS vs. pressing number side a', 'BOTHPressingNumberARMSa')
+% plot_scatter2(BOTH, 'quiet', 'b', 'PressingNumber', 'A_L', 'A_R','A-weighted RMS  vs. pressing number side b', 'BOTHPressingNumberARMSb')
+% plot_scatter2(BOTH, 'quiet', 'a', 'PressingNumber', 'RMS_L', 'RMS_R','RMS vs. pressing number side a', 'BOTHPressingNumberRMSa')
+% plot_scatter2(BOTH, 'quiet', 'b', 'PressingNumber', 'RMS_L', 'RMS_R','RMS  vs. pressing number side b', 'BOTHPressingNumberRMSb')
+% plot_scatter2(BOTH, 'quiet', 'a', 'PressingNumber', 'THD_L', 'THD_R','Total harmonic distortion  vs. pressing number side a', 'BOTHPressingNumberTHDa')
+% plot_scatter2(BOTH, 'quiet', 'b', 'PressingNumber', 'THD_L', 'THD_R','Total harmonic distortion vs. pressing number side b', 'BOTHPressingNumberTHDb')
+% plot_scatter2(BOTH, 'quiet', 'a', 'PressingNumber', 'clicks_L', 'clicks_R','Number of clicks  vs. pressing number side a', 'BOTHPressingNumberCLICKSa')
+% plot_scatter2(BOTH, 'quiet', 'b', 'PressingNumber', 'clicks_L', 'clicks_R','Number of clicks vs. pressing number side b', 'BOTHPressingNumberCLICKSb')
 
 
-plot_stereohistogram(BOTH, 'transition', 'a', 'A_L', 'A_R', 'A-weighted noise in the transition track side a', 'transitionAhista')
-plot_stereohistogram(BOTH, 'transition', 'b', 'A_L', 'A_R', 'A-weighted noise in the transition track side b', 'transitionAhistb')
-plot_barchart2(BOTH, 'transition', 'a', 'A_L', 'A_R','A weighted noise in the transition track side a', '[dB]', 'transitionpressingAa')
-% plot_barchart2(BOTH, 'transition', 'b', 'A_L', 'A_R','A weighted noise in the transition track side b', '[dB]', 'transitionpressingAb')
 
-plot_scatter2(BOTH, '3150Hz', 'a', 'PressingNumber','wow_L', 'wow_R','Peak to peak wow per record', 'wowa3150')
-plot_scatter2(BOTH, '3150Hz', 'b', 'PressingNumber', 'wow_L', 'wow_R','Peak to peak wow per record', 'wowb3150')
-plot_scatter2(BOTH, '3150Hz', 'a', 'PressingNumber','wow_L', 'wow_R','Peak to peak wow per record', 'wowa3150')
-plot_scatter2(BOTH, '3150Hz', 'b', 'PressingNumber', 'wow_L', 'wow_R','Peak to peak wow per record', 'wowb3150')
+% plot_scatter2(BOTH, '3150Hz', 'a', 'PressingNumber', 'wow_L', 'wow_R','Wow  vs. pressing number side a', 'BOTHPressingNumberWOWa')
+% plot_scatter2(BOTH, '3150Hz', 'b', 'PressingNumber', 'wow_L', 'wow_R','Wow  vs. pressing number side b', 'BOTHPressingNumberWOWb')
+% plot_scatter(BOTH, '3150Hz', 'a', 'PressingNumber', 'centreholeoffset','Centre hole offset vs. pressing number side a', 'BOTHPressingNumberCHOa')
+% plot_scatter(BOTH, '3150Hz', 'b', 'PressingNumber', 'centreholeoffset','Centre hole offset vs. pressing number side b', 'BOTHPressingNumberCHOb')
 
 
-A_L = BOTH{:,'A_L'}./20;
-A_R = BOTH{:,'A_R'}./20;
-A_Labs = 10.^(A_L);
-A_Rabs = 10.^(A_R);
-
-BOTH(:,'A_Labs') = num2cell(A_Labs);
-BOTH(:,'A_Rabs') = num2cell(A_Rabs);
+% plot_scatter(BOTH, '1kHzL', 'a', 'PressingNumber', 'stereo_bleed','Stereo bleed vs pressing number side a', 'BOTHPressingNumberSBa')
+% plot_scatter(BOTH, '1kHzL', 'b', 'PressingNumber', 'stereo_bleed','Stereo bleed vs pressing number side b', 'BOTHPressingNumberSBb')
 
 
-% BOTH(:,'A_Labs') = 10.^((BOTH{:,'A_L'}./20));
-% BOTH(:,'A_Rabs') = 10.^((BOTH{:,'A_R'}./20));
+% plot_scatter2(BOTH, 'quiet', 'a', 'maxMouldSteamIn_F', 'A_L', 'A_R','A-weighted RMS vs. maximum mould steam in temperature side a', 'BOTHmaxMouldSteamInARMSa')
+% plot_scatter2(BOTH, 'quiet', 'b', 'maxMouldSteamIn_F', 'A_L', 'A_R','A-weighted RMS vs. maximum mould steam in temperature side b', 'BOTHmaxMouldSteamINARMSb')
+% plot_scatter2(BOTH, 'quiet', 'a', 'maxMouldSteamIn_F', 'RMS_L', 'RMS_R','RMS vs. maximum mould steam in temperature side a', 'BOTHmaxMouldSteamInRMSa')
+% plot_scatter2(BOTH, 'quiet', 'b', 'maxMouldSteamIn_F', 'RMS_L', 'RMS_R','RMS vs. maximum mould steam in temperature side b', 'BOTHmaxMouldSteamINRMSb')
+% plot_scatter2(BOTH, 'quiet', 'a', 'maxMouldSteamIn_F', 'clicks_L', 'clicks_R','Number of clicks vs. maximum mould steam in temperature side a', 'BOTHmaxMouldSteamInCLICKSa')
+% plot_scatter2(BOTH, 'quiet', 'b', 'maxMouldSteamIn_F', 'clicks_L', 'clicks_R','Number of clicks vs. maximum mould steam in temperature side b', 'BOTHmaxMouldSteamInCLICKSb')
 
-plot_scatter2(BOTH, 'quiet', 'a', 'PressingNumber', 'A_Labs', 'A_Rabs','A-weighted RMS levels per record', 'quietPressingNumberAabsa')
-plot_scatter2(BOTH, 'quiet', 'b', 'PressingNumber', 'A_Labs', 'A_Rabs','A-weighted RMS levels per record', 'quietPressingNumberAabsb')
 
-plot_scatter2(A0000B0000, 'quiet', 'a', 'PressingNumber', 'A_L', 'A_R','A-weighted RMS levels per record', 'A0000B0000quietPressingNumberARMSa')
-plot_scatter2(A0000B0000, 'quiet', 'b', 'PressingNumber', 'A_L', 'A_R','A-weighted RMS levels per record', 'A0000B0000quietPressingNumberARMSb')
+% plot_scatter2(BOTH, 'quiet', 'a', 'maxExtruderPremouldTemp_F', 'A_L', 'A_R','A-weighted RMS vs. maximum extruder premould temperature  side a', 'BOTHmaxExtruderPremouldTempARMSa')
+% plot_scatter2(BOTH, 'quiet', 'b', 'maxExtruderPremouldTemp_F', 'A_L', 'A_R','A-weighted RMS vs. maximum extruder premould temperature side b', 'BOTHmaxmaxExtruderPremouldTempARMSb')
+% plot_scatter2(BOTH, 'quiet', 'a', 'maxExtruderPremouldTemp_F', 'RMS_L', 'RMS_R','RMS vs. maximum extruder premould temperature  side a', 'BOTHmaxExtruderPremouldTempRMSa')
+% plot_scatter2(BOTH, 'quiet', 'b', 'maxExtruderPremouldTemp_F', 'RMS_L', 'RMS_R','RMS vs. maximum extruder premould temperature  side b', 'BOTHmaxmaxExtruderPremouldTempRMSb')
+% plot_scatter2(BOTH, 'quiet', 'a', 'maxExtruderPremouldTemp_F', 'clicks_L', 'clicks_R','Number of clicks vs. maximum extruder premould temperature side a', 'BOTHmaxExtruderPremouldTempCLICKSa')
+% plot_scatter2(BOTH, 'quiet', 'b', 'maxMouldSteamIn_F', 'clicks_L', 'clicks_R','Number of clicks vs. maximum extruder premould temperature side b', 'BOTHmaxmaxExtruderPremouldTempCLICKSb')
+
+% plot_scatter2(BOTH, 'quiet', 'a', 'minMouldSteamOutBottom_F', 'A_L', 'A_R','Minimum steam out temperature of the bottom mould vs. A-weighted RMS side a', 'BOTHminMouldSteamOutBottomARMSa')
+% plot_scatter2(BOTH, 'quiet', 'b', 'minMouldSteamOutBottom_F', 'A_L', 'A_R','Minimum steam out temperature of the bottom mould vs. RMS side b', 'BOTHminMouldSteamOutBottomARMSb')
+% plot_scatter2(BOTH, 'quiet', 'a', 'minMouldSteamOutTop_F', 'RMS_L', 'RMS_R','Minimum steam out temperature of the top mould vs. RMS side a', 'BOTHminMouldSteamOutTopRMSa')
+% plot_scatter2(BOTH, 'quiet', 'b', 'minMouldSteamOutBottom_F', 'RMS_L', 'RMS_R','Minimum steam out temperature of the top mould vs. number of clicks side b', 'BOTHminMouldSteamOutTopRMSb')
+% plot_scatter2(BOTH, 'quiet', 'a', 'minMouldSteamOutTop_F', 'clicks_L', 'clicks_R','Minimum steam out temperature of the top mould vs. number of clicks side a', 'BOTHminMouldSteamOutToCLICKSa')
+% plot_scatter2(BOTH, 'quiet', 'b', 'minMouldSteamOutBottom_F', 'clicks_L', 'clicks_R','Minimum steam out temperature of the top mould vs. number of clicks side b', 'BOTHminMouldSteamOutTopCLICKSb')
+
+
+
+% plot_scatter2(BOTH, '1kHz', 'a', 'PressingNumber', 'RMS_L', 'RMS_R','Pressing number vs. A-weighted RMS', 'BOTH1kHzRMSa')
+% plot_scatter2(BOTH, '1kHz', 'b', 'PressingNumber', 'RMS_L', 'RMS_R','RMS level of reference tone', 'BOTH1kHzRMSb')
+% plot_scatter2(BOTH, '1kHz', 'a', 'PressingNumber', 'A_L', 'A_R','A-weighted RMS level of reference tone', 'BOTH1kHzARMSa')
+% plot_scatter2(BOTH, '1kHz', 'b', 'PressingNumber', 'A_L', 'A_R','A weighted RMS level of reference tone', 'BOTH1kHzARMSb')
+
+% plot_scatter2(BOTH, 'transition', 'a', 'PressingNumber', 'clicks_L', 'clicks_R','Number of clicks in the transition track', 'BOTHclickstransitiona')
+% plot_scatter2(BOTH, 'transition', 'b', 'PressingNumber', 'clicks_L', 'clicks_R','Number of clicks in the transition track', 'BOTHclickstransitionb')
+
+% plot_stereohistogramstats(A0000B0000, 'quiet', 'a', 'A_L', 'A_R', 'A-weighted noise in the quiet track of the first pressing side a', 'A0000B0000quietAhista')
+% plot_stereohistogramstats(A0000B0000, 'quiet', 'b', 'A_L', 'A_R', 'A-weighted noise in the quiet track of the first pressing side b', 'A0000B0000quietAhistb')
+% plot_stereohistogramstats(A0137B0137, 'quiet', 'a', 'A_L', 'A_R', 'A-weighted noise in the quiet track of the second pressing side a', 'A0137B0137quietAhista')
+% plot_stereohistogramstats(A0137B0137, 'quiet', 'b', 'A_L', 'A_R', 'A-weighted noise in the quiet track of the second pressing side b', 'A0137B0137quietAhistb')
+
+% plot_stereohistogramstats(BOTH, 'quiet', 'a', 'A_L', 'A_R', 'A-weighted noise in the quiet track side a', 'BOTHquietAhista')
+% plot_stereohistogramstats(BOTH, 'quiet', 'b', 'A_L', 'A_R', 'A-weighted noise in the quiet track side b', 'BOTHquietAhistb')
+
+
+% plot_stereohistogram(BOTH, 'transition', 'a', 'A_L', 'A_R', 'A-weighted noise in the transition track side a', 'transitionAhista')
+% plot_stereohistogram(BOTH, 'transition', 'b', 'A_L', 'A_R', 'A-weighted noise in the transition track side b', 'transitionAhistb')
+% plot_barchart2(BOTH, 'transition', 'a', 'A_L', 'A_R','A weighted noise in the transition track side a', '[dB]', 'transitionpressingAa')
+% % plot_barchart2(BOTH, 'transition', 'b', 'A_L', 'A_R','A weighted noise in the transition track side b', '[dB]', 'transitionpressingAb')
+
+% plot_scatter2(BOTH, '3150Hz', 'a', 'PressingNumber','wow_L', 'wow_R','Peak to peak wow per record', 'wowa3150')
+% plot_scatter2(BOTH, '3150Hz', 'b', 'PressingNumber', 'wow_L', 'wow_R','Peak to peak wow per record', 'wowb3150')
+% plot_scatter2(BOTH, '3150Hz', 'a', 'PressingNumber','wow_L', 'wow_R','Peak to peak wow per record', 'wowa3150')
+% plot_scatter2(BOTH, '3150Hz', 'b', 'PressingNumber', 'wow_L', 'wow_R','Peak to peak wow per record', 'wowb3150')
+
+
+% A_L = BOTH{:,'A_L'}./20;
+% A_R = BOTH{:,'A_R'}./20;
+% A_Labs = 10.^(A_L);
+% A_Rabs = 10.^(A_R);
+
+% BOTH(:,'A_Labs') = num2cell(A_Labs);
+% BOTH(:,'A_Rabs') = num2cell(A_Rabs);
+
+
+% % BOTH(:,'A_Labs') = 10.^((BOTH{:,'A_L'}./20));
+% % BOTH(:,'A_Rabs') = 10.^((BOTH{:,'A_R'}./20));
+
+% plot_scatter2(BOTH, 'quiet', 'a', 'PressingNumber', 'A_Labs', 'A_Rabs','A-weighted RMS levels per record', 'quietPressingNumberAabsa')
+% plot_scatter2(BOTH, 'quiet', 'b', 'PressingNumber', 'A_Labs', 'A_Rabs','A-weighted RMS levels per record', 'quietPressingNumberAabsb')
+
+% plot_scatter2(A0000B0000, 'quiet', 'a', 'PressingNumber', 'A_L', 'A_R','A-weighted RMS levels per record', 'A0000B0000quietPressingNumberARMSa')
+% plot_scatter2(A0000B0000, 'quiet', 'b', 'PressingNumber', 'A_L', 'A_R','A-weighted RMS levels per record', 'A0000B0000quietPressingNumberARMSb')
+
+plot_scatter6(A0000B0000, 'quiet', 'quiet2', 'a',  'PressingNumber', 'RMS_L', 'RMS_R', 'Unweighted RMS levels per record side a', 'A0000B0000quiettracksRMSa')
+plot_scatter6(A0000B0000, 'quiet', 'quiet2', 'a',  'PressingNumber', 'A_L', 'A_R', 'A weighted RMS levels per record side a', 'A0000B000quiettracksAa')
+plot_scatter6(A0000B0000, 'quiet', 'quiet2', 'a',  'PressingNumber', 'CCIR_L', 'CCIR_R', 'CCIR weighted RMS levels per record side a', 'A0000B000quiettracksCCIRa')
+
+plot_scatter6(A0000B0000, 'quiet', 'quiet2', 'b',  'PressingNumber', 'RMS_L', 'RMS_R', 'Unweighted RMS levels per record side b', 'A0000B0000quiettracksRMSb')
+plot_scatter6(A0000B0000, 'quiet', 'quiet2', 'b',  'PressingNumber', 'A_L', 'A_R', 'A weighted RMS levels per record side b', 'A0000B000quiettracksAb')
+plot_scatter6(A0000B0000, 'quiet', 'quiet2', 'b',  'PressingNumber', 'CCIR_L', 'CCIR_R', 'CCIR weighted RMS levels per record side b', 'A0000B000quiettracksCCIRb')
+
+%~~~~~~~~~~~~~ Plot 
+function plot_scatter6(Tbl, trackname1, trackname2, side, x, y1, y2, titlestring, filename)
+    cols = Tbl.Properties.VariableNames;
+    Tbl = Tbl(strcmp(Tbl.side,side),:);
+    Tbl1 = Tbl(strcmp(Tbl.track,trackname1),:);
+    Tbl2 = Tbl(strcmp(Tbl.track,trackname2),:);
+    % Tbl3 = Tbl(strcmp(Tbl.track,trackname3),:);
+    colx = find(ismember(cols, x));
+    coly1 = find(ismember(cols, y1));
+    coly2 = find(ismember(cols, y2));
+    X1 = table2array(Tbl1(:,colx));
+    Y1L = table2array(Tbl1(:,coly1));
+    Y1R = table2array(Tbl1(:,coly2));
+    X2 = table2array(Tbl2(:,colx));
+    Y2L = table2array(Tbl2(:,coly1));
+    Y2R = table2array(Tbl2(:,coly2));
+    % X3 = table2array(Tbl3(:,colx));
+    % Y3L = table2array(Tbl3(:,coly1)); 
+    % Y3R = table2array(Tbl3(:,coly2));
+
+    % figure(plotnum);  
+    fig = figure('Visible', 'off');
+    scatter(X1,Y1L,'ko');
+    grid on; hold on;
+    scatter(X1,Y1R,'kx');
+    scatter(X2,Y2L,'bo');
+    grid on; hold on;
+    scatter(X2,Y2R,'bx');
+    % scatter(X3,Y3L,'go');
+    % grid on; hold on;
+    % scatter(X3,Y3R,'gx');
+    legend({'quiet left', 'quiet right', 'quiet2 left', 'quiet2 right'});
+    ylim([-58,-38])
+    xlim([0,100])
+    xlabel('record number')
+    ylabel('Level [dB]')
+    title(titlestring);
+    plotname = strcat('plots/', filename,'.png');
+    saveas(fig, plotname);
+end
+
 
 
 
