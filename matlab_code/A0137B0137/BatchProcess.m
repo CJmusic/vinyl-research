@@ -134,7 +134,7 @@ for i = (1:length(files)) %%loop through records
     end
     %append audio output to info cell array
     disp('SAVING CSV')
-    writetable(AudioTable, strcat(folder,pressingID,'-AudioTable.csv'));
+    writetable(AudioTable, strcat(folder, pressingID,'-AudioTable.csv'));
 end
 
 

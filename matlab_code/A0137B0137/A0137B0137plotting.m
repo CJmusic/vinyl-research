@@ -1,5 +1,5 @@
 clear all; close all;
-Tbl = readtable( '/Users/cz/Code/vinyl-research/matlab_code/A0000B0000/A0000B0000.csv');
+Tbl = readtable( '/Users/cz/Code/vinyl-research/matlab_code/A0137B0137/A0137B0137.csv');
 
 
 % plot_scatter2(Tbl, 'quiet', 'a', 'PressingNumber', 'RMS_L', 'RMS_R', 'Pressing Number vs Unweighted RMS side a')
@@ -73,9 +73,9 @@ function plot_clicks(Tbl,side, titlestring)
     % for i = (1:length(clicktracks))
     Tbl(strcmp(Tbl.track,'leadout'),:) = [];
     Tbl(strcmp(Tbl.track,'leadin'),:) = [];
-
-    for i = (1:137)
-        tbl = Tbl((Tbl.PressingNumber==i),:);
+    PressingNumbers = unique(Tbl.PressingNumber);
+    for i = (1:length(PressingNumbers))
+        tbl = Tbl((Tbl.PressingNumber==PressingNumbers(i)),:);
         clicks_l = sum(tbl.clicks_L);
         clicks_r = sum(tbl.clicks_R);
         % for j = 1:length(clicktracks)
@@ -88,18 +88,18 @@ function plot_clicks(Tbl,side, titlestring)
         clicks_R = [clicks_R; (clicks_r)];
     
     end 
-    pressing_number = tbl.PressingNumber;
+    pressing_number = PressingNumbers;
     size(pressing_number)
     size(clicks_L)
     size(clicks_R)
-    pressing_number = (1:137);
+    % pressing_number = (1:137);
     fig = figure('Visible', 'off');
     scatter(pressing_number,clicks_L,'ko');
     grid on; hold on;
     scatter(pressing_number,clicks_R,'kx');
     legend({'left channel', 'right channel'});
     title(titlestring);
-    xlim([0,100])
+    % xlim([0,100])
     ylim([1,160])
     xlabel('record number')
     ylabel('number of clicks')

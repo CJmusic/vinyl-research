@@ -26,7 +26,9 @@ addpath('/Users/cz/Code/vinyl-research/matlab_code/from_John')
 
 % tracks = SeperateTracks('/Volumes/AUDIOBANK/audio_files/A0137B0137/-03b1558.270.wav')
 
-tracks = SeperateTracks('/Volumes/AUDIOBANK/audio_files/A0000B0000/040318_A0000B0000r031b1559.717.wav')
+% tracks = SeperateTracks('/Volumes/AUDIOBANK/audio_files/A0000B0000/081219-A0000B0000r093b1555.849.wav')
+
+tracks = SeperateTracks('/Volumes/AUDIOBANK/audio_files/A0000B0000/071919-A0000B0000r038b1559.173.wav')
 
 data = tracks('quiet2');
 fs = 96000;
