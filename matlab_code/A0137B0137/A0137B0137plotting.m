@@ -2,35 +2,35 @@ clear all; close all;
 Tbl = readtable( '/Users/cz/Code/vinyl-research/matlab_code/A0137B0137/A0137B0137.csv');
 
 
-% plot_scatter2(Tbl, 'quiet', 'a', 'PressingNumber', 'RMS_L', 'RMS_R', 'Pressing Number vs Unweighted RMS side a')
-% plot_scatter2(Tbl, 'quiet', 'a', 'PressingNumber', 'A_L', 'A_R', 'Pressing Number vs A weighted RMS side a')
-% plot_scatter2(Tbl, 'quiet', 'a', 'PressingNumber', 'CCIR_L', 'CCIR_R', 'Pressing Number vs CCIR weighted RMS side a')
+plot_scatter2(Tbl, 'quiet', 'a', 'PressingNumber', 'RMS_L', 'RMS_R', 'Pressing Number vs Unweighted RMS side a')
+plot_scatter2(Tbl, 'quiet', 'a', 'PressingNumber', 'A_L', 'A_R', 'Pressing Number vs A weighted RMS side a')
+plot_scatter2(Tbl, 'quiet', 'a', 'PressingNumber', 'CCIR_L', 'CCIR_R', 'Pressing Number vs CCIR weighted RMS side a')
 
-% plot_scatter2(Tbl, 'quiet', 'b', 'PressingNumber', 'RMS_L', 'RMS_R', 'Pressing Number vs Unweighted RMS side b')
-% plot_scatter2(Tbl, 'quiet', 'b', 'PressingNumber', 'A_L', 'A_R', 'Pressing Number vs A weighted RMS side b')
-% plot_scatter2(Tbl, 'quiet', 'b', 'PressingNumber', 'CCIR_L', 'CCIR_R', 'Pressing Number vs CCIR weighted RMS side b')
+plot_scatter2(Tbl, 'quiet', 'b', 'PressingNumber', 'RMS_L', 'RMS_R', 'Pressing Number vs Unweighted RMS side b')
+plot_scatter2(Tbl, 'quiet', 'b', 'PressingNumber', 'A_L', 'A_R', 'Pressing Number vs A weighted RMS side b')
+plot_scatter2(Tbl, 'quiet', 'b', 'PressingNumber', 'CCIR_L', 'CCIR_R', 'Pressing Number vs CCIR weighted RMS side b')
 
-% plot_scatter2(Tbl, 'quiet', 'a', 'PressingNumber', 'clicks_L', 'clicks_R', 'Pressing Number vs Unweighted RMS side a')
-% plot_scatter2(Tbl, 'quiet', 'b', 'PressingNumber', 'CCIR_L', 'CCIR_R', 'Pressing Number vs CCIR weighted RMS side b')
-
-
-% figure(4)
-% plot_scatter2special(Tbl, 'quiet', 'a', 'PressingNumber', 'clicks_L', 'clicks_R', 'Pressing Number vs Clicks side a')
-% figure(5)
-% plot_scatter2(Tbl, 'quiet', 'b', 'PressingNumber', 'clicks_L', 'clicks_R', 'Pressing Number vs Clicks side b')
-
-% figure(10)
-% plot_histogram(10, Tbl, 'quiet', 'a', 'A_L', 'clicks histogram left channel', 'clicks', [-58 -52])
+plot_scatter2(Tbl, 'quiet', 'a', 'PressingNumber', 'clicks_L', 'clicks_R', 'Pressing Number vs Unweighted RMS side a')
+plot_scatter2(Tbl, 'quiet', 'b', 'PressingNumber', 'CCIR_L', 'CCIR_R', 'Pressing Number vs CCIR weighted RMS side b')
 
 
+figure(4)
+plot_scatter2special(Tbl, 'quiet', 'a', 'PressingNumber', 'clicks_L', 'clicks_R', 'Pressing Number vs Clicks side a')
+figure(5)
+plot_scatter2(Tbl, 'quiet', 'b', 'PressingNumber', 'clicks_L', 'clicks_R', 'Pressing Number vs Clicks side b')
 
-% plot_scatter6(Tbl, 'quiet', 'quiet2', 'a',  'PressingNumber', 'RMS_L', 'RMS_R', 'Unweighted RMS levels per record side a', 'A0000B0000quiettracksRMSa')
-% plot_scatter6(Tbl, 'quiet', 'quiet2', 'a',  'PressingNumber', 'A_L', 'A_R', 'A weighted RMS levels per record side a', 'A0000B000quiettracksAa')
-% plot_scatter6(Tbl, 'quiet', 'quiet2', 'a',  'PressingNumber', 'CCIR_L', 'CCIR_R', 'CCIR weighted RMS levels per record side a', 'A0000B000quiettracksCCIRa')
+figure(10)
+plot_histogram(10, Tbl, 'quiet', 'a', 'A_L', 'clicks histogram left channel', 'clicks', [-58 -52])
 
-% plot_scatter6(Tbl, 'quiet', 'quiet2', 'b',  'PressingNumber', 'RMS_L', 'RMS_R', 'Unweighted RMS levels per record side b', 'A0000B0000quiettracksRMSb')
-% plot_scatter6(Tbl, 'quiet', 'quiet2', 'b',  'PressingNumber', 'A_L', 'A_R', 'A weighted RMS levels per record side b', 'A0000B000quiettracksAb')
-% plot_scatter6(Tbl, 'quiet', 'quiet2', 'b',  'PressingNumber', 'CCIR_L', 'CCIR_R', 'CCIR weighted RMS levels per record side b', 'A0000B000quiettracksCCIRb')
+
+
+plot_scatter6(Tbl, 'quiet', 'quiet2', 'a',  'PressingNumber', 'RMS_L', 'RMS_R', 'Unweighted RMS levels per record side a', 'A0000B0000quiettracksRMSa')
+plot_scatter6(Tbl, 'quiet', 'quiet2', 'a',  'PressingNumber', 'A_L', 'A_R', 'A weighted RMS levels per record side a', 'A0000B000quiettracksAa')
+plot_scatter6(Tbl, 'quiet', 'quiet2', 'a',  'PressingNumber', 'CCIR_L', 'CCIR_R', 'CCIR weighted RMS levels per record side a', 'A0000B000quiettracksCCIRa')
+
+plot_scatter6(Tbl, 'quiet', 'quiet2', 'b',  'PressingNumber', 'RMS_L', 'RMS_R', 'Unweighted RMS levels per record side b', 'A0000B0000quiettracksRMSb')
+plot_scatter6(Tbl, 'quiet', 'quiet2', 'b',  'PressingNumber', 'A_L', 'A_R', 'A weighted RMS levels per record side b', 'A0000B000quiettracksAb')
+plot_scatter6(Tbl, 'quiet', 'quiet2', 'b',  'PressingNumber', 'CCIR_L', 'CCIR_R', 'CCIR weighted RMS levels per record side b', 'A0000B000quiettracksCCIRb')
 
 
 plot_clicks(Tbl, 'a','Total number of clicks in the first pressing side a')

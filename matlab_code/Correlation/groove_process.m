@@ -53,7 +53,7 @@ for ng = 1:num_segs-1
     disp('NEW LOOP~~~~~~~~~~~~~~~~~~~~~~~~~')
     %%********* PRINT THE LAGDIFF BETWEEN GROOVES ************
     if ng > 1;
-        groovediff = audio_corrlineup(seg_array(:,1,ng), seg_array(:,1,ng-1))
+        groovediff = audio_corrlineup(seg_array(:,1,ng), seg_array(:,1,ng-1));
         seg_array(:,2,ng-1) = circshift(seg_array(:,2,ng-1), groovediff);
     end
 
