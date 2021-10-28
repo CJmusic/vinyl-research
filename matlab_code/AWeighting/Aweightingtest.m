@@ -38,9 +38,9 @@ CCIRw = audio_CCIRweighting(csig(:,1));
 size(freq)
 size(data_fft)
 
-data_fft = pwroctsmooth(data_fft,0.33);
-data_ffta = pwroctsmooth(data_ffta,0.33);
-data_fftccir = pwroctsmooth(data_fftccir,0.33);
+data_fft = pwroctsmooth_singlesided(data_fft,0.33);
+data_ffta = pwroctsmooth_singlesided(data_ffta,0.33);
+data_fftccir = pwroctsmooth_singlesided(data_fftccir,0.33);
 
 
 

@@ -3,7 +3,8 @@
 %
 
 function [amp_coh, freq_coh] = audio_mscohere(data1, data2, fs)
-    nfft=2^14;
+    % nfft=2^14;
+    nfft = 1.8*96000/4;
     %freq_coh=([0:nfft/2])*fs/nfft;
     % [amp_coh, freq_coh] = mscohere(data1,data2,hanning(nfft),nfft/2,nfft,fs);
     [amp_coh, freq_coh] = mscohere(data1,data2,hanning(nfft),nfft/2,nfft,fs);

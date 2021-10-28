@@ -50,7 +50,7 @@ subplot(2,1,1)
 plot(freq, 20.0*log10(data_fft_L1a))
 hold on; grid on; 
 plot(freq, 20.0*log10(data_fft_L2a))
-legend('CAF', 'Reinee')
+legend('Plastic A', 'Plastic B')
 title('Left Channel')
 set(gca, 'XScale', 'log');
 xlabel('Frequency (Hz)')
@@ -61,7 +61,7 @@ subplot(2,1,2)
 plot(freq, 20.0*log10(data_fft_R1a))
 hold on; grid on; 
 plot(freq, 20.0*log10(data_fft_R2a))
-legend('CAF', 'Reinee')
+legend('Plastic A', 'Plastic B')
 title('Right Channel ')
 set(gca, 'XScale', 'log');
 xlabel('Frequency (Hz)')
@@ -74,7 +74,7 @@ subplot(2,1,1)
 plot(freq, 20.0*log10(data_fft_L1b))
 hold on; grid on; 
 plot(freq, 20.0*log10(data_fft_L2b))
-legend('CAF', 'Reinee')
+legend('Plastic A', 'Plastic B')
 title('Left Channel')
 set(gca, 'XScale', 'log');
 xlabel('Frequency (Hz)')
@@ -85,7 +85,7 @@ subplot(2,1,2)
 plot(freq, 20.0*log10(data_fft_R1b))
 hold on; grid on; 
 plot(freq, 20.0*log10(data_fft_R2b))
-legend('CAF', 'Reinee')
+legend('Plastic A', 'Plastic B')
 title('Right Channel')
 set(gca, 'XScale', 'log');
 xlabel('Frequency (Hz)')
@@ -99,7 +99,7 @@ subplot(2,1,1)
 plot(freq, 20.0*log10(data_fft_L1a))
 hold on; grid on; 
 plot(freq, 20.0*log10(data_fft_L2a))
-legend('CAF', 'Reinee')
+legend('Plastic A', 'Plastic B')
 title('Left Channel')
 set(gca, 'XScale', 'log');
 xlabel('Frequency (Hz)')
@@ -110,7 +110,7 @@ subplot(2,1,2)
 plot(freq, 20.0*log10(data_fft_R1a))
 hold on; grid on; 
 plot(freq, 20.0*log10(data_fft_R2a))
-legend('CAF', 'Reinee')
+legend('Plastic A', 'Plastic B')
 title('Right Channel ')
 set(gca, 'XScale', 'log');
 xlabel('Frequency (Hz)')
@@ -123,7 +123,7 @@ subplot(2,1,1)
 plot(freq, 20.0*log10(data_ffta_L1b))
 hold on; grid on; 
 plot(freq, 20.0*log10(data_ffta_L2b))
-legend('CAF', 'Reinee')
+legend('Plastic A', 'Plastic B')
 title('Left Channel')
 set(gca, 'XScale', 'log');
 xlabel('Frequency (Hz)')
@@ -134,7 +134,7 @@ subplot(2,1,2)
 plot(freq, 20.0*log10(data_ffta_R1b))
 hold on; grid on; 
 plot(freq, 20.0*log10(data_ffta_R2b))
-legend('CAF', 'Reinee')
+legend('Plastic A', 'Plastic B')
 title('Right Channel')
 set(gca, 'XScale', 'log');
 xlabel('Frequency (Hz)')
@@ -149,7 +149,7 @@ subplot(2,1,1)
 plot(freq, 20.0*log10(data_fft_L1a))
 hold on; grid on; 
 plot(freq, 20.0*log10(data_fft_L2a))
-legend('CAF', 'Reinee')
+legend('Plastic A', 'Plastic B')
 title('Left Channel')
 set(gca, 'XScale', 'log');
 xlabel('Frequency (Hz)')
@@ -160,7 +160,7 @@ subplot(2,1,2)
 plot(freq, 20.0*log10(data_fft_R1a))
 hold on; grid on; 
 plot(freq, 20.0*log10(data_fft_R2a))
-legend('CAF', 'Reinee')
+legend('Plastic A', 'Plastic B')
 title('Right Channel ')
 set(gca, 'XScale', 'log');
 xlabel('Frequency (Hz)')
@@ -173,7 +173,7 @@ subplot(2,1,1)
 plot(freq, 20.0*log10(data_fftccir_L1b))
 hold on; grid on; 
 plot(freq, 20.0*log10(data_fftccir_L2b))
-legend('CAF', 'Reinee')
+legend('Plastic A', 'Plastic B')
 title('Left Channel')
 set(gca, 'XScale', 'log');
 xlabel('Frequency (Hz)')
@@ -184,7 +184,7 @@ subplot(2,1,2)
 plot(freq, 20.0*log10(data_fftccir_R1b))
 hold on; grid on; 
 plot(freq, 20.0*log10(data_fftccir_R2b))
-legend('CAF', 'Reinee')
+legend('Plastic A', 'Plastic B')
 title('Right Channel')
 set(gca, 'XScale', 'log');
 xlabel('Frequency (Hz)')
@@ -202,13 +202,14 @@ plot(freq, 20.0*log10(data_fftccir_L1a),'Color',[0/255 191/255 255/255])
 plot(freq, 20.0*log10(data_fft_L2a),'Color',[255/255 64/255 0/255])
 plot(freq, 20.0*log10(data_ffta_L2a),'Color',[255/255 128/255 0/255])
 plot(freq, 20.0*log10(data_fftccir_L2a),'Color',[255/255 191/255 0/255])
-legend('CAF', 'CAF A','CAF CCIR','Reinee', 'Reinee A', 'Reinee CCIR')
+lgd = legend('Plastic A', 'Plastic A A','Plastic A CCIR','Plastic B', 'Plastic B A', 'Plastic B CCIR')
+lgd.FontSize = 8;
 title('Left Channel')
 set(gca, 'XScale', 'log');
 xlabel('Frequency (Hz)')
 ylabel('Level (dB)')  
 ylim([-120,-30])
-xlim([1, 2000000])
+xlim([1, 20000])
 subplot(2,1,2)
 plot(freq, 20.0*log10(data_fft_R1a),'Color',[0/255 64/255 255/255])
 hold on; grid on; 
@@ -217,13 +218,14 @@ plot(freq, 20.0*log10(data_fftccir_R1a),'Color',[0/255 191/255 255/255])
 plot(freq, 20.0*log10(data_fft_R2a),'Color',[255/255 64/255 0/255])
 plot(freq, 20.0*log10(data_ffta_R2a),'Color',[255/255 128/255 0/255])
 plot(freq, 20.0*log10(data_fftccir_R2a),'Color',[255/255 191/255 0/255])
-legend('CAF', 'CAF A','CAF CCIR','Reinee', 'Reinee A', 'Reinee CCIR')
+lgd = legend('Plastic A', 'Plastic A A','Plastic A CCIR','Plastic B', 'Plastic B A', 'Plastic B CCIR')
+lgd.FontSize = 8;
 title('Right Channel')
 set(gca, 'XScale', 'log');
 xlabel('Frequency (Hz)')
 ylabel('Level (dB)')  
 ylim([-120,-30])
-xlim([1, 2000000])
+xlim([1, 20000])
 
 
 figure(8)
@@ -235,13 +237,14 @@ plot(freq, 20.0*log10(data_fftccir_L1b),'Color',[0/255 191/255 255/255])
 plot(freq, 20.0*log10(data_fft_L2b),'Color',[255/255 64/255 0/255])
 plot(freq, 20.0*log10(data_ffta_L2b),'Color',[255/255 128/255 0/255])
 plot(freq, 20.0*log10(data_fftccir_L2b),'Color',[255/255 191/255 0/255])
-legend('CAF', 'CAF A','CAF CCIR','Reinee', 'Reinee A', 'Reinee CCIR')
+lgd = legend('Plastic A', 'Plastic A A','Plastic A CCIR','Plastic B', 'Plastic B A', 'Plastic B CCIR')
+lgd.FontSize = 8;
 title('Left Channel')
 set(gca, 'XScale', 'log');
 xlabel('Frequency (Hz)')
 ylabel('Level (dB)')  
 ylim([-120,-30])
-xlim([1, 2000000])
+xlim([1, 20000])
 subplot(2,1,2)
 plot(freq, 20.0*log10(data_fft_R1b),'Color',[0/255 64/255 255/255])
 hold on; grid on; 
@@ -250,13 +253,14 @@ plot(freq, 20.0*log10(data_fftccir_R1b),'Color',[0/255 191/255 255/255])
 plot(freq, 20.0*log10(data_fft_R2b),'Color',[255/255 64/255 0/255])
 plot(freq, 20.0*log10(data_ffta_R2b),'Color',[255/255 128/255 0/255])
 plot(freq, 20.0*log10(data_fftccir_R2b),'Color',[255/255 191/255 0/255])
-legend('CAF', 'CAF A','CAF CCIR','Reinee', 'Reinee A', 'Reinee CCIR')
+lgd = legend('Plastic A', 'Plastic A A','Plastic A CCIR','Plastic B', 'Plastic B A', 'Plastic B CCIR')
+lgd.FontSize = 8;
 title('Right Channel')
 set(gca, 'XScale', 'log');
 xlabel('Frequency (Hz)')
 ylabel('Level (dB)')  
 ylim([-120,-30])
-xlim([1, 2000000])
+xlim([1, 20000])
 
 
 
@@ -364,12 +368,12 @@ function [freq, data_fft_L, data_fft_R, data_ffta_L, data_ffta_R, data_fftccir_L
     data_fftccir_R = data_fftccir(:,2);
 
 
-    data_fft_L = pwroctsmooth(data_fft_L,0.33);
-    data_ffta_L = pwroctsmooth(data_ffta_L,0.33);
-    data_fftccir_L = pwroctsmooth(data_fftccir_L,0.33);
-    data_fft_R = pwroctsmooth(data_fft_R,0.33);
-    data_ffta_R = pwroctsmooth(data_ffta_R,0.33);
-    data_fftccir_R = pwroctsmooth(data_fftccir_R,0.33);
+    data_fft_L = pwroctsmooth_singlesided(data_fft_L,0.33);
+    data_ffta_L = pwroctsmooth_singlesided(data_ffta_L,0.33);
+    data_fftccir_L = pwroctsmooth_singlesided(data_fftccir_L,0.33);
+    data_fft_R = pwroctsmooth_singlesided(data_fft_R,0.33);
+    data_ffta_R = pwroctsmooth_singlesided(data_ffta_R,0.33);
+    data_fftccir_R = pwroctsmooth_singlesided(data_fftccir_R,0.33);
 
 
 end

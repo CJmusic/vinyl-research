@@ -30,16 +30,17 @@ addpath('/Users/cz/Code/vinyl-research/matlab_code/from_John')
 
 tracks = SeperateTracks('/Volumes/AUDIOBANK/audio_files/A0000B0000/071919-A0000B0000r038b1559.173.wav')
 
-data = tracks('quiet2');
+data = tracks('quiet');
 fs = 96000;
 
 % 1 khz
-tstart = 3;
+tstart = 6;
 tend = 21;
 data = data(tstart*fs:tend*fs,:);
 time = linspace(0,(length(data)-1)/fs,length(data));
 rotation_speed = 33.33333;%45;
-n_sam = 172800;
+% n_sam = 172800;
+n_sam = 1.8*96000;
 num_segs = (floor(length(data)/n_sam))
 time_seg = time(1:n_sam);
 seg_array = []; 
@@ -73,13 +74,13 @@ for ng = 1:num_segs-1
 
     [coh_LR, ~] = audio_mscohere(seg_array(:,1,ng), seg_array(:,2,ng), fs);% same groove, left and right channel
 
-    coh_firstL = pwroctsmooth(coh_firstL, 0.33);
-    coh_firstR = pwroctsmooth(coh_firstR, 0.33);
-    coh_nextL = pwroctsmooth(coh_nextL, 0.33);
-    coh_nextR = pwroctsmooth(coh_nextR, 0.33);
-    coh_nextLR = pwroctsmooth(coh_nextLR, 0.33);
-    coh_nextRL = pwroctsmooth(coh_nextRL, 0.33);
-    coh_LR = pwroctsmooth(coh_LR, 0.33);
+    coh_firstL = pwroctsmooth_singlesided(coh_firstL, 0.33);
+    coh_firstR = pwroctsmooth_singlesided(coh_firstR, 0.33);
+    coh_nextL = pwroctsmooth_singlesided(coh_nextL, 0.33);
+    coh_nextR = pwroctsmooth_singlesided(coh_nextR, 0.33);
+    coh_nextLR = pwroctsmooth_singlesided(coh_nextLR, 0.33);
+    coh_nextRL = pwroctsmooth_singlesided(coh_nextRL, 0.33);
+    coh_LR = pwroctsmooth_singlesided(coh_LR, 0.33);
 
 
     figure(1); hold on;
@@ -179,7 +180,7 @@ for ng = 1:num_segs-1
     data_fft = fft(seg_array(:,1,ng))/n_sam;
     data_fft = data_fft(1:n_sam/2+1);
 
-    data_fft = pwroctsmooth(data_fft,0.33)
+    data_fft = pwroctsmooth_singlesided(data_fft,0.33);
 
     plot(freq_fft, 20.0*log10(data_fft)) 
     grid on; 
@@ -194,7 +195,7 @@ for ng = 1:num_segs-1
     data_fft = fft(seg_array(:,2,ng))/n_sam;
     data_fft = data_fft(1:n_sam/2+1);
 
-    data_fft = pwroctsmooth(data_fft,0.33)
+    data_fft = pwroctsmooth_singlesided(data_fft,0.33);
 
     plot(freq_fft, 20.0*log10(data_fft)) 
     grid on; 

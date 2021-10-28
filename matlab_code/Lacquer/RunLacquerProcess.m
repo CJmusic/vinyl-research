@@ -8,6 +8,8 @@ if ismac() == true
     addpath('/Users/cz/Code/vinyl-research/matlab_code/A0137B0137')
     addpath('/Users/cz/OneDrive - University of Waterloo/School/Vinyl_Project/audio_bin/')    
     addpath('/Volumes/AUDIOBANK/audio_files/A0137B0137/')
+    addpath('/Users/cz/Code/vinyl-research/matlab_code/Common')
+    addpath('/Users/cz/Code/vinyl-research/matlab_code/')
 end 
 if ispc() == true
     addpath('D:\Code\vinyl-research\matlab_code')

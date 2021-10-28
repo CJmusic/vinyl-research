@@ -42,9 +42,9 @@ CCIRw = audio_CCIRweighting(csig(:,1));
 [data_fftccir, freq] = audio_spectrum(CCIRw, 96000, 1, length(csig)-1);
 size(freq)
 size(data_fft)
-data_fft = pwroctsmooth(data_fft,0.33);
-data_ffta = pwroctsmooth(data_ffta,0.33);
-data_fftccir = pwroctsmooth(data_fftccir,0.33);
+data_fft = pwroctsmooth_singlesided(data_fft,0.33);
+data_ffta = pwroctsmooth_singlesided(data_ffta,0.33);
+data_fftccir = pwroctsmooth_singlesided(data_fftccir,0.33);
 
 figure(1)
 plot(freq, 20.0*log10(data_fft),'k')

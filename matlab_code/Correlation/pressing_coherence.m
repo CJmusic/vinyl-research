@@ -68,13 +68,13 @@ for ng = 4:5%num_segs-1
     [coh_nextRL1, ~] = audio_mscohere(seg_array1(:,2,ng), seg_array1(:,1,ng+1), fs); % previous right channel with next left channel
     [coh_LR1, ~] = audio_mscohere(seg_array1(:,1,ng), seg_array1(:,2,ng), fs);% same groove, left and right channel
 
-    coh_firstL1 = pwroctsmooth(coh_firstL1, 0.33);
-    coh_firstR1 = pwroctsmooth(coh_firstR1, 0.33);
-    coh_nextL1 = pwroctsmooth(coh_nextL1, 0.33);
-    coh_nextR1 = pwroctsmooth(coh_nextR1, 0.33);
-    coh_nextLR1 = pwroctsmooth(coh_nextLR1, 0.33);
-    coh_nextRL1 = pwroctsmooth(coh_nextRL1, 0.33);
-    coh_LR1 = pwroctsmooth(coh_LR1, 0.33);
+    coh_firstL1 = pwroctsmooth_singlesided(coh_firstL1, 0.33);
+    coh_firstR1 = pwroctsmooth_singlesided(coh_firstR1, 0.33);
+    coh_nextL1 = pwroctsmooth_singlesided(coh_nextL1, 0.33);
+    coh_nextR1 = pwroctsmooth_singlesided(coh_nextR1, 0.33);
+    coh_nextLR1 = pwroctsmooth_singlesided(coh_nextLR1, 0.33);
+    coh_nextRL1 = pwroctsmooth_singlesided(coh_nextRL1, 0.33);
+    coh_LR1 = pwroctsmooth_singlesided(coh_LR1, 0.33);
 
 
     [coh_nextL2, freq_coh] = audio_mscohere(seg_array2(:,1,ng), seg_array2(:,1,ng+1), fs); % previous left channel with next left channel
@@ -86,13 +86,13 @@ for ng = 4:5%num_segs-1
     [coh_nextRL2, ~] = audio_mscohere(seg_array2(:,2,ng), seg_array2(:,1,ng+1), fs); % previous right channel with next left channel
     [coh_LR2, ~] = audio_mscohere(seg_array2(:,1,ng), seg_array2(:,2,ng), fs);% same groove, left and right channel
 
-    coh_firstL2 = pwroctsmooth(coh_firstL2, 0.33);
-    coh_firstR2 = pwroctsmooth(coh_firstR2, 0.33);
-    coh_nextL2 = pwroctsmooth(coh_nextL2, 0.33);
-    coh_nextR2 = pwroctsmooth(coh_nextR2, 0.33);
-    coh_nextLR2 = pwroctsmooth(coh_nextLR2, 0.33);
-    coh_nextRL2 = pwroctsmooth(coh_nextRL2, 0.33);
-    coh_LR2 = pwroctsmooth(coh_LR2, 0.33);
+    coh_firstL2 = pwroctsmooth_singlesided(coh_firstL2, 0.33);
+    coh_firstR2 = pwroctsmooth_singlesided(coh_firstR2, 0.33);
+    coh_nextL2 = pwroctsmooth_singlesided(coh_nextL2, 0.33);
+    coh_nextR2 = pwroctsmooth_singlesided(coh_nextR2, 0.33);
+    coh_nextLR2 = pwroctsmooth_singlesided(coh_nextLR2, 0.33);
+    coh_nextRL2 = pwroctsmooth_singlesided(coh_nextRL2, 0.33);
+    coh_LR2 = pwroctsmooth_singlesided(coh_LR2, 0.33);
 
 
 
