@@ -52,7 +52,7 @@ hold on; grid on;
 % plot(freq, 20.0*log10(data_ffta))  
 % plot(freq, 20.0*log10(data_fftccir)) 
 % legend('non-weighted','A-weighted','CCIR-weighted')
-title('Record Frequency Response')
+title('Record Noise Spectrum')
 set(gca, 'XScale', 'log');
 xlabel('Frequency (Hz)')
 ylabel('Level (dB)')  
@@ -65,7 +65,7 @@ hold on; grid on;
 % plot(freq, 20.0*log10(data_ffta))  
 % plot(freq, 20.0*log10(data_fftccir)) 
 % legend('non-weighted','A-weighted','CCIR-weighted')
-title('Record Frequency Response')
+title('Record Noise Spectrum')
 set(gca, 'XScale', 'log');
 xlabel('Frequency (Hz)')
 ylabel('Level (dB)')  
@@ -79,7 +79,7 @@ hold on; grid on;
 plot(freq, 20.0*log10(data_ffta_L))  
 plot(freq, 20.0*log10(data_fftccir_L)) 
 legend('non-weighted','A-weighted','CCIR-weighted')
-title('Record Frequency Response')
+title('Record Noise Spectrum')
 set(gca, 'XScale', 'log');
 xlabel('Frequency (Hz)')
 ylabel('Level (dB)')  
@@ -90,7 +90,7 @@ hold on; grid on;
 % plot(freq, 20.0*log10(data_ffta_L))  
 plot(freq, 20.0*log10(data_fftccir_L),'k') 
 % legend('non-weighted','A-weighted','CCIR-weighted')
-title('Record Frequency Response CCIR-Weighting')
+title('Record Noise Spectrum CCIR-Weighting')
 set(gca, 'XScale', 'log');
 xlabel('Frequency (Hz)')
 ylabel('Level (dB)')  
@@ -101,7 +101,7 @@ hold on; grid on;
 plot(freq, 20.0*log10(data_ffta_L),'k')  
 % plot(freq, 20.0*log10(data_fftccir_L)) 
 % legend('non-weighted','A-weighted','CCIR-weighted')
-title('Record Frequency Response A-Weighting')
+title('Record Noise Spectrum A-Weighting')
 set(gca, 'XScale', 'log');
 xlabel('Frequency (Hz)')
 ylabel('Level (dB)')  

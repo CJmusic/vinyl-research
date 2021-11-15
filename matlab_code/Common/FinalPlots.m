@@ -149,6 +149,19 @@ plot_scatter2ylim(BOTH, 'quiet', 'a', 'minMouldSteamOutTop_F', 'clicks_L', 'clic
 plot_scatter2ylim(BOTH, 'quiet', 'b', 'minMouldSteamOutBottom_F', 'clicks_L', 'clicks_R','Minimum steam out temperature of the top mould vs. number of clicks side b', 'BOTHminMouldSteamOutTopCLICKSb',[0,30])
 
 
+plot_scatter2ylim(BOTH, 'quiet', 'a', 'minMouldSteamOutBottom_F', 'A_L', 'A_R','Minimum steam out temperature of the bottom mould vs. A-weighted RMS side a', 'BOTHminMouldSteamOutBottomARMSa',[-58,-40])
+plot_scatter2ylim(BOTH, 'quiet', 'b', 'minMouldSteamOutBottom_F', 'A_L', 'A_R','Minimum steam out temperature of the bottom mould vs. A-weighted RMS side b', 'BOTHminMouldSteamOutBottomARMSb',[-58,-40])
+plot_scatter2ylim(BOTH, 'quiet', 'a', 'minMouldSteamOutBottom_F', 'CCIR_L', 'CCIR_R','Minimum steam out temperature of the bottom mould vs. CCIR-weighted RMS side a', 'BOTHminMouldSteamOutBottomARMSa',[-58,-40])
+plot_scatter2ylim(BOTH, 'quiet', 'b', 'minMouldSteamOutBottom_F', 'CCIR_L', 'CCIR_R','Minimum steam out temperature of the bottom mould vs. CCIR-weighted RMS side b', 'BOTHminMouldSteamOutBottomCCIRRMSb',[-58,-40])
+
+plot_scatter2ylim(BOTH, 'quiet', 'a', 'minMouldSteamOutTop_F', 'RMS_L', 'RMS_R','Minimum steam out temperature of the top mould vs. RMS side a', 'BOTHminMouldSteamOutTopRMSa',[-36,-24])
+plot_scatter2ylim(BOTH, 'quiet', 'b', 'minMouldSteamOutBottom_F', 'RMS_L', 'RMS_R','Minimum steam out temperature of the top mould vs. number of clicks side b', 'BOTHminMouldSteamOutTopRMSb',[-36,-24])
+plot_scatter2ylim(BOTH, 'quiet', 'a', 'minMouldSteamOutTop_F', 'clicks_L', 'clicks_R','Minimum steam out temperature of the top mould vs. number of clicks side a', 'BOTHminMouldSteamOutToCLICKSa',[0,30])
+plot_scatter2ylim(BOTH, 'quiet', 'b', 'minMouldSteamOutBottom_F', 'clicks_L', 'clicks_R','Minimum steam out temperature of the top mould vs. number of clicks side b', 'BOTHminMouldSteamOutTopCLICKSb',[0,30])
+
+
+
+
 
 plot_scatter2ylim(BOTH, '1kHz', 'a', 'PressingNumber', 'RMS_L', 'RMS_R','Pressing number vs. A-weighted RMS', 'BOTH1kHzRMSa', [-36,0])
 plot_scatter2ylim(BOTH, '1kHz', 'b', 'PressingNumber', 'RMS_L', 'RMS_R','RMS level of reference tone', 'BOTH1kHzRMSb', [-36,0])

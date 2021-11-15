@@ -53,7 +53,7 @@ hold on; grid on;
 % plot(freq, 20.0*log10(data_fftccir))
 % legend('non-weighted','A-weighted','CCIR-weighted')
 set(gca, 'XScale', 'log');
-title('Lacquer Frequency Response')
+title('Lacquer Noise Spectrum')
 xlabel('Frequency (Hz)')
 ylabel('Level (dB)')  
 
@@ -64,7 +64,7 @@ plot(freq, 20.0*log10(data_ffta))
 plot(freq, 20.0*log10(data_fftccir))
 legend('non-weighted','A-weighted','CCIR-weighted')
 set(gca, 'XScale', 'log');
-title('Lacquer Frequency Response')
+title('Lacquer Noise Spectrum')
 xlabel('Frequency (Hz)')
 ylabel('Level (dB)')  
 

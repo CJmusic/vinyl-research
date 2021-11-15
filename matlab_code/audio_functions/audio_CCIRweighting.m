@@ -104,7 +104,7 @@ function data_CCIR = audio_CCIRweighting(data)
    [b,a]=yulewalk(12,Wn,CCIRmag);%%%%%%%%%%%%%%%%%%%%%
    [d,c]=butter(1,2*750/fs,'high');% this corrects DC-LF with highpass
    fb=conv(b,d);ea=conv(a,c);
-   data_CCIR=filter(fb,ea,data);
+   data_CCIR= filter(fb,ea,data); %added 0.5 to normalize to 2kHz
    % data_CCIR=filtfilt(fb,ea,data);
    %----------------------plot yulewalk freq------------
    % f=[0:N/2]*fs/N;

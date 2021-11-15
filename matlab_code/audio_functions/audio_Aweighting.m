@@ -101,6 +101,7 @@ function data_A = audio_Aweighting(data)
     f4 = 12194.217;%for infinite fs
     f4 = 14100;%for finite fs, makes magnitude -9.5dB at 20kHz
     A1000 = 1.9997;
+    % A1000 = 0.0001;
     NUM = [ (2*pi*f4)^2*(10^(A1000/20)) 0 0 0 0 ];
     DEN = conv([1 +4*pi*f4 (2*pi*f4)^2],[1 +4*pi*f1 (2*pi*f1)^2]); 
     DEN = conv(conv(DEN,[1 2*pi*f3]),[1 2*pi*f2]);

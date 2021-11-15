@@ -3,7 +3,7 @@
 % John Vanderkooy
 % Feb. 2019
 %  
-clear all; clc;close all;
+clear all; clc;close all; 
 disp('----------------start of program--------------------')
 set(0,'DefaultLineLinewidth',1.5)
 set(0,'DefaultAxesFontSize',12)
@@ -17,6 +17,8 @@ end
 
 addpath('/Users/cz/Code/vinyl-research/matlab_code/Common')
 addpath('/Users/cz/Code/vinyl-research/matlab_code/audio_functions')
+addpath('/Users/cz/Code/vinyl-research/matlab_code/from_John')
+
 
 tracks1 = SeperateTracks('/Volumes/AUDIOBANK/audio_files/A0000B0000/040318_A0000B0000r005a1555.796.wav')
 tracks2 = SeperateTracks('/Volumes/AUDIOBANK/audio_files/A0137B0137/010a1600.264.wav')
@@ -108,55 +110,55 @@ for ng = 4:5%num_segs-1
     subplot(2,1,1)
     plot(freq_coh,coh_firstL1)
     hold on; 
-    plot(freq_coh,coh_firstL2)
+    % plot(freq_coh,coh_firstL2)
     title('left channel')
     set(gca, 'XScale', 'log');
     set(gca,'YGrid','on')
     set(gca,'XGrid','on')
     xlabel('Frequency (Hz)')
-    legend('CAF', 'Reinee')
+    legend('Plastic A', 'Plastic B')
     subplot(2,1,2)
     plot(freq_coh,coh_firstR1)
     hold on; 
-    plot(freq_coh,coh_firstR2)
+    % plot(freq_coh,coh_firstR2)
     title('right channel')
     set(gca, 'XScale', 'log');
     set(gca,'YGrid','on')
     set(gca,'XGrid','on')
     xlabel('Frequency (Hz)')
-    legend('CAF', 'Reinee')
+    legend('Plastic A', 'Plastic B')
     
     figure(2)
     subplot(2,1,1)
-    plot(freq_coh,coh_nextL1)
+    plot(freq_coh, coh_nextL1)
     hold on; 
-    plot(freq_coh,coh_nextL2)
+    % plot(freq_coh,coh_nextL2)
     title('left channel')
     set(gca, 'XScale', 'log');
     set(gca,'YGrid','on')
     set(gca,'XGrid','on')
     xlabel('Frequency (Hz)')
-    legend('CAF', 'Reinee')
+    legend('Plastic A', 'Plastic B')
     subplot(2,1,2)
     plot(freq_coh,coh_nextR1)
     hold on; 
-    plot(freq_coh,coh_nextR2)
+    % plot(freq_coh,coh_nextR2)
     title('right channel')
     set(gca, 'XScale', 'log');
     set(gca,'YGrid','on')
     set(gca,'XGrid','on')
     xlabel('Frequency (Hz)')
-    legend('CAF', 'Reinee')
+    legend('Plastic A', 'Plastic B')
 
     figure(3); hold on;
     plot(freq_coh, coh_LR1)
-    plot(freq_coh, coh_LR2)
+    % plot(freq_coh, coh_LR2)
     set(gca, 'XScale', 'log');
     set(gca,'YGrid','on')
     set(gca,'XGrid','on')
     xlabel('Frequency (Hz)')
     title(strcat('Coherence in noise between Left and Right Channel'))
-    legend('CAF', 'Reinee')
+    legend('Plastic A', 'Plastic B')
 
 
     
